@@ -17,16 +17,16 @@ const useTheme = () => {
   }
 
   // 테마 state 생성
-  const [theme, setTheme] = useState(initTheme);
+  const [themeMode, setThemeMode] = useState(initTheme);
 
   // 테마 전환 함수
   const toggleTheme = () => {
-    const themeMode = theme === "light" ? "dark" : "light";
-    window.localStorage.setItem("userTheme", themeMode);
-    setTheme(themeMode);
+    const theme = themeMode === "light" ? "dark" : "light";
+    window.localStorage.setItem("userTheme", theme);
+    setThemeMode(theme);
   };
 
-  return [theme, toggleTheme] as const;
+  return [themeMode, toggleTheme] as const;
 };
 
 export default useTheme;
