@@ -1,4 +1,4 @@
-const colors = {
+const brandColors = {
   jurassicGreen: {
     50: "#DCFAE3",
     100: "#BCEDC6",
@@ -37,9 +37,4 @@ const colors = {
   },
 };
 
-export default colors;
-
-const DARK_INFORMATIVE = "#68C7EF";
-const DARK_DANGER = "#FB4656";
-const LIGHT_INFORMATIVE = "#1790C3";
-const LIGHT_DANGER = "#F33041";
+export default brandColors;
