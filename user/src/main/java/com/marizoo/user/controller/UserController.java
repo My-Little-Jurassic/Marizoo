@@ -1,9 +1,11 @@
 package com.marizoo.user.controller;
 
 import com.marizoo.user.dto.JoinRequestDto;
+import com.marizoo.user.dto.JoinResponseDto;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +19,7 @@ public class UserController {
     private final UserRepository userRepository;
 
     @PostMapping("/users")
-    public String join(@RequestBody JoinRequestDto joinRequestDto) {
+    public ResponseEntity<JoinResponseDto> join(@RequestBody JoinRequestDto joinRequestDto) {
         User user = new User();
         user.setUid(joinRequestDto.getUid());
         user.setPwd(encoder.encode(joinRequestDto.getPwd()));
@@ -27,6 +29,7 @@ public class UserController {
         user.setRole("ROLE_USER");
 
         userRepository.save(user);
-        return "회원가입완료";
+
+        return ResponseEntity.ok(new JoinResponseDto("Success"));
     }
 }

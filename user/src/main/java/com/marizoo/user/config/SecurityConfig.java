@@ -33,9 +33,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests(
                         authorize -> authorize
-                                .anyRequest()
-                                .permitAll()
-                ).build();
+                                .anyRequest().permitAll())
+                .build();
     }
 
     public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
