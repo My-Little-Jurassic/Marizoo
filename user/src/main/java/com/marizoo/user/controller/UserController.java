@@ -7,6 +7,7 @@ import com.marizoo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ public class UserController {
     private final UserRepository userRepository;
 
     @PostMapping("/users")
-    public ResponseEntity<JoinResponseDto> join(@RequestBody JoinRequestDto joinRequestDto) {
+    public ResponseEntity<JoinResponseDto> join(@RequestBody @Validated JoinRequestDto joinRequestDto) {
         User user = new User();
         user.setUid(joinRequestDto.getUid());
         user.setPwd(encoder.encode(joinRequestDto.getPwd()));
