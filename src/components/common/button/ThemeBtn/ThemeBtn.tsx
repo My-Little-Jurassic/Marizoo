@@ -4,6 +4,7 @@ import styled, { keyframes } from "styled-components";
 import { TbSun, TbMoon } from "react-icons/tb";
 
 interface Iprops {
+  // 테마 버튼 props type
   themeMode: string;
   toggleTheme: () => void;
 }
@@ -12,14 +13,15 @@ function ThemeBtn(props: Iprops) {
   return (
     <StyledThemeBtn
       onClick={() => {
-        console.log(props.themeMode);
+        // 버튼 클릭시 테마 토글
         props.toggleTheme();
       }}
     >
       {props.themeMode === "dark" ? (
-        <TbSun size={24} strokeWidth={3} />
+        // 테마 모드에 따라서 아이콘 변경
+        <TbSun size={24} strokeWidth={3} /> // 해 모양 아이콘
       ) : (
-        <TbMoon size={24} strokeWidth={3} />
+        <TbMoon size={24} strokeWidth={3} /> // 달 모양 아이콘
       )}
     </StyledThemeBtn>
   );
