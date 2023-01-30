@@ -62,7 +62,6 @@ const VerifyInput = ({
    * input tag에 focusout 발생시 최종 input값과 판별결과를 상위에 알리는 함수
    */
   const focusOut = (): void => {
-    console.log("focus out");
     const totalInputVerifyResult = getTotalInputVerifyResult();
     inputStatus.current = totalInputVerifyResult ? EInputStatus.success : EInputStatus.fail;
     submitInputResult(inputValue, totalInputVerifyResult);
