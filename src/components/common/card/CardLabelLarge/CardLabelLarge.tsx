@@ -147,9 +147,13 @@ const StyledSpeciesRemainCnt = styled.div`
   background-color: ${(props) => props.theme.colors.brandColors.basaltGray["400"]};
 `;
 
-const StyledCardTitle = styled.span`
+const StyledCardTitle = styled.div`
   font: ${(props) => props.theme.fonts.mainContentBold};
   cursor: pointer;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   &:hover {
     text-decoration: underline;
   }

@@ -52,6 +52,10 @@ const StyledCardTitle = styled.span`
   left: 10%;
   color: white;
   z-index: 99;
+  width: 80%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font: ${(props) => props.theme.fonts.mainContentBold};
   color: ${(props) => props.theme.colors.brandColors.basaltGray["50"]};
 `;

@@ -75,10 +75,13 @@ const StyledCardImgBox = styled.div`
   }
 `;
 
-const StyledCardTitle = styled.span`
+const StyledCardTitle = styled.div`
   font: ${(props) => props.theme.fonts.mainContentBold};
   color: ${(props) => props.theme.colors.primaryText};
   cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   &:hover {
     text-decoration: underline;
   }
