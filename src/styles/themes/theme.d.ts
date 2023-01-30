@@ -20,6 +20,7 @@ interface Itheme {
   styles: {
     button: string;
     card: string;
+    input: string;
   };
 }
 

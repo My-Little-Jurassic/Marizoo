@@ -23,24 +23,32 @@ export const darkTheme: Itheme = {
     cursor: pointer;
     border-radius: 32px;
     filter: drop-shadow(2px 2px 8px rgba(67, 67, 67, 0.2));
-    transition: all 0.2s ease-in-out;
+    transition: all 0.02s;
     &:hover {
       filter: drop-shadow(2px 2px 8px rgba(67, 67, 67, 0.2)) brightness(1.1);
     }
     &:active {
       filter: drop-shadow(2px 2px 8px rgba(67, 67, 67, 0.2)) brightness(1.2);
-      scale: 0.95;
+      scale: 0.98;
   }`,
     card: `
     border-radius: 32px;
     filter: drop-shadow(2px 2px 8px rgba(67, 67, 67, 0.2));
-    transition: all 0.2s ease-in-out;
+    transition: all 0.1s;
     &:hover {
       scale: 1.02;
     }
     &:active {
       filter: drop-shadow(2px 2px 8px rgba(67, 67, 67, 0.2)) brightness(1.1);
       scale: 1;
+    }`,
+    input: `
+    border-radius: 32px;
+    transition: all 0.1s;
+    &:hover {
+      filter: brightness(1.1);
+    }
+    &:active {
     }`,
   },
 };
