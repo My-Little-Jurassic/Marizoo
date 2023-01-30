@@ -58,6 +58,7 @@ const StyledCardImgBox = styled.div`
   transition: all 0.2s ease-in-out;
   border-radius: 32px;
   overflow: hidden;
+  cursor: pointer;
   &:hover ${StyledTbPlayerPlayBox} {
     display: flex;
   }
