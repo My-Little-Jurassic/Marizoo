@@ -3,14 +3,14 @@ import styled from "styled-components";
 
 import { TbGenderMale, TbGenderFemale } from "react-icons/tb";
 
-interface Iprops {
+interface IProps {
   animalName: string;
   gender: string;
   classification: string;
   imgSrc: string;
 }
 
-const ProfileLarge = function (props: Iprops) {
+const ProfileLarge = function (props: IProps) {
   return (
     <StyledContainer>
       <StyledDetailSpan>더보기</StyledDetailSpan>

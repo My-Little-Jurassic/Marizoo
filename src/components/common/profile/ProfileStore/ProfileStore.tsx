@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-interface Iprops {
+interface IProps {
   storeName: string;
   imgSrc: string;
 }
 
-const ProfileStore = function (props: Iprops) {
+const ProfileStore = function (props: IProps) {
   return (
     <StyledContainer>
       <StyledImgBox>
