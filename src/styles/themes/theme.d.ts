@@ -10,9 +10,9 @@ interface Itheme {
     yellow: string;
     red: string;
     primaryText: string;
-    seconderyText: string;
+    secondaryText: string;
     primaryBg: string;
-    seconderyBg: string;
+    secondaryBg: string;
     disable: string;
   };
   fonts: typeof fonts;
