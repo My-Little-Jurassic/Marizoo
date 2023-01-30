@@ -5,37 +5,41 @@ import { NavLink } from "react-router-dom";
 import { ThemeBtn } from "../../button/index";
 import { MdAccountCircle } from "react-icons/md";
 
-interface Iprops {
+interface IProps {
   // 테마 버튼 props type
   themeMode: string;
   toggleTheme: () => void;
 }
 
-function Nav(props: Iprops) {
+function Nav(props: IProps) {
   return (
-    <Navbar>
+    <StyledNavbar>
       {/* Nav 내부 컴포넌트 컨테이너 */}
-      <NavContainer>
+      <StyledNavContainer>
         {/* 왼쪽 로고 */}
         <NavLink to={"/"} style={{ textDecoration: "none" }}>
-          <NavLogo>마이리틀쥬라기</NavLogo>
+          <StyledNavLogo>마이리틀쥬라기</StyledNavLogo>
         </NavLink>
         {/* 오른쪽 버튼 */}
-        <NavbarRSide>
-          <NavBtn>로그인</NavBtn>
-          <NavBtn>
-            <MdAccountCircle size={30}></MdAccountCircle>
-          </NavBtn>
+        <StyledNavbarRSide>
+          <NavLink to={"/login"} style={{ textDecoration: "none" }}>
+            <StyledNavBtn>로그인</StyledNavBtn>
+          </NavLink>
+          <NavLink to={"/account"} style={{ textDecoration: "none" }}>
+            <StyledNavBtn>
+              <MdAccountCircle size={30}></MdAccountCircle>
+            </StyledNavBtn>
+          </NavLink>
           <ThemeBtn themeMode={props.themeMode} toggleTheme={props.toggleTheme}></ThemeBtn>
-        </NavbarRSide>
-      </NavContainer>
-    </Navbar>
+        </StyledNavbarRSide>
+      </StyledNavContainer>
+    </StyledNavbar>
   );
 }
 
 export default Nav;
 
-const Navbar = styled.nav`
+const StyledNavbar = styled.nav`
   position: sticky;
   top: 0px;
   width: 100vw;
@@ -49,7 +53,7 @@ const Navbar = styled.nav`
   color: ${(props) => props.theme.colors.primaryText};
 `;
 
-const NavContainer = styled.div`
+const StyledNavContainer = styled.div`
   width: 90%;
   max-width: 1056px;
   display: flex;
@@ -57,7 +61,7 @@ const NavContainer = styled.div`
   align-items: center;
 `;
 
-const NavLogo = styled.div`
+const StyledNavLogo = styled.div`
   ${(props) => props.theme.styles.button}
   display: flex;
   justify-content: center;
@@ -77,14 +81,14 @@ const NavLogo = styled.div`
   }
 `;
 
-const NavbarRSide = styled.div`
+const StyledNavbarRSide = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   font: ${(props) => props.theme.fonts.mainContentBold};
 `;
 
-const NavBtn = styled.button`
+const StyledNavBtn = styled.button`
   ${(props) => props.theme.styles.button}
   display: flex;
   justify-content: center;
