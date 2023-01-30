@@ -3,12 +3,12 @@ import styled from "styled-components";
 
 import { TbPlayerPlay } from "react-icons/tb";
 
-interface Iprops {
+interface IProps {
   title: string;
   imgSrc: string;
 }
 
-const CardLabelMedium = function (props: Iprops) {
+const CardLabelMedium = function (props: IProps) {
   return (
     <StyledContainer>
       <StyledCardImgBox>

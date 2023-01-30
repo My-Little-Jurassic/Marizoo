@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-interface Iprops {
+interface IProps {
   title: string;
   imgSrc: string;
 }
 
-const CardOverlayLabel = function (props: Iprops) {
+const CardOverlayLabel = function (props: IProps) {
   return (
     <StyledContainer>
       <StyledCardImg src={props.imgSrc} alt="" />

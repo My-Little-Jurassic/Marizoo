@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-interface Iprops {
+interface IProps {
   imgSrc: string;
 }
 
-const CardNotLabel = function (props: Iprops) {
+const CardNotLabel = function (props: IProps) {
   return (
     <StyledContainer>
       <StyledCardImg src={props.imgSrc} alt="" />

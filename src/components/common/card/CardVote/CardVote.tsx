@@ -2,12 +2,12 @@ import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 
-interface Iprops {
+interface IProps {
   title: string;
   imgSrc: string;
 }
 
-const CardVote = function (props: Iprops) {
+const CardVote = function (props: IProps) {
   // prop으로 받을지는 나중에 설정
   const [isSelected, setIsSelected] = useState(false);
 
