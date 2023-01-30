@@ -1,0 +1,35 @@
+import React from "react";
+import styled from "styled-components";
+
+interface Iprops {
+  imgSrc: string;
+}
+
+const CardNotLabel = function (props: Iprops) {
+  return (
+    <StyledContainer>
+      <StyledCardImg src={props.imgSrc} alt="" />
+    </StyledContainer>
+  );
+};
+
+export default CardNotLabel;
+
+const StyledContainer = styled.div`
+  width: 240px;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  ${(props) => props.theme.styles.card}
+  cursor: pointer;
+`;
+
+const StyledCardImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
