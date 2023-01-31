@@ -40,6 +40,7 @@ function Nav(props: IProps) {
 export default Nav;
 
 const StyledNavbar = styled.nav`
+  z-index: 99;
   position: sticky;
   top: 0px;
   width: 100vw;
