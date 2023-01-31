@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 
 export enum EInputStatus {
@@ -64,28 +64,34 @@ const StyledInput = styled.input<{ status: EInputStatus }>`
 `;
 
 interface IProps {
-  value: string;
+  value?: string;
   setValue(value: string): void;
   status?: EInputStatus;
   placeholder?: string;
-  onBlur(): void;
+  focusOut?(value: string): void;
 }
 
 const Input = ({
-  value,
+  value = "",
   setValue,
   status = EInputStatus.default,
   placeholder = "",
-  onBlur,
+  focusOut,
 }: IProps): JSX.Element => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
+  };
+  const onBlur = () => {
+    if (focusOut && inputRef.current) focusOut(inputRef.current.value);
   };
 
   return (
     <StyledInput
+      ref={inputRef}
       status={status}
-      value={value}
+      defaultValue={value}
       placeholder={placeholder}
       onChange={onChange}
       onBlur={onBlur}
@@ -93,4 +99,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default React.memo(Input);
