@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import Input, { EInputStatus } from "../Input/Input";
 import VerifyInfoList, { IInputVerifyResult } from "./InputVerifyList";
@@ -31,8 +31,8 @@ const VerifyInput = ({
    * input 조건 판별 결과를 담은 배열을 반환하는 함수
    * @returns IInputVerifyResult[]
    */
-  const getInputVerifyResultList = (): IInputVerifyResult[] => {
-    const inputVerifyResultList = inputVerifyList.map<IInputVerifyResult>((item) => {
+  const inputVerifyResultList = useMemo((): IInputVerifyResult[] => {
+    const result = inputVerifyList.map<IInputVerifyResult>((item) => {
       const { description, verify } = item;
       let result = EInputStatus.default;
 
@@ -42,15 +42,14 @@ const VerifyInput = ({
       return { description, result };
     });
     if (isInitial.current) isInitial.current = false;
-    return inputVerifyResultList;
-  };
+    return result;
+  }, [inputValue]);
 
   /**
    * input 조건 전체에 대해 만족 여부를 반환하는 함수
    * @returns totalInputVerifyResult
    */
   const getTotalInputVerifyResult = (): boolean => {
-    const inputVerifyResultList = getInputVerifyResultList();
     let totalInputVerifyResult = true;
     inputVerifyResultList.forEach((item) => {
       totalInputVerifyResult = totalInputVerifyResult && item.result === EInputStatus.success;
@@ -76,7 +75,7 @@ const VerifyInput = ({
         onBlur={focusOut}
         status={inputStatus.current}
       />
-      <VerifyInfoList inputVerifyResultList={getInputVerifyResultList()} />
+      <VerifyInfoList inputVerifyResultList={inputVerifyResultList} />
     </StyledDiv>
   );
 };
