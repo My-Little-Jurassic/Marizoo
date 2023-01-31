@@ -41,4 +41,4 @@ const InputVerifyItem = ({ description, result }: IInputVerifyResult): JSX.Eleme
   );
 };
 
-export default InputVerifyItem;
+export default React.memo(InputVerifyItem);

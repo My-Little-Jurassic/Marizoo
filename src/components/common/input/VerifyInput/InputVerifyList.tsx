@@ -28,4 +28,4 @@ const InputVerifyList = ({ inputVerifyResultList }: IProps): JSX.Element => {
   );
 };
 
-export default InputVerifyList;
+export default React.memo(InputVerifyList);
