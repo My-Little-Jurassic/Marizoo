@@ -1,13 +1,13 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/marizoo? #jdbc:h2:tcp://localhost/~/storetest
+    url: jdbc:mysql://localhost:3306/marizoo?
     username: root # MySQL DB Username
     password: ssafy # MySQL DB password
 
-jpa:
-  hibernate:
-    ddl-auto: create
-  properties:
+  jpa:
     hibernate:
-      format_sql: true
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
