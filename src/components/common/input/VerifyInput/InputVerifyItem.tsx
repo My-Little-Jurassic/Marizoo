@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { TbInfoCircle, TbCheck, TbX } from "react-icons/tb";
 import { IInputVerifyResult } from "./InputVerifyList";
-import { EInputStatus, getStatusColor } from "../Input/Input";
+import { EInputStatus } from "..";
+import { getStatusColor } from "../Input/Input";
 
 const StyledLi = styled.li<{ status: EInputStatus }>`
   margin: 3px 0 0 13px;

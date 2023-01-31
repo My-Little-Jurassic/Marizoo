@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { EInputStatus } from "../Input/Input";
+import { EInputStatus } from "../";
 import InputVerifyItem from "./InputVerifyItem";
 
 const StyledUl = styled.ul`

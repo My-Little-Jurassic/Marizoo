@@ -13,6 +13,7 @@ export interface IInputVerify {
 interface IProps {
   value?: string;
   placeholder?: string;
+  type?: string;
   inputVerifyList: IInputVerify[];
   submitInputResult(value: string, result: boolean): void;
 }
@@ -20,6 +21,7 @@ interface IProps {
 const VerifyInput = ({
   value = "",
   placeholder = "",
+  type = "text",
   inputVerifyList,
   submitInputResult,
 }: IProps): JSX.Element => {
@@ -85,6 +87,7 @@ const VerifyInput = ({
   return (
     <StyledDiv>
       <Input
+        type={type}
         value={value}
         placeholder={placeholder}
         setValue={setValue}
