@@ -5,10 +5,10 @@ import { Grid } from "@mui/material";
 
 import CardLabelLarge from "../../common/card/CardLabelLarge/CardLabelLarge";
 
-const itemList: any[] = [];
+const itemList: JSX.Element[] = [];
 for (let i = 0; i < 10; i++) {
   itemList.push(
-    <Grid item xs={12} sm={6} md={4}>
+    <Grid key={`item-${i}`} item xs={12} sm={6} md={4}>
       <CardLabelLarge
         title={"label"}
         thumbnailSrc={"https://picsum.photos/200/300"}
@@ -20,18 +20,18 @@ for (let i = 0; i < 10; i++) {
 
 function LiveGrid() {
   return (
-    <LiveGridContainer>
-      <ContainerTitle>지금 진행중인 방송이에요</ContainerTitle>
-      <Grid container spacing={4}>
+    <StyledLiveGridContainer>
+      <StyledContainerTitle>지금 진행중인 방송이에요</StyledContainerTitle>
+      <Grid container columnSpacing={4}>
         {itemList}
       </Grid>
-    </LiveGridContainer>
+    </StyledLiveGridContainer>
   );
 }
 
 export default LiveGrid;
 
-const LiveGridContainer = styled.div`
+const StyledLiveGridContainer = styled.div`
   width: 90%;
   max-width: 927px;
   @media screen and (max-width: 900px) {
@@ -39,8 +39,8 @@ const LiveGridContainer = styled.div`
   }
 `;
 
-const ContainerTitle = styled.h3`
-  font: ${(props) => props.theme.fonts.header3};
+const StyledContainerTitle = styled.h4`
+  font: ${(props) => props.theme.fonts.header4};
   color: ${(props) => props.theme.colors.primaryText};
   margin-bottom: 16px;
 `;
