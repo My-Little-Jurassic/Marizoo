@@ -8,7 +8,7 @@ const StyledLi = styled.li<{ status: EInputStatus }>`
   margin: 3px 0 0 13px;
   font: ${({ theme }) => theme.fonts.tinyContentBold};
   color: ${({ theme, status }) =>
-    getStatusColor(status, theme.colors.primaryText, theme.colors.green, theme.colors.red)};
+    getStatusColor(status, theme.colors.secondaryText, theme.colors.green, theme.colors.red)};
   text-align: left;
   display: flex;
   align-items: center;
