@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import Input, { EInputStatus } from "../Input/Input";
 import VerifyInfoList, { IInputVerifyResult } from "./InputVerifyList";
@@ -24,60 +24,76 @@ const VerifyInput = ({
   submitInputResult,
 }: IProps): JSX.Element => {
   const [inputValue, setInputValue] = useState(value);
+  const [inputStatus, setInputStatus] = useState(EInputStatus.default);
   const isInitial = useRef(true);
-  const inputStatus = useRef(EInputStatus.default);
 
   /**
-   * input 조건 판별 결과를 담은 배열을 반환하는 함수
-   * @returns IInputVerifyResult[]
+   * input 조건 판별 결과를 담은 배열
    */
-  const inputVerifyResultList = useMemo((): IInputVerifyResult[] => {
-    const result = inputVerifyList.map<IInputVerifyResult>((item) => {
-      const { description, verify } = item;
-      let result = EInputStatus.default;
+  const getInputVerifyResultList = useCallback(
+    (str: string): IInputVerifyResult[] => {
+      const result = inputVerifyList.map<IInputVerifyResult>((item) => {
+        const { description, verify } = item;
+        let result = EInputStatus.default;
 
-      if (!isInitial.current) {
-        result = verify(inputValue) ? EInputStatus.success : EInputStatus.fail;
-      }
-      return { description, result };
-    });
-    if (isInitial.current) isInitial.current = false;
-    return result;
-  }, [inputValue]);
+        if (str && !isInitial.current) {
+          result = verify(str) ? EInputStatus.success : EInputStatus.fail;
+        }
+        return { description, result };
+      });
+
+      if (isInitial.current) isInitial.current = false;
+      return result;
+    },
+    [isInitial],
+  );
 
   /**
    * input 조건 전체에 대해 만족 여부를 반환하는 함수
    * @returns totalInputVerifyResult
    */
-  const getTotalInputVerifyResult = (): boolean => {
-    let totalInputVerifyResult = true;
-    inputVerifyResultList.forEach((item) => {
-      totalInputVerifyResult = totalInputVerifyResult && item.result === EInputStatus.success;
-    });
-    return totalInputVerifyResult;
-  };
+  const getTotalInputVerifyResult = useCallback(
+    (str: string): boolean => {
+      let totalInputVerifyResult = true;
+      getInputVerifyResultList(str).forEach((item) => {
+        totalInputVerifyResult = totalInputVerifyResult && item.result === EInputStatus.success;
+      });
+      return totalInputVerifyResult;
+    },
+    [getInputVerifyResultList],
+  );
+
+  const setValue = useCallback(
+    (newValue: string) => {
+      setInputValue(newValue);
+    },
+    [setInputValue],
+  );
 
   /**
    * input tag에 focusout 발생시 최종 input값과 판별결과를 상위에 알리는 함수
    */
-  const focusOut = (): void => {
-    const totalInputVerifyResult = getTotalInputVerifyResult();
-    inputStatus.current = totalInputVerifyResult ? EInputStatus.success : EInputStatus.fail;
-    submitInputResult(inputValue, totalInputVerifyResult);
-  };
+  const focusOut = useCallback(
+    (newValue: string): void => {
+      const totalInputVerifyResult = getTotalInputVerifyResult(newValue);
+      setInputStatus(totalInputVerifyResult ? EInputStatus.success : EInputStatus.fail);
+      submitInputResult(newValue, totalInputVerifyResult);
+    },
+    [getTotalInputVerifyResult],
+  );
 
   return (
     <StyledDiv>
       <Input
-        value={inputValue}
+        value={value}
         placeholder={placeholder}
-        setValue={setInputValue}
-        onBlur={focusOut}
-        status={inputStatus.current}
+        setValue={setValue}
+        focusOut={focusOut}
+        status={inputStatus}
       />
-      <VerifyInfoList inputVerifyResultList={inputVerifyResultList} />
+      <VerifyInfoList inputVerifyResultList={getInputVerifyResultList(inputValue)} />
     </StyledDiv>
   );
 };
 
-export default VerifyInput;
+export default React.memo(VerifyInput);
