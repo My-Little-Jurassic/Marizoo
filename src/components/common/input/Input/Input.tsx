@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 
 export enum EInputStatus {
@@ -78,18 +78,15 @@ const Input = ({
   placeholder = "",
   focusOut,
 }: IProps): JSX.Element => {
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
-  const onBlur = () => {
-    if (focusOut && inputRef.current) focusOut(inputRef.current.value);
+  const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (focusOut) focusOut(e.target.value);
   };
 
   return (
     <StyledInput
-      ref={inputRef}
       status={status}
       defaultValue={value}
       placeholder={placeholder}
