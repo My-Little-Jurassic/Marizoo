@@ -1,5 +1,6 @@
 package com.marizoo.user.entity;
 
+<<<<<<< HEAD
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -26,4 +27,46 @@ public class Broadcast {
     @ManyToOne
     @JoinColumn(name = "animal_store_id")
     private AnimalStore animalStore;           // 방송 주체
+=======
+import com.marizoo.user.entity.common.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+public class Broadcast extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "broadcast_id")
+    private Long id;
+
+    private String title;
+
+    private String description;
+
+    private String thumbnail;
+
+    private LocalDateTime startTime;
+
+    private LocalDateTime endTime;
+
+    private BroadcastStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "animal_store_id")
+    private AnimalStore animalStore;
+
+    @OneToMany(mappedBy = "broadcast")
+    private List<BroadcastAnimal> broadcastAnimalList = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vote_id")
+    private Vote vote;
+>>>>>>> 043d037fef92b98b56fa9f9a2c94b43ce2a58bee
 }
