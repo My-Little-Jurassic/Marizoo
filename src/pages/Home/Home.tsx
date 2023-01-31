@@ -22,7 +22,7 @@ const StyledMain = styled.main`
 
 const Box = styled.div`
   height: 4000px;
-  width: 100%;
+  width: 100px;
   max-width: 1056px;
   background: blue;
 `;

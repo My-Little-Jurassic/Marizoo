@@ -23,7 +23,6 @@ function HomeNav() {
     } else {
       setIsHide(false);
     }
-    console.log(isHide);
   }, [scrollY]);
 
   return (
@@ -42,7 +41,7 @@ interface IStyledHomeNavbarProps {
 const StyledHomeNavbar = styled.nav<IStyledHomeNavbarProps>`
   position: sticky;
   top: ${(props) => (props.isHide ? "-20" : "60")}px;
-  width: 100vw;
+  width: 100%;
   height: 80px;
   display: flex;
   justify-content: center;
