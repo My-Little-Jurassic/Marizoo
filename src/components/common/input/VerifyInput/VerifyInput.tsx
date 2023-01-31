@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import Input, { EInputStatus } from "../Input/Input";
 import VerifyInfoList, { IInputVerifyResult } from "./InputVerifyList";
