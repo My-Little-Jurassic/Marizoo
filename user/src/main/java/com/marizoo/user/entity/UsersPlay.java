@@ -25,6 +25,7 @@ public class UsersPlay extends BaseEntity {
     private Play play;
 
     private Integer totalVisitor;
+    @Enumerated(EnumType.STRING)
     private BookStatus status;
 
 }
