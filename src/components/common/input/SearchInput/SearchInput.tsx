@@ -14,8 +14,17 @@ const StyledDiv = styled.div`
   overflow: hidden;
   ${({ theme }) => theme.shadow}; //shadow CSS
   background-color: ${({ theme }) => theme.colors.secondaryBg};
+  transition: all 0.1s ease-in-out;
+
+  &:focus-within {
+    border-width: 6px;
+    & > label svg {
+      margin: auto 8px auto 22px;
+    }
+  }
 
   & > label svg {
+    transition: all 0.1s ease-in-out;
     font-size: 25px;
     margin: auto 8px auto 24px;
     stroke-width: 3px;
