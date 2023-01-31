@@ -6,16 +6,16 @@ import VerifyInfoList, { IInputVerifyResult } from "./InputVerifyList";
 const StyledDiv = styled.div``;
 
 export interface IInputVerify {
-  description: string;
-  verify(value: string): boolean;
+  description: string; // 사용자에게 보여질 설명
+  verify(value: string): boolean; // value를 받아 참 거짓을 판별하는 함수
 }
 
 interface IProps {
-  value?: string;
+  value?: string; // 초기값
   placeholder?: string;
-  type?: string;
-  inputVerifyList: IInputVerify[];
-  submitInputResult(value: string, result: boolean): void;
+  type?: string; // input type
+  inputVerifyList: IInputVerify[]; // 조건 목록
+  submitInputResult(value: string, result: boolean): void; // focusOut시 value와 전체 조건 만족여부를 받을 함수
 }
 
 const VerifyInput = ({

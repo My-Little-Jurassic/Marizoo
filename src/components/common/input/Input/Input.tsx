@@ -3,6 +3,10 @@ import React from "react";
 import DefaultInput from "./DefaultInput";
 import PasswordInput from "./PasswordInput";
 
+/**
+ * Input Status Enum
+ * 기본 input에서 border 색상을 지정하고 싶으면 사용하세요
+ */
 export enum EInputStatus {
   default = "default",
   success = "success",
@@ -35,12 +39,12 @@ export const getStatusColor = (
 };
 
 interface IProps {
-  value?: string;
-  setValue(value: string): void;
-  status?: EInputStatus;
+  value?: string; // 초기값
+  setValue(value: string): void; // value값을 전달받을 함수
+  status?: EInputStatus; // input 상태 값
   placeholder?: string;
-  focusOut?(value: string): void;
-  type?: string;
+  focusOut?(value: string): void; // focusout 시 value값을 전달받을 함수
+  type?: string; // input type
 }
 
 const Input = ({

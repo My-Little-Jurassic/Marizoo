@@ -50,10 +50,10 @@ const StyledDiv = styled.div`
 `;
 
 interface IProps {
-  value?: string;
-  setValue(value: string): void;
+  value?: string; // 초기 값
+  setValue(value: string): void; // value값을 전달받을 함수
   placeholder?: string;
-  onSearch(value: string): void;
+  onSearch(value: string): void; // Enter시 value 값을 전달받을 함수
 }
 
 const SearchInput = ({ value = "", setValue, placeholder = "", onSearch }: IProps): JSX.Element => {
