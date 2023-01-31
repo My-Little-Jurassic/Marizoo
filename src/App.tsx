@@ -10,6 +10,8 @@ import useTheme from "./styles/themes/useTheme";
 import Itheme from "./styles/themes/theme";
 import { Nav } from "./components/common/navbar";
 
+import Home from "./pages/Home/Home";
+
 function App() {
   const [themeMode, toggleTheme] = useTheme();
   const theme: Itheme = themeMode === "light" ? lightTheme : darkTheme;
@@ -19,7 +21,8 @@ function App() {
       <Nav themeMode={themeMode} toggleTheme={toggleTheme}></Nav>
       <Routes>
         {/* 라우팅 될 페이지 */}
-        {/* <Route path="/{path}" element={<{page} />}></Route> */}
+        {/* <Route path="/{path}" element={s<{page} />}></Route> */}
+        <Route path="/" element={<Home />}></Route>
       </Routes>
     </ThemeProvider>
   );
