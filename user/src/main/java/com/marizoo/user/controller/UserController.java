@@ -66,6 +66,11 @@ public class UserController {
         return userService.isDuplicatedUid(uid) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpServletResponse.SC_CONFLICT).build();
     }
 
+    @GetMapping("/users/check-nickname")
+    public ResponseEntity nicknameDuplicatedCheck(@RequestParam String nickname) {
+        return userService.isDuplicatedNickname(nickname) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpServletResponse.SC_CONFLICT).build();
+    }
+
     // Exception
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(RefreshTokenException.class)

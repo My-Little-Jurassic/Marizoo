@@ -18,4 +18,8 @@ public class UserService {
     public boolean isDuplicatedUid(String uid) {
         return !userRepository.findByUid(uid).isPresent();
     }
+
+    public boolean isDuplicatedNickname(String nickname) {
+        return !userRepository.findByNickname(nickname).isPresent();
+    }
 }
