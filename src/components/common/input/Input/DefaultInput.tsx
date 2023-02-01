@@ -36,6 +36,7 @@ const StyledInput = styled.input<{ status: EInputStatus }>`
 `;
 
 interface IProps {
+  ref?: React.MutableRefObject<HTMLInputElement | null>;
   value: string;
   setValue(value: string): void;
   status: EInputStatus;
@@ -45,6 +46,7 @@ interface IProps {
 }
 
 const DefaultInput = ({
+  ref,
   value,
   setValue,
   status,
@@ -61,6 +63,7 @@ const DefaultInput = ({
 
   return (
     <StyledInput
+      ref={ref}
       status={status}
       type={type}
       defaultValue={value}

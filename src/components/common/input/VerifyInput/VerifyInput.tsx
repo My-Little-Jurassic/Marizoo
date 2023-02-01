@@ -11,6 +11,7 @@ export interface IInputVerify {
 }
 
 interface IProps {
+  ref?: React.MutableRefObject<HTMLInputElement | null>;
   value?: string; // 초기값
   placeholder?: string;
   type?: string; // input type
@@ -19,6 +20,7 @@ interface IProps {
 }
 
 const VerifyInput = ({
+  ref,
   value = "",
   placeholder = "",
   type = "text",
@@ -87,6 +89,7 @@ const VerifyInput = ({
   return (
     <StyledDiv>
       <Input
+        ref={ref}
         type={type}
         value={value}
         placeholder={placeholder}

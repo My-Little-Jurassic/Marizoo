@@ -74,6 +74,7 @@ const StyledDiv = styled.div<{ status: EInputStatus }>`
 `;
 
 interface IProps {
+  ref?: React.MutableRefObject<HTMLInputElement | null>;
   value: string;
   setValue(value: string): void;
   status: EInputStatus;
@@ -82,6 +83,7 @@ interface IProps {
 }
 
 const PasswordInput = ({
+  ref,
   value = "",
   setValue,
   status = EInputStatus.default,
@@ -105,13 +107,16 @@ const PasswordInput = ({
   return (
     <StyledDiv status={status}>
       <input
+        ref={ref}
         defaultValue={value}
         type={type}
         placeholder={placeholder}
         onChange={onChange}
         onBlur={onBlur}
       />
-      <button onClick={toggleType}>{type === "password" ? <TbEye /> : <TbEyeOff />}</button>
+      <button onClick={toggleType} type="button">
+        {type === "password" ? <TbEye /> : <TbEyeOff />}
+      </button>
     </StyledDiv>
   );
 };
