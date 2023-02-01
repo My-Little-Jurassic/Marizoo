@@ -1,4 +1,4 @@
-package com.marizoo.user.repository;
+package com.marizoo.user.repository.animalstore_repo;
 
 import com.marizoo.user.entity.AnimalStore;
 

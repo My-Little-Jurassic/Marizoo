@@ -1,4 +1,4 @@
-package com.marizoo.user.api;
+package com.marizoo.user.api.animalstore_api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.marizoo.user.dto.AnimalstoreDto;
+package com.marizoo.user.dto.animalstore_dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,17 +1,12 @@
-package com.marizoo.user.repository;
+package com.marizoo.user.repository.animalstore_repo;
 
 import com.marizoo.user.entity.AnimalStore;
-import com.marizoo.user.entity.QAnimal;
-import com.marizoo.user.entity.QAnimalStore;
-import com.marizoo.user.entity.QSpecies;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.marizoo.user.entity.QAnimal.animal;
-import static com.marizoo.user.entity.QAnimalStore.animalStore;
 import static com.marizoo.user.entity.QSpecies.species;
 
 public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{

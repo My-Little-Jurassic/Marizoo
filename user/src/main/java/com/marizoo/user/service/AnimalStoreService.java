@@ -1,9 +1,8 @@
 package com.marizoo.user.service;
 
 import com.marizoo.user.entity.AnimalStore;
-import com.marizoo.user.repository.AnimalStoreRepository;
+import com.marizoo.user.repository.animalstore_repo.AnimalStoreRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
