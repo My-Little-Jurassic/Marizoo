@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AnimalStoreResponseDto {
+public class AnimalStoreDto {
 
     private String store_name;
     private String tel;
