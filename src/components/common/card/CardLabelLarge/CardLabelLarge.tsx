@@ -48,7 +48,7 @@ const CardLabelLarge = function (props: IProps) {
 export default CardLabelLarge;
 
 const StyledContainer = styled.div`
-  width: 285px;
+  width: 100%;
   height: 247px;
   position: relative;
   filter: drop-shadow(2px 2px 8px rgba(67, 67, 67, 0.2));
