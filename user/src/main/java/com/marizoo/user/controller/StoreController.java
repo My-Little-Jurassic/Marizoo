@@ -1,9 +1,11 @@
 package com.marizoo.user.controller;
 
 import com.marizoo.user.api.animalstore_api.AnimalStoreListResponse;
+import com.marizoo.user.api.animalstore_api.ReservedAnimalStoreResponse;
 import com.marizoo.user.dto.animalstore_dto.AnimalStoreDto;
 import com.marizoo.user.entity.AnimalStore;
 import com.marizoo.user.service.AnimalStoreService;
+import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -78,7 +80,14 @@ public class StoreController {
     }
 
 
-    
-
+    @GetMapping("/stores/{store_id}")
+    public ResponseEntity<ReservedAnimalStoreResponse> reserve(@PathVariable(name = "store_id") Long store_id){
+        AnimalStore animalStore = animalStoreService.findAnimalStore(store_id);
+        ReservedAnimalStoreResponse reservedStore =
+                new ReservedAnimalStoreResponse(animalStore.getStoreName(),
+                                                animalStore.getAddress(),
+                                                animalStore.getTel());
+        return new ResponseEntity<>(reservedStore, HttpStatus.OK);
+    }
 
 }

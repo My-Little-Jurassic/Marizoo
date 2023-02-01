@@ -33,9 +33,21 @@ public class AnimalStoreService {
     }
 
     /**
+     * 가게고유아이디로 가게 조회
+     * @param storeId : 가게 고유 id
+     * @return : 가게
+     */
+
+    public AnimalStore findAnimalStore(Long storeId) {
+        return animalStoreRepository.findAnimalStoreById(storeId).get();
+    }
+
+
+
+    /**
      * 검색한 상호명이 포함된 가게 조회.
      * @param storename : 상호명
-     * @return 파충류 샵
+     * @return 가게
      */
     public List<AnimalStore> findAnimalStoresbyNameSearch(String storename){
         return animalStoreRepository.findBystoreNameContaining(storename);
@@ -44,7 +56,7 @@ public class AnimalStoreService {
     /**
      * 검색한 종을 포함한 가게 조회.
      * @param species : 종
-     * @return 파충류 샵
+     * @return 가게
      */
     
     public List<AnimalStore> findAnimalStoresbySpeciesSearch(String species){
