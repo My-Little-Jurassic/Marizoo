@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,14 +43,24 @@ public class StoreController {
             @RequestParam(name = "storename", required = false, defaultValue = "") String storename,
             @RequestParam(name = "species", required = false, defaultValue = "") String species){
 
+        List<AnimalStore> storeList = new ArrayList<>();
+        List<AnimalStoreDto> AnimalStoreDtoList;
+
         if(storename.length() == 0 && species.length() == 0){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+        }else{
+            // 상호명 검색
+            if(storename.length() != 0 && species.length() == 0){
+                storeList = animalStoreService.findAnimalStoresbyNameSearch(storename);
+            }
+            // 종 검색
+            if(storename.length() == 0 && species.length() != 0){
+                System.out.println("종 검색");
+                storeList = animalStoreService.findAnimalStoresbySpeciesSearch(species);
+            }
 
-        // 상호명 검색
-        if(storename.length() != 0 && species.length() == 0){
-            List<AnimalStore> storeList = animalStoreService.findAnimalStoresbyNameSearch(storename);
-            List<AnimalStoreDto> AnimalStoreDtoList = storeList.stream()
+            // 검색 결과 API 객체로 변환.
+            AnimalStoreDtoList = storeList.stream()
                     .map(as -> new AnimalStoreDto(
                             as.getStoreName(),
                             as.getTel(),
@@ -61,26 +72,7 @@ public class StoreController {
             return new ResponseEntity<>(new AnimalStoreListResponse(AnimalStoreDtoList), HttpStatus.OK);
         }
 
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
-
-//        if(storename.length() == 0 && species.length() != 0){
-//
-//        }
-
-//        if(storename.length() != 0 && species.length() != 0){
-//
-//        }
-
     }
-
-    @Data
-    @AllArgsConstructor
-    static class ggg{
-        private String storename;
-        private String species;
-    }
-
-
 
 
 

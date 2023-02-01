@@ -26,15 +26,22 @@ public class AnimalStoreService {
     }
 
     /**
-     * 상호명으로 검색시, 가게 목록 조회.
-     * @return 해당 상호명이 포함된 가게 리스트
+     * 검색한 상호명이 포함된 가게 조회.
+     * @param storename : 상호명
+     * @return 파충류 샵
      */
     public List<AnimalStore> findAnimalStoresbyNameSearch(String storename){
         return animalStoreRepository.findBystoreNameContaining(storename);
     }
 
-//    public List<AnimalStore> findAnimalStoresbySpeciesSearch(String species){
-//        return animalStoreRepository.
-//    }
+    /**
+     * 검색한 종을 포함한 가게 조회.
+     * @param species : 종
+     * @return 파충류 샵
+     */
+    
+    public List<AnimalStore> findAnimalStoresbySpeciesSearch(String species){
+        return animalStoreRepository.searchAnimalStoreHavingSpecies(species);
+    }
 
 }

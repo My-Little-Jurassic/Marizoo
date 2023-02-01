@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface AnimalStoreRepository extends JpaRepository<AnimalStore, Long> {
+public interface AnimalStoreRepository extends JpaRepository<AnimalStore, Long>, AnimalStoreRepositoryCustom {
 
     // 가게 목록 전체 조회
     List<AnimalStore> findAll();
@@ -15,7 +15,4 @@ public interface AnimalStoreRepository extends JpaRepository<AnimalStore, Long> 
     // 상호명으로 가게 검색
     List<AnimalStore> findBystoreNameContaining(String storeName);
 
-    // 보유 동물로 가게 검색
-//    @Query("SELECT m FROM animalStore m JOIN animal b")
-//    List<AnimalStore> findstoreHavingSpeciesName(@Param("classification")String species);
 }
