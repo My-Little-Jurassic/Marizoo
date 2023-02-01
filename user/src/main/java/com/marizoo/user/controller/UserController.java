@@ -3,6 +3,7 @@ package com.marizoo.user.controller;
 import com.marizoo.user.dto.JoinRequestDto;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.dto.ExceptionResponseDto;
+import com.marizoo.user.exception.AlreadyJoinException;
 import com.marizoo.user.exception.RefreshTokenException;
 import com.marizoo.user.repository.UserRepository;
 import com.marizoo.user.service.AuthService;
@@ -30,6 +31,11 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseEntity join(@RequestBody JoinRequestDto joinRequestDto) {
+
+        if (userRepository.findByEmail(joinRequestDto.getEmail()).isPresent()) {
+            throw new AlreadyJoinException("이미 가입된 이메일입니다.");
+        }
+
         User user = new User();
         user.setUid(joinRequestDto.getUid());
         user.setPwd(encoder.encode(joinRequestDto.getPwd()));
@@ -40,7 +46,7 @@ public class UserController {
 
         userRepository.save(user);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpServletResponse.SC_CREATED).build();
     }
 
     @GetMapping("/refresh")
@@ -75,6 +81,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(RefreshTokenException.class)
     public ExceptionResponseDto refreshTokenException(RefreshTokenException e) {
+        return new ExceptionResponseDto(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(AlreadyJoinException.class)
+    public ExceptionResponseDto alreadyJoinException(AlreadyJoinException e) {
         return new ExceptionResponseDto(e.getMessage());
     }
 }
