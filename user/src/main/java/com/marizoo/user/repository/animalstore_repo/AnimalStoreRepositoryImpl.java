@@ -16,6 +16,7 @@ public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    // 종으로 해당하는 가게 검색
     @Override
     public List<AnimalStore> searchAnimalStoreHavingSpecies(String input) {
 

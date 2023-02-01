@@ -69,10 +69,16 @@ public class StoreController {
 
             return new ResponseEntity<>(new AnimalStoreListResponse(AnimalStoreDtoList), HttpStatus.OK);
         }
+    }
 
+    @PostMapping("/stores/{store_id}")
+    public ResponseEntity<String> follow(@PathVariable(name = "store_id") String store_id, @RequestBody Long uid){
+
+        return new ResponseEntity<>("성공", HttpStatus.OK);
     }
 
 
+    
 
 
 }
