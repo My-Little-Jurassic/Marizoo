@@ -34,7 +34,13 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/users").permitAll()
+                .antMatchers("/users", "/refresh").permitAll()
+                .antMatchers(
+                        "/swagger-resources/**",
+                        "/swagger-ui.html",
+                        "/v2/api-docs",
+                        "/webjars/**")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -48,6 +54,7 @@ public class SecurityConfig {
                 .and()
                 .build();
     }
+
     public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
         @Override
         public void configure(HttpSecurity http) throws Exception {
@@ -59,4 +66,6 @@ public class SecurityConfig {
                     .addFilterBefore(new ExceptionHandlerFilter(om), JwtAuthorizationFilter.class);
         }
     }
+
+
 }
