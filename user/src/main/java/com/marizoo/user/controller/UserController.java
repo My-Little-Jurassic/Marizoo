@@ -1,10 +1,12 @@
 package com.marizoo.user.controller;
 
+import com.marizoo.user.api.FindUidResponseApi;
 import com.marizoo.user.dto.JoinRequestDto;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.dto.ExceptionResponseDto;
 import com.marizoo.user.exception.AlreadyJoinException;
 import com.marizoo.user.exception.RefreshTokenException;
+import com.marizoo.user.exception.UserNotFoundException;
 import com.marizoo.user.repository.UserRepository;
 import com.marizoo.user.service.AuthService;
 import com.marizoo.user.service.UserService;
@@ -77,6 +79,12 @@ public class UserController {
         return userService.isDuplicatedNickname(nickname) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpServletResponse.SC_CONFLICT).build();
     }
 
+    @GetMapping("/users/find-uid")
+    public ResponseEntity findUidByEmail(@RequestParam String email) {
+        String uid = userService.findUidByEmail(email);
+        return ResponseEntity.ok(new FindUidResponseApi(uid));
+    }
+
     // Exception
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(RefreshTokenException.class)
@@ -87,6 +95,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(AlreadyJoinException.class)
     public ExceptionResponseDto alreadyJoinException(AlreadyJoinException e) {
+        return new ExceptionResponseDto(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserNotFoundException.class)
+    public ExceptionResponseDto userNotFoundException(UserNotFoundException e) {
         return new ExceptionResponseDto(e.getMessage());
     }
 }
