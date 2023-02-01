@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
 import { EInputStatus } from "..";
 import { getStatusColor } from "./Input";
@@ -36,7 +36,6 @@ const StyledInput = styled.input<{ status: EInputStatus }>`
 `;
 
 interface IProps {
-  ref?: React.MutableRefObject<HTMLInputElement | null>;
   value: string;
   setValue(value: string): void;
   status: EInputStatus;
@@ -45,33 +44,29 @@ interface IProps {
   type: string;
 }
 
-const DefaultInput = ({
-  ref,
-  value,
-  setValue,
-  status,
-  placeholder,
-  focusOut,
-  type,
-}: IProps): JSX.Element => {
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
-  const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (focusOut) focusOut(e.target.value);
-  };
+const DefaultInput = forwardRef<HTMLInputElement, IProps>(
+  ({ value, setValue, status, placeholder, focusOut, type }: IProps, ref): JSX.Element => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(e.target.value);
+    };
+    const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      if (focusOut) focusOut(e.target.value);
+    };
 
-  return (
-    <StyledInput
-      ref={ref}
-      status={status}
-      type={type}
-      defaultValue={value}
-      placeholder={placeholder}
-      onChange={onChange}
-      onBlur={onBlur}
-    />
-  );
-};
+    return (
+      <StyledInput
+        ref={ref}
+        status={status}
+        type={type}
+        defaultValue={value}
+        placeholder={placeholder}
+        onChange={onChange}
+        onBlur={onBlur}
+      />
+    );
+  },
+);
+
+DefaultInput.displayName = "DefaultInput";
 
 export default React.memo(DefaultInput);
