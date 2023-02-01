@@ -15,7 +15,8 @@ import { getStatusColor } from "./Input";
 
 const StyledDiv = styled.div<{ status: EInputStatus }>`
   box-sizing: border-box;
-  width: 292px;
+  width: 100%;
+  max-width: 292px;
   height: 48px;
   border: 4px solid
     ${({ theme, status }) =>
