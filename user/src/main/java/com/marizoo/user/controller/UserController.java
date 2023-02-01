@@ -85,6 +85,12 @@ public class UserController {
         return ResponseEntity.ok(new FindUidResponseApi(uid));
     }
 
+    @GetMapping("/users/find-pwd")
+    public ResponseEntity findPwdByEmail(@RequestParam String email) {
+        userService.createMailAndChangePwd(email);
+        return ResponseEntity.ok().build();
+    }
+
     // Exception
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(RefreshTokenException.class)
