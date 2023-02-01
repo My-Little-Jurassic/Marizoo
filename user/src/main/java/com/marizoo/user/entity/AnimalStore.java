@@ -2,6 +2,7 @@ package com.marizoo.user.entity;
 
 import com.marizoo.user.entity.common.BaseEntity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
