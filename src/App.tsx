@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 
 import Home from "./pages/Home/Home";
+import Cafe from "./pages/Cafe/Cafe";
 import Itheme from "./styles/themes/theme";
 import useTheme from "./styles/themes/useTheme";
 import { Nav } from "./components/common/navbar";
@@ -19,6 +20,7 @@ function App() {
       <Nav themeMode={themeMode} toggleTheme={toggleTheme}></Nav>
       <Routes>
         <Route path="/" element={<Home />}></Route>
+        <Route path="/cafe" element={<Cafe />}></Route>
       </Routes>
     </ThemeProvider>
   );
