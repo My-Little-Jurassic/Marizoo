@@ -19,7 +19,7 @@ function App() {
       <Nav themeMode={themeMode} toggleTheme={toggleTheme}></Nav>
       <Routes>
         {/* 라우팅 될 페이지 */}
-        {/* <Route path="/{path}" element={<{page} />}></Route> */}
+        {/* <Route path="/{path}" element={s<{page} />}></Route> */}
       </Routes>
     </ThemeProvider>
   );
