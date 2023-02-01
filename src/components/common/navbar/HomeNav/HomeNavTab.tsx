@@ -66,6 +66,10 @@ const StyledHomeNavTab = styled.nav`
   justify-content: center;
   align-items: center;
   height: 100%;
+  @media screen and (max-width: 600px) {
+    justify-content: space-around;
+    width: 100%;
+  }
 `;
 
 const StyledIconContainer = styled.div`
@@ -77,6 +81,10 @@ const StyledIconContainer = styled.div`
   }
   & > .deactive {
     color: ${(props) => props.theme.colors.primaryText}; // 비활성화된 탭 아이콘 색깔
+  }
+  @media screen and (max-width: 600px) {
+    justify-content: space-around;
+    width: 100%;
   }
 `;
 
@@ -106,9 +114,16 @@ const StyledTabLabel = styled.div`
 const StyledActiveTabLine = styled.div<any>`
   transition: all 0.2s;
   position: absolute;
-  left: ${(props) => props.activeTab * 100}px;
-  bottom: -1px;
-  width: 100px;
   height: 4px;
   background-color: ${(props) => props.theme.colors.green};
+  @media screen and (max-width: 600px) {
+    width: 33.333%;
+    left: ${(props) => props.activeTab * 33.333}%;
+    top: 0px;
+  }
+  @media screen and (min-width: 600px) {
+    left: ${(props) => props.activeTab * 100}px;
+    bottom: -1px;
+    width: 100px;
+  }
 `;

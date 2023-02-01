@@ -39,8 +39,7 @@ interface IStyledHomeNavbarProps {
 }
 
 const StyledHomeNavbar = styled.nav<IStyledHomeNavbarProps>`
-  position: sticky;
-  top: ${(props) => (props.isHide ? "-20" : "60")}px;
+  z-index: 10;
   width: 100%;
   height: 80px;
   display: flex;
@@ -48,7 +47,16 @@ const StyledHomeNavbar = styled.nav<IStyledHomeNavbarProps>`
   align-items: center;
   transition: all 0.1s;
   transition: top 0.2s ease-out;
-  border-bottom: 1px solid ${(props) => props.theme.colors.disable};
   background-color: ${(props) => props.theme.colors.primaryBg};
   color: ${(props) => props.theme.colors.primaryText};
+  @media screen and (max-width: 600px) {
+    position: fixed;
+    bottom: 0px;
+    border-top: 1px solid ${(props) => props.theme.colors.disable};
+  }
+  @media screen and (min-width: 600px) {
+    position: sticky;
+    top: ${(props) => (props.isHide ? "-20" : "60")}px;
+    border-bottom: 1px solid ${(props) => props.theme.colors.disable};
+  }
 `;

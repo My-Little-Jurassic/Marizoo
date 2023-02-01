@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
 import { TbSearch } from "react-icons/tb";
 
@@ -57,22 +57,32 @@ interface IProps {
   onSearch(value: string): void; // Enter시 value 값을 전달받을 함수
 }
 
-const SearchInput = ({ value = "", setValue, placeholder = "", onSearch }: IProps): JSX.Element => {
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
-  const onKeyup = (e: React.KeyboardEvent & React.ChangeEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") onSearch(e.target.value);
-  };
+const SearchInput = forwardRef<HTMLInputElement, IProps>(
+  ({ value = "", setValue, placeholder = "", onSearch }: IProps, ref): JSX.Element => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(e.target.value);
+    };
+    const onKeyup = (e: React.KeyboardEvent & React.ChangeEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") onSearch(e.target.value);
+    };
 
-  return (
-    <StyledDiv>
-      <label>
-        <TbSearch />
-      </label>
-      <input defaultValue={value} placeholder={placeholder} onChange={onChange} onKeyUp={onKeyup} />
-    </StyledDiv>
-  );
-};
+    return (
+      <StyledDiv>
+        <label>
+          <TbSearch />
+        </label>
+        <input
+          ref={ref}
+          defaultValue={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          onKeyUp={onKeyup}
+        />
+      </StyledDiv>
+    );
+  },
+);
+
+SearchInput.displayName = "SearchInput";
 
 export default React.memo(SearchInput);
