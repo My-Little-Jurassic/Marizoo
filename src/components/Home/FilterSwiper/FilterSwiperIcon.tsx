@@ -2,18 +2,32 @@ import React from "react";
 import styled from "styled-components";
 
 interface IProps {
-  iconName: string;
+  index: number;
+  animalName: string;
   imgUrl: string;
+  focusdFilter: number | null;
+  setFocusdFilter: (index: number | null) => void;
+  searchKeyword: string | null;
+  setSearchKeyword: (index: string | null) => void;
 }
 
 function FilterSwiperIcon(props: IProps) {
   return (
-    <StyledFilterSwiperIcon>
+    <StyledFilterSwiperIcon
+      onMouseOver={() => {
+        props.setFocusdFilter(props.index);
+      }}
+      onMouseOut={() => {
+        props.setFocusdFilter(null);
+      }}
+      onClick={() => {
+        props.setSearchKeyword(props.animalName);
+      }}
+    >
       <StyledIcon
-        onClick={() => {
-          console.log(props.imgUrl);
-        }}
+        index={props.index}
         imgUrl={props.imgUrl}
+        focusdIcon={props.focusdFilter}
       ></StyledIcon>
     </StyledFilterSwiperIcon>
   );
@@ -26,18 +40,19 @@ const StyledFilterSwiperIcon = styled.div`
   display: inline-block;
 `;
 
-const StyledIcon = styled.div<{ imgUrl: string }>`
+const StyledIcon = styled.div<{ index: number; imgUrl: string; focusdIcon: number | null }>`
+  ${(props) => props.theme.styles.card}
   cursor: pointer;
-  width: 80px;
-  height: 80px;
+  width: 64px;
+  height: 64px;
   background: gray;
   border-radius: 64px;
   background-image: url("${(props) => props.imgUrl}");
   background-size: cover;
   transition: all 0.2s;
-  margin-inline: 4px;
-  box-shadow: 0 0 0 4px ${(props) => props.theme.colors.primaryBg} inset;
-  &:hover {
-    box-shadow: 0 0 0 0px ${(props) => props.theme.colors.primaryBg} inset;
-  }
+  margin-inline: 8px;
+  filter: ${(props) =>
+    props.focusdIcon !== null && props.index !== props.focusdIcon
+      ? "drop-shadow(2px 2px 8px rgba(67, 67, 67, 0.2)) brightness(0.5)"
+      : "drop-shadow(2px 2px 8px rgba(67, 67, 67, 0.2)) brightness(1)"};
 `;

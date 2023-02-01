@@ -1,45 +1,56 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import FilterSwiperIcon from "./FilterSwiperIcon";
 
-function FilterSwiper() {
-  const [selectedAnimal, setSelectedAnimal] = useState("");
+interface IProps {
+  animalList: {
+    animalName: string;
+    imgUrl: string;
+  }[];
+  focusdFilter: number | null;
+  setFocusdFilter: (index: number | null) => void;
+  searchKeyword: string | null;
+  setSearchKeyword: (index: string | null) => void;
+}
+
+function FilterSwiper(props: IProps) {
+  // swiper icon 배열 데이터 가공
+  const swiperIcons = props.animalList.map((animal, index) => {
+    return (
+      <FilterSwiperIcon
+        key={`animal-${index}`}
+        index={index}
+        animalName={animal.animalName}
+        imgUrl={animal.imgUrl}
+        focusdFilter={props.focusdFilter}
+        setFocusdFilter={props.setFocusdFilter}
+        searchKeyword={props.searchKeyword}
+        setSearchKeyword={props.setSearchKeyword}
+      ></FilterSwiperIcon>
+    );
+  });
+
   return (
-    <StyledSwiper>
-      <StyledSwiperTitle>보고싶은 동물을 골라보세요</StyledSwiperTitle>
-      <StyledSwiperSlide>
-        <FilterSwiperIcon
-          iconName="도마뱀"
-          imgUrl="https://picsum.photos/200/300"
-        ></FilterSwiperIcon>
-        <FilterSwiperIcon iconName="거북" imgUrl="https://picsum.photos/200/300"></FilterSwiperIcon>
-        <FilterSwiperIcon
-          iconName="도롱뇽"
-          imgUrl="https://picsum.photos/200/300"
-        ></FilterSwiperIcon>
-        <FilterSwiperIcon
-          iconName="우파루파"
-          imgUrl="https://picsum.photos/200/300"
-        ></FilterSwiperIcon>
-        <FilterSwiperIcon iconName="뱀" imgUrl="https://picsum.photos/200/300"></FilterSwiperIcon>
-        <FilterSwiperIcon
-          iconName="개구리"
-          imgUrl="https://picsum.photos/200/300"
-        ></FilterSwiperIcon>
-        <FilterSwiperIcon
-          iconName="얼룩말"
-          imgUrl="https://picsum.photos/200/300"
-        ></FilterSwiperIcon>
-      </StyledSwiperSlide>
+    <StyledSwiper searchKeyword={props.searchKeyword}>
+      <StyledSwiperTitle>
+        {props.focusdFilter === null
+          ? "보고싶은 동물을 골라보세요"
+          : `"${props.animalList[props.focusdFilter].animalName}" 라이브 보기`}
+      </StyledSwiperTitle>
+      <StyledSwiperSlide>{swiperIcons}</StyledSwiperSlide>
     </StyledSwiper>
   );
 }
 
 export default FilterSwiper;
 
-const StyledSwiper = styled.div`
+const StyledSwiper = styled.div<{ searchKeyword: string | null }>`
   width: 90%;
+  height: ${(props) => (props.searchKeyword === null ? "160px" : "0px")};
+  filter: ${(props) => (props.searchKeyword === null ? "opacity(1)" : "opacity(0)")};
+  transition: all 0.5s;
+  overflow: hidden;
   max-width: 927px;
   @media screen and (max-width: 900px) {
     max-width: 620px;
@@ -56,5 +67,6 @@ const StyledSwiperSlide = styled.div`
   height: 88px;
   white-space: nowrap;
   overflow: auto;
-  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
 `;

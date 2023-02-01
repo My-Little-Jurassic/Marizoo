@@ -10,7 +10,7 @@ for (let i = 0; i < 10; i++) {
   itemList.push(
     <Grid key={`item-${i}`} item xs={12} sm={6} md={4}>
       <CardLabelLarge
-        title={"label"}
+        title={"제목"}
         thumbnailSrc={"https://picsum.photos/200/300"}
         classficationImgList={["https://picsum.photos/200/300"]}
       ></CardLabelLarge>
@@ -21,7 +21,6 @@ for (let i = 0; i < 10; i++) {
 function LiveGrid() {
   return (
     <StyledLiveGridContainer>
-      <StyledContainerTitle>지금 진행중인 방송이에요</StyledContainerTitle>
       <Grid container columnSpacing={4}>
         {itemList}
       </Grid>
@@ -37,10 +36,4 @@ const StyledLiveGridContainer = styled.div`
   @media screen and (max-width: 900px) {
     max-width: 620px;
   }
-`;
-
-const StyledContainerTitle = styled.h4`
-  font: ${(props) => props.theme.fonts.header4};
-  color: ${(props) => props.theme.colors.primaryText};
-  margin-bottom: 16px;
 `;
