@@ -4,7 +4,8 @@ import { TbSearch } from "react-icons/tb";
 
 const StyledDiv = styled.div`
   box-sizing: border-box;
-  width: 516px;
+  width: 100%;
+  max-width: 516px;
   height: 60px;
   border: 4px solid ${({ theme }) => theme.colors.green};
   border-radius: 32px;
