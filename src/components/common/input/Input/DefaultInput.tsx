@@ -5,7 +5,8 @@ import { getStatusColor } from "./Input";
 
 const StyledInput = styled.input<{ status: EInputStatus }>`
   box-sizing: border-box;
-  width: 292px;
+  width: 100%;
+  max-width: 292px;
   height: 48px;
   background-color: ${({ theme }) => theme.colors.secondaryBg};
   border: 4px solid
