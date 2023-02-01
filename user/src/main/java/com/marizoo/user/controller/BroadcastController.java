@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,18 +24,26 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BroadcastController {
     private final BroadcastRepository broadcastRepository;
-/*
+
     @GetMapping("/broadcasts")
     public ResponseEntity<?> getOnairs(){
+        // 현재 방송 중인 목록 가져오기
         List<Broadcast> onairs = broadcastRepository.findByStatus(BroadcastStatus.ONAIR);
-        List<BroadcastDto> result = onairs.stream()
-                .map(b -> new BroadcastsDto(b.getTitle(), b.getThumbnail(), ))
-                .collect(Collectors.toList());
-        return new ResponseEntity<List<BroadcastDto>>(result, HttpStatus.OK);
+        List<BroadcastsDto> result = new ArrayList<>();
+        for (Broadcast onair : onairs) {
+            List<String> classifications = new ArrayList<>();
+            for (BroadcastAnimal broadcastAnimal : onair.getBroadcastAnimalList()) {
+                classifications.add(broadcastAnimal.getAnimal().getSpecies().getClassification());
+            }
+            result.add(new BroadcastsDto(onair.getTitle(), onair.getThumbnail(), classifications));
+        }
+        return new ResponseEntity<List<BroadcastsDto>>(result, HttpStatus.OK);
     }
-*/
+
     @GetMapping("/broadcasts/{broadcast_id}")
     public ResponseEntity<?> getBroadcastInfo(@PathVariable("broadcast_id") Long broadcastId){
+        // broadcast_id에 해당하는 방송 정보 가져오기.
+
         Optional<Broadcast> opt = broadcastRepository.findById(broadcastId);
         if(opt.isEmpty()){
             // 방송 정보를 찾는데 없음

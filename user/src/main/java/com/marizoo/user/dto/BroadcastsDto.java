@@ -5,13 +5,15 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 public class BroadcastsDto {
-    // 방송 제목, 방송 써멘일
+    // 방송 제목, 방송 썸네일, 종
     private String title;
     private String thumbnail;
-    private String classification;
+    private List<String> classificationImgs;
 }
