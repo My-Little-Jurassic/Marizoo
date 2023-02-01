@@ -39,6 +39,7 @@ export const getStatusColor = (
 };
 
 interface IProps {
+  ref?: React.MutableRefObject<HTMLInputElement | null>;
   value?: string; // 초기값
   setValue(value: string): void; // value값을 전달받을 함수
   status?: EInputStatus; // input 상태 값
@@ -48,6 +49,7 @@ interface IProps {
 }
 
 const Input = ({
+  ref,
   value = "",
   setValue,
   status = EInputStatus.default,
@@ -59,6 +61,7 @@ const Input = ({
     return (
       <PasswordInput
         status={status}
+        ref={ref}
         value={value}
         setValue={setValue}
         placeholder={placeholder}
@@ -69,6 +72,7 @@ const Input = ({
     return (
       <DefaultInput
         status={status}
+        ref={ref}
         value={value}
         setValue={setValue}
         placeholder={placeholder}
