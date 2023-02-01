@@ -1,11 +1,9 @@
 package com.marizoo.user.controller;
 
-import com.marizoo.user.api.AnimalStoreListResponse;
-import com.marizoo.user.dto.AnimalstoreDto.AnimalStoreDto;
+import com.marizoo.user.api.animalstore_api.AnimalStoreListResponse;
+import com.marizoo.user.dto.animalstore_dto.AnimalStoreDto;
 import com.marizoo.user.entity.AnimalStore;
 import com.marizoo.user.service.AnimalStoreService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
