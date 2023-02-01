@@ -5,11 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class JoinResponseDto {
+public class ExceptionResponseDto {
 
     private String message;
 
-    public JoinResponseDto(String message) {
+    public ExceptionResponseDto(String message) {
         this.message = message;
     }
 }

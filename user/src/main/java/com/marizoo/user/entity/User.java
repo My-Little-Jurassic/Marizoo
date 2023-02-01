@@ -27,4 +27,6 @@ public class User {
     private Long watchTimeAcc;
     private Long effectClickAcc;
     private Long feedClickAcc;
+
+    private String refreshToken;
 }
