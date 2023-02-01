@@ -6,6 +6,7 @@ import com.marizoo.user.dto.ExceptionResponseDto;
 import com.marizoo.user.exception.RefreshTokenException;
 import com.marizoo.user.repository.UserRepository;
 import com.marizoo.user.service.AuthService;
+import com.marizoo.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class UserController {
 
     private final BCryptPasswordEncoder encoder;
     private final UserRepository userRepository;
+    private final UserService userService;
     private final AuthService authService;
 
     @PostMapping("/users")
@@ -57,6 +59,11 @@ public class UserController {
         }
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/users/check-uid")
+    public ResponseEntity uidDuplicatedCheck(@RequestParam String uid) {
+        return userService.isDuplicatedUid(uid) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpServletResponse.SC_CONFLICT).build();
     }
 
     // Exception

@@ -34,14 +34,14 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/users", "/refresh").permitAll()
-                .antMatchers(
-                        "/swagger-resources/**",
-                        "/swagger-ui.html",
-                        "/v2/api-docs",
-                        "/webjars/**")
-                .permitAll()
-                .anyRequest().authenticated()
+//                .antMatchers("/users", "/refresh").permitAll()
+//                .antMatchers(
+//                        "/swagger-resources/**",
+//                        "/swagger-ui.html",
+//                        "/v2/api-docs",
+//                        "/webjars/**")
+//                .permitAll()
+                .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
