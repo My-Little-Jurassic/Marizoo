@@ -11,7 +11,7 @@ public interface PlayRepository extends JpaRepository<Play, Long> {
     
     // 가게 id로 해당 프로그램들 조회
     @Query("select p from Play p join AnimalStore a where a.id = :StoreId")
-    List<Play> findPlaysByStoreId(@Param("StoreId") Long StoreId);
+    List<Play> getPlaysAboutStoreId(@Param("StoreId") Long StoreId);
 
 
 }

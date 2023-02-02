@@ -77,7 +77,7 @@ public class AnimalStoreService {
      * @return  체험 프로그램 목록
      */
      public List<Play> findPlayByStore(Long storeId){
-        return playRepository.findPlaysByStoreId(storeId);
+        return playRepository.getPlaysAboutStoreId(storeId);
      }
 
 
