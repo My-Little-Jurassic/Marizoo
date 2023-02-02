@@ -1,5 +1,6 @@
 package com.marizoo.user.service;
 
+import com.marizoo.user.api.MyPageRequestApi;
 import com.marizoo.user.dto.MailDto;
 import com.marizoo.user.api.MyPageResponseApi;
 import com.marizoo.user.entity.User;
@@ -11,13 +12,14 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -93,6 +95,22 @@ public class UserService {
             } else {
                 throw new UserNotFoundException("비밀번호가 일치하지 않습니다.");
             }
+        } catch (Exception e) {
+            throw new UserNotFoundException(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void modifyMyPageInfo(Long userId, MyPageRequestApi myPageRequest) {
+        try {
+            User user = userRepository.findById(userId).orElseThrow(
+                    () -> new UserNotFoundException("유저가 없습니다.")
+            );
+
+            user.setNickname(myPageRequest.getNickname());
+            user.setPhoneNumber(myPageRequest.getPhoneNumber());
+            user.setEmail(myPageRequest.getEmail());
+
         } catch (Exception e) {
             throw new UserNotFoundException(e.getMessage());
         }

@@ -1,6 +1,7 @@
 package com.marizoo.user.controller;
 
 import com.marizoo.user.api.FindUidResponseApi;
+import com.marizoo.user.api.MyPageRequestApi;
 import com.marizoo.user.dto.JoinRequestDto;
 import com.marizoo.user.api.MyPageResponseApi;
 import com.marizoo.user.entity.User;
@@ -97,6 +98,12 @@ public class UserController {
         String pwd = request.get("pwd");
         MyPageResponseApi myPageInfo = userService.getMyPageInfo(userId, pwd);
         return ResponseEntity.ok(myPageInfo);
+    }
+
+    @PutMapping("/users/{userId}")
+    public ResponseEntity modifyMyPage(@RequestBody MyPageRequestApi myPageRequest, @PathVariable Long userId) {
+        userService.modifyMyPageInfo(userId, myPageRequest);
+        return ResponseEntity.ok().build();
     }
 
     // Exception
