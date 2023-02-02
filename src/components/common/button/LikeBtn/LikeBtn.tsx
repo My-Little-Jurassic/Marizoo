@@ -3,7 +3,11 @@ import styled from "styled-components";
 
 import { TbThumbUp } from "react-icons/tb"; // 엄지 아이콘 import
 
-function LikeBtn() {
+interface IProps {
+  onClick?(): void; // onclick props
+}
+
+function LikeBtn(props: IProps) {
   // 클릭할 경우 실행될 엄지 아이콘 애니메이션 함수
   const thumbUpIconAnimate = function () {
     const thumbUpIcon: Element | null = document.querySelector(".thumb-up-icon"); // 엄지 아이콘
@@ -32,10 +36,10 @@ function LikeBtn() {
         thumbUpIconAnimate();
       }}
     >
-      <ThumbUpIcon className="thumb-up-icon">
+      <div className="thumb-up-icon">
         <TbThumbUp size={32} />
-      </ThumbUpIcon>
-      <StyledLikeBtnLabel>좋아요</StyledLikeBtnLabel>
+      </div>
+      <StyledLabel>좋아요</StyledLabel>
     </StyledLikeBtn>
   );
 }
@@ -49,17 +53,14 @@ const StyledLikeBtn = styled.button`
   justify-content: space-around;
   width: 140px;
   height: 48px;
-  background: ${(props) => props.theme.colors.seconderyBg};
+  background: ${(props) => props.theme.colors.secondaryBg};
   border: none;
   padding-inline: 24px;
   padding-block: 10px;
   color: ${(props) => props.theme.colors.green};
-  word-break: break-all;
 `;
 
-const ThumbUpIcon = styled.div``;
-
-const StyledLikeBtnLabel = styled.a`
+const StyledLabel = styled.div`
   font: ${(props) => props.theme.fonts.mainContentBold};
   display: flex;
   align-items: center;

@@ -3,13 +3,13 @@ import styled, { keyframes } from "styled-components";
 
 import { TbSun, TbMoon } from "react-icons/tb";
 
-interface Iprops {
+interface IProps {
   // 테마 버튼 props type
   themeMode: string;
   toggleTheme: () => void;
 }
 
-function ThemeBtn(props: Iprops) {
+function ThemeBtn(props: IProps) {
   return (
     <StyledThemeBtn
       onClick={() => {
