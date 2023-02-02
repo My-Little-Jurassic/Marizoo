@@ -23,7 +23,7 @@ const StyledCafe = styled.div`
 const StyledCafeMain = styled.main`
   position: absolute;
   width: 100%;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 124px);
   @media screen and (max-width: 600px) {
     top: 60px;
   }

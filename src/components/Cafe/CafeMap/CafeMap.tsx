@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import CafeList from "../CafeList/CafeList";
+
+import { TbZoomCancel, TbLocation } from "react-icons/tb";
 
 // 파충류카페 더미데이터
 const cafeData = [
@@ -73,6 +75,10 @@ function CafeMap() {
   const [mapBounds, setMapBounds] = useState<IMapBounds | null>(null);
   const [filterdCafeData, setFilterdCafeData] = useState<ICafeData[]>(cafeData);
   const [focusedCafe, setFocusedCafe] = useState<number | null>(null);
+  const [userPosition, setUserPosition] = useState<{ lat: number; lng: number }>({
+    lat: window.innerWidth <= 600 ? 128 : 128.8,
+    lng: 35.7,
+  });
 
   //최초 1회 지도 생성
   useEffect(() => {
@@ -81,6 +87,9 @@ function CafeMap() {
     const options = { center: new kakao.maps.LatLng(35.7, mapLng), level: 13 };
     const kakaoMap = new kakao.maps.Map(container, options);
     setMap(kakaoMap);
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setUserPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+    });
   }, []);
 
   // map 생성 이후 1회 실행
@@ -161,7 +170,25 @@ function CafeMap() {
         cafeData={filterdCafeData}
         focusedCafe={focusedCafe}
         setFocusedCafe={setFocusedCafe}
-      ></CafeList>
+      />
+      <StyledMapIconSet>
+        <StyledMapIcon
+          onClick={() => {
+            map.setCenter(new kakao.maps.LatLng(35.7, window.innerWidth <= 600 ? 128 : 128.8));
+            map.setLevel(13);
+          }}
+        >
+          <TbZoomCancel size={24} />
+        </StyledMapIcon>
+        <StyledMapIcon
+          onClick={() => {
+            map.setCenter(new kakao.maps.LatLng(userPosition.lat, userPosition.lng));
+            map.setLevel(8);
+          }}
+        >
+          <TbLocation size={24} />
+        </StyledMapIcon>
+      </StyledMapIconSet>
     </KakaoMap>
   );
 }
@@ -171,4 +198,25 @@ export default React.memo(CafeMap);
 const KakaoMap = styled.div`
   width: 100%;
   height: 100%;
+`;
+
+const StyledMapIconSet = styled.div`
+  z-index: 50;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100px;
+  height: 100px;
+  color: ${(props) => props.theme.colors.primaryText};
+`;
+const StyledMapIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ${(props) => props.theme.styles.button};
+  width: 48px;
+  height: 48px;
+  margin: 8px;
+  background-color: ${(props) => props.theme.colors.primaryBg};
+  color: ${(props) => props.theme.colors.primaryText};
 `;

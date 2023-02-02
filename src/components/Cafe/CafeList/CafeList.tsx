@@ -58,7 +58,7 @@ const StyledCafeList = styled.aside<{ isListMax: boolean }>`
   overflow-y: scroll;
   transition: all 0.5s;
   @media screen and (max-width: 600px) {
-    height: ${(props) => (props.isListMax ? "100%" : "40%")};
+    height: ${(props) => (props.isListMax ? "90%" : "40%")};
     width: 100vw;
     bottom: 0px;
     border-radius: 32px 32px 0px 0px;
@@ -93,6 +93,7 @@ const StyledMaxBar = styled.div`
     justify-content: center;
     align-items: center;
     background: ${(props) => props.theme.colors.secondaryBg};
+    color: ${(props) => props.theme.colors.secondaryText};
   }
   @media screen and (min-width: 600px) {
     display: none;

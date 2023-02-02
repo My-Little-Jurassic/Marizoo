@@ -80,7 +80,7 @@ const StyledMain = styled.main`
   align-items: center;
   background-color: ${(props) => props.theme.colors.primaryBg};
   @media screen and (max-width: 600px) {
-    margin-bottom: 72px;
+    padding-bottom: 64px;
   }
 `;
 
@@ -120,8 +120,8 @@ const StyledSearchResetBtn = styled.button`
   background-color: ${(props) => props.theme.colors.secondaryBg};
   outline: none;
   border: none;
-  margin-left: 5px;
-  padding-inline: 10px;
+  margin-left: 8px;
+  padding-inline: 8px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
