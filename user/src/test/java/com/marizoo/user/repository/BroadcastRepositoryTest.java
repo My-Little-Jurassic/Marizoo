@@ -1,7 +1,7 @@
 package com.marizoo.user.repository;
 
 import com.marizoo.user.entity.*;
-import org.assertj.core.api.Assertions;
+import com.marizoo.user.repository.broadcast_repo.BroadcastRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

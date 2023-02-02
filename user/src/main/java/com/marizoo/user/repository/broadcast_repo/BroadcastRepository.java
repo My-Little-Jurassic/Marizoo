@@ -1,4 +1,4 @@
-package com.marizoo.user.repository;
+package com.marizoo.user.repository.broadcast_repo;
 
 import com.marizoo.user.dto.broadcast_dto.BroadcastDto;
 import com.marizoo.user.entity.Broadcast;
