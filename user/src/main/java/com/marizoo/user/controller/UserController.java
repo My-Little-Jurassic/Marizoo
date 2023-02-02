@@ -114,6 +114,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/users/{userId}")
+    public ResponseEntity deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().build();
+    }
+
     // Exception
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(RefreshTokenException.class)

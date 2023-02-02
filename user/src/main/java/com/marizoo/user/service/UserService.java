@@ -138,4 +138,9 @@ public class UserService {
             throw new PasswordNotMatchException(e.getMessage());
         }
     }
+
+    @Transactional
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
 }
