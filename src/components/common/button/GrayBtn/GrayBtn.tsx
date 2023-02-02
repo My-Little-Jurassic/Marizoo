@@ -11,7 +11,7 @@ interface IProps {
 
 function GrayBtn(props: IProps) {
   return (
-    <StyledBtn btnType={props.type} isDisable={props.isDisable}>
+    <StyledBtn btnType={props.type} isDisable={props.isDisable} onClick={props.onClick}>
       {props.label}
     </StyledBtn>
   );

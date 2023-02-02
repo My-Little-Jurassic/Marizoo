@@ -3,11 +3,15 @@ import styled from "styled-components";
 import Input, { EInputStatus } from "../Input/Input";
 import VerifyInfoList, { IInputVerifyResult } from "./InputVerifyList";
 
-const StyledDiv = styled.div``;
+const StyledDiv = styled.div`
+  width: 100%;
+  max-width: 292px;
+`;
 
 export interface IInputVerify {
   description: string; // 사용자에게 보여질 설명
   verify(value: string): boolean; // value를 받아 참 거짓을 판별하는 함수
+  lazy?: boolean; // focusOut 후에 판단할지를 결정하는
 }
 
 interface IProps {
@@ -31,21 +35,23 @@ const VerifyInput = forwardRef<HTMLInputElement, IProps>(
      * input 조건 판별 결과를 담은 배열
      */
     const getInputVerifyResultList = useCallback(
-      (str: string): IInputVerifyResult[] => {
-        const result = inputVerifyList.map<IInputVerifyResult>((item) => {
-          const { description, verify } = item;
-          let result = EInputStatus.default;
+      (str: string, all = false): IInputVerifyResult[] => {
+        const result = inputVerifyList
+          .filter((item) => !item.lazy || inputStatus !== EInputStatus.default || all)
+          .map<IInputVerifyResult>((item) => {
+            const { description, verify } = item;
+            let result = EInputStatus.default;
 
-          if (str && !isInitial.current) {
-            result = verify(str) ? EInputStatus.success : EInputStatus.fail;
-          }
-          return { description, result };
-        });
-
-        if (isInitial.current) isInitial.current = false;
+            if (item.lazy && !all) {
+              result = verify(value) ? EInputStatus.success : EInputStatus.fail;
+            } else if (str && !isInitial.current) {
+              result = verify(str) ? EInputStatus.success : EInputStatus.fail;
+            }
+            return { description, result };
+          });
         return result;
       },
-      [isInitial],
+      [isInitial, inputStatus],
     );
 
     /**
@@ -55,7 +61,7 @@ const VerifyInput = forwardRef<HTMLInputElement, IProps>(
     const getTotalInputVerifyResult = useCallback(
       (str: string): boolean => {
         let totalInputVerifyResult = true;
-        getInputVerifyResultList(str).forEach((item) => {
+        getInputVerifyResultList(str, true).forEach((item) => {
           totalInputVerifyResult = totalInputVerifyResult && item.result === EInputStatus.success;
         });
         return totalInputVerifyResult;
@@ -66,6 +72,7 @@ const VerifyInput = forwardRef<HTMLInputElement, IProps>(
     const setValue = useCallback(
       (newValue: string) => {
         setInputValue(newValue);
+        isInitial.current = false;
       },
       [setInputValue],
     );
