@@ -34,13 +34,9 @@ function HomeNav() {
 
 export default HomeNav;
 
-interface IStyledHomeNavbarProps {
-  isHide: boolean;
-}
-
-const StyledHomeNavbar = styled.nav<IStyledHomeNavbarProps>`
+const StyledHomeNavbar = styled.nav<{ isHide: boolean }>`
   z-index: 10;
-  width: 100%;
+  width: 100vw;
   height: 80px;
   display: flex;
   justify-content: center;
@@ -55,7 +51,7 @@ const StyledHomeNavbar = styled.nav<IStyledHomeNavbarProps>`
     border-top: 1px solid ${(props) => props.theme.colors.disable};
   }
   @media screen and (min-width: 600px) {
-    position: sticky;
+    position: absolute;
     top: ${(props) => (props.isHide ? "-20" : "60")}px;
     border-bottom: 1px solid ${(props) => props.theme.colors.disable};
   }
