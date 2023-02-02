@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import RegistForm from "./RegistForm";
 
@@ -41,12 +42,15 @@ const StyledDiv = styled.div`
 `;
 
 const RegistContainer = (): JSX.Element => {
+  const navigate = useNavigate();
+
+  const moveToLogin = () => navigate("/login");
   return (
     <StyledDiv>
       <div className="container-header">
         <h2>회원가입</h2>
         <span>
-          이미 회원이신가요? <a>로그인</a>
+          이미 회원이신가요? <a onClick={moveToLogin}>로그인</a>
         </span>
       </div>
       <RegistForm />

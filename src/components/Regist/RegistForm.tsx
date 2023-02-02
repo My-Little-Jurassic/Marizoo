@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import {
+  validateEmail,
   validateIdChar,
   validateIdLength,
   validatePWChar,
@@ -41,8 +42,10 @@ interface IRegistForm {
   email: string;
   validation: boolean;
 }
+type RegistInputId = "uid" | "pwd" | "pwdCheck" | "email" | "nickname" | "phoneNumber";
+
 interface IInput {
-  id: string;
+  id: RegistInputId;
   type: string;
   ref?: React.MutableRefObject<HTMLInputElement | null>;
   placeholder: string;
@@ -60,20 +63,9 @@ const RegistForm = () => {
     validation: false,
   });
 
-  const updateData = (id: string, value: string) => {
+  const updateData = (id: RegistInputId, value: string) => {
     const newData = { ...data };
-    switch (id) {
-      case "uid":
-      case "pwd":
-      case "pwdCheck":
-      case "nickname":
-      case "phoneNumber":
-      case "email":
-        newData[id] = value;
-        break;
-      default:
-        return;
-    }
+    newData[id] = value;
     setData(newData);
   };
   const pwdRef = useRef<HTMLInputElement>(null);
@@ -86,6 +78,26 @@ const RegistForm = () => {
     else return false;
   };
 
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    // TODO: 회원가입 POST요청
+  };
+
+  const validateIdUnique = (uid: string): boolean => {
+    // TODO: 아이디 중복 검사 요청
+    return true;
+  };
+
+  const validateUserUnique = (email: string): boolean => {
+    // TODO: 회원 중복 검사 요청
+    return true;
+  };
+
+  const validateNicknameUnique = (nickname: string): boolean => {
+    // TODO: 닉네임 중복 검사 요청
+    return true;
+  };
+
   const inputList: IInput[] = [
     {
       id: "uid",
@@ -94,6 +106,7 @@ const RegistForm = () => {
       inputVerifyList: [
         { description: "8글자 이상 16자 이하 입력", verify: validateIdLength },
         { description: "영문 소문자와 숫자로 구성", verify: validateIdChar },
+        { description: "사용가능한 아이디", verify: validateIdUnique, lazy: true },
       ],
     },
     {
@@ -117,20 +130,32 @@ const RegistForm = () => {
         },
       ],
     },
-    { id: "nickname", type: "text", placeholder: "닉네임" },
+    {
+      id: "nickname",
+      type: "text",
+      placeholder: "닉네임",
+      inputVerifyList: [
+        {
+          description: "사용가능한 닉네임",
+          verify: validateNicknameUnique,
+          lazy: true,
+        },
+      ],
+    },
     { id: "phoneNumber", type: "tel", placeholder: "연락처" },
-    { id: "email", type: "email", placeholder: "이메일" },
+    {
+      id: "email",
+      type: "email",
+      placeholder: "이메일",
+      inputVerifyList: [
+        { description: "올바른 이메일 형식", verify: validateEmail, lazy: true },
+        { description: "새로운 회원", verify: validateUserUnique, lazy: true },
+      ],
+    },
   ];
 
   return (
-    <StyledForm>
-      {/* <Input
-        type={"password"}
-        ref={inputRef}
-        setValue={function (value: string): void {
-          throw new Error("Function not implemented.");
-        }}
-      /> */}
+    <StyledForm onSubmit={onSubmit}>
       {inputList.map((item, index) => {
         const { id, type, ref, placeholder, inputVerifyList } = item;
         if (inputVerifyList)
@@ -138,6 +163,7 @@ const RegistForm = () => {
             <VerifyInput
               key={index}
               ref={ref}
+              value={data[id]}
               type={type}
               placeholder={placeholder}
               inputVerifyList={inputVerifyList}
@@ -151,6 +177,7 @@ const RegistForm = () => {
             <Input
               key={index}
               ref={ref}
+              value={data[id]}
               type={type}
               placeholder={placeholder}
               setValue={(val) => {
