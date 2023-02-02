@@ -1,6 +1,7 @@
 package com.marizoo.user.service;
 
 import com.marizoo.user.dto.MailDto;
+import com.marizoo.user.api.MyPageResponseApi;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.exception.UserNotFoundException;
 import com.marizoo.user.repository.UserRepository;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,6 +22,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final JavaMailSender mailSender;
+
+    private final BCryptPasswordEncoder encoder;
 
     public boolean isDuplicatedUid(String uid) {
         return !userRepository.findByUid(uid).isPresent();
@@ -68,6 +72,29 @@ public class UserService {
             user.setPwd(pwd);
         } catch (Exception e) {
             throw new UserNotFoundException("이메일에 해당하는 유저가 없습니다.");
+        }
+    }
+
+    public MyPageResponseApi getMyPageInfo(Long userId, String pwd) {
+        try {
+            User user = userRepository.findById(userId).orElseThrow(
+                    () -> new UserNotFoundException("유저가 없습니다.")
+            );
+
+            if (encoder.matches(pwd, user.getPwd())) {
+                MyPageResponseApi myPageDto = new MyPageResponseApi();
+
+                myPageDto.setUid(user.getUid());
+                myPageDto.setNickname(user.getNickname());
+                myPageDto.setPhoneNumber(user.getPhoneNumber());
+                myPageDto.setEmail(user.getEmail());
+
+                return myPageDto;
+            } else {
+                throw new UserNotFoundException("비밀번호가 일치하지 않습니다.");
+            }
+        } catch (Exception e) {
+            throw new UserNotFoundException(e.getMessage());
         }
     }
 }

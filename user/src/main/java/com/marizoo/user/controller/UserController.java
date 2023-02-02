@@ -2,6 +2,7 @@ package com.marizoo.user.controller;
 
 import com.marizoo.user.api.FindUidResponseApi;
 import com.marizoo.user.dto.JoinRequestDto;
+import com.marizoo.user.api.MyPageResponseApi;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.dto.ExceptionResponseDto;
 import com.marizoo.user.exception.AlreadyJoinException;
@@ -89,6 +90,13 @@ public class UserController {
     public ResponseEntity findPwdByEmail(@RequestParam String email) {
         userService.createMailAndChangePwd(email);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/users/{userId}")
+    public ResponseEntity myPage(@RequestBody Map<String, String> request, @PathVariable Long userId) {
+        String pwd = request.get("pwd");
+        MyPageResponseApi myPageInfo = userService.getMyPageInfo(userId, pwd);
+        return ResponseEntity.ok(myPageInfo);
     }
 
     // Exception
