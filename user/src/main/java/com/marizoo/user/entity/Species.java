@@ -16,19 +16,13 @@ public class Species extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "species_id")
     private Long id;
-
     private String classification;
     private String classificationImg;
-
     private String habitat;
-
     private Integer lifeSpan;
-
     private String info;
-
     @OneToMany(mappedBy = "species")
     private List<Animal> animalList = new ArrayList<>();
-
     @OneToMany(mappedBy = "species")
     private List<SpeciesFeed> speciesFeedList = new ArrayList<>();
 }

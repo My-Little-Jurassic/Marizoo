@@ -8,9 +8,7 @@ import com.marizoo.user.entity.AnimalStore;
 import com.marizoo.user.entity.Broadcast;
 import com.marizoo.user.entity.BroadcastAnimal;
 import com.marizoo.user.entity.Play;
-import com.marizoo.user.service.AnimalService;
-import com.marizoo.user.service.AnimalStoreService;
-import com.marizoo.user.service.BroadcastService;
+import com.marizoo.user.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,6 +26,8 @@ public class StoreController {
     private final AnimalStoreService animalStoreService;
     private final AnimalService animalService;
     private final BroadcastService broadcastService;
+    private final FeedService feedService;
+    private final SpeciesService speciesService;
 
     @GetMapping("/stores")
     public ResponseEntity<AnimalStoreListResponse> storeList(){
@@ -108,7 +108,6 @@ public class StoreController {
         List<Broadcast> onairs = broadcastService.getOnAirs();
         List<BroadcastsDto> result = new ArrayList<>();
         for (Broadcast onair : onairs) {
-            log.info("animal store id ~~~~~~ : " + onair.getAnimalStore().getId());
             if(onair.getAnimalStore().getId() == store_id){
                 List<String> classificationImgs = new ArrayList<>();
                 for (BroadcastAnimal broadcastAnimal : onair.getBroadcastAnimalList()) {
@@ -137,13 +136,34 @@ public class StoreController {
     @GetMapping("/stores/{store_id}/plays/{play_id}")
     public ResponseEntity<PlayAndStoreInfoResponse> getPlayInfo(@PathVariable(name = "store_id") Long storeId,
                                                                 @PathVariable(name = "play_id") Long playId){
-
-
         return new ResponseEntity<>(animalStoreService.findPlayInfo(storeId, playId), HttpStatus.OK);
     }
 
+//    @GetMapping("/stores/{store_id}/animals/search")
+//    public ResponseEntity<AnimalStoreListResponse> searchOwnedAnimal(@PathVariable(name = "store_id") Long storeId,
+//                                                                     @RequestParam(name = "input") String input){
+//        return null;
+//    }
 
-
+    // 동물 상세 정보 제공.
+    @GetMapping("/stores/{animal_id}/animal_detail")
+    public ResponseEntity<AnimalDetailResponse> getAnimalInfo(@PathVariable(name = "animal_id") Long animalId){
+        AnimalDetailResponse animalDetailResponse = new AnimalDetailResponse(
+                animalService.findAnimalInfo(animalId),
+                feedService.findFeedListforAnimal(animalId)
+        );
+        return new ResponseEntity(animalDetailResponse, HttpStatus.OK);
+    }
+    
+    // 동물 종 정보 제공
+    @GetMapping("/stores/{species_id}/species_detail")
+    public ResponseEntity<SpeciesDetailResponse> getSpeciesInfo(@PathVariable(name = "species_id") Long speciesId){
+        SpeciesDetailResponse speciesDetailResponse = new SpeciesDetailResponse(
+                speciesService.findSpeciesInfo(speciesId),
+                feedService.findFeedListforSpecies(speciesId)
+        );
+        return new ResponseEntity<>(speciesDetailResponse, HttpStatus.OK);
+    }
 
 }
 
