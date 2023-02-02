@@ -13,18 +13,30 @@ interface IProps {
     lng: number;
   };
   focusedCafe: number | null;
+  setFocusedCafe: (id: number | null) => void;
 }
 function CafeListContent(props: IProps) {
   return (
     <StyledCafeListContent
       focusedCafe={props.focusedCafe}
       animal_store_id={props.cafe.animal_store_id}
+      onMouseOver={() => {
+        props.setFocusedCafe(props.cafe.animal_store_id);
+      }}
     >
       <StyledCafeProfile>
         <StyledCafeProfileImg src={props.cafe.profile_img} />
         <StyledCafeInfoBox>
-          <StyledStoreName>{props.cafe.store_name}</StyledStoreName>
-          <StyledStoreContent>{props.cafe.address}</StyledStoreContent>
+          <StyledStoreName
+            focusedCafe={props.focusedCafe}
+            animal_store_id={props.cafe.animal_store_id}
+          >
+            {props.cafe.store_name}
+            <StyledStoreContent>{props.cafe.address}</StyledStoreContent>
+            {props.focusedCafe === props.cafe.animal_store_id ? (
+              <StyledStoreDiscription>{props.cafe.discription}</StyledStoreDiscription>
+            ) : null}
+          </StyledStoreName>
         </StyledCafeInfoBox>
       </StyledCafeProfile>
     </StyledCafeListContent>
@@ -52,24 +64,28 @@ const StyledCafeListContent = styled.div<{ focusedCafe: number | null; animal_st
   align-items: center;
   cursor: pointer;
   margin-block: 4px;
-  @media screen and (max-width: 600px) {
-    width: 100%;
-  }
+  width: 100%;
   @media screen and (min-width: 600px) {
-    width: 100%;
     ${(props) => props.theme.shadow};
     ${(props) => props.theme.styles.card};
+    background-color: ${(props) =>
+      props.focusedCafe === props.animal_store_id
+        ? props.theme.colors.yellow
+        : props.theme.colors.primaryBg};
+    scale: ${(props) => (props.focusedCafe === props.animal_store_id ? "1.02" : "1")};
   }
-  background-color: ${(props) =>
-    props.focusedCafe === props.animal_store_id
-      ? props.theme.colors.primaryBg
-      : props.theme.colors.primaryBg};
 `;
 
 const StyledCafeProfile = styled.div`
   width: 100%;
-  padding: 16px;
   display: flex;
+  @media screen and (max-width: 600px) {
+    padding-inline: 16px;
+    padding-bottom: 16px;
+  }
+  @media screen and (min-width: 600px) {
+    padding: 16px;
+  }
 `;
 
 const StyledCafeProfileImg = styled.img`
@@ -87,14 +103,24 @@ const StyledCafeInfoBox = styled.div`
   margin-left: 16px;
 `;
 
-const StyledStoreName = styled.h3`
+const StyledStoreName = styled.h3<{ focusedCafe: number | null; animal_store_id: number }>`
   font: ${(props) => props.theme.fonts.subContentBold};
   color: ${(props) => props.theme.colors.primaryText};
+  @media screen and (min-width: 600px) {
+    color: ${(props) =>
+      props.focusedCafe === props.animal_store_id
+        ? props.theme.colors.brandColors.basaltGray[900]
+        : props.theme.colors.primaryText};
+  }
   word-break: break-all;
   margin-bottom: 4px;
 `;
 const StyledStoreContent = styled.p`
   font: ${(props) => props.theme.fonts.tinyContent};
-  color: ${(props) => props.theme.colors.secondaryText};
+  word-break: break-all;
+`;
+
+const StyledStoreDiscription = styled.p`
+  font: ${(props) => props.theme.fonts.tinyContentBold};
   word-break: break-all;
 `;

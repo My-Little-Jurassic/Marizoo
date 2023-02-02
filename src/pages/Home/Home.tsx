@@ -32,7 +32,6 @@ function Home() {
 
   return (
     <StyledMain>
-      <StyledSpacer space={180} />
       <StyledHomeInput>
         <SearchInput
           value={""} // 초기 값
@@ -80,12 +79,21 @@ const StyledMain = styled.main`
   flex-direction: column;
   align-items: center;
   background-color: ${(props) => props.theme.colors.primaryBg};
+  @media screen and (max-width: 600px) {
+    margin-bottom: 72px;
+  }
 `;
 
 const StyledHomeInput = styled.div`
   display: flex;
   justify-content: center;
   width: 80%;
+  @media screen and (max-width: 600px) {
+    margin-top: 96px;
+  }
+  @media screen and (min-width: 600px) {
+    margin-top: 180px;
+  }
 `;
 
 const StyledTitle = styled.h4`

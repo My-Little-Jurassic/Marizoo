@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
-import { HomeNav } from "../../components/common/navbar";
-import { CafeList, CafeMap } from "../../components/Cafe";
+import { CafeMap } from "../../components/Cafe";
 
 function Cafe() {
   return (
@@ -22,8 +21,13 @@ const StyledCafe = styled.div`
 `;
 
 const StyledCafeMain = styled.main`
-  position: relative;
+  position: absolute;
   width: 100%;
-  height: calc(100vh - 142px);
-  background-color: black;
+  height: calc(100vh - 140px);
+  @media screen and (max-width: 600px) {
+    top: 60px;
+  }
+  @media screen and (min-width: 600px) {
+    top: 140px;
+  }
 `;

@@ -146,6 +146,7 @@ function CafeMap() {
     kakao.maps.event.addListener(marker, "click", () => {
       map.setLevel(4, { anchor: new kakao.maps.LatLng(cafe.lat, cafe.lng) });
     });
+
     // 마커 마우스오버 이벤트
     kakao.maps.event.addListener(marker, "mouseover", () => {
       setFocusedCafe(cafe.animal_store_id);
@@ -156,7 +157,11 @@ function CafeMap() {
 
   return (
     <KakaoMap id="map">
-      <CafeList cafeData={filterdCafeData} focusedCafe={focusedCafe}></CafeList>
+      <CafeList
+        cafeData={filterdCafeData}
+        focusedCafe={focusedCafe}
+        setFocusedCafe={setFocusedCafe}
+      ></CafeList>
     </KakaoMap>
   );
 }
