@@ -9,7 +9,7 @@ interface IProps {
   onClick?(): void; // onclick props
 }
 
-function GreenBtn(props: IProps) {
+function GrayBtn(props: IProps) {
   return (
     <StyledBtn btnType={props.type} isDisable={props.isDisable} onClick={props.onClick}>
       {props.label}
@@ -17,7 +17,7 @@ function GreenBtn(props: IProps) {
   );
 }
 
-export default GreenBtn;
+export default GrayBtn;
 
 const StyledBtn = styled.button<{ btnType: number; isDisable: boolean }>`
   ${(props) => (props.isDisable ? null : props.theme.styles.button)}
@@ -36,7 +36,7 @@ const StyledBtn = styled.button<{ btnType: number; isDisable: boolean }>`
       if (props.isDisable) {
         return props.theme.colors.disable;
       } else {
-        return props.theme.colors.green;
+        return props.theme.colors.secondaryText;
       }
     } else if (props.btnType === 1) {
       return props.theme.colors.primaryBg;
@@ -52,7 +52,7 @@ const StyledBtn = styled.button<{ btnType: number; isDisable: boolean }>`
         if (props.isDisable) {
           return `4px ${props.theme.colors.disable}`;
         } else {
-          return `4px ${props.theme.colors.green}`;
+          return `4px ${props.theme.colors.secondaryText}`;
         }
       }
     }}
@@ -64,7 +64,7 @@ const StyledBtn = styled.button<{ btnType: number; isDisable: boolean }>`
       if (props.isDisable) {
         return props.theme.colors.disable;
       } else {
-        return props.theme.colors.green;
+        return props.theme.colors.secondaryText;
       }
     }
   }};

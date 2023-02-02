@@ -1,4 +1,3 @@
-import { JSX_TYPES } from "@babel/types";
 import React, { forwardRef } from "react";
 import DefaultInput from "./DefaultInput";
 import PasswordInput from "./PasswordInput";

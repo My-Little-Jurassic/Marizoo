@@ -1,15 +1,12 @@
 import React from "react";
-import styled from "styled-components";
-import { Side, RegistContainer } from "../components/Regist";
+import { RegistSide, RegistContainer, RegistVectorBg } from "../components/Regist";
 
-const StyledMain = styled.main``;
-
-const Regist = () => {
+const Regist = (): JSX.Element => {
   return (
-    <StyledMain>
-      <Side />
+    <RegistVectorBg>
+      <RegistSide />
       <RegistContainer />
-    </StyledMain>
+    </RegistVectorBg>
   );
 };
 

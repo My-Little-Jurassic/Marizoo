@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 import { ThemeBtn } from "../../button/index";
 import { MdAccountCircle } from "react-icons/md";
+import HomeNav from "../HomeNav/HomeNav";
 
 interface IProps {
   // 테마 버튼 props type
@@ -12,6 +13,8 @@ interface IProps {
 }
 
 function Nav(props: IProps) {
+  const location = useLocation(); // 현재 url
+
   return (
     <StyledNavbar>
       {/* Nav 내부 컴포넌트 컨테이너 */}
@@ -33,6 +36,11 @@ function Nav(props: IProps) {
           <ThemeBtn themeMode={props.themeMode} toggleTheme={props.toggleTheme}></ThemeBtn>
         </StyledNavbarRSide>
       </StyledNavContainer>
+      {location.pathname === "/" ||
+      location.pathname === "/cafe" ||
+      location.pathname === "/dict" ? (
+        <HomeNav></HomeNav>
+      ) : null}
     </StyledNavbar>
   );
 }
@@ -41,25 +49,28 @@ export default Nav;
 
 const StyledNavbar = styled.nav`
   z-index: 99;
-  position: sticky;
+  position: fixed;
   top: 0px;
-  width: 100%;
-  height: 60px;
+  width: 100vw;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   transition: all 0.1s;
   border-bottom: 1px solid ${(props) => props.theme.colors.disable};
-  background-color: ${(props) => props.theme.colors.primaryBg};
   color: ${(props) => props.theme.colors.primaryText};
+  background-color: ${(props) => props.theme.colors.primaryBg};
 `;
 
 const StyledNavContainer = styled.div`
+  z-index: 98;
   width: 90%;
   max-width: 1056px;
   display: flex;
+  height: 60px;
   justify-content: space-between;
   align-items: center;
+  background-color: ${(props) => props.theme.colors.primaryBg};
 `;
 
 const StyledNavLogo = styled.div`

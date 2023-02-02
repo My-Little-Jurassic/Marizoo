@@ -1,19 +1,22 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import RegistForm from "./RegistForm";
+import LoginForm from "./LoginForm";
 
 const StyledDiv = styled.div`
+  z-index: -1;
+  display: absolute;
   max-width: 484px;
   border-radius: 32px;
   background-color: ${({ theme }) => theme.colors.secondaryBg};
   ${({ theme }) => theme.shadow}; //shadow CSS
   display: flex;
-  margin: 120px 8px;
+  margin: auto 8px;
   padding: 56px 8px;
   flex-direction: column;
 
-  & > .container-header {
+  & > .container-header,
+  & > .container-footer {
     text-align: center;
     margin-bottom: 56px;
 
@@ -36,26 +39,33 @@ const StyledDiv = styled.div`
       }
     }
   }
-  @media screen and (max-width: 800px) {
+  & > .container-footer {
+    margin-bottom: 0;
+  }
+
+  @media screen and (max-width: 1280px) {
     margin: auto;
+    margin-bottom: 100px;
   }
 `;
 
-const RegistContainer = (): JSX.Element => {
+const LoginContainer = (): JSX.Element => {
   const navigate = useNavigate();
 
-  const moveToLogin = () => navigate("/login");
+  const moveToRegist = () => navigate("/regist");
   return (
     <StyledDiv>
       <div className="container-header">
-        <h2>회원가입</h2>
+        <h2>로그인</h2>
+      </div>
+      <LoginForm />
+      <div className="container-footer">
         <span>
-          이미 회원이신가요? <a onClick={moveToLogin}>로그인</a>
+          아직 회원이 아니신가요? <a onClick={moveToRegist}>회원가입</a>
         </span>
       </div>
-      <RegistForm />
     </StyledDiv>
   );
 };
 
-export default RegistContainer;
+export default LoginContainer;
