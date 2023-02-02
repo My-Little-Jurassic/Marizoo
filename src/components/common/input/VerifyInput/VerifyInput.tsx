@@ -49,8 +49,6 @@ const VerifyInput = forwardRef<HTMLInputElement, IProps>(
             }
             return { description, result };
           });
-
-        if (isInitial.current) isInitial.current = false;
         return result;
       },
       [isInitial, inputStatus],
@@ -74,6 +72,7 @@ const VerifyInput = forwardRef<HTMLInputElement, IProps>(
     const setValue = useCallback(
       (newValue: string) => {
         setInputValue(newValue);
+        isInitial.current = false;
       },
       [setInputValue],
     );
