@@ -12,4 +12,6 @@ public interface AnimalStoreRepositoryCustom {
 
     List<OwnedAnimalDto> findOwnedAnimalInfo(Long storeId);
 
+    List<String> findClassificationImgs(Long storeId);
+
 }

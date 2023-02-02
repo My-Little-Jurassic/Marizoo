@@ -19,6 +19,7 @@ public interface AnimalStoreRepository extends JpaRepository<AnimalStore, Long>,
     // 가게 id로 가게 조회
     Optional<AnimalStore> findAnimalStoreById(Long store_id);
 
+
 }
 
 

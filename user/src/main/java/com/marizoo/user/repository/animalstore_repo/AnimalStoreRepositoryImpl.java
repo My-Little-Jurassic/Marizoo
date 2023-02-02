@@ -4,6 +4,8 @@ import com.marizoo.user.dto.animal_dto.OwnedAnimalDto;
 import com.marizoo.user.dto.animal_dto.QOwnedAnimalDto;
 import com.marizoo.user.entity.AnimalStore;
 import com.marizoo.user.entity.QAnimalStore;
+import com.marizoo.user.entity.QBroadcast;
+import com.marizoo.user.entity.QBroadcastAnimal;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -12,6 +14,8 @@ import java.util.List;
 
 import static com.marizoo.user.entity.QAnimal.animal;
 import static com.marizoo.user.entity.QAnimalStore.animalStore;
+import static com.marizoo.user.entity.QBroadcast.broadcast;
+import static com.marizoo.user.entity.QBroadcastAnimal.broadcastAnimal;
 import static com.marizoo.user.entity.QSpecies.species;
 
 public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
@@ -22,7 +26,6 @@ public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
     }
 
     // 종으로 해당하는 가게 검색
-    @Override
     public List<AnimalStore> searchAnimalStoreHavingSpecies(String input) {
 
         List<AnimalStore> findAnimalStore = queryFactory
@@ -53,6 +56,17 @@ public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
         return findOwnedAnimal;
     }
 
+    // 스트리밍 중인 방송에 출연하는 동물의 종정보
+    public List<String> findClassificationImgs(Long storeId){
+
+        List<String> classificationImgs = queryFactory
+                .select(broadcastAnimal.classificationImg)
+                .from(broadcastAnimal)
+                .join(broadcastAnimal.broadcast, broadcast)
+                .where(broadcast.animalStore.id.eq(storeId))
+                .fetch();
+        return classificationImgs;
+    }
 
 
 }
