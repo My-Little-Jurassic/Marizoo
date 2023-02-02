@@ -53,7 +53,6 @@ public class StoreController {
             }
             // 종 검색
             if(storename.length() == 0 && species.length() != 0){
-                System.out.println("종 검색");
                 storeList = animalStoreService.findAnimalStoresbySpeciesSearch(species);
             }
 
@@ -69,10 +68,5 @@ public class StoreController {
 
             return new ResponseEntity<>(new AnimalStoreListResponse(AnimalStoreDtoList), HttpStatus.OK);
         }
-
     }
-
-
-
-
 }
