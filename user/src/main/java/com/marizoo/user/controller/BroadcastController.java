@@ -5,6 +5,7 @@ import com.marizoo.user.api.broadcast_api.FeedVoteApi;
 import com.marizoo.user.dto.broadcast_dto.*;
 import com.marizoo.user.entity.*;
 import com.marizoo.user.repository.BroadcastRepository;
+import com.marizoo.user.service.BroadcastService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,12 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 public class BroadcastController {
-    private final BroadcastRepository broadcastRepository;
+    private final BroadcastService broadcastService;
 
     @GetMapping("/broadcasts")
     public ResponseEntity<?> getOnairs(){
         // 현재 방송 중인 목록 가져오기
-        List<Broadcast> onairs = broadcastRepository.findByStatus(BroadcastStatus.ONAIR);
+        List<Broadcast> onairs = broadcastService.getOnAirs();
         List<BroadcastsDto> result = new ArrayList<>();
         for (Broadcast onair : onairs) {
             List<String> classifications = new ArrayList<>();
@@ -40,12 +41,11 @@ public class BroadcastController {
     public ResponseEntity<?> getBroadcastInfo(@PathVariable("broadcast_id") Long broadcastId){
         // broadcast_id에 해당하는 방송 정보 가져오기.
 
-        Optional<Broadcast> opt = broadcastRepository.findById(broadcastId);
-        if(opt.isEmpty()){
+        Broadcast broadcast = broadcastService.getBroadcast(broadcastId);
+        if(broadcast == null){
             // broadcast_id에 해당하는 방송이 없음
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        Broadcast broadcast = opt.get();
 
         // 방송 정보  |  dto 형식으로 변환
         BroadcastDto broadcastDto = new BroadcastDto(broadcast.getTitle(), broadcast.getDescription());
@@ -68,16 +68,12 @@ public class BroadcastController {
 
     @GetMapping("/broadcasts/{broadcast_id}/vote")
     public ResponseEntity<?> getBroadcastVote(@PathVariable("broadcast_id") Long broadcastId){
-//        broadcast_id에 해당하는 투표 옵션 가져오기
-        Optional<Broadcast> opt = broadcastRepository.findById(broadcastId);
+//        feedvote 정보
+        List<FeedVote> feedVoteList = broadcastService.getFeedVote(broadcastId);
 
-        if(opt.isEmpty()){
-//            broadcast_id에 해당하는 방송이 없음
+        if(feedVoteList == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-//        feedvote 정보
-        List<FeedVote> feedVoteList = opt.get().getVote().getFeedVoteList();
-
 //        dto 형식으로 변환
         List<FeedVoteDto> result = new ArrayList<>();
         for (FeedVote feedVote : feedVoteList) {
