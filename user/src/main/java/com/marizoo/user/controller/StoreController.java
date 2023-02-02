@@ -131,8 +131,19 @@ public class StoreController {
                         m.getImg())).collect(Collectors.toList());
 
         return new ResponseEntity<>(new StorePlayListResponse(playDtoList), HttpStatus.OK);
-
     }
+
+    // 체험 프로그램에 대한 정보 제공.
+    @GetMapping("/stores/{store_id}/plays/{play_id}")
+    public ResponseEntity<PlayAndStoreInfoResponse> getPlayInfo(@PathVariable(name = "store_id") Long storeId,
+                                                                @PathVariable(name = "play_id") Long playId){
+
+
+        return new ResponseEntity<>(animalStoreService.findPlayInfo(storeId, playId), HttpStatus.OK);
+    }
+
+
+
 
 }
 
