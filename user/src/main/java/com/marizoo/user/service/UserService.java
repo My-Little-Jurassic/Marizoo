@@ -2,6 +2,7 @@ package com.marizoo.user.service;
 
 import com.marizoo.user.api.MyPageRequestApi;
 import com.marizoo.user.api.PwdChangeRequestApi;
+import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.MailDto;
 import com.marizoo.user.api.MyPageResponseApi;
 import com.marizoo.user.entity.User;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -142,5 +144,9 @@ public class UserService {
     @Transactional
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    public List<FavorStoreDto> getFavorStoreList(Long userId) {
+        return userRepository.getFavorStoreList(userId);
     }
 }
