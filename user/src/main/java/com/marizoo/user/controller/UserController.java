@@ -2,11 +2,13 @@ package com.marizoo.user.controller;
 
 import com.marizoo.user.api.FindUidResponseApi;
 import com.marizoo.user.api.MyPageRequestApi;
+import com.marizoo.user.api.PwdChangeRequestApi;
 import com.marizoo.user.dto.JoinRequestDto;
 import com.marizoo.user.api.MyPageResponseApi;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.dto.ExceptionResponseDto;
 import com.marizoo.user.exception.AlreadyJoinException;
+import com.marizoo.user.exception.PasswordNotMatchException;
 import com.marizoo.user.exception.RefreshTokenException;
 import com.marizoo.user.exception.UserNotFoundException;
 import com.marizoo.user.repository.UserRepository;
@@ -106,6 +108,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/users/{userId}/change-pwd")
+    public ResponseEntity changePwd(@RequestBody PwdChangeRequestApi request, @PathVariable Long userId) {
+        userService.changePwd(userId, request);
+        return ResponseEntity.ok().build();
+    }
+
     // Exception
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(RefreshTokenException.class)
@@ -122,6 +130,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserNotFoundException.class)
     public ExceptionResponseDto userNotFoundException(UserNotFoundException e) {
+        return new ExceptionResponseDto(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(PasswordNotMatchException.class)
+    public ExceptionResponseDto passwordNotMatchException(PasswordNotMatchException e) {
         return new ExceptionResponseDto(e.getMessage());
     }
 }

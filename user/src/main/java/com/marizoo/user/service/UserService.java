@@ -1,9 +1,11 @@
 package com.marizoo.user.service;
 
 import com.marizoo.user.api.MyPageRequestApi;
+import com.marizoo.user.api.PwdChangeRequestApi;
 import com.marizoo.user.dto.MailDto;
 import com.marizoo.user.api.MyPageResponseApi;
 import com.marizoo.user.entity.User;
+import com.marizoo.user.exception.PasswordNotMatchException;
 import com.marizoo.user.exception.UserNotFoundException;
 import com.marizoo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -72,7 +74,7 @@ public class UserService {
         try {
             User user = userRepository.findByEmail(email).get();
             user.setPwd(pwd);
-        } catch (Exception e) {
+        } catch (UserNotFoundException e) {
             throw new UserNotFoundException("이메일에 해당하는 유저가 없습니다.");
         }
     }
@@ -93,10 +95,12 @@ public class UserService {
 
                 return myPageDto;
             } else {
-                throw new UserNotFoundException("비밀번호가 일치하지 않습니다.");
+                throw new PasswordNotMatchException("비밀번호가 일치하지 않습니다.");
             }
-        } catch (Exception e) {
+        } catch (UserNotFoundException e) {
             throw new UserNotFoundException(e.getMessage());
+        } catch (PasswordNotMatchException e) {
+            throw new PasswordNotMatchException(e.getMessage());
         }
     }
 
@@ -111,8 +115,27 @@ public class UserService {
             user.setPhoneNumber(myPageRequest.getPhoneNumber());
             user.setEmail(myPageRequest.getEmail());
 
-        } catch (Exception e) {
+        } catch (UserNotFoundException e) {
             throw new UserNotFoundException(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void changePwd(Long userId, PwdChangeRequestApi request) {
+        try {
+            User user = userRepository.findById(userId).orElseThrow(
+                    () -> new UserNotFoundException("유저가 없습니다.")
+            );
+
+            if (encoder.matches(request.getPastPwd(), user.getPwd())) {
+                user.setPwd(encoder.encode(request.getChangePwd()));
+            } else {
+                throw new PasswordNotMatchException("기존 비밀번호가 일치하지 않습니다.");
+            }
+        } catch (UserNotFoundException e) {
+            throw new UserNotFoundException(e.getMessage());
+        } catch (PasswordNotMatchException e) {
+            throw new PasswordNotMatchException(e.getMessage());
         }
     }
 }
