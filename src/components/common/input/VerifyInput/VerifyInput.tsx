@@ -42,7 +42,9 @@ const VerifyInput = forwardRef<HTMLInputElement, IProps>(
             const { description, verify } = item;
             let result = EInputStatus.default;
 
-            if (str && !isInitial.current) {
+            if (item.lazy && !all) {
+              result = verify(value) ? EInputStatus.success : EInputStatus.fail;
+            } else if (str && !isInitial.current) {
               result = verify(str) ? EInputStatus.success : EInputStatus.fail;
             }
             return { description, result };
