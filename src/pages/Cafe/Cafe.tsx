@@ -6,7 +6,7 @@ import { CafeList, CafeMap } from "../../components/Cafe";
 
 function Cafe() {
   // 파충류카페 더미데이터
-  const cafeData = [
+  const cafeDummyData = [
     {
       animal_store_id: 0,
       store_name: "마리쥬 파충류카페",
@@ -53,8 +53,8 @@ function Cafe() {
     <StyledCafe>
       <HomeNav />
       <StyledCafeMain>
-        <CafeMap cafeData={cafeData} />
-        <CafeList cafeData={cafeData} />
+        <CafeMap cafeData={cafeDummyData} />
+        <CafeList cafeData={cafeDummyData} />
       </StyledCafeMain>
     </StyledCafe>
   );

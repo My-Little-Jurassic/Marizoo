@@ -25,16 +25,16 @@ function CafeList(props: IProps) {
 
 export default CafeList;
 
-const StyledCafeList = styled.div`
-  ${(props) => props.theme.shadow};
+const StyledCafeList = styled.aside`
   z-index: 1;
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 240px;
-  max-height: calc(100% - 32px);
-  border-radius: 32px;
-  background-color: yellow;
+  top: 0px;
+  right: 0px;
+  max-height: 100%;
   overflow: scroll;
-  background-color: ${(props) => props.theme.colors.secondaryBg};
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

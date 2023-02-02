@@ -21,19 +21,6 @@ function CafeMap(props: IProps) {
     setMap(kakaoMap);
   }, []);
 
-  // 지도 중심좌표 가져오기
-  useEffect(() => {
-    if (map) {
-      kakao.maps.event.addListener(map, "center_changed", function () {
-        // 지도의  레벨을 얻어옵니다
-        const level = map.getLevel();
-        // 지도의 중심좌표를 얻어옵니다
-        const latlng = map.getCenter();
-        console.log(level, latlng);
-      });
-    }
-  }, [map]);
-
   // 마커 이미지
   const markerImgSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
