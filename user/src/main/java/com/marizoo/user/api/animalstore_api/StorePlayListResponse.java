@@ -5,9 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class BroacastResponse<T> {
+public class StorePlayListResponse<T> {
 
-    private String title;
-    private String thumbnail;
-    private T classificationsImgs;
+    private T plays;
 }

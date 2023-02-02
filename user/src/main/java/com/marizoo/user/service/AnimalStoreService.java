@@ -2,17 +2,18 @@ package com.marizoo.user.service;
 
 import com.marizoo.user.dto.animalstore_dto.FollowDto;
 import com.marizoo.user.entity.AnimalStore;
+import com.marizoo.user.entity.Play;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.entity.UsersAnimalStore;
 import com.marizoo.user.repository.UserRepository;
 import com.marizoo.user.repository.animalstore_repo.AnimalStoreFollowRepository;
 import com.marizoo.user.repository.animalstore_repo.AnimalStoreRepository;
+import com.marizoo.user.repository.play_repo.PlayRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,6 +23,7 @@ public class AnimalStoreService {
     private final UserRepository userRepository;
     private final AnimalStoreRepository animalStoreRepository;
     private final AnimalStoreFollowRepository animalStoreFollowRepository;
+    private final PlayRepository playRepository;
 
     /**
      * 가게 목록 전체 조회
@@ -41,8 +43,6 @@ public class AnimalStoreService {
     public AnimalStore findAnimalStore(Long storeId) {
         return animalStoreRepository.findAnimalStoreById(storeId).get();
     }
-
-
 
     /**
      * 검색한 상호명이 포함된 가게 조회.
@@ -70,5 +70,17 @@ public class AnimalStoreService {
         UsersAnimalStore follower = new UsersAnimalStore();
         animalStoreFollowRepository.save(follower);
      }
+
+    /**
+     * 가게 id에 해당하는 체험 프로그램 조회.
+     * @param storeId : 가게 id
+     * @return  체험 프로그램 목록
+     */
+     public List<Play> findPlayByStore(Long storeId){
+        return playRepository.findPlaysByStoreId(storeId);
+     }
+
+
+
 
 }

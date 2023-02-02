@@ -18,6 +18,7 @@ public class Species extends BaseEntity {
     private Long id;
 
     private String classification;
+    private String classificationImg;
 
     private String habitat;
 

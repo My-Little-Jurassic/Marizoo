@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
 
-    @Query("select a from Animal a join AnimalStore b where b.id = :storeId")
-    List<Animal> findAnimalByAnimalStoreId(@Param("storeId")Long storeId);
+//    @Query("select a from Animal a join AnimalStore b where b.id = :storeId")
+//    List<Animal> findAnimalByAnimalStoreId(@Param("storeId")Long storeId);
+
+
 
 }
