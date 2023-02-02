@@ -1,15 +1,16 @@
 package com.marizoo.user.controller;
 
-import com.marizoo.user.api.animalstore_api.AnimalListResponse;
-import com.marizoo.user.api.animalstore_api.AnimalStoreListResponse;
-import com.marizoo.user.api.animalstore_api.ReservedAnimalStoreResponse;
-import com.marizoo.user.api.animalstore_api.StorePlayListResponse;
+import com.marizoo.user.api.animalstore_api.*;
 import com.marizoo.user.dto.animalstore_dto.AnimalStoreDto;
+import com.marizoo.user.dto.broadcast_dto.BroadcastsDto;
 import com.marizoo.user.dto.play_dto.StorePlayDto;
 import com.marizoo.user.entity.AnimalStore;
+import com.marizoo.user.entity.Broadcast;
+import com.marizoo.user.entity.BroadcastAnimal;
 import com.marizoo.user.entity.Play;
 import com.marizoo.user.service.AnimalService;
 import com.marizoo.user.service.AnimalStoreService;
+import com.marizoo.user.service.BroadcastService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 public class StoreController {
     private final AnimalStoreService animalStoreService;
     private final AnimalService animalService;
+    private final BroadcastService broadcastService;
 
     @GetMapping("/stores")
     public ResponseEntity<AnimalStoreListResponse> storeList(){
@@ -100,11 +102,23 @@ public class StoreController {
         return new ResponseEntity<>(OwnedAnimalList, HttpStatus.OK);
     }
 
-
-//    @GetMapping("/stores/{store_id}/broadcasts")
-//    public ResponseEntity<> getOnairBroadcast(){
-//
-//    }
+    // 스트리밍 중인 영상 목록 조회
+    @GetMapping("/stores/{store_id}/broadcasts")
+    public ResponseEntity<BroadcastListResponse> getOnairBroadcast(@PathVariable(name = "store_id")Long store_id){
+        List<Broadcast> onairs = broadcastService.getOnAirs();
+        List<BroadcastsDto> result = new ArrayList<>();
+        for (Broadcast onair : onairs) {
+            log.info("animal store id ~~~~~~ : " + onair.getAnimalStore().getId());
+            if(onair.getAnimalStore().getId() == store_id){
+                List<String> classificationImgs = new ArrayList<>();
+                for (BroadcastAnimal broadcastAnimal : onair.getBroadcastAnimalList()) {
+                    classificationImgs.add(broadcastAnimal.getAnimal().getSpecies().getClassificationImg());
+                }
+                result.add(new BroadcastsDto(onair.getTitle(), onair.getThumbnail(), classificationImgs));
+            }
+        }
+        return new ResponseEntity<>(new BroadcastListResponse(result), HttpStatus.OK);
+    }
 
 
     // 가게 체험 프로그램 목록 제공

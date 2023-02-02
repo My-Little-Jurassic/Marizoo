@@ -1,10 +1,10 @@
 package com.marizoo.user.service;
 
 import com.marizoo.user.dto.animalstore_dto.FollowDto;
-import com.marizoo.user.entity.AnimalStore;
-import com.marizoo.user.entity.Play;
-import com.marizoo.user.entity.User;
-import com.marizoo.user.entity.UsersAnimalStore;
+import com.marizoo.user.dto.broadcast_dto.BroadcastDto;
+import com.marizoo.user.dto.broadcast_dto.BroadcastsDto;
+import com.marizoo.user.entity.*;
+import com.marizoo.user.repository.BroadcastRepository;
 import com.marizoo.user.repository.UserRepository;
 import com.marizoo.user.repository.animalstore_repo.AnimalStoreFollowRepository;
 import com.marizoo.user.repository.animalstore_repo.AnimalStoreRepository;
@@ -24,6 +24,7 @@ public class AnimalStoreService {
     private final AnimalStoreRepository animalStoreRepository;
     private final AnimalStoreFollowRepository animalStoreFollowRepository;
     private final PlayRepository playRepository;
+    private final BroadcastRepository broadcastRepository;
 
     /**
      * 가게 목록 전체 조회
@@ -77,10 +78,17 @@ public class AnimalStoreService {
      * @return  체험 프로그램 목록
      */
      public List<Play> findPlayByStore(Long storeId){
-        return playRepository.findPlaysByStoreId(storeId);
+        return playRepository.getPlaysAboutStoreId(storeId);
      }
 
-
+//     public List<BroadcastsDto> findBroadcastsDto(Long storeId){
+//         // 해당 가게의 현재 스트리밍 중인 방송들
+//         List<Broadcast> broadcastList = broadcastRepository.findBroadcasts(storeId);
+//         // 위 방송에 포함되는 동물의 종이미지 리스트 조회.
+//         for(Boardcast b)
+//
+//         return null;
+//     }
 
 
 }
