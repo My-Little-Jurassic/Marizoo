@@ -47,6 +47,9 @@ interface IProps {
 const DefaultInput = forwardRef<HTMLInputElement, IProps>(
   ({ value, setValue, status, placeholder, focusOut, type }: IProps, ref): JSX.Element => {
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (type === "tel" || type === "number") {
+        e.target.value = e.target.value.replace(/\D/, "");
+      }
       setValue(e.target.value);
     };
     const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
