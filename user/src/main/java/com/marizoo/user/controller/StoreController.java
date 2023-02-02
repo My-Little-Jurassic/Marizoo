@@ -79,13 +79,16 @@ public class StoreController {
         }
     }
 
+    // 팔로우
     @PostMapping("/stores/{store_id}")
-    public ResponseEntity<String> follow(@PathVariable(name = "store_id") String store_id, @RequestBody Long uid){
-
+    public ResponseEntity<String> follow(@PathVariable(name = "store_id") Long store_id,
+                                         @RequestBody FollowRequest followRequest){
+        animalStoreService.followingStore(store_id, followRequest.getUid());
         return new ResponseEntity<>("성공", HttpStatus.OK);
     }
 
 
+    // 가게 정보 제공
     @GetMapping("/stores/{store_id}")
     public ResponseEntity<ReservedAnimalStoreResponse> reserve(@PathVariable(name = "store_id") Long store_id){
         AnimalStore animalStore = animalStoreService.findAnimalStore(store_id);
