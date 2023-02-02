@@ -28,11 +28,11 @@ public class BroadcastController {
         List<Broadcast> onairs = broadcastService.getOnAirs();
         List<BroadcastsDto> result = new ArrayList<>();
         for (Broadcast onair : onairs) {
-            List<String> classifications = new ArrayList<>();
+            List<String> classificationImgs = new ArrayList<>();
             for (BroadcastAnimal broadcastAnimal : onair.getBroadcastAnimalList()) {
-                classifications.add(broadcastAnimal.getAnimal().getSpecies().getClassification());
+                classificationImgs.add(broadcastAnimal.getAnimal().getSpecies().getClassificationImg());
             }
-            result.add(new BroadcastsDto(onair.getTitle(), onair.getThumbnail(), classifications));
+            result.add(new BroadcastsDto(onair.getTitle(), onair.getThumbnail(), classificationImgs));
         }
         return new ResponseEntity<List<BroadcastsDto>>(result, HttpStatus.OK);
     }
