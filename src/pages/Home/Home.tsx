@@ -32,8 +32,7 @@ function Home() {
 
   return (
     <StyledMain>
-      <HomeNav />
-      <Styled32Spacer />
+      <StyledSpacer space={180} />
       <StyledHomeInput>
         <SearchInput
           value={""} // 초기 값
@@ -46,7 +45,7 @@ function Home() {
           }}
         ></SearchInput>
       </StyledHomeInput>
-      <Styled32Spacer />
+      <StyledSpacer space={32} />
       <FilterSwiper
         animalList={animalList}
         focusdFilter={focusdFilter}
@@ -101,8 +100,8 @@ const StyledTitle = styled.h4`
   margin-bottom: 32px;
 `;
 
-const Styled32Spacer = styled.div`
-  height: 40px;
+const StyledSpacer = styled.div<{ space: number }>`
+  height: ${(props) => props.space}px;
   width: 100%;
 `;
 

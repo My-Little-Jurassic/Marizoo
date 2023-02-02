@@ -12,9 +12,9 @@ function HomeNavTab() {
   useEffect(() => {
     if (location.pathname === "/") {
       setActiveTab(0);
-    } else if (location.pathname === "/2") {
+    } else if (location.pathname === "/cafe") {
       setActiveTab(1);
-    } else if (location.pathname === "/3") {
+    } else if (location.pathname === "/dict") {
       setActiveTab(2);
     }
   }, [location]);
@@ -33,7 +33,7 @@ function HomeNavTab() {
           </StyledTabIcon>
         </NavLink>
         <NavLink
-          to={"/2"}
+          to={"/cafe"}
           style={{ textDecoration: "none" }}
           className={({ isActive }) => (isActive ? "active" : "deactive")}
         >
@@ -43,7 +43,7 @@ function HomeNavTab() {
           </StyledTabIcon>
         </NavLink>
         <NavLink
-          to={"/3"}
+          to={"/dict"}
           style={{ textDecoration: "none" }}
           className={({ isActive }) => (isActive ? "active" : "deactive")}
         >
@@ -111,7 +111,7 @@ const StyledTabLabel = styled.div`
   margin-top: 8px;
 `;
 
-const StyledActiveTabLine = styled.div<any>`
+const StyledActiveTabLine = styled.div<{ activeTab: number }>`
   transition: all 0.2s;
   position: absolute;
   height: 4px;
