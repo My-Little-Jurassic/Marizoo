@@ -19,10 +19,6 @@ public class Vote extends BaseEntity {
 
     private String title;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "boardcast_id")
-    private Broadcast broadcast;
-
     @OneToMany(mappedBy = "vote")
     private List<FeedVote> feedVoteList = new ArrayList<>();
 }
