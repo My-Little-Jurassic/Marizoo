@@ -1,10 +1,8 @@
 package com.marizoo.user.controller;
 
-import com.marizoo.user.api.FindUidResponseApi;
-import com.marizoo.user.api.MyPageRequestApi;
-import com.marizoo.user.api.PwdChangeRequestApi;
+import com.marizoo.user.api.*;
+import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.JoinRequestDto;
-import com.marizoo.user.api.MyPageResponseApi;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.dto.ExceptionResponseDto;
 import com.marizoo.user.exception.AlreadyJoinException;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 import static com.marizoo.user.constant.JwtConstant.*;
@@ -118,6 +117,12 @@ public class UserController {
     public ResponseEntity deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/users/{userId}/stores")
+    public ResponseEntity getFavorStoreList(@PathVariable Long userId) {
+        List<FavorStoreDto> favorStoreList = userService.getFavorStoreList(userId);
+        return ResponseEntity.ok(new FavorStoreListResponseApi(favorStoreList));
     }
 
     // Exception
