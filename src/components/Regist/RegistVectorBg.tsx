@@ -2,6 +2,10 @@ import React, { ReactNode } from "react";
 import styled from "styled-components";
 
 const StyledDiv = styled.div`
+  width: 100%;
+  position: absolute;
+  top: 0;
+  z-index: 10000;
   & > main {
     z-index: 1;
     position: relative;

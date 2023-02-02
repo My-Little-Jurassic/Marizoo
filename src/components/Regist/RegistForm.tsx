@@ -29,6 +29,7 @@ const StyledForm = styled.form`
     & > button {
       width: 100%;
       text-align: center;
+      display: block;
     }
   }
 `;
