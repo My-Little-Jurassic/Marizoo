@@ -1,9 +1,13 @@
 package com.marizoo.user.repository.animalstore_repo;
 
+import com.marizoo.user.entity.Animal;
 import com.marizoo.user.entity.AnimalStore;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 public interface AnimalStoreRepository extends JpaRepository<AnimalStore, Long>, AnimalStoreRepositoryCustom {
 
@@ -12,5 +16,7 @@ public interface AnimalStoreRepository extends JpaRepository<AnimalStore, Long>,
 
     // 상호명으로 가게 검색
     List<AnimalStore> findBystoreNameContaining(String storeName);
+
+    Optional<AnimalStore> findAnimalStoreById(Long store_id);
 
 }

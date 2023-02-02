@@ -1,8 +1,13 @@
 package com.marizoo.user.controller;
 
+import com.marizoo.user.api.animalstore_api.AnimalListResponse;
 import com.marizoo.user.api.animalstore_api.AnimalStoreListResponse;
+import com.marizoo.user.api.animalstore_api.ReservedAnimalStoreResponse;
+import com.marizoo.user.dto.animal_dto.AnimalDto;
 import com.marizoo.user.dto.animalstore_dto.AnimalStoreDto;
+import com.marizoo.user.entity.Animal;
 import com.marizoo.user.entity.AnimalStore;
+import com.marizoo.user.service.AnimalService;
 import com.marizoo.user.service.AnimalStoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +24,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StoreController {
     private final AnimalStoreService animalStoreService;
+
+    private final AnimalService animalService;
 
     @GetMapping("/stores")
     public ResponseEntity<AnimalStoreListResponse> storeList(){
@@ -69,4 +76,34 @@ public class StoreController {
             return new ResponseEntity<>(new AnimalStoreListResponse(AnimalStoreDtoList), HttpStatus.OK);
         }
     }
+
+    @PostMapping("/stores/{store_id}")
+    public ResponseEntity<String> follow(@PathVariable(name = "store_id") String store_id, @RequestBody Long uid){
+
+        return new ResponseEntity<>("성공", HttpStatus.OK);
+    }
+
+
+    @GetMapping("/stores/{store_id}")
+    public ResponseEntity<ReservedAnimalStoreResponse> reserve(@PathVariable(name = "store_id") Long store_id){
+        AnimalStore animalStore = animalStoreService.findAnimalStore(store_id);
+        ReservedAnimalStoreResponse reservedStore =
+                new ReservedAnimalStoreResponse(animalStore.getStoreName(),
+                                                animalStore.getAddress(),
+                                                animalStore.getTel());
+        return new ResponseEntity<>(reservedStore, HttpStatus.OK);
+    }
+
+//    @GetMapping("stores/{store_id}/animals")
+//    public ResponseEntity<AnimalListResponse> ownedAnimal(@PathVariable(name = "store_id") Long store_id){
+//
+//        List<Animal> animalList = animalService.findOwnedAnimal(store_id);
+//        List<AnimalDto> animalDtoList = animalList.stream()
+//                .map(m -> new AnimalDto(
+//                        m.getName(),
+//                        m.getSpecies(),
+//                        m.getImg())).collect(Collectors.toList());
+//
+//
+//    }
 }
