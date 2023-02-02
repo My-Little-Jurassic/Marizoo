@@ -3,7 +3,7 @@ package com.marizoo.user.service;
 import com.marizoo.user.entity.Broadcast;
 import com.marizoo.user.entity.BroadcastStatus;
 import com.marizoo.user.entity.FeedVote;
-import com.marizoo.user.repository.BroadcastRepository;
+import com.marizoo.user.repository.broadcast_repo.BroadcastRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

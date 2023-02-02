@@ -4,7 +4,6 @@ import com.marizoo.user.api.broadcast_api.BroadcastApi;
 import com.marizoo.user.api.broadcast_api.FeedVoteApi;
 import com.marizoo.user.dto.broadcast_dto.*;
 import com.marizoo.user.entity.*;
-import com.marizoo.user.repository.BroadcastRepository;
 import com.marizoo.user.service.BroadcastService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
