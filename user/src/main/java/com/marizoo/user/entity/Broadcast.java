@@ -31,6 +31,7 @@ public class Broadcast extends BaseEntity {
     @OneToMany(mappedBy = "broadcast")
     private List<BroadcastAnimal> broadcastAnimalList = new ArrayList<>();
 
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vote_id")
     private Vote vote;

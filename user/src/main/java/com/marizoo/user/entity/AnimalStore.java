@@ -41,4 +41,5 @@ public class AnimalStore extends BaseEntity {
 
     @OneToMany(mappedBy = "animalStore")
     private List<Broadcast> broadcastList = new ArrayList<>();
+
 }
