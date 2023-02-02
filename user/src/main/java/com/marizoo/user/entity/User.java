@@ -31,6 +31,8 @@ public class User extends BaseEntity {
     private Long effectClickAcc;
     private Long feedClickAcc;
 
+    private String refreshToken;
+
     @OneToMany(mappedBy = "user")
     private List<UsersBadge> badgeList = new ArrayList<>();
 
