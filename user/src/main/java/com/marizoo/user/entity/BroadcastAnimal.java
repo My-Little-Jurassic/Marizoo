@@ -23,4 +23,8 @@ public class BroadcastAnimal extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_id")
     private Animal animal;
+
+    private String classification;
+    private String classificationImg;
+
 }
