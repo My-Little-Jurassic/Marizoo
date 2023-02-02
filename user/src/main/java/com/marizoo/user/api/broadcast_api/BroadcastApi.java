@@ -1,8 +1,8 @@
-package com.marizoo.user.api;
+package com.marizoo.user.api.broadcast_api;
 
-import com.marizoo.user.dto.BroadcastDto;
-import com.marizoo.user.dto.onAirAnimalDto;
-import com.marizoo.user.dto.onAirAnimalStoreDto;
+import com.marizoo.user.dto.broadcast_dto.BroadcastDto;
+import com.marizoo.user.dto.broadcast_dto.onAirAnimalDto;
+import com.marizoo.user.dto.broadcast_dto.onAirAnimalStoreDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

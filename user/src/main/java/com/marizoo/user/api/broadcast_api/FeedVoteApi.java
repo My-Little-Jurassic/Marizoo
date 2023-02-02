@@ -1,12 +1,11 @@
-package com.marizoo.user.api;
+package com.marizoo.user.api.broadcast_api;
 
-import com.marizoo.user.dto.FeedVoteDto;
+import com.marizoo.user.dto.broadcast_dto.FeedVoteDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

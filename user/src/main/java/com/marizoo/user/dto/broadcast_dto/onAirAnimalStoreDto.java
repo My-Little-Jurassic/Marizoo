@@ -1,4 +1,4 @@
-package com.marizoo.user.dto;
+package com.marizoo.user.dto.broadcast_dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
-public class FeedVoteDto {
-    private String name;    // 먹이명
-    private String img;     // 먹이 사진
+public class onAirAnimalStoreDto {
+    private String name;
+    private String profile;
 }

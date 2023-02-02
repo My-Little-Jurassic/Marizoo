@@ -1,8 +1,8 @@
 package com.marizoo.user.controller;
 
-import com.marizoo.user.api.BroadcastApi;
-import com.marizoo.user.api.FeedVoteApi;
-import com.marizoo.user.dto.*;
+import com.marizoo.user.api.broadcast_api.BroadcastApi;
+import com.marizoo.user.api.broadcast_api.FeedVoteApi;
+import com.marizoo.user.dto.broadcast_dto.*;
 import com.marizoo.user.entity.*;
 import com.marizoo.user.repository.BroadcastRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

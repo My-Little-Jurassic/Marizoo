@@ -1,5 +1,6 @@
-package com.marizoo.user.dto;
+package com.marizoo.user.dto.broadcast_dto;
 
+import com.marizoo.user.entity.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -9,7 +10,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
-public class onAirAnimalStoreDto {
+public class onAirAnimalDto {
     private String name;
-    private String profile;
+    private Gender gender;
+    private String classification;
 }

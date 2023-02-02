@@ -1,19 +1,17 @@
-package com.marizoo.user.dto;
+package com.marizoo.user.dto.broadcast_dto;
 
+import com.marizoo.user.entity.AnimalStore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
-public class BroadcastsDto {
-    // 방송 제목, 방송 썸네일, 종
+public class BroadcastDto {
+    // 방송 제목, 방송 설명
     private String title;
-    private String thumbnail;
-    private List<String> classificationImgs;
+    private String description;
 }
