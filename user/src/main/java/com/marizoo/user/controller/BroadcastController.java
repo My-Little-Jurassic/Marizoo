@@ -2,6 +2,7 @@ package com.marizoo.user.controller;
 
 import com.marizoo.user.api.broadcast_api.BroadcastApi;
 import com.marizoo.user.api.broadcast_api.FeedVoteApi;
+import com.marizoo.user.api.broadcast_api.OnairApi;
 import com.marizoo.user.dto.broadcast_dto.*;
 import com.marizoo.user.entity.*;
 import com.marizoo.user.service.BroadcastService;
@@ -33,7 +34,7 @@ public class BroadcastController {
             }
             result.add(new BroadcastsDto(onair.getTitle(), onair.getThumbnail(), classificationImgs));
         }
-        return new ResponseEntity<List<BroadcastsDto>>(result, HttpStatus.OK);
+        return new ResponseEntity<>(new OnairApi(result), HttpStatus.OK);
     }
 
     @GetMapping("/broadcasts/{broadcast_id}")
@@ -90,7 +91,7 @@ public class BroadcastController {
         if(searchOnairs.isEmpty()){
             return new ResponseEntity<>("검색 결과 없음", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(searchOnairs, HttpStatus.OK);
+        return new ResponseEntity<>(new OnairApi(searchOnairs), HttpStatus.OK);
     }
 
     @GetMapping("/broadcasts/{broadcast_id}/related")
@@ -99,6 +100,6 @@ public class BroadcastController {
         if(relatedOnairs.isEmpty()){
             return new ResponseEntity<>("관련 방송 없음", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(relatedOnairs, HttpStatus.OK);
+        return new ResponseEntity<>(new OnairApi(relatedOnairs), HttpStatus.OK);
     }
 }
