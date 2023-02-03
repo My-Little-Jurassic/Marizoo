@@ -21,4 +21,10 @@ public class Vote extends BaseEntity {
 
     @OneToMany(mappedBy = "vote")
     private List<FeedVote> feedVoteList = new ArrayList<>();
+
+//    ===연관관계 메서드 ===
+    public void addFeedVote(FeedVote feedVote){
+        this.feedVoteList.add(feedVote);
+        feedVote.setVote(this);
+    }
 }

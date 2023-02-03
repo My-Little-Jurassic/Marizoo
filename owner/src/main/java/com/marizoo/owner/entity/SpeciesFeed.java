@@ -22,4 +22,15 @@ public class SpeciesFeed extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feed_id")
     private Feed feed;
+
+//    === 연관관계 메서드 ===
+
+    public void setSpecies(Species species) {
+        this.species = species;
+    }
+
+    public void setFeed(Feed feed) {
+        this.feed = feed;
+    }
+
 }

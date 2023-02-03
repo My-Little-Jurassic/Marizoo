@@ -27,4 +27,12 @@ public class BroadcastAnimal extends BaseEntity {
     private String classification;
     private String classificationImg;
 
+//    === 생성 메서드 ===
+    public static BroadcastAnimal createBroadcastAnimal(Animal animal, String classification, String classificationImg){
+        BroadcastAnimal broadcastAnimal = new BroadcastAnimal();
+        broadcastAnimal.setAnimal(animal);
+        broadcastAnimal.setClassification(classification);
+        broadcastAnimal.setClassificationImg(classificationImg);
+        return broadcastAnimal;
+    }
 }

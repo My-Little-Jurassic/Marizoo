@@ -31,4 +31,16 @@ public class Species extends BaseEntity {
 
     @OneToMany(mappedBy = "species")
     private List<SpeciesFeed> speciesFeedList = new ArrayList<>();
+
+//    === 연관관계 메서드 ===
+
+    public void addAnimal(Animal animal){
+        this.animalList.add(animal);
+        animal.setSpecies(this);
+    }
+
+    public void addSpeciesFeed(SpeciesFeed speciesFeed){
+        this.speciesFeedList.add(speciesFeed);
+        speciesFeed.setSpecies(this);
+    }
 }

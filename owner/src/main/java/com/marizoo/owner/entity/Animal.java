@@ -41,5 +41,25 @@ public class Animal extends BaseEntity {
     @JoinColumn(name = "species_id")
     private Species species;
 
+//    === 연관관계 메서드 ===
+
+    public void setAnimalStore(AnimalStore animalStore){
+        this.animalStore = animalStore;
+        animalStore.addAnimal(this);
+    }
+
+    public void setSpecies(Species species) {
+        this.species = species;
+    }
+
+    public void addBroadcastAnimal(BroadcastAnimal broadcastAnimal){
+        this.broadcastAnimalList.add(broadcastAnimal);
+        broadcastAnimal.setAnimal(this);
+    }
+
+    public void addAnimalFeed(AnimalFeed animalFeed){
+        this.animalFeedList.add(animalFeed);
+        animalFeed.setAnimal(this);
+    }
 
 }
