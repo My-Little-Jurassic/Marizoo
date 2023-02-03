@@ -36,7 +36,7 @@ function CafeList(props: IProps) {
   });
 
   return (
-    <StyledCafeList isListMax={isListMax}>
+    <StyledCafeList isListMax={isListMax} cafeDataLen={props.cafeData.length}>
       <StyledMaxBar
         onClick={() => {
           setIsListMax(!isListMax);
@@ -51,14 +51,14 @@ function CafeList(props: IProps) {
 
 export default React.memo(CafeList);
 
-const StyledCafeList = styled.aside<{ isListMax: boolean }>`
+const StyledCafeList = styled.aside<{ isListMax: boolean; cafeDataLen: number }>`
   z-index: 50;
   position: absolute;
   overflow-x: hidden;
   overflow-y: scroll;
   transition: all 0.5s;
   @media screen and (max-width: 600px) {
-    height: ${(props) => (props.isListMax ? "90%" : "40%")};
+    height: ${(props) => (props.cafeDataLen > 0 ? (props.isListMax ? "90%" : "40%") : "0%")};
     width: 100vw;
     bottom: 0px;
     border-radius: 32px 32px 0px 0px;

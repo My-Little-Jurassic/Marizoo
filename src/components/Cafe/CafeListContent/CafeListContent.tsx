@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 
 interface IProps {
@@ -17,29 +18,31 @@ interface IProps {
 }
 function CafeListContent(props: IProps) {
   return (
-    <StyledCafeListContent
-      focusedCafe={props.focusedCafe}
-      animal_store_id={props.cafe.animal_store_id}
-      onMouseOver={() => {
-        props.setFocusedCafe(props.cafe.animal_store_id);
-      }}
-    >
-      <StyledCafeProfile>
-        <StyledCafeProfileImg src={props.cafe.profile_img} />
-        <StyledCafeInfoBox>
-          <StyledStoreName
-            focusedCafe={props.focusedCafe}
-            animal_store_id={props.cafe.animal_store_id}
-          >
-            {props.cafe.store_name}
-            <StyledStoreContent>{props.cafe.address}</StyledStoreContent>
-            {props.focusedCafe === props.cafe.animal_store_id ? (
-              <StyledStoreDiscription>{props.cafe.discription}</StyledStoreDiscription>
-            ) : null}
-          </StyledStoreName>
-        </StyledCafeInfoBox>
-      </StyledCafeProfile>
-    </StyledCafeListContent>
+    <Link to={`/cafe/${props.cafe.animal_store_id}`} style={{ textDecoration: "none" }}>
+      <StyledCafeListContent
+        focusedCafe={props.focusedCafe}
+        animal_store_id={props.cafe.animal_store_id}
+        onMouseOver={() => {
+          props.setFocusedCafe(props.cafe.animal_store_id);
+        }}
+      >
+        <StyledCafeProfile>
+          <StyledCafeProfileImg src={props.cafe.profile_img} />
+          <StyledCafeInfoBox>
+            <StyledStoreName
+              focusedCafe={props.focusedCafe}
+              animal_store_id={props.cafe.animal_store_id}
+            >
+              {props.cafe.store_name}
+              <StyledStoreContent>{props.cafe.address}</StyledStoreContent>
+              {props.focusedCafe === props.cafe.animal_store_id ? (
+                <StyledStoreDiscription>{props.cafe.discription}</StyledStoreDiscription>
+              ) : null}
+            </StyledStoreName>
+          </StyledCafeInfoBox>
+        </StyledCafeProfile>
+      </StyledCafeListContent>
+    </Link>
   );
 }
 
