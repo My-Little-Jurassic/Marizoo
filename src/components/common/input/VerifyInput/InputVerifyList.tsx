@@ -4,6 +4,8 @@ import { EInputStatus } from "../";
 import InputVerifyItem from "./InputVerifyItem";
 
 const StyledUl = styled.ul`
+  box-sizing: border-box;
+  min-height: 24px;
   margin: 0;
   padding: 0;
   list-style: none;

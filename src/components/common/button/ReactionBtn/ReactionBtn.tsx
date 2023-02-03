@@ -1,20 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 
-interface Iprops {
-  // 리액션 버튼 props type
+interface IProps {
   label: string; // 리액션 버튼의 라벨
   icon: React.ElementType; // 리액션 버튼의 아이콘
   color: string; // 리액션 버튼의 색깔
+  onClick?(): void; // onclick props
 }
 
-function ReactionBtn(props: Iprops) {
+function ReactionBtn(props: IProps) {
   const Icon = props.icon; // prop된 아이콘
 
   return (
     <StyledReactionBtn background={props.color}>
-      <Icon size={30} strokeWidth={2}></Icon>
       <StyledBtnLabel>{props.label}</StyledBtnLabel>
+      <Icon size={30} strokeWidth={2}></Icon>
     </StyledReactionBtn>
   );
 }
@@ -29,40 +29,37 @@ interface IStyledReactionBtn {
 const StyledReactionBtn = styled.button<IStyledReactionBtn>`
   ${(props) => props.theme.shadow}
   ${(props) => props.theme.styles.button}
+  transition: all 0.2s;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 56px;
   height: 56px;
   border: none;
+  overflow: hidden;
   color: ${(props) => props.theme.colors.brandColors.basaltGray[50]};
   background: ${(props) => props.background};
   &:hover {
     width: 117px;
     color: ${(props) => props.background};
+    transition: all 0.2s;
   }
 `;
 
-const StyledBtnLabel = styled.a`
+const StyledBtnLabel = styled.div`
   position: absolute;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 56px;
-  height: 56px;
+  width: 100%;
+  height: 100%;
   border-radius: 32px;
   margin-inline: 20px;
-  font-family: "NanumSquareNeo-Variable";
-  font-weight: 700;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
-  font-weight: bold;
   word-break: break-all;
   transition: all 0.2s;
   opacity: 0;
+  font: ${(props) => props.theme.fonts.mainContentBold};
   &:hover {
-    width: 117px;
     opacity: 100;
     color: ${(props) => props.theme.colors.brandColors.basaltGray[50]};
   }

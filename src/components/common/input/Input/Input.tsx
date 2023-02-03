@@ -1,5 +1,4 @@
-import { JSX_TYPES } from "@babel/types";
-import React from "react";
+import React, { forwardRef } from "react";
 import DefaultInput from "./DefaultInput";
 import PasswordInput from "./PasswordInput";
 
@@ -47,35 +46,43 @@ interface IProps {
   type?: string; // input type
 }
 
-const Input = ({
-  value = "",
-  setValue,
-  status = EInputStatus.default,
-  placeholder = "",
-  focusOut,
-  type = "text",
-}: IProps): JSX.Element => {
-  if (type === "password")
-    return (
-      <PasswordInput
-        status={status}
-        value={value}
-        setValue={setValue}
-        placeholder={placeholder}
-        focusOut={focusOut}
-      />
-    );
-  else
-    return (
-      <DefaultInput
-        status={status}
-        value={value}
-        setValue={setValue}
-        placeholder={placeholder}
-        focusOut={focusOut}
-        type={type}
-      />
-    );
-};
+const Input = forwardRef<HTMLInputElement, IProps>(
+  (
+    {
+      value = "",
+      setValue,
+      status = EInputStatus.default,
+      placeholder = "",
+      focusOut,
+      type = "text",
+    }: IProps,
+    ref,
+  ): JSX.Element => {
+    if (type === "password")
+      return (
+        <PasswordInput
+          status={status}
+          ref={ref}
+          value={value}
+          setValue={setValue}
+          placeholder={placeholder}
+          focusOut={focusOut}
+        />
+      );
+    else
+      return (
+        <DefaultInput
+          status={status}
+          ref={ref}
+          value={value}
+          setValue={setValue}
+          placeholder={placeholder}
+          focusOut={focusOut}
+          type={type}
+        />
+      );
+  },
+);
+Input.displayName = "Input";
 
 export default React.memo(Input);

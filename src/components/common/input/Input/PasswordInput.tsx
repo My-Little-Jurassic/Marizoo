@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { TbEye, TbEyeOff } from "react-icons/tb";
 import styled from "styled-components";
 import { EInputStatus } from "..";
@@ -15,7 +15,8 @@ import { getStatusColor } from "./Input";
 
 const StyledDiv = styled.div<{ status: EInputStatus }>`
   box-sizing: border-box;
-  width: 292px;
+  width: 100%;
+  max-width: 292px;
   height: 48px;
   border: 4px solid
     ${({ theme, status }) =>
@@ -80,39 +81,42 @@ interface IProps {
   focusOut?(value: string): void;
 }
 
-const PasswordInput = ({
-  value = "",
-  setValue,
-  status = EInputStatus.default,
-  placeholder = "",
-  focusOut,
-}: IProps): JSX.Element => {
-  const [type, setType] = useState("password");
+const PasswordInput = forwardRef<HTMLInputElement, IProps>(
+  (
+    { value = "", setValue, status = EInputStatus.default, placeholder = "", focusOut }: IProps,
+    ref,
+  ): JSX.Element => {
+    const [type, setType] = useState("password");
 
-  const toggleType = () => {
-    if (type === "password") setType("text");
-    else setType("password");
-  };
+    const toggleType = () => {
+      if (type === "password") setType("text");
+      else setType("password");
+    };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
-  const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (focusOut) focusOut(e.target.value);
-  };
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(e.target.value);
+    };
+    const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      if (focusOut) focusOut(e.target.value);
+    };
 
-  return (
-    <StyledDiv status={status}>
-      <input
-        defaultValue={value}
-        type={type}
-        placeholder={placeholder}
-        onChange={onChange}
-        onBlur={onBlur}
-      />
-      <button onClick={toggleType}>{type === "password" ? <TbEye /> : <TbEyeOff />}</button>
-    </StyledDiv>
-  );
-};
+    return (
+      <StyledDiv status={status}>
+        <input
+          ref={ref}
+          defaultValue={value}
+          type={type}
+          placeholder={placeholder}
+          onChange={onChange}
+          onBlur={onBlur}
+        />
+        <button onClick={toggleType} type="button">
+          {type === "password" ? <TbEye /> : <TbEyeOff />}
+        </button>
+      </StyledDiv>
+    );
+  },
+);
+PasswordInput.displayName = "PasswordInput";
 
 export default React.memo(PasswordInput);
