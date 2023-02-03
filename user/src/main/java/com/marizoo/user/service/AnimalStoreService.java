@@ -3,6 +3,7 @@ package com.marizoo.user.service;
 import com.marizoo.user.api.animalstore_api.PlayAndStoreInfoResponse;
 import com.marizoo.user.dto.animalstore_dto.FollowDto;
 import com.marizoo.user.dto.animalstore_dto.StoreInfoDto;
+import com.marizoo.user.dto.animalstore_dto.StoreSubDto;
 import com.marizoo.user.dto.broadcast_dto.BroadcastDto;
 import com.marizoo.user.dto.broadcast_dto.BroadcastsDto;
 import com.marizoo.user.dto.play_dto.PlayInfoDto;
@@ -14,8 +15,11 @@ import com.marizoo.user.repository.animalstore_repo.AnimalStoreFollowRepository;
 import com.marizoo.user.repository.animalstore_repo.AnimalStoreRepository;
 import com.marizoo.user.repository.play_repo.PlayRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import springfox.documentation.service.ResponseMessage;
 
 import java.util.List;
 
@@ -108,4 +112,11 @@ public class AnimalStoreService {
                                                  animalStore.getTel());
          return new PlayAndStoreInfoResponse(playInfoDto, storeInfoDto);
      }
+
+    public StoreSubDto findStoreSubDto(Long animalId){
+         AnimalStore animalStore = animalStoreRepository.findAnimalStoreSubInfo(animalId);
+         return new StoreSubDto(animalStore.getId(), animalStore.getStoreName(), animalStore.getProfileImg());
+    }
+
+
 }

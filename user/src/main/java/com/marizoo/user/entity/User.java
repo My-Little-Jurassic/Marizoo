@@ -24,13 +24,10 @@ public class User extends BaseEntity {
     private String phoneNumber;
     private String email;
     private String nickname;
-
     private String role;
-
     private Long watchTimeAcc;
     private Long effectClickAcc;
     private Long feedClickAcc;
-
     private String refreshToken;
 
     @OneToMany(mappedBy = "user")
