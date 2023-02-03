@@ -159,6 +159,7 @@ public class StoreController {
                 animalService.findAnimalInfo(animalId),
                 animalStoreService.findStoreSubDto(animalId),
                 speciesService.findSpeciesDetail(animalId),
+                animalService.getBroadcastStatus(animalId),
                 feedService.findFeedListforAnimal(animalId)
         );
         return new ResponseEntity(animalDetailResponse, HttpStatus.OK);

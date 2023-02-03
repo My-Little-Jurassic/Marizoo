@@ -89,15 +89,6 @@ public class AnimalStoreService {
         return playRepository.getPlaysAboutStoreId(storeId);
      }
 
-//     public List<BroadcastsDto> findBroadcastsDto(Long storeId){
-//         // 해당 가게의 현재 스트리밍 중인 방송들
-//         List<Broadcast> broadcastList = broadcastRepository.findBroadcasts(storeId);
-//         // 위 방송에 포함되는 동물의 종이미지 리스트 조회.
-//         for(Boardcast b)
-//
-//         return null;
-//     }
-
     public PlayAndStoreInfoResponse findPlayInfo(Long store_id, Long play_id){
          Play play = playRepository.findPlayById(play_id);
          // 보내는 날짜와 시간은 아직 형식을 정하지 않아서 , localDateTime으로 보냄.
