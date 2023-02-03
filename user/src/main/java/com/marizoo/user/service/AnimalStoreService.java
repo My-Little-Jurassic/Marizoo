@@ -1,8 +1,12 @@
 package com.marizoo.user.service;
 
+import com.marizoo.user.api.animalstore_api.PlayAndStoreInfoResponse;
 import com.marizoo.user.dto.animalstore_dto.FollowDto;
+import com.marizoo.user.dto.animalstore_dto.StoreInfoDto;
 import com.marizoo.user.dto.broadcast_dto.BroadcastDto;
 import com.marizoo.user.dto.broadcast_dto.BroadcastsDto;
+import com.marizoo.user.dto.play_dto.PlayInfoDto;
+import com.marizoo.user.dto.play_dto.StorePlayDto;
 import com.marizoo.user.entity.*;
 import com.marizoo.user.repository.UserRepository;
 import com.marizoo.user.repository.animalstore_repo.AnimalStoreFollowRepository;
@@ -90,5 +94,15 @@ public class AnimalStoreService {
 //         return null;
 //     }
 
-
+    public PlayAndStoreInfoResponse findPlayInfo(Long store_id, Long play_id){
+         Play play = playRepository.findPlayById(play_id);
+         // 보내는 날짜와 시간은 아직 형식을 정하지 않아서 , localDateTime으로 보냄.
+         PlayInfoDto playInfoDto = new PlayInfoDto(play.getPlayDateTime(), play.getTitle(),
+                                                    play.getDescription(), play.getRunningTime(), play.getNotice());
+         AnimalStore animalStore = animalStoreRepository.findAnimalStoreById(store_id).get();
+         StoreInfoDto storeInfoDto= new StoreInfoDto(animalStore.getStoreName(),
+                                                     animalStore.getAddress(),
+                                                     animalStore.getTel());
+         return new PlayAndStoreInfoResponse(playInfoDto, storeInfoDto);
+     }
 }

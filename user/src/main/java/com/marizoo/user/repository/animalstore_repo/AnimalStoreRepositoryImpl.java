@@ -2,10 +2,7 @@ package com.marizoo.user.repository.animalstore_repo;
 
 import com.marizoo.user.dto.animal_dto.OwnedAnimalDto;
 import com.marizoo.user.dto.animal_dto.QOwnedAnimalDto;
-import com.marizoo.user.entity.AnimalStore;
-import com.marizoo.user.entity.QAnimalStore;
-import com.marizoo.user.entity.QBroadcast;
-import com.marizoo.user.entity.QBroadcastAnimal;
+import com.marizoo.user.entity.*;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -13,9 +10,11 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.marizoo.user.entity.QAnimal.animal;
+import static com.marizoo.user.entity.QAnimalFeed.animalFeed;
 import static com.marizoo.user.entity.QAnimalStore.animalStore;
 import static com.marizoo.user.entity.QBroadcast.broadcast;
 import static com.marizoo.user.entity.QBroadcastAnimal.broadcastAnimal;
+import static com.marizoo.user.entity.QFeed.feed;
 import static com.marizoo.user.entity.QSpecies.species;
 
 public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
@@ -45,13 +44,8 @@ public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
                 .select(new QOwnedAnimalDto(animal.name, species.classification, animal.img))
                 .from(animal)
                 .join(animal.species, species)
-                .where(animal.animalStore.eq(
-                        JPAExpressions
-                                .select(animalStore)
-                                .join(animal.animalStore, animalStore)
-                                .where(animalStore.id.eq(storeId))
-                        )
-                ).fetch();
+                .where(animal.animalStore.id.eq(storeId))
+                .fetch();
 
         return findOwnedAnimal;
     }
@@ -67,6 +61,19 @@ public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
                 .fetch();
         return classificationImgs;
     }
+
+    // 동물id에 해당하는 먹이 목록 조회.
+    public List<Feed> findFeedList(Long animalId){
+
+        List<Feed> feedList = queryFactory
+                .select(feed)
+                .from(feed)
+                .join(feed, animalFeed.feed)
+                .where(animalFeed.id.eq(animalId))
+                .fetch();
+        return feedList;
+    }
+
 
 
 }
