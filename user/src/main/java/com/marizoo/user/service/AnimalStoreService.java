@@ -1,9 +1,7 @@
 package com.marizoo.user.service;
 
 import com.marizoo.user.api.animalstore_api.PlayAndStoreInfoResponse;
-import com.marizoo.user.dto.animalstore_dto.FollowDto;
-import com.marizoo.user.dto.animalstore_dto.StoreInfoDto;
-import com.marizoo.user.dto.animalstore_dto.StoreSubDto;
+import com.marizoo.user.dto.animalstore_dto.*;
 import com.marizoo.user.dto.broadcast_dto.BroadcastDto;
 import com.marizoo.user.dto.broadcast_dto.BroadcastsDto;
 import com.marizoo.user.dto.play_dto.PlayInfoDto;
@@ -49,8 +47,19 @@ public class AnimalStoreService {
      * @return : 가게
      */
 
-    public AnimalStore findAnimalStore(Long storeId) {
-        return animalStoreRepository.findAnimalStoreById(storeId).get();
+    public AnimalStoreWholeDto findAnimalStore(Long storeId) {
+        AnimalStore animalStore = animalStoreRepository.findAnimalStoreById(storeId).get();
+        return new AnimalStoreWholeDto(
+                animalStore.getId(),
+                animalStore.getStoreName(),
+                animalStore.getDescription(),
+                animalStore.getAddress(),
+                animalStore.getOpeningHours(),
+                animalStore.getTel(),
+                animalStore.getEmail(),
+                animalStore.getProfileImg(),
+                animalStore.getLat(),
+                animalStore.getLng());
     }
 
     /**
@@ -88,15 +97,6 @@ public class AnimalStoreService {
      public List<Play> findPlayByStore(Long storeId){
         return playRepository.getPlaysAboutStoreId(storeId);
      }
-
-//     public List<BroadcastsDto> findBroadcastsDto(Long storeId){
-//         // 해당 가게의 현재 스트리밍 중인 방송들
-//         List<Broadcast> broadcastList = broadcastRepository.findBroadcasts(storeId);
-//         // 위 방송에 포함되는 동물의 종이미지 리스트 조회.
-//         for(Boardcast b)
-//
-//         return null;
-//     }
 
     public PlayAndStoreInfoResponse findPlayInfo(Long store_id, Long play_id){
          Play play = playRepository.findPlayById(play_id);

@@ -2,8 +2,10 @@ package com.marizoo.user.service;
 
 import com.marizoo.user.dto.animal_dto.AnimalDto;
 import com.marizoo.user.dto.animal_dto.OwnedAnimalDto;
+import com.marizoo.user.dto.broadcast_dto.BroadcastStatusDto;
 import com.marizoo.user.dto.feed_dto.FeedDto;
 import com.marizoo.user.entity.Animal;
+import com.marizoo.user.entity.BroadcastStatus;
 import com.marizoo.user.entity.Feed;
 import com.marizoo.user.repository.animal_repo.AnimalRepository;
 import com.marizoo.user.repository.animalstore_repo.AnimalStoreRepository;
@@ -41,4 +43,7 @@ public class AnimalService {
         return animalDto;
     }
 
+    public BroadcastStatusDto getBroadcastStatus(Long animalId){
+        return new BroadcastStatusDto(animalRepository.findBroadcastStatus(animalId));
+    }
 }

@@ -2,6 +2,7 @@ package com.marizoo.user.controller;
 
 import com.marizoo.user.api.animalstore_api.*;
 import com.marizoo.user.dto.animalstore_dto.AnimalStoreDto;
+import com.marizoo.user.dto.animalstore_dto.AnimalStoreWholeDto;
 import com.marizoo.user.dto.broadcast_dto.BroadcastsDto;
 import com.marizoo.user.dto.play_dto.StorePlayDto;
 import com.marizoo.user.entity.AnimalStore;
@@ -49,7 +50,7 @@ public class StoreController {
     @GetMapping("/stores/search")
     public ResponseEntity<AnimalStoreListResponse> store_search(
             @RequestParam(name = "storename", required = false, defaultValue = "") String storename,
-            @RequestParam(name = "species", required = false, defaultValue = "") String species){
+            @RequestParam(name = "classification", required = false, defaultValue = "") String species){
 
         List<AnimalStore> storeList = new ArrayList<>();
         List<AnimalStoreDto> AnimalStoreDtoList;
@@ -89,17 +90,13 @@ public class StoreController {
     }
 
 
-    // 가게 정보 제공
+    // 해당 가게 전체 정보 제공
     @GetMapping("/stores/{store_id}")
-    public ResponseEntity<ReservedAnimalStoreResponse> reserve(@PathVariable(name = "store_id") Long store_id){
-        AnimalStore animalStore = animalStoreService.findAnimalStore(store_id);
-        ReservedAnimalStoreResponse reservedStore =
-                new ReservedAnimalStoreResponse(animalStore.getStoreName(),
-                                                animalStore.getAddress(),
-                                                animalStore.getTel());
-        return new ResponseEntity<>(reservedStore, HttpStatus.OK);
+    public ResponseEntity<AnimalStoreWholeDto> reserveToStore(@PathVariable(name = "store_id") Long store_id){
+        return new ResponseEntity<>(animalStoreService.findAnimalStore(store_id), HttpStatus.OK);
     }
 
+    // 해당 가게 있는 동물 목록 조회.
     @GetMapping("/stores/{store_id}/animals")
     public ResponseEntity<AnimalListResponse> getOwnedAnimal(@PathVariable(name = "store_id") Long store_id){
         AnimalListResponse OwnedAnimalList = new AnimalListResponse(animalService.findOwnedAnimal(store_id));
@@ -159,6 +156,7 @@ public class StoreController {
                 animalService.findAnimalInfo(animalId),
                 animalStoreService.findStoreSubDto(animalId),
                 speciesService.findSpeciesDetail(animalId),
+                animalService.getBroadcastStatus(animalId),
                 feedService.findFeedListforAnimal(animalId)
         );
         return new ResponseEntity(animalDetailResponse, HttpStatus.OK);
