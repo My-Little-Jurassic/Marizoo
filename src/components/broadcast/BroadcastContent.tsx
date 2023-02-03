@@ -10,6 +10,12 @@ interface IProps {
   title: string;
   detail: string;
   feedList: { id: number; feedName: string; imgSrc: string }[];
+  vote: (selectedFeed: string) => void;
+  isVoted: boolean;
+  isLiked: boolean;
+  like: () => void;
+  viewers: number;
+  numberOfLikes: number;
 }
 
 const BroadcastContent = function (props: IProps) {
@@ -19,7 +25,11 @@ const BroadcastContent = function (props: IProps) {
   return (
     <StyledContainer>
       {isVoteModalOpened && (
-        <VoteModal feedList={props.feedList} closeModal={() => setIsVoteModalOpened(false)} />
+        <VoteModal
+          feedList={props.feedList}
+          closeModal={() => setIsVoteModalOpened(false)}
+          vote={(selectedFeed) => props.vote(selectedFeed)}
+        />
       )}
       {isResultModalOpened && (
         <VoteResultModal
@@ -32,18 +42,22 @@ const BroadcastContent = function (props: IProps) {
       <StyledSubTitleContainer>
         <StyledCountInfoContainer>
           <TbUsers size={20} />
-          <StyledSpan>00 명</StyledSpan>
+          <StyledSpan>{props.viewers} 명</StyledSpan>
           <TbThumbUp size={20} />
-          <StyledSpan>000 회</StyledSpan>
+          <StyledSpan>{props.numberOfLikes} 회</StyledSpan>
         </StyledCountInfoContainer>
         <StyledButtonContainer>
-          <GreenBtn
-            label="투표하기"
-            type={0}
-            isDisable={false}
-            onClick={() => setIsVoteModalOpened(true)}
-          />
-          <LikeBtn />
+          {props.isVoted ? (
+            <GreenBtn label="투표하기" type={0} isDisable={true} />
+          ) : (
+            <GreenBtn
+              label="투표하기"
+              type={0}
+              isDisable={false}
+              onClick={() => setIsVoteModalOpened(true)}
+            />
+          )}
+          <LikeBtn onClick={props.like} isLiked={props.isLiked} />
         </StyledButtonContainer>
       </StyledSubTitleContainer>
       <StyledHr />
@@ -79,6 +93,11 @@ const StyledSubTitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
 `;
 
 const StyledCountInfoContainer = styled.div`
