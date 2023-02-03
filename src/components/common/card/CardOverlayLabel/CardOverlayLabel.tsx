@@ -19,7 +19,7 @@ const CardOverlayLabel = function (props: IProps) {
 export default CardOverlayLabel;
 
 const StyledContainer = styled.div`
-  width: 240px;
+  width: 100%;
   height: 160px;
   display: flex;
   justify-content: center;
