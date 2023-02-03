@@ -1,9 +1,7 @@
 package com.marizoo.user.service;
 
 import com.marizoo.user.api.animalstore_api.PlayAndStoreInfoResponse;
-import com.marizoo.user.dto.animalstore_dto.FollowDto;
-import com.marizoo.user.dto.animalstore_dto.StoreInfoDto;
-import com.marizoo.user.dto.animalstore_dto.StoreSubDto;
+import com.marizoo.user.dto.animalstore_dto.*;
 import com.marizoo.user.dto.broadcast_dto.BroadcastDto;
 import com.marizoo.user.dto.broadcast_dto.BroadcastsDto;
 import com.marizoo.user.dto.play_dto.PlayInfoDto;
@@ -49,8 +47,19 @@ public class AnimalStoreService {
      * @return : 가게
      */
 
-    public AnimalStore findAnimalStore(Long storeId) {
-        return animalStoreRepository.findAnimalStoreById(storeId).get();
+    public AnimalStoreWholeDto findAnimalStore(Long storeId) {
+        AnimalStore animalStore = animalStoreRepository.findAnimalStoreById(storeId).get();
+        return new AnimalStoreWholeDto(
+                animalStore.getId(),
+                animalStore.getStoreName(),
+                animalStore.getDescription(),
+                animalStore.getAddress(),
+                animalStore.getOpeningHours(),
+                animalStore.getTel(),
+                animalStore.getEmail(),
+                animalStore.getProfileImg(),
+                animalStore.getLat(),
+                animalStore.getLng());
     }
 
     /**

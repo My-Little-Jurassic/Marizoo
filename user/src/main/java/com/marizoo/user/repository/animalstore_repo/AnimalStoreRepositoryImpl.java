@@ -33,7 +33,7 @@ public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
     public List<AnimalStore> searchAnimalStoreHavingSpecies(String input) {
 
         List<AnimalStore> findAnimalStore = queryFactory
-                .select(animal.animalStore)
+                .select(animal.animalStore).distinct()
                 .from(animal)
                 .join(animal.species, species)
                 .where(species.classification.like(input))
