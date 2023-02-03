@@ -4,6 +4,7 @@ import com.marizoo.owner.entity.common.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -21,8 +22,6 @@ public class AnimalStore extends BaseEntity {
     @Column(name = "animal_store_id")
     private Long id;
 
-    @OneToMany(mappedBy = "animalStore")
-    private List<UsersAnimalStore> followers = new ArrayList<>();
     private String storeName;
     private String description;
     private String address;
@@ -34,6 +33,9 @@ public class AnimalStore extends BaseEntity {
     private Float lng;
 
     @OneToMany(mappedBy = "animalStore")
+    private List<UsersAnimalStore> followers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "animalStore")
     private List<Play> playList = new ArrayList<>();
 
     @OneToMany(mappedBy = "animalStore")
@@ -41,5 +43,28 @@ public class AnimalStore extends BaseEntity {
 
     @OneToMany(mappedBy = "animalStore")
     private List<Broadcast> broadcastList = new ArrayList<>();
+
+//    === 연관관계 메서드 ===
+
+    public void addFollower(UsersAnimalStore usersAnimalStore) {
+        this.followers.add(usersAnimalStore);
+        usersAnimalStore.setAnimalStore(this);
+    }
+
+    public void addPlay(Play play) {
+        this.playList.add(play);
+        play.setAnimalStore(this);
+    }
+
+    public void addAnimal(Animal animal) {
+        this.animalList.add(animal);
+        animal.setAnimalStore(this);
+    }
+
+    public void addBroadcast(Broadcast broadcast){
+        this.broadcastList.add(broadcast);
+        broadcast.setAnimalStore(this );
+    }
+
 
 }

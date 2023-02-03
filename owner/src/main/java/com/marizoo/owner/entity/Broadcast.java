@@ -58,8 +58,8 @@ public class Broadcast extends BaseEntity {
 //    === 생성 메서드 ===
 
     // 방송 시작
-    public static Broadcast createBroadcast
-    (String title, String description, String thumbnail, AnimalStore animalStore, List<BroadcastAnimal> broadcastAnimalList, Vote vote){
+    public static Broadcast createBroadcast(
+            String title, String description, String thumbnail, AnimalStore animalStore, List<BroadcastAnimal> broadcastAnimalList, Vote vote){
         Broadcast broadcast = new Broadcast();
         broadcast.setTitle(title);
         broadcast.setDescription(description);
