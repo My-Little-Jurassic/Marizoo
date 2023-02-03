@@ -28,6 +28,7 @@ public class StoreController {
     private final BroadcastService broadcastService;
     private final FeedService feedService;
     private final SpeciesService speciesService;
+    private final ReservationService reservationService;
 
     @GetMapping("/stores")
     public ResponseEntity<AnimalStoreListResponse> storeList(){
@@ -79,13 +80,16 @@ public class StoreController {
         }
     }
 
+    // 팔로우
     @PostMapping("/stores/{store_id}")
-    public ResponseEntity<String> follow(@PathVariable(name = "store_id") String store_id, @RequestBody Long uid){
-
+    public ResponseEntity<String> follow(@PathVariable(name = "store_id") Long store_id,
+                                         @RequestBody FollowRequest followRequest){
+        animalStoreService.followingStore(store_id, followRequest.getUid());
         return new ResponseEntity<>("성공", HttpStatus.OK);
     }
 
 
+    // 가게 정보 제공
     @GetMapping("/stores/{store_id}")
     public ResponseEntity<ReservedAnimalStoreResponse> reserve(@PathVariable(name = "store_id") Long store_id){
         AnimalStore animalStore = animalStoreService.findAnimalStore(store_id);
@@ -97,7 +101,7 @@ public class StoreController {
     }
 
     @GetMapping("/stores/{store_id}/animals")
-    public ResponseEntity<AnimalListResponse> ownedAnimal(@PathVariable(name = "store_id") Long store_id){
+    public ResponseEntity<AnimalListResponse> getOwnedAnimal(@PathVariable(name = "store_id") Long store_id){
         AnimalListResponse OwnedAnimalList = new AnimalListResponse(animalService.findOwnedAnimal(store_id));
         return new ResponseEntity<>(OwnedAnimalList, HttpStatus.OK);
     }
@@ -139,17 +143,22 @@ public class StoreController {
         return new ResponseEntity<>(animalStoreService.findPlayInfo(storeId, playId), HttpStatus.OK);
     }
 
-//    @GetMapping("/stores/{store_id}/animals/search")
-//    public ResponseEntity<AnimalStoreListResponse> searchOwnedAnimal(@PathVariable(name = "store_id") Long storeId,
-//                                                                     @RequestParam(name = "input") String input){
-//        return null;
-//    }
+
+    // 예약 정보 기입
+    @GetMapping("/stores/books")
+    public ResponseEntity postReservation(@RequestBody ReservationRequest reservationRequest){
+
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
     // 동물 상세 정보 제공.
     @GetMapping("/stores/{animal_id}/animal_detail")
     public ResponseEntity<AnimalDetailResponse> getAnimalInfo(@PathVariable(name = "animal_id") Long animalId){
         AnimalDetailResponse animalDetailResponse = new AnimalDetailResponse(
                 animalService.findAnimalInfo(animalId),
+                animalStoreService.findStoreSubDto(animalId),
+                speciesService.findSpeciesDetail(animalId),
                 feedService.findFeedListforAnimal(animalId)
         );
         return new ResponseEntity(animalDetailResponse, HttpStatus.OK);
@@ -164,6 +173,13 @@ public class StoreController {
         );
         return new ResponseEntity<>(speciesDetailResponse, HttpStatus.OK);
     }
+
+    // 예약 정보 제공
+    @GetMapping("/stores/books/{book_id}")
+    public ResponseEntity<ReservationResponse> showReservationInfo(@PathVariable(name = "book_id") Long bookId){
+        return new ResponseEntity<>(reservationService.getReservatonResult(bookId), HttpStatus.OK);
+    }
+
 
 }
 

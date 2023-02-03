@@ -24,5 +24,9 @@ public class UsersAnimalStore extends BaseEntity {
     @JoinColumn(name = "users_id")
     private User user;
 
+    public UsersAnimalStore(AnimalStore animalStore,User user){
+        this.animalStore = animalStore;
+        this.user = user;
+    }
 
 }

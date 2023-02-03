@@ -18,17 +18,10 @@ public class Play extends BaseEntity {
     private Long id;
 
     private LocalDateTime playDateTime;
-
-    @Enumerated(EnumType.STRING)
-    private PlayType playType;
-
     private String title;
-
     private String description;
-
     private Integer maxVisitor;
     private Integer runningTime;
-
     private String notice;
 
     @ManyToOne(fetch = FetchType.LAZY)

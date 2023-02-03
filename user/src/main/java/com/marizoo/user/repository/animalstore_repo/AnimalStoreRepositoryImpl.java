@@ -1,5 +1,7 @@
 package com.marizoo.user.repository.animalstore_repo;
 
+import com.marizoo.user.dto.UsersPlay_dto.QUsersPlayDto;
+import com.marizoo.user.dto.UsersPlay_dto.UsersPlayDto;
 import com.marizoo.user.dto.animal_dto.OwnedAnimalDto;
 import com.marizoo.user.dto.animal_dto.QOwnedAnimalDto;
 import com.marizoo.user.entity.*;
@@ -7,6 +9,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
 import java.util.List;
 
 import static com.marizoo.user.entity.QAnimal.animal;
@@ -15,7 +18,9 @@ import static com.marizoo.user.entity.QAnimalStore.animalStore;
 import static com.marizoo.user.entity.QBroadcast.broadcast;
 import static com.marizoo.user.entity.QBroadcastAnimal.broadcastAnimal;
 import static com.marizoo.user.entity.QFeed.feed;
+import static com.marizoo.user.entity.QPlay.play;
 import static com.marizoo.user.entity.QSpecies.species;
+import static com.marizoo.user.entity.QUsersPlay.usersPlay;
 
 public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
 
@@ -41,7 +46,7 @@ public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
     public List<OwnedAnimalDto> findOwnedAnimalInfo(Long storeId){
 
         List<OwnedAnimalDto> findOwnedAnimal = queryFactory
-                .select(new QOwnedAnimalDto(animal.name, species.classification, animal.img))
+                .select(new QOwnedAnimalDto(animal.name, species.classification, animal.img, animal.gender))
                 .from(animal)
                 .join(animal.species, species)
                 .where(animal.animalStore.id.eq(storeId))
@@ -74,7 +79,20 @@ public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
         return feedList;
     }
 
-
+    public UsersPlayDto findStoreNameForReservation(Long bookId){
+        UsersPlayDto ReservationInfo = queryFactory
+                .select(new QUsersPlayDto(animalStore.storeName, play.playDateTime))
+                .from(play)
+                .join(play.animalStore, animalStore)
+                .where(play.eq(
+                        JPAExpressions
+                                .select(usersPlay.play)
+                                .from(usersPlay)
+                                .join(usersPlay.play, play)
+                                .where(usersPlay.id.eq(bookId))))
+                .fetchOne();
+        return ReservationInfo;
+    }
 
 }
 

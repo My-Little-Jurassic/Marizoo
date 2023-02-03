@@ -3,6 +3,7 @@ package com.marizoo.user.service;
 import com.marizoo.user.api.animalstore_api.PlayAndStoreInfoResponse;
 import com.marizoo.user.dto.animalstore_dto.FollowDto;
 import com.marizoo.user.dto.animalstore_dto.StoreInfoDto;
+import com.marizoo.user.dto.animalstore_dto.StoreSubDto;
 import com.marizoo.user.dto.broadcast_dto.BroadcastDto;
 import com.marizoo.user.dto.broadcast_dto.BroadcastsDto;
 import com.marizoo.user.dto.play_dto.PlayInfoDto;
@@ -14,8 +15,11 @@ import com.marizoo.user.repository.animalstore_repo.AnimalStoreRepository;
 import com.marizoo.user.repository.broadcast_repo.BroadcastRepository;
 import com.marizoo.user.repository.play_repo.PlayRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import springfox.documentation.service.ResponseMessage;
 
 import java.util.List;
 
@@ -68,11 +72,11 @@ public class AnimalStoreService {
         return animalStoreRepository.searchAnimalStoreHavingSpecies(species);
     }
 
-
+    // 팔로우
      public void followingStore(Long storeId, Long userId){
-//        User user = userRepository.findByUid(userId);
+        User user = userRepository.findById(userId).get();
         AnimalStore animalStore = animalStoreRepository.findAnimalStoreById(storeId).get();
-        UsersAnimalStore follower = new UsersAnimalStore();
+        UsersAnimalStore follower = new UsersAnimalStore(animalStore, user);
         animalStoreFollowRepository.save(follower);
      }
 
@@ -97,12 +101,22 @@ public class AnimalStoreService {
     public PlayAndStoreInfoResponse findPlayInfo(Long store_id, Long play_id){
          Play play = playRepository.findPlayById(play_id);
          // 보내는 날짜와 시간은 아직 형식을 정하지 않아서 , localDateTime으로 보냄.
-         PlayInfoDto playInfoDto = new PlayInfoDto(play.getPlayDateTime(), play.getTitle(),
-                                                    play.getDescription(), play.getRunningTime(), play.getNotice());
+         PlayInfoDto playInfoDto = new PlayInfoDto(play.getPlayDateTime(),
+                                                play.getTitle(),
+                                                play.getDescription(),
+                                                play.getRunningTime(),
+                                                play.getNotice());
          AnimalStore animalStore = animalStoreRepository.findAnimalStoreById(store_id).get();
          StoreInfoDto storeInfoDto= new StoreInfoDto(animalStore.getStoreName(),
-                                                     animalStore.getAddress(),
-                                                     animalStore.getTel());
+                                                 animalStore.getAddress(),
+                                                 animalStore.getTel());
          return new PlayAndStoreInfoResponse(playInfoDto, storeInfoDto);
      }
+
+    public StoreSubDto findStoreSubDto(Long animalId){
+         AnimalStore animalStore = animalStoreRepository.findAnimalStoreSubInfo(animalId);
+         return new StoreSubDto(animalStore.getId(), animalStore.getStoreName(), animalStore.getProfileImg());
+    }
+
+
 }
