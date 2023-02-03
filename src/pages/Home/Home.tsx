@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { TbX } from "react-icons/tb";
 import styled from "styled-components";
-import { SearchInput } from "../../components/common/input";
 
-import { HomeNav } from "../../components/common/navbar";
+import { SearchInput } from "../../components/common/input";
 import { FilterSwiper, LiveGrid } from "../../components/Home";
 
 function Home() {
@@ -24,7 +23,6 @@ function Home() {
 
   // search keyword 변화에 다른 hook
   useEffect(() => {
-    console.log(searchKeyword);
     if (searchKeyword === "") {
       setSearchKeyword(null);
     }
