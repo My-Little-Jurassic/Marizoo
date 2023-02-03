@@ -1,13 +1,17 @@
 package com.marizoo.user.service;
 
+import com.marizoo.user.dto.broadcast_dto.SearchBroadcastDto;
 import com.marizoo.user.entity.Broadcast;
+import com.marizoo.user.entity.BroadcastAnimal;
 import com.marizoo.user.entity.BroadcastStatus;
 import com.marizoo.user.entity.FeedVote;
 import com.marizoo.user.repository.broadcast_repo.BroadcastRepository;
+import com.marizoo.user.repository.broadcast_repo.BroadcastRepositoryCustomImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +50,38 @@ public class BroadcastService {
         return opt.map(broadcast -> broadcast.getVote().getFeedVoteList()).orElse(null);
     }
 
+    /**
+     * input에 해당하는 종이 출연하는 라이브 방송
+     *
+     * @param input : 검색어(종)
+     * @return 라이브 방송 중 검색어 종이 출연하는 방송 목록
+     */
+    public List<SearchBroadcastDto> searchOnAirsHavingSpeciesList(String input){
+        String keyword = "%" + input + "%";
+        List<SearchBroadcastDto> searchSpecies = broadcastRepository.searchOnAirsHavingSpecies(keyword);
+        return searchSpecies;
+    }
 
+    /**
+     * classifications에 해당하는 종이 출연하는 라이브 방송
+     *
+     * @param broadcastId : 방송 PK
+     * @return 라이브 방송 중 종 리스트에 있는 종이 출연하는 방송 목록
+     */
+    public List<SearchBroadcastDto> searchBroadcastRelated(Long broadcastId){
+        Optional<Broadcast> opt = broadcastRepository.findById(broadcastId);
+        if(opt.isEmpty()){
+            // error
+            return null;
+        }
+        List<String> classifications = new ArrayList<>();
+        List<BroadcastAnimal> broadcastAnimalList = opt.get().getBroadcastAnimalList();
+        for (BroadcastAnimal broadcastAnimal : broadcastAnimalList) {
+            classifications.add(broadcastAnimal.getClassification());
+        }
+
+        List<SearchBroadcastDto> relateBroadcastList = broadcastRepository.searchBroadcastRelated(classifications);
+        return relateBroadcastList;
+    }
 
 }

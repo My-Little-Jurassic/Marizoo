@@ -1,6 +1,6 @@
 package com.marizoo.user.repository.broadcast_repo;
 
-import com.marizoo.user.dto.animal_dto.QSearchBroadcastDto;
+import com.marizoo.user.dto.broadcast_dto.QSearchBroadcastDto;
 import com.marizoo.user.dto.broadcast_dto.SearchBroadcastDto;
 
 import com.marizoo.user.entity.Broadcast;
@@ -25,9 +25,9 @@ public class BroadcastRepositoryCustomImpl implements BroadcastRepositoryCustom 
         BroadcastStatus status = BroadcastStatus.ONAIR;
         return queryFactory
                 .select(new QSearchBroadcastDto(broadcast.title, broadcast.thumbnail)).distinct()
-                .from(broadcast)
-                .join(broadcast, broadcastAnimal.broadcast)
-                .where(onAir(status), classificationLike(input))
+                .from(broadcastAnimal)
+                .join(broadcastAnimal.broadcast, broadcast)
+                .where(onAir(status).and(classificationLike(input)))
                 .fetch();
     }
 
@@ -48,8 +48,8 @@ public class BroadcastRepositoryCustomImpl implements BroadcastRepositoryCustom 
         BroadcastStatus status = BroadcastStatus.ONAIR;
         return queryFactory
                 .select(new QSearchBroadcastDto(broadcast.title, broadcast.thumbnail)).distinct()
-                .from(broadcast)
-                .join(broadcast, broadcastAnimal.broadcast)
+                .from(broadcastAnimal)
+                .join(broadcastAnimal.broadcast, broadcast)
                 .where(onAir(status), classificationsIn(classifications))
                 .fetch();
 
