@@ -4,18 +4,17 @@ import com.marizoo.user.api.broadcast_api.BroadcastApi;
 import com.marizoo.user.api.broadcast_api.FeedVoteApi;
 import com.marizoo.user.dto.broadcast_dto.*;
 import com.marizoo.user.entity.*;
-import com.marizoo.user.repository.BroadcastRepository;
 import com.marizoo.user.service.BroadcastService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -83,5 +82,23 @@ public class BroadcastController {
 //        api 형식으로 변환
         return new ResponseEntity<FeedVoteApi>(new FeedVoteApi(result), HttpStatus.OK);
 
+    }
+
+    @GetMapping("/broadcasts/search")
+    public ResponseEntity<?> getSearchOnairs(@RequestParam(value = "keyword") String keyword){
+        List<SearchBroadcastDto> searchOnairs = broadcastService.searchOnAirsHavingSpeciesList(keyword);
+        if(searchOnairs.isEmpty()){
+            return new ResponseEntity<>("검색 결과 없음", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(searchOnairs, HttpStatus.OK);
+    }
+
+    @GetMapping("/broadcasts/{broadcast_id}/related")
+    public ResponseEntity<?> getRelatedOnairs(@PathVariable("broadcast_id") Long broadcastId){
+        List<SearchBroadcastDto> relatedOnairs = broadcastService.searchBroadcastRelated(broadcastId);
+        if(relatedOnairs.isEmpty()){
+            return new ResponseEntity<>("관련 방송 없음", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(relatedOnairs, HttpStatus.OK);
     }
 }

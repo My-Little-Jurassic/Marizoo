@@ -1,4 +1,4 @@
-package com.marizoo.user.repository;
+package com.marizoo.user.repository.broadcast_repo;
 
 import com.marizoo.user.dto.broadcast_dto.BroadcastDto;
 import com.marizoo.user.entity.Broadcast;
@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface BroadcastRepository extends JpaRepository<Broadcast, Long> {
+public interface BroadcastRepository extends JpaRepository<Broadcast, Long>, BroadcastRepositoryCustom {
     // 현재 방송 중인 목록 가져오기
     List<Broadcast> findByStatus(BroadcastStatus status);
 

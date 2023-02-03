@@ -1,7 +1,7 @@
 package com.marizoo.user.repository;
 
 import com.marizoo.user.entity.*;
-import org.assertj.core.api.Assertions;
+import com.marizoo.user.repository.broadcast_repo.BroadcastRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,7 +42,7 @@ public class BroadcastRepositoryTest {
         broadcast1.setAnimalStore(animalStore);
         broadcast1.setStatus(BroadcastStatus.ONAIR);
         Vote vote1 = new Vote();
-        vote1.setBroadcast(broadcast1);
+//        vote1.setBroadcast(broadcast1);
         vote1.setTitle("투표1");
         broadcast1.setVote(vote1);
 
@@ -57,7 +57,7 @@ public class BroadcastRepositoryTest {
         broadcast2.setAnimalStore(animalStore);
         broadcast2.setStatus(BroadcastStatus.FINISH);
         Vote vote2 = new Vote();
-        vote2.setBroadcast(broadcast2);
+//        vote2.setBroadcast(broadcast2);
         vote2.setTitle("투표2");
         broadcast2.setVote(vote2);
 
