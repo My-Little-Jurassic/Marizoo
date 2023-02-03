@@ -25,6 +25,9 @@ function CafeListContent(props: IProps) {
         onMouseOver={() => {
           props.setFocusedCafe(props.cafe.animal_store_id);
         }}
+        onMouseOut={() => {
+          props.setFocusedCafe(null);
+        }}
       >
         <StyledCafeProfile>
           <StyledCafeProfileImg src={props.cafe.profile_img} />
@@ -66,7 +69,7 @@ const StyledCafeListContent = styled.div<{ focusedCafe: number | null; animal_st
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  margin-block: 4px;
+  margin-block: 8px;
   width: 100%;
   @media screen and (min-width: 600px) {
     ${(props) => props.theme.shadow};
@@ -74,7 +77,7 @@ const StyledCafeListContent = styled.div<{ focusedCafe: number | null; animal_st
     background-color: ${(props) =>
       props.focusedCafe === props.animal_store_id
         ? props.theme.colors.yellow
-        : props.theme.colors.primaryBg};
+        : props.theme.colors.primaryBg + "aa"};
     scale: ${(props) => (props.focusedCafe === props.animal_store_id ? "1.02" : "1")};
   }
 `;

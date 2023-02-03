@@ -116,22 +116,74 @@ function CafeMap() {
     navigator.geolocation.getCurrentPosition((pos) => {
       setUserPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
     });
+    // 마커 이미지
+    const markerImgSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+    // 각 카페 배열 순회하며 마커 생성
+    cafeData.map((cafe: ICafeData) => {
+      // 마커 사이즈 생성
+      const markerSize = new kakao.maps.Size(24, 35);
+      // 마커 이미지 생성
+      const markerImg = new kakao.maps.MarkerImage(markerImgSrc, markerSize);
+      // 마커 생성
+      const marker = new kakao.maps.Marker({
+        map: map, // 마커를 표시할 지도
+        position: new kakao.maps.LatLng(cafe.lat, cafe.lng), // 마커를 표시할 위치
+        title: cafe.store_name, // 마커의 타이틀
+        image: markerImg, // 마커 이미지
+      });
+      // 마커 클릭 이벤트
+      kakao.maps.event.addListener(marker, "click", () => {
+        map.setLevel(4, { anchor: new kakao.maps.LatLng(cafe.lat, cafe.lng) });
+      });
+
+      // 마커 마우스오버 이벤트
+      kakao.maps.event.addListener(marker, "mouseover", () => {
+        setFocusedCafe(cafe.animal_store_id);
+      });
+      // 마커 마우스오버 이벤트
+      kakao.maps.event.addListener(marker, "mouseout", () => {
+        setFocusedCafe(null);
+      });
+
+      return marker;
+    });
   }, [map]);
 
   // 죄표가 다시 생성될 때 카페 리스트 다시 필터링하기
   useEffect(() => {
-    const newfilterdData = cafeData.filter((cafe) => {
-      if (mapBounds === null) {
-        return cafe;
-      } else {
-        return (
-          mapBounds.top > cafe.lat &&
-          cafe.lat > mapBounds.bottom &&
-          mapBounds.left < cafe.lng &&
-          cafe.lng < mapBounds.right
-        );
-      }
-    });
+    const newfilterdData = cafeData
+      .filter((cafe) => {
+        if (mapBounds === null) {
+          return cafe;
+        } else {
+          return (
+            mapBounds.top > cafe.lat &&
+            cafe.lat > mapBounds.bottom &&
+            mapBounds.left < cafe.lng &&
+            cafe.lng < mapBounds.right
+          );
+        }
+      })
+      .sort((cafe1, cafe2) => {
+        // 사용자 위치에 다른 가게 정렬
+        const getDistance = (ax: number, ay: number, bx: number, by: number) =>
+          Math.sqrt(Math.abs(bx - ax * bx - ax) + Math.abs(by - ay * by - ay));
+        if (
+          getDistance(cafe1.lng, userPosition.lng, cafe1.lat, userPosition.lat) <
+          getDistance(cafe2.lng, userPosition.lng, cafe2.lat, userPosition.lat)
+        ) {
+          return 1;
+        }
+        if (
+          getDistance(cafe1.lng, userPosition.lng, cafe1.lat, userPosition.lat) >
+          getDistance(cafe2.lng, userPosition.lng, cafe2.lat, userPosition.lat)
+        ) {
+          return -1;
+        }
+        return 0;
+      });
+
     setFilterdCafeData(newfilterdData);
   }, [mapBounds]);
 
@@ -154,35 +206,6 @@ function CafeMap() {
       map.setLevel(4, { anchor: new kakao.maps.LatLng(userPosition.lat, userPosition.lng) });
     });
   }, [userPosition]);
-
-  // 마커 이미지
-  const markerImgSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
-  // 각 카페 배열 순회하며 마커 생성
-  cafeData.map((cafe: ICafeData) => {
-    // 마커 사이즈 생성
-    const markerSize = new kakao.maps.Size(24, 35);
-    // 마커 이미지 생성
-    const markerImg = new kakao.maps.MarkerImage(markerImgSrc, markerSize);
-    // 마커 생성
-    const marker = new kakao.maps.Marker({
-      map: map, // 마커를 표시할 지도
-      position: new kakao.maps.LatLng(cafe.lat, cafe.lng), // 마커를 표시할 위치
-      title: cafe.store_name, // 마커의 타이틀
-      image: markerImg, // 마커 이미지
-    });
-    // 마커 클릭 이벤트
-    kakao.maps.event.addListener(marker, "click", () => {
-      map.setLevel(4, { anchor: new kakao.maps.LatLng(cafe.lat, cafe.lng) });
-    });
-
-    // 마커 마우스오버 이벤트
-    kakao.maps.event.addListener(marker, "mouseover", () => {
-      setFocusedCafe(cafe.animal_store_id);
-    });
-
-    return marker;
-  });
 
   return (
     <KakaoMap id="map">
