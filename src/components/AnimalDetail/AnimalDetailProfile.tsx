@@ -1,6 +1,7 @@
 import React from "react";
 import { TbGenderFemale, TbGenderMale } from "react-icons/tb";
 import styled from "styled-components";
+import AnimalDetailRedBtn from "./AnimalDetailRedBtn";
 
 interface IAnimalInfo {
   gender: string;
@@ -12,8 +13,12 @@ interface IAnimalInfo {
   img: string;
 }
 
+interface IBroadcast {
+  status: string;
+}
+
 interface IProps {
-  animalProfile: { animalInfo: IAnimalInfo; feeds: string[] };
+  animalProfile: { animalInfo: IAnimalInfo; broadcast: IBroadcast; feeds: string[] };
 }
 
 const AnimalDetailProfile = function (props: IProps) {
@@ -24,13 +29,22 @@ const AnimalDetailProfile = function (props: IProps) {
     return <span key={feed}>{feed}, </span>;
   });
 
+  let statusBtn;
+  if (props.animalProfile.broadcast.status === "reserve") {
+    statusBtn = <AnimalDetailRedBtn label="방송 대기중" type={0} isDisable={true} />;
+  } else if (props.animalProfile.broadcast.status === "onair") {
+    statusBtn = <AnimalDetailRedBtn label="지금 방송중!" type={0} isDisable={false} />;
+  } else if (props.animalProfile.broadcast.status === "finish") {
+    statusBtn = <AnimalDetailRedBtn label="방송 종료" type={0} isDisable={true} />;
+  }
+
   return (
     <StyledContainer>
       <StyledLeftSideContainer>
         <StyledImageBox>
           <StyledImage src="https://picsum.photos/200/300" />
         </StyledImageBox>
-        <StyledStatusButton>지금 방송중!</StyledStatusButton>
+        {statusBtn}
       </StyledLeftSideContainer>
       <StyledRightSideContainer>
         <StyledTextHeader>
@@ -57,11 +71,14 @@ export default AnimalDetailProfile;
 
 const StyledContainer = styled.div`
   width: 100%;
-  height: 292px;
+  height: 100%;
+  max-height: 280px;
   display: flex;
   gap: 24px;
   @media screen and (max-width: 800px) {
     flex-direction: column;
+    align-items: center;
+    max-height: 100%;
   }
 `;
 
@@ -89,16 +106,22 @@ const StyledImage = styled.img`
   object-fit: crop;
 `;
 
-const StyledStatusButton = styled.button`
+const StyledStatusButton = styled.button<{ status: string }>`
   width: 100%;
   height: 48px;
   border: none;
   border-radius: 32px;
   font: ${(props) => props.theme.fonts.header3};
   color: ${(props) => props.theme.colors.brandColors.basaltGray["50"]};
-  background-color: ${(props) => props.theme.colors.red};
   box-shadow: 2px 2px 8px rgba(67, 67, 67, 0.2);
   cursor: pointer;
+  ${(props) =>
+    props.status === "onair"
+      ? `background: ${props.theme.colors.red}
+      &:hover {
+
+      }`
+      : `background: ${props.theme.colors.green}`}
 `;
 
 const StyledRightSideContainer = styled.div`
@@ -109,10 +132,14 @@ const StyledRightSideContainer = styled.div`
   gap: 8px;
   width: 74%;
   min-width: 448px;
-  height: 284px;
+  height: 100%;
   border-radius: 32px;
   box-shadow: 2px 2px 8px rgba(67, 67, 67, 0.2);
   background-color: ${(props) => props.theme.colors.secondaryBg};
+  @media screen and (max-width: 800px) {
+    min-width: 300px;
+    width: 100%;
+  }
 `;
 
 const StyledTextHeader = styled.div`

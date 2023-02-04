@@ -22,6 +22,8 @@ interface IProps {
   storeAnimals: IStoreAnimal[];
 }
 
+// 현재 동물과 같은 종인 동물들 받아오기
+// api 아직 없음
 const sampleSameSpeciesAnimals = [
   {
     animalName: "도",
