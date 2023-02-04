@@ -27,8 +27,8 @@ public class BroadcastController {
     }
 
     @PutMapping("/broadcasts/{broadcast_id}")
-    public ResponseEntity<?> endBroadcast(@PathVariable("broadcast_id") Long broadcastId, @RequestBody LocalDateTime endTime){
-        boolean result = broadcastService.saveEndTime(broadcastId, endTime);
+    public ResponseEntity<?> endBroadcast(@PathVariable("broadcast_id") Long broadcastId){
+        boolean result = broadcastService.saveEndTime(broadcastId);
         if(result){
             return new ResponseEntity<>("방송 종료 성공", HttpStatus.OK);
         }else{

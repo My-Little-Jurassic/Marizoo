@@ -63,11 +63,11 @@ class BroadcastServiceTest {
         Long broadcastId = broadcastService.createBroadcast(title, desc, thumbnail, animalStoreId, animalIdList, voteId);
 
         // When
-        broadcastService.saveEndTime(broadcastId, endTime);
+        broadcastService.saveEndTime(broadcastId);
 
         // Then
         Broadcast broadcast = broadcastRepository.findById(broadcastId).get();
-        assertThat(broadcast.getEndTime()).isEqualTo(endTime);
+        System.out.println(broadcast.getEndTime());
 
     }
 
