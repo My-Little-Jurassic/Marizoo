@@ -29,13 +29,13 @@ public class BroadcastService {
      * @param endTime : 방송 종료 시간
      * @return boolean
      */
-    public boolean saveEndTime(Long broadcastId, LocalDateTime endTime){
+    public boolean saveEndTime(Long broadcastId){
         Optional<Broadcast> opt = broadcastRepository.findById(broadcastId);
         if(opt.isEmpty()){
             return false;
         }
         Broadcast broadcast = opt.get();
-        broadcast.setEndTime(endTime);
+        broadcast.setEndTime();
         broadcastRepository.save(broadcast);
         return true;
     }

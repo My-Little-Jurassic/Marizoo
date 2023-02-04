@@ -55,6 +55,10 @@ public class Broadcast extends BaseEntity {
         this.vote = vote;
     }
 
+    public void setEndTime(){
+        this.endTime = LocalDateTime.now();
+    }
+
 //    === 생성 메서드 ===
 
     // 방송 시작
@@ -79,6 +83,7 @@ public class Broadcast extends BaseEntity {
             // 이미 종료된 방송은 종료 불가
         }
         this.setStatus(BroadcastStatus.FINISH);
+        this.setEndTime();
     }
 
 }
