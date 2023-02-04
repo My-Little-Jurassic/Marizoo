@@ -17,9 +17,9 @@ public class BroadcastController {
 
     @PostMapping("/broadcasts")
     public ResponseEntity<?> createBroadcast(@RequestBody CreateBroadcastReq createBroadcastReq){
-        boolean result = broadcastService.createBroadcast(createBroadcastReq.getTitle(), createBroadcastReq.getDescription(), createBroadcastReq.getThumbnail(),
+        Long result = broadcastService.createBroadcast(createBroadcastReq.getTitle(), createBroadcastReq.getDescription(), createBroadcastReq.getThumbnail(),
                 createBroadcastReq.getAnimalStoreId(), createBroadcastReq.getAnimalIdList(), createBroadcastReq.getVoteId());
-        if(result){
+        if(result != 1L){
             return new ResponseEntity<>("방송 생성 성공", HttpStatus.OK);
         }else{
             return new ResponseEntity<>("방송 생성 실패 :(", HttpStatus.BAD_REQUEST);

@@ -46,20 +46,20 @@ public class BroadcastService {
      * @return boolean :
      */
     @Transactional
-    public boolean createBroadcast(
+    public Long createBroadcast(
             String title, String description, String thumbnail, Long animalStoreId,
             List<Long> animalIdList, Long voteId
     ){
         // entity
         Optional<AnimalStore> optionalAnimalStore = animalStoretRepository.findById(animalStoreId);
         if(optionalAnimalStore.isEmpty()){
-            return false;
+            return -1L;
         }
         AnimalStore animalStore = optionalAnimalStore.get();
 
         Optional<Vote> optionalVote = voteRepository.findById(voteId);
         if (optionalVote.isEmpty()) {
-            return false;
+            return -1L;
         }
         Vote vote = optionalVote.get();
 
@@ -67,7 +67,7 @@ public class BroadcastService {
         for (Long aLong : animalIdList) {
             Optional<Animal> optionalAnimal = animalRepository.findById(aLong);
             if (optionalAnimal.isEmpty()) {
-                return false;
+                return -1L;
             }
             Animal animal = optionalAnimal.get();
             BroadcastAnimal broadcastAnimal = BroadcastAnimal.createBroadcastAnimal(animal, animal.getSpecies().getClassification(), animal.getSpecies().getClassificationImg());
@@ -79,6 +79,6 @@ public class BroadcastService {
 
         // 방송 저장
         broadcastRepository.save(broadcast);
-        return true;
+        return broadcast.getId();
     }
 }
