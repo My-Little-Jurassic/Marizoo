@@ -24,5 +24,10 @@ public class UsersBadge extends BaseEntity {
     @JoinColumn(name = "badge_id")
     private Badge badge;
 
+    public static UsersBadge createUsersBadge(Badge badge) {
+        UsersBadge usersBadge = new UsersBadge();
+        usersBadge.setBadge(badge);
 
+        return usersBadge;
+    }
 }
