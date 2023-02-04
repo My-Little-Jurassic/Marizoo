@@ -168,7 +168,7 @@ function CafeMap() {
       .sort((cafe1, cafe2) => {
         // 사용자 위치에 다른 가게 정렬
         const getDistance = (ax: number, ay: number, bx: number, by: number) =>
-          Math.sqrt(Math.abs(bx - ax * bx - ax) + Math.abs(by - ay * by - ay));
+          Math.sqrt(Math.abs(bx - ax * bx - ax) + Math.abs(by - ay * by - ay)); // 피타고라스
         if (
           getDistance(cafe1.lng, userPosition.lng, cafe1.lat, userPosition.lat) <
           getDistance(cafe2.lng, userPosition.lng, cafe2.lat, userPosition.lat)
@@ -241,6 +241,35 @@ export default React.memo(CafeMap);
 const KakaoMap = styled.div`
   width: 100%;
   height: 100%;
+  & > div > div > div {
+    // mix-blend-mode: normal;
+    // mix-blend-mode: multiply;
+    // mix-blend-mode: screen;
+    // mix-blend-mode: overlay;
+    // mix-blend-mode: darken;
+    // mix-blend-mode: lighten;
+    // mix-blend-mode: color-dodge;
+    // mix-blend-mode: color-burn;
+    // mix-blend-mode: hard-light;
+    // mix-blend-mode: soft-light;
+    // mix-blend-mode: difference;
+    // mix-blend-mode: exclusion;
+    // mix-blend-mode: hue;
+    // mix-blend-mode: saturation;
+    // mix-blend-mode: color;
+    // mix-blend-mode: luminosity;
+  }
+  ${(props) =>
+    props.theme.isDark // 지도 이미지 다크모드
+      ? `
+  & > div > div > div > div {
+    filter: saturate(80%) brightness(1.2);
+  }
+  & > div > div > div > img {
+    filter: invert(100%) sepia(65%) hue-rotate(190deg) saturate(80%);
+  }
+  `
+      : null};
 `;
 
 const StyledMapIconSet = styled.div`
