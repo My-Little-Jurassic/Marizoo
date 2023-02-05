@@ -1,10 +1,12 @@
 package com.marizoo.user.controller;
 
 import com.marizoo.user.api.*;
+import com.marizoo.user.dto.BookDto;
 import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.JoinRequestDto;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.dto.ExceptionResponseDto;
+import com.marizoo.user.entity.UsersPlay;
 import com.marizoo.user.exception.AlreadyJoinException;
 import com.marizoo.user.exception.PasswordNotMatchException;
 import com.marizoo.user.exception.RefreshTokenException;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -123,6 +126,29 @@ public class UserController {
     public ResponseEntity getFavorStoreList(@PathVariable Long userId) {
         List<FavorStoreDto> favorStoreList = userService.getFavorStoreList(userId);
         return ResponseEntity.ok(new FavorStoreListResponseApi(favorStoreList));
+    }
+
+    @GetMapping("/users/{userId}/books")
+    public ResponseEntity getBookList(@PathVariable Long userId) {
+        User user = userRepository.findById(userId).get();
+        List<UsersPlay> bookList = user.getBookList();
+        List<BookDto> bookDtoList = new ArrayList<>();
+        for (UsersPlay usersPlay : bookList) {
+            bookDtoList.add(new BookDto(
+                    usersPlay.getId(),
+                    usersPlay.getPlay().getPlayDateTime(),
+                    usersPlay.getTotalVisitor(),
+                    usersPlay.getPlay().getAnimalStore().getStoreName(),
+                    usersPlay.getPlay().getAnimalStore().getTel())
+            );
+        }
+        return ResponseEntity.ok(new BookListResponseApi(bookDtoList));
+    }
+
+    @DeleteMapping("users/{userId}/books/{book_id}")
+    public ResponseEntity deleteBook(@PathVariable Long userId, @PathVariable Long bookId) {
+        userService.deleteBook(userId, bookId);
+        return ResponseEntity.ok().build();
     }
 
     // Exception
