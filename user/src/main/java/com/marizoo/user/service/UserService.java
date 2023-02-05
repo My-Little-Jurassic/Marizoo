@@ -16,7 +16,7 @@ import com.marizoo.user.exception.PasswordNotMatchException;
 import com.marizoo.user.exception.UserNotFoundException;
 import com.marizoo.user.repository.BadgeRepository;
 import com.marizoo.user.repository.UserRepository;
-import com.marizoo.user.repository.UsersPlayRepository;
+import com.marizoo.user.repository.reservation_repo.UsersPlayRepository;
 import com.marizoo.user.repository.UsersBadgeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

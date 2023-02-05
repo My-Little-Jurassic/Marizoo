@@ -169,6 +169,7 @@ public class UserController {
     @PutMapping("/users/watchEnd")
     public ResponseEntity updateCountAndWatchTimeAcc(@RequestBody WatchEndRequestApi watchEndRequestApi) {
         userService.updateCountAndWatchTimeAcc(watchEndRequestApi);
+        return ResponseEntity.ok().build();
     }
 
     // Exception
