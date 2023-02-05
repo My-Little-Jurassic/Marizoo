@@ -77,6 +77,7 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("https://localhost:3000");    // allowCredentials가 true이면 origin을 정확히 명시해주어야함
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+        configuration.addExposedHeader("access-token");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
