@@ -28,7 +28,7 @@ public class Broadcast extends BaseEntity {
     @JoinColumn(name = "animal_store_id")
     private AnimalStore animalStore;
 
-    @OneToMany(mappedBy = "broadcast")
+    @OneToMany(mappedBy = "broadcast", cascade = CascadeType.ALL)
     private List<BroadcastAnimal> broadcastAnimalList = new ArrayList<>();
 
 
@@ -71,7 +71,9 @@ public class Broadcast extends BaseEntity {
         broadcast.setStartTime(LocalDateTime.now());
         broadcast.setStatus(BroadcastStatus.ONAIR);
         broadcast.setAnimalStore(animalStore);
-        broadcast.setBroadcastAnimalList(broadcastAnimalList);
+        for (BroadcastAnimal broadcastAnimal : broadcastAnimalList) {
+            broadcast.addBroadcastAnimal(broadcastAnimal);
+        }
         broadcast.setVote(vote);
         return broadcast;
     }
