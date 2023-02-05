@@ -3,6 +3,7 @@ package com.marizoo.user.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.marizoo.user.auth.PrincipalDetails;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.exception.AccessTokenException;
@@ -80,6 +81,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     .getClaim("uid")
                     .asString();
         } catch (JWTDecodeException e) {
+            log.error(e.getClass().toString());
+            log.error(e.getMessage());
+            throw e;
+        } catch (TokenExpiredException e) {
             log.error(e.getClass().toString());
             log.error(e.getMessage());
             throw e;
