@@ -28,7 +28,7 @@ public class Broadcast extends BaseEntity {
     @JoinColumn(name = "animal_store_id")
     private AnimalStore animalStore;
 
-    @OneToMany(mappedBy = "broadcast")
+    @OneToMany(mappedBy = "broadcast", cascade = CascadeType.ALL)
     private List<BroadcastAnimal> broadcastAnimalList = new ArrayList<>();
 
 

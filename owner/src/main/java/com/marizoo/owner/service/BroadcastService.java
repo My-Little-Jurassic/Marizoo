@@ -26,7 +26,6 @@ public class BroadcastService {
     /**
      * broadcast_id에 해당하는 방송 종료 시간
      * @param broadcastId : 방송 PK
-     * @param endTime : 방송 종료 시간
      * @return boolean
      */
     public boolean saveEndTime(Long broadcastId){
