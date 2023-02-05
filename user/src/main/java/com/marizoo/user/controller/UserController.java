@@ -166,6 +166,11 @@ public class UserController {
         return ResponseEntity.ok(new MyPageBadgeListResponseApi(badgeList));
     }
 
+    @PutMapping("/users/watchEnd")
+    public ResponseEntity updateCountAndWatchTimeAcc(@RequestBody WatchEndRequestApi watchEndRequestApi) {
+        userService.updateCountAndWatchTimeAcc(watchEndRequestApi);
+    }
+
     // Exception
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(RefreshTokenException.class)
