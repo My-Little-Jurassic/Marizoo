@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { ProfileStore, ProfileLarge } from "../common/profile/index";
@@ -6,39 +6,42 @@ import BroadcastContent from "./BroadcastContent";
 import BroadcastScreen from "./BroadcastScreen";
 import BroadcastRecommendations from "./BroadcastRecommendations";
 import Grid from "@mui/material/Grid";
+import { useParams } from "react-router-dom";
 
 // 임시 방송 정보
-const tmpBroadcastInfo = {
-  title: "우파루파 먹방",
-  detail: "우리 우파루파 얼마나 맛있게 먹는지 보러 올 사람?",
+const sampleBroadcastInfo = {
+  broadcast: {
+    title: "우파루파 먹방",
+    description: "우리 우파루파 얼마나 맛있게 먹는지 보러 올 사람?",
+  },
+  animals: [
+    {
+      name: "우파",
+      gender: "male",
+      classification: "axolotl",
+      image: "https://picsum.photos/200/300",
+    },
+    {
+      name: "우파파",
+      gender: "female",
+      classification: "axolotl",
+      image: "https://picsum.photos/200/300",
+    },
+  ],
+  store: {
+    name: "마리쥬 카페",
+    profile: "https://picsum.photos/200/300",
+  },
 };
 
-// 임시 동물 목록
-const tmpAnimalList = [
-  {
-    id: 1,
-    animalName: "우파파",
-    gender: "male",
-    classification: "axolotl",
-    imgSrc: "https://picsum.photos/200/300",
-  },
-  {
-    id: 2,
-    animalName: "움파파",
-    gender: "female",
-    classification: "snake",
-    imgSrc: "https://picsum.photos/200/300",
-  },
-];
-
-const animalProfileList = tmpAnimalList.map((animal) => {
+const animalProfileList = sampleBroadcastInfo.animals.map((animal) => {
   return (
-    <Grid key={animal.id} item xs={12} sm={6} md={12}>
+    <Grid key={animal.name} item xs={12} sm={6} md={12}>
       <ProfileLarge
-        animalName={animal.animalName}
+        animalName={animal.name}
         gender={animal.gender}
         classification={animal.classification}
-        imgSrc={animal.imgSrc}
+        imgSrc={animal.image}
       />
     </Grid>
   );
@@ -56,15 +59,34 @@ const BroadcastHome = function () {
   const [isMaximized, setIsMaximized] = useState<boolean>(false);
   const [selectedFeed, setSelectedFeed] = useState<string | null>(null);
   const [isVoted, setIsVoted] = useState<boolean>(false);
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isLiked, setIsLiked] = useState<string | boolean>("neverClicked");
   const [numberOfViewers, setNumberOfViewers] = useState<number>(0);
   const [numberOfLikes, setNumberOfLikes] = useState<number>(0);
+
+  const params = useParams();
+
+  useEffect(() => {
+    setIsMaximized(false);
+    setSelectedFeed(null);
+    setIsVoted(false);
+    setIsLiked("neverClicked");
+    setNumberOfViewers(0);
+    setNumberOfLikes(0);
+  }, [params.id]);
+
+  const like = function () {
+    if (isLiked === true) {
+      setIsLiked(false);
+    } else {
+      setIsLiked(true);
+    }
+  };
 
   return (
     <StyledContainer>
       <StyledLeftSection>
         <BroadcastScreen
-          title={tmpBroadcastInfo.title}
+          title={sampleBroadcastInfo.broadcast.title}
           isMaximized={isMaximized}
           toggleScreenMode={() => setIsMaximized(!isMaximized)}
           feedList={tmpFeedList}
@@ -82,8 +104,8 @@ const BroadcastHome = function () {
         />
         {!isMaximized && (
           <BroadcastContent
-            title={tmpBroadcastInfo.title}
-            detail={tmpBroadcastInfo.detail}
+            title={sampleBroadcastInfo.broadcast.title}
+            detail={sampleBroadcastInfo.broadcast.description}
             feedList={tmpFeedList}
             vote={(selectedFeed) => {
               setSelectedFeed(selectedFeed);
@@ -91,7 +113,7 @@ const BroadcastHome = function () {
             }}
             isVoted={isVoted}
             isLiked={isLiked}
-            like={() => setIsLiked(!isLiked)}
+            like={like}
             viewers={numberOfViewers}
             numberOfLikes={numberOfLikes}
           />
@@ -99,7 +121,10 @@ const BroadcastHome = function () {
       </StyledLeftSection>
       {!isMaximized && (
         <StyledRightSection>
-          <ProfileStore storeName="우파파 움파파" imgSrc="https://picsum.photos/200/300" />
+          <ProfileStore
+            storeName={sampleBroadcastInfo.store.name}
+            imgSrc={sampleBroadcastInfo.store.profile}
+          />
           <Grid container spacing={4}>
             {animalProfileList}
           </Grid>

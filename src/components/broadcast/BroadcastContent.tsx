@@ -12,7 +12,7 @@ interface IProps {
   feedList: { id: number; feedName: string; imgSrc: string }[];
   vote: (selectedFeed: string) => void;
   isVoted: boolean;
-  isLiked: boolean;
+  isLiked: boolean | string;
   like: () => void;
   viewers: number;
   numberOfLikes: number;

@@ -2,13 +2,15 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Connection, OpenVidu, Session } from "openvidu-browser";
 import axios from "axios";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
 
 interface IProps {
   selectedFeed: string | null;
-  isLiked: boolean;
+  isLiked: boolean | string;
   onClick: () => void;
   changeNumberOfViewers: (viewers: number) => void;
   changeNumberOfLikes: (likes: number) => void;
+  isVoted: boolean;
 }
 
 function useInterval(callback: () => void, delay: number) {
@@ -33,11 +35,14 @@ function useInterval(callback: () => void, delay: number) {
 function BroadcastVideo(props: IProps) {
   const [session, setSession] = useState<Session | undefined>(undefined);
   const [ownerConnection, setOwnerConnection] = useState<Connection | undefined>(undefined);
+  const startTime = useState<number>(Date.now())[0];
 
   const OV = useMemo(() => new OpenVidu(), []);
   const APPLICATION_SERVER_URL = "http://localhost:5000/";
 
-  const mySessionId = "123";
+  const params = useParams();
+
+  const mySessionId = String(params.id);
   const myUserName = "myUserName1";
 
   // useEffect(() => {
@@ -71,7 +76,7 @@ function BroadcastVideo(props: IProps) {
       }
     });
     setSession(newSession);
-  }, [OV]);
+  }, [params.id]);
 
   // 토큰 생성
   const createToken = async function (sessionId: string) {
@@ -95,8 +100,29 @@ function BroadcastVideo(props: IProps) {
       createToken(mySessionId).then((token: string) => {
         session.connect(token, { clientData: myUserName });
       });
+
+      // 방 퇴장
+      return () => {
+        session.disconnect();
+        const totalTime = Date.now() - startTime;
+        let effectCnt: number;
+        if (localStorage.getItem("effectCnt") === null) {
+          effectCnt = 0;
+        } else {
+          effectCnt = Number(localStorage.getItem("effectCnt"));
+        }
+        let feedCount: number;
+        if (localStorage.getItem("isVoted") === null) {
+          feedCount = 0;
+        } else {
+          feedCount = 1;
+        }
+
+        localStorage.removeItem("effectCnt");
+        localStorage.removeItem("isVoted");
+        // totalTime, effectCnt, feedCount
+      };
     }
-    return () => session?.disconnect();
   }, [session]);
 
   // 세션 입장
@@ -123,10 +149,10 @@ function BroadcastVideo(props: IProps) {
 
   // 좋아요 및 좋아요 취소
   useEffect(() => {
-    if (ownerConnection === undefined) {
+    if (ownerConnection === undefined || props.isLiked === "neverClicked") {
       return;
     }
-    if (props.isLiked) {
+    if (props.isLiked === false) {
       session?.signal({
         data: "",
         to: [ownerConnection],
@@ -139,7 +165,7 @@ function BroadcastVideo(props: IProps) {
         type: "like",
       });
     }
-  }, [props.isLiked, ownerConnection]);
+  }, [props.isLiked]);
 
   // 시청자 수 4초마다 갱신
   useInterval(() => {

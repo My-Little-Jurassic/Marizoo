@@ -22,7 +22,7 @@ interface IProps {
   selectedFeed: string | null;
   vote: (selectedFeed: string) => void;
   isVoted: boolean;
-  isLiked: boolean;
+  isLiked: boolean | string;
   numberOfViewers: number;
   numberOfLikes: number;
   changeNumberOfViewers: (viewers: number) => void;
@@ -88,6 +88,12 @@ const BroadcastScreen = function (props: IProps) {
     setTimeout(() => {
       setIsReactionPlaying(false);
       setWaitingReaction(null);
+      const originalEffectCnt = localStorage.getItem("effectCnt");
+      if (originalEffectCnt !== null) {
+        localStorage.setItem("effectCnt", String(Number(originalEffectCnt) + 1));
+      } else {
+        localStorage.setItem("effectCnt", "1");
+      }
     }, 3000);
   }, [isReactionPlaying]);
 
@@ -126,6 +132,7 @@ const BroadcastScreen = function (props: IProps) {
         onClick={doReaction}
         changeNumberOfViewers={(viewers) => props.changeNumberOfViewers(viewers)}
         changeNumberOfLikes={(likes) => props.changeNumberOfLikes(likes)}
+        isVoted={props.isVoted}
       />
       {props.isMaximized && (
         <StyledHeader isBtnShown={isBtnShown}>

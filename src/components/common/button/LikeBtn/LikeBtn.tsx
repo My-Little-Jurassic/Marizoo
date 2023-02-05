@@ -5,7 +5,7 @@ import { TbThumbUp } from "react-icons/tb"; // 엄지 아이콘 import
 
 interface IProps {
   onClick(): void; // onclick props
-  isLiked: boolean;
+  isLiked: boolean | string;
 }
 
 function LikeBtn(props: IProps) {

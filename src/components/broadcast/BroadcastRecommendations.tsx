@@ -1,5 +1,6 @@
 import { Grid } from "@mui/material";
 import React from "react";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { CardLabelMedium } from "../common/card";
 
@@ -26,7 +27,9 @@ const BroadcastRecommendations = function () {
   const recommendedBroadcastCardList = tmpRecommendedBroadcastList.map((broadcast) => {
     return (
       <Grid key={broadcast.id} item xs={12} sm={6} md={12}>
-        <CardLabelMedium key={broadcast.id} title={broadcast.title} imgSrc={broadcast.imgSrc} />
+        <NavLink to={"/room/" + broadcast.id} style={{ textDecoration: "none" }}>
+          <CardLabelMedium key={broadcast.id} title={broadcast.title} imgSrc={broadcast.imgSrc} />
+        </NavLink>
       </Grid>
     );
   });

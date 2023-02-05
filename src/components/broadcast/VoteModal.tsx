@@ -30,7 +30,7 @@ const VoteModal = function (props: Iprops) {
   // 먹이 투표 카드들
   const Cards = props.feedList.map((feed) => {
     return (
-      <Grid key={feed.id} item xs={12} sm={12} md={12}>
+      <Grid key={feed.id} item xs={12} sm={12} md={6}>
         <CardVote
           title={feed.feedName}
           imgSrc={feed.imgSrc}
@@ -46,6 +46,7 @@ const VoteModal = function (props: Iprops) {
     console.log(selectedFeed, typeof selectedFeed);
     if (typeof selectedFeed === "string") {
       props.vote(selectedFeed);
+      localStorage.setItem("isVoted", "true");
       props.closeModal();
     }
   }, [selectedFeed]);
@@ -58,7 +59,11 @@ const VoteModal = function (props: Iprops) {
           <MdClose size={32} />
         </StyledMdClose>
         <StyledHeader>먹이를 투표해주세요.</StyledHeader>
-        <StyledCardContainer>{Cards}</StyledCardContainer>
+        <StyledCardContainer>
+          <Grid container spacing={4}>
+            {Cards}
+          </Grid>
+        </StyledCardContainer>
         <GreenBtn label="투표하기" type={0} isDisable={false} onClick={vote} />
       </StyledContainer>
     </StyledModal>
@@ -127,10 +132,10 @@ const StyledHeader = styled.span`
   font: ${(props) => props.theme.fonts.header2};
 `;
 
-const StyledCardContainer = styled.ul`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+const StyledCardContainer = styled.div`
+  // display: flex;
+  // flex-direction: row;
+  // flex-wrap: wrap;
+  // justify-content: center;
+  // gap: 20px;
 `;
