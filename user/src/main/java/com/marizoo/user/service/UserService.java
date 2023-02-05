@@ -6,9 +6,11 @@ import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.MailDto;
 import com.marizoo.user.api.MyPageResponseApi;
 import com.marizoo.user.entity.User;
+import com.marizoo.user.entity.UsersPlay;
 import com.marizoo.user.exception.PasswordNotMatchException;
 import com.marizoo.user.exception.UserNotFoundException;
 import com.marizoo.user.repository.UserRepository;
+import com.marizoo.user.repository.UsersPlayRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -27,6 +29,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UsersPlayRepository usersPlayRepository;
     private final JavaMailSender mailSender;
 
     private final BCryptPasswordEncoder encoder;
@@ -148,5 +151,15 @@ public class UserService {
 
     public List<FavorStoreDto> getFavorStoreList(Long userId) {
         return userRepository.getFavorStoreList(userId);
+    }
+
+    public void deleteBook(Long userId, Long bookId) {
+        User user = userRepository.findById(userId).get();
+        UsersPlay usersPlay = usersPlayRepository.findById(bookId).get();
+
+        if (usersPlay.getUser().equals(user)) {
+            usersPlayRepository.deleteById(bookId);
+        }
+
     }
 }
