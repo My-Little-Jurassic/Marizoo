@@ -7,7 +7,7 @@ interface IModalState {
 }
 
 const initialState: IModalState = {
-  visible: true,
+  visible: false,
   content: "DefaultModal",
 };
 
