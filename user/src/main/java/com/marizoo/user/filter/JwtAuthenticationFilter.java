@@ -10,6 +10,7 @@ import com.marizoo.user.dto.ExceptionResponseDto;
 import com.marizoo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -95,12 +96,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     private static void setCookieRefreshToken(HttpServletResponse response, String refreshToken) {
-        Cookie cookie = new Cookie(RT_HEADER, refreshToken);
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge((int) RT_EXP_TIME);
-        cookie.setDomain("localhost");  // 나중에 변경해야함 2023-01-30 이성복
-        cookie.setPath("/refresh");
-        response.addCookie(cookie);
+        ResponseCookie cookie = ResponseCookie.from(RT_HEADER, refreshToken)
+                .httpOnly(true)
+                .maxAge(RT_EXP_TIME)
+                .domain("localhost")
+                .path("/refresh")
+                .sameSite("none")
+                .secure(true)
+                .build();
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 
     private void saveRefreshToken(PrincipalDetails principalDetails, String refreshToken) {

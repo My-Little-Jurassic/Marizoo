@@ -19,6 +19,7 @@ import com.marizoo.user.service.AuthService;
 import com.marizoo.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -67,12 +68,15 @@ public class UserController {
         response.addHeader(AT_HEADER, tokenMap.get(AT_HEADER));
         if (tokenMap.get(RT_HEADER) != null) {
             // refresh token이 재생성되었으므로 쿠키에 저장하여 보내주어야한다.
-            Cookie cookie = new Cookie(RT_HEADER, tokenMap.get(RT_HEADER));
-            cookie.setHttpOnly(true);
-            cookie.setMaxAge((int) RT_EXP_TIME);
-            cookie.setDomain("localhost");  // 나중에 변경해야함 2023-01-30 이성복
-            cookie.setPath("/refresh");
-            response.addCookie(cookie);
+            ResponseCookie cookie = ResponseCookie.from(RT_HEADER, refreshToken)
+                    .httpOnly(true)
+                    .maxAge(RT_EXP_TIME)
+                    .domain("localhost")
+                    .path("/refresh")
+                    .sameSite("none")
+                    .secure(true)
+                    .build();
+            response.addHeader("Set-Cookie", cookie.toString());
         }
 
         return ResponseEntity.ok().build();

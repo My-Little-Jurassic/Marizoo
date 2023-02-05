@@ -1,6 +1,7 @@
 package com.marizoo.user.filter;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marizoo.user.exception.AccessTokenException;
 import com.marizoo.user.dto.ExceptionResponseDto;
@@ -26,7 +27,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (JWTDecodeException | AccessTokenException e) {
+        } catch (TokenExpiredException | JWTDecodeException | AccessTokenException e) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setCharacterEncoding("utf-8");
             response.setContentType("application/json");

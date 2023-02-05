@@ -1,5 +1,6 @@
 package com.marizoo.user.filter;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marizoo.user.dto.ExceptionResponseDto;
 import lombok.RequiredArgsConstructor;
