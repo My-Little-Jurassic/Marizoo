@@ -1,22 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from ".";
-import { DefaultModal } from "../components/common/modal";
 
 interface IModalState {
   visible: boolean;
-  content: () => JSX.Element;
+  content: string;
 }
 
 const initialState: IModalState = {
   visible: true,
-  content: DefaultModal,
+  content: "DefaultModal",
 };
 
 const modalSlice = createSlice({
   name: "modal",
   initialState,
   reducers: {
-    setContent: (state, action: PayloadAction<() => JSX.Element>) => {
+    setContent: (state, action: PayloadAction<string>) => {
       state.content = action.payload;
     },
     openModal: (state) => {

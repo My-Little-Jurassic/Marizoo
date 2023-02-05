@@ -1,28 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { useAppDispatch } from "../../../store";
 import { closeModal } from "../../../store/modalSlice";
-import { GreenBtn } from "../button";
+import DefaultContent from "./DefaultContent";
 
-const DefaultModal = (): JSX.Element => {
+interface IProps {
+  content: string;
+}
+
+const Modal = ({ content }: IProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const [state, setState] = useState("");
 
   useEffect(() => {
-    if (state === "close") setTimeout(() => dispatch(closeModal()), 500);
+    if (state === "close") setTimeout(() => dispatch(closeModal), 500);
   }, [state]);
 
   const onClose = () => {
     setState("close");
   };
+
+  const modalContent = useMemo(() => {
+    switch (content) {
+      default:
+        return <DefaultContent onClose={onClose} />;
+    }
+  }, [content]);
+
   return (
     <StyledDiv className={state}>
       <div className="background" onClick={onClose} />
-      <div className="modal">
-        <h1>기본 모달 형식입니다</h1>
-        <span>해당 tsx를 이용하여 모달을 자유롭게 작성해보세요</span>
-        <GreenBtn label={"확인"} type={0} isDisable={false} onClick={onClose} />
-      </div>
+      <div className="modal">{modalContent}</div>
     </StyledDiv>
   );
 };
@@ -50,10 +58,7 @@ const StyledDiv = styled.div`
     animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
   }
 
-  // START : 수정가능한 부분
   & > .modal {
-    width: 480px;
-    height: 320px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -64,12 +69,7 @@ const StyledDiv = styled.div`
     border-radius: 32px;
     -webkit-animation: slide-in-blurred-bottom 0.4s cubic-bezier(0.23, 1, 0.32, 1) both; // 수정불가
     animation: slide-in-blurred-bottom 0.4s cubic-bezier(0.23, 1, 0.32, 1) both; // 수정불가
-
-    & > h1 {
-      font: ${({ theme }) => theme.fonts.header3};
-    }
   }
-  // END : 수정가능한 부분
 
   &.close {
     pointer-events: none;
@@ -187,4 +187,4 @@ const StyledDiv = styled.div`
   }
 `;
 
-export default DefaultModal;
+export default Modal;
