@@ -25,5 +25,12 @@ public class FeedVote extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feed_id")
     private Feed feed;
+
+//    === 생성 메서드 ===
+    public static FeedVote createFeedVote(Feed feed) {
+        FeedVote feedVote = new FeedVote();
+        feedVote.setFeed(feed);
+        return feedVote;
+    }
 }
 
