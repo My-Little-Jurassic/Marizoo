@@ -2,15 +2,21 @@ package com.marizoo.user.service;
 
 import com.marizoo.user.api.MyPageRequestApi;
 import com.marizoo.user.api.PwdChangeRequestApi;
+import com.marizoo.user.dto.BadgeDto;
 import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.MailDto;
 import com.marizoo.user.api.MyPageResponseApi;
+import com.marizoo.user.entity.Badge;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.entity.UsersPlay;
+import com.marizoo.user.entity.UsersBadge;
+import com.marizoo.user.exception.BadgeNotFoundException;
 import com.marizoo.user.exception.PasswordNotMatchException;
 import com.marizoo.user.exception.UserNotFoundException;
+import com.marizoo.user.repository.BadgeRepository;
 import com.marizoo.user.repository.UserRepository;
 import com.marizoo.user.repository.UsersPlayRepository;
+import com.marizoo.user.repository.UsersBadgeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -19,6 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +37,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UsersPlayRepository usersPlayRepository;
+    private final BadgeRepository badgeRepository;
+    private final UsersBadgeRepository usersBadgeRepository;
+
     private final JavaMailSender mailSender;
 
     private final BCryptPasswordEncoder encoder;
@@ -160,6 +170,41 @@ public class UserService {
         if (usersPlay.getUser().equals(user)) {
             usersPlayRepository.deleteById(bookId);
         }
+    }
+    /**
+     * 배지 획득
+     */
+    @Transactional
+    public void addBadge(Long userId, Long badgeId) {
+        try {
+            User user = userRepository.findById(userId).orElseThrow(
+                    () -> new UserNotFoundException("해당하는 유저가 없습니다.")
+            );
+            Badge badge = badgeRepository.findById(badgeId).orElseThrow(
+                    () -> new BadgeNotFoundException("해당하는 배지가 없습니다.")
+            );
 
+            UsersBadge usersBadge = UsersBadge.createUsersBadge(badge);
+            user.addBadge(usersBadge);
+
+        } catch (UserNotFoundException e) {
+            throw new UserNotFoundException(e.getMessage());
+        } catch (BadgeNotFoundException e) {
+            throw new BadgeNotFoundException(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void bulkAddBadge(List<Long> userIdList, Long badgeId) {
+        int effectedRowCnt = usersBadgeRepository.bulkAddBadge(userIdList, badgeId);
+    }
+
+    public List<BadgeDto> getBadgeList(Long userId) {
+        User user = userRepository.findById(userId).get();
+        List<BadgeDto> badgeDtoList = new ArrayList<>();
+        for (UsersBadge usersBadge : user.getBadgeList()) {
+            badgeDtoList.add(new BadgeDto(usersBadge.getBadge().getImg(), usersBadge.getBadge().getBadgeType(), usersBadge.getBadge().getDescription()));
+        }
+        return badgeDtoList;
     }
 }

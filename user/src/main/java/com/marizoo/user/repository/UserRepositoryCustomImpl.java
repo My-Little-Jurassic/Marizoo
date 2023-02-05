@@ -1,14 +1,19 @@
 package com.marizoo.user.repository;
 
+import com.marizoo.user.dto.BadgeDto;
 import com.marizoo.user.dto.FavorStoreDto;
+import com.marizoo.user.dto.QBadgeDto;
 import com.marizoo.user.dto.QFavorStoreDto;
+import com.marizoo.user.entity.Badge;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.marizoo.user.entity.QBadge.badge;
+import static com.marizoo.user.entity.QUser.user;
 import static com.marizoo.user.entity.QUsersAnimalStore.usersAnimalStore;
+import static com.marizoo.user.entity.QUsersBadge.usersBadge;
 
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 

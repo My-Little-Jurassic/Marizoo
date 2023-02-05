@@ -30,7 +30,7 @@ public class User extends BaseEntity {
     private Long feedClickAcc;
     private String refreshToken;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UsersBadge> badgeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
@@ -38,4 +38,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<UsersPlay> bookList = new ArrayList<>();
+
+    public void addBadge(UsersBadge badge) {
+        badgeList.add(badge);
+        badge.setUser(this);
+    }
 }

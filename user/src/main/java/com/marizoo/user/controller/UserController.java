@@ -2,11 +2,14 @@ package com.marizoo.user.controller;
 
 import com.marizoo.user.api.*;
 import com.marizoo.user.dto.BookDto;
+import com.marizoo.user.dto.BadgeDto;
 import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.JoinRequestDto;
+import com.marizoo.user.entity.Badge;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.dto.ExceptionResponseDto;
 import com.marizoo.user.entity.UsersPlay;
+import com.marizoo.user.entity.UsersBadge;
 import com.marizoo.user.exception.AlreadyJoinException;
 import com.marizoo.user.exception.PasswordNotMatchException;
 import com.marizoo.user.exception.RefreshTokenException;
@@ -149,6 +152,18 @@ public class UserController {
     public ResponseEntity deleteBook(@PathVariable Long userId, @PathVariable Long bookId) {
         userService.deleteBook(userId, bookId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/broadcasts/badges")
+    public ResponseEntity addBadgeAtRelatedUsers(@RequestBody BulkBadgeRequestApi bulkBadgeRequest) {
+        userService.bulkAddBadge(bulkBadgeRequest.getUserIdList(), bulkBadgeRequest.getBadgeId());
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/users/{userId}/badges")
+    public ResponseEntity getBadgeList(@PathVariable Long userId) {
+        List<BadgeDto> badgeList = userService.getBadgeList(userId);
+        return ResponseEntity.ok(new MyPageBadgeListResponseApi(badgeList));
     }
 
     // Exception
