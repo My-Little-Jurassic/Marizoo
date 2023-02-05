@@ -2,6 +2,7 @@ package com.marizoo.user.service;
 
 import com.marizoo.user.api.MyPageRequestApi;
 import com.marizoo.user.api.PwdChangeRequestApi;
+import com.marizoo.user.api.WatchEndRequestApi;
 import com.marizoo.user.dto.BadgeDto;
 import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.MailDto;
@@ -206,5 +207,13 @@ public class UserService {
             badgeDtoList.add(new BadgeDto(usersBadge.getBadge().getImg(), usersBadge.getBadge().getBadgeType(), usersBadge.getBadge().getDescription()));
         }
         return badgeDtoList;
+    }
+
+    @Transactional
+    public void updateCountAndWatchTimeAcc(WatchEndRequestApi watchEndRequestApi) {
+        User user = userRepository.findById(watchEndRequestApi.getUserId()).get();
+        user.setWatchTimeAcc(user.getWatchTimeAcc() + watchEndRequestApi.getWatchTime());
+        user.setEffectClickAcc(user.getEffectClickAcc() + watchEndRequestApi.getEffectCount());
+        user.setFeedClickAcc(user.getFeedClickAcc() + watchEndRequestApi.getFeedCount());
     }
 }
