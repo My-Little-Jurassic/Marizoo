@@ -124,7 +124,7 @@ const StyledContainer = styled.div`
     flex-direction: column;
   }
   @media screen and (max-width: 600px) {
-    padding: 40px 2vw;
+    padding: 80px 2vw;
     min-width: 375px;
   }
 `;
@@ -141,11 +141,17 @@ const StyledLeftSection = styled.div`
 
 const StyledRightSection = styled.div`
   width: 22%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   @media screen and (max-width: 900px) {
     width: 100%;
+    height: 100%;
     flex-wrap: wrap;
   }
 `;

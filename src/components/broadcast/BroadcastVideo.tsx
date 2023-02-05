@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Connection, OpenVidu, Session } from "openvidu-browser";
 import axios from "axios";
 import styled from "styled-components";
@@ -51,8 +51,10 @@ function BroadcastVideo(props: IProps) {
   useEffect(() => {
     const newSession = OV.initSession();
     newSession.on("streamCreated", (event) => {
-      const ownerStream = newSession.subscribe(event.stream, streamRef.current!);
-      ownerStream?.addVideoElement(streamRef.current!);
+      if (streamRef.current !== null) {
+        const ownerStream = newSession.subscribe(event.stream, streamRef.current);
+        ownerStream?.addVideoElement(streamRef.current);
+      }
     });
     // 메세지 받기
     newSession.on("signal", (event) => {

@@ -43,6 +43,7 @@ const VoteModal = function (props: Iprops) {
 
   // 투표하기
   const vote = useCallback(() => {
+    console.log(selectedFeed, typeof selectedFeed);
     if (typeof selectedFeed === "string") {
       props.vote(selectedFeed);
       props.closeModal();
@@ -85,6 +86,7 @@ const StyledContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  max-width: 720px;
   min-width: 646px;
   height: 620px;
   display: flex;
