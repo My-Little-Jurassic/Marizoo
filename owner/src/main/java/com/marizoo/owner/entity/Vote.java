@@ -19,12 +19,22 @@ public class Vote extends BaseEntity {
 
     private String title;
 
-    @OneToMany(mappedBy = "vote")
+    @OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
     private List<FeedVote> feedVoteList = new ArrayList<>();
 
 //    ===연관관계 메서드 ===
     public void addFeedVote(FeedVote feedVote){
         this.feedVoteList.add(feedVote);
         feedVote.setVote(this);
+    }
+
+//    === 생성 메서드 ===
+    public static Vote createVote(String title, List<FeedVote> feedVoteList){
+        Vote vote = new Vote();
+        vote.setTitle(title);
+        for (FeedVote feedVote : feedVoteList) {
+            vote.addFeedVote(feedVote);
+        }
+        return vote;
     }
 }

@@ -74,7 +74,9 @@ public class Broadcast extends BaseEntity {
         for (BroadcastAnimal broadcastAnimal : broadcastAnimalList) {
             broadcast.addBroadcastAnimal(broadcastAnimal);
         }
+
         broadcast.setVote(vote);
+
         return broadcast;
     }
 
