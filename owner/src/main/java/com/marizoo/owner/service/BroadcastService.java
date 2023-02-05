@@ -1,5 +1,6 @@
 package com.marizoo.owner.service;
 
+import com.marizoo.owner.api.response.CreateBroadcastResponse;
 import com.marizoo.owner.entity.*;
 import com.marizoo.owner.repository.*;
 import com.marizoo.owner.repository.animalStore.AnimalStoreRepository;
@@ -43,7 +44,7 @@ public class BroadcastService {
      * @return boolean :
      */
     @Transactional
-    public Long createBroadcast(
+    public CreateBroadcastResponse createBroadcast(
             String title, String description, String thumbnail, Long animalStoreId,
             List<Long> animalIdList, String voteTitle, List<Long> feedIdList
     ){
@@ -51,7 +52,7 @@ public class BroadcastService {
         // animal store find
         Optional<AnimalStore> optionalAnimalStore = animalStoretRepository.findById(animalStoreId);
         if(optionalAnimalStore.isEmpty()){
-            return -1L;
+            return null;
         }
         AnimalStore animalStore = optionalAnimalStore.get();
 
@@ -60,7 +61,7 @@ public class BroadcastService {
         for (Long aLong : animalIdList) {
             Optional<Animal> optionalAnimal = animalRepository.findById(aLong);
             if (optionalAnimal.isEmpty()) {
-                return -1L;
+                return null;
             }
             Animal animal = optionalAnimal.get();
             BroadcastAnimal broadcastAnimal = BroadcastAnimal.createBroadcastAnimal(animal, animal.getSpecies().getClassification(), animal.getSpecies().getClassificationImg());
@@ -72,7 +73,7 @@ public class BroadcastService {
         for (Long aLong : feedIdList) {
             Optional<Feed> optionalFeed = feedRepository.findById(aLong);
             if (optionalFeed.isEmpty()) {
-                return -1L;
+                return null;
             }
             FeedVote feedVote = FeedVote.createFeedVote(optionalFeed.get());
             feedVoteList.add(feedVote);
@@ -87,6 +88,6 @@ public class BroadcastService {
 
         // 방송 저장
         broadcastRepository.save(broadcast);
-        return broadcast.getId();
+        return new CreateBroadcastResponse(broadcast.getId(), vote.getId());
     }
 }

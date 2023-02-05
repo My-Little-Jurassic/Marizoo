@@ -10,5 +10,4 @@ public class CreateBroadcastDto {
     private String thumbnail;
     private Long animalStoreId;
     private List<Long> animalIdList;
-    private Long voteId;
 }

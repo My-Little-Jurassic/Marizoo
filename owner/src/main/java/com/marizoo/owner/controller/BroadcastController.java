@@ -1,6 +1,7 @@
 package com.marizoo.owner.controller;
 
 import com.marizoo.owner.api.request.CreateBroadcastReq;
+import com.marizoo.owner.api.response.CreateBroadcastResponse;
 import com.marizoo.owner.service.BroadcastService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,10 @@ public class BroadcastController {
 
     @PostMapping("/broadcasts")
     public ResponseEntity<?> createBroadcast(@RequestBody CreateBroadcastReq createBroadcastReq){
-        Long result = broadcastService.createBroadcast(createBroadcastReq.getBroadcastInfo().getTitle(), createBroadcastReq.getBroadcastInfo().getDescription(), createBroadcastReq.getBroadcastInfo().getThumbnail(),
+        CreateBroadcastResponse result = broadcastService.createBroadcast(createBroadcastReq.getBroadcastInfo().getTitle(), createBroadcastReq.getBroadcastInfo().getDescription(), createBroadcastReq.getBroadcastInfo().getThumbnail(),
                 createBroadcastReq.getBroadcastInfo().getAnimalStoreId(), createBroadcastReq.getBroadcastInfo().getAnimalIdList(), createBroadcastReq.getVoteInfo().getTitle(), createBroadcastReq.getVoteInfo().getFeedIdList());
-        if(result != 1L){
-            return new ResponseEntity<>("방송 생성 성공", HttpStatus.OK);
+        if(result != null){
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }else{
             return new ResponseEntity<>("방송 생성 실패 :(", HttpStatus.BAD_REQUEST);
         }

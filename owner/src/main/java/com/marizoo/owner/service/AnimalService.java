@@ -1,7 +1,6 @@
 package com.marizoo.owner.service;
 
 import com.marizoo.owner.dto.OwnedAnimalDto;
-import com.marizoo.owner.repository.AnimalRepository;
 import com.marizoo.owner.repository.animalStore.AnimalStoreRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
