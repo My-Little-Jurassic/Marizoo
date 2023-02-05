@@ -70,6 +70,11 @@ const StyledContainer = styled.div`
 const StyledNotice = styled.span`
   color: ${(props) => props.theme.colors.primaryText};
   font: ${(props) => props.theme.fonts.mainContent};
+  max-height: 376px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const StyledBottom = styled.div`
