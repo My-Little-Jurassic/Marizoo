@@ -2,11 +2,11 @@ package com.marizoo.owner.service;
 
 import com.marizoo.owner.entity.*;
 import com.marizoo.owner.repository.*;
+import com.marizoo.owner.repository.animalStore.AnimalStoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BroadcastService {
     private final BroadcastRepository broadcastRepository;
-    private final AnimalStoretRepository animalStoretRepository;
+    private final AnimalStoreRepository animalStoretRepository;
     private final FeedRepository feedRepository;
     private final VoteRepository voteRepository;
     private final AnimalRepository animalRepository;
