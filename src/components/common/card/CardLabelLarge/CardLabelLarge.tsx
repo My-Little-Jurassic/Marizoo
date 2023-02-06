@@ -76,6 +76,7 @@ const StyledCardImgBox = styled.div`
 
 const StyledThumbnailContainer = styled.div`
   position: relative;
+  margin-bottom: 8px;
   width: 100%;
   height: 178px;
   &:hover ${StyledTbPlayerPlayBox} {
@@ -147,7 +148,8 @@ const StyledSpeciesRemainCnt = styled.div`
   background-color: ${(props) => props.theme.colors.brandColors.basaltGray["400"]};
 `;
 
-const StyledCardTitle = styled.div`
+const StyledCardTitle = styled.span`
+  color: ${(props) => props.theme.colors.primaryText};
   font: ${(props) => props.theme.fonts.mainContentBold};
   cursor: pointer;
   width: 100%;
