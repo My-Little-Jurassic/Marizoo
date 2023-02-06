@@ -44,6 +44,6 @@ public class AnimalService {
     }
 
     public BroadcastStatusDto getBroadcastStatus(Long animalId){
-        return new BroadcastStatusDto(animalRepository.findBroadcastStatus(animalId));
+        return animalRepository.findBroadcastStatus(animalId);
     }
 }

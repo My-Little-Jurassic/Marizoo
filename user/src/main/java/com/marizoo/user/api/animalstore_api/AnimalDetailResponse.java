@@ -20,6 +20,6 @@ public class AnimalDetailResponse {
     private AnimalDto animalInfo;
     private StoreSubDto storeInfo;
     private SpeciesWholeDto speciesInfo;
-    private BroadcastStatusDto broadcastStatus;
+    private BroadcastStatusDto broadcastInfo;
     private List<FeedDto> feeds;
 }
