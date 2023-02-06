@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import { TbCircleCheck, TbX } from "react-icons/tb";
+import { TbCircleCheck } from "react-icons/tb";
+import GreenBtn from "./StoreReservationGreenBtn";
+import GrayBtn from "./StoreReservationGrayBtn";
 
 interface IPlayInfo {
   playDateTime: string;
   title: string;
-  description: string;
   runningTime: number;
   notice: string;
 }
@@ -14,6 +15,7 @@ interface IPlayInfo {
 interface IProps {
   playInfo: IPlayInfo;
   numberOfVisitor: number | null;
+  storeId: number;
 }
 
 const StoreReservationCompleteModal = function (props: IProps) {
@@ -21,13 +23,6 @@ const StoreReservationCompleteModal = function (props: IProps) {
     <>
       <StyledBlackDiv />
       <StyledContainer>
-        <StyledCloseIcon>
-          <NavLink to="/">
-            <StyledCloseIconColor>
-              <TbX size={32} />
-            </StyledCloseIconColor>
-          </NavLink>
-        </StyledCloseIcon>
         <StyledCheckIcon>
           <TbCircleCheck size={64} />
         </StyledCheckIcon>
@@ -43,14 +38,18 @@ const StoreReservationCompleteModal = function (props: IProps) {
             <StyledSpan>{props.playInfo.runningTime}H</StyledSpan>
           </StyledContent>
           <StyledContent>
-            <StyledBold>방문 유형</StyledBold>
-            <StyledSpan>{props.playInfo.description}</StyledSpan>
-          </StyledContent>
-          <StyledContent>
             <StyledBold>방문자 수</StyledBold>
             <StyledSpan>{props.numberOfVisitor}인</StyledSpan>
           </StyledContent>
         </StyledContentContainer>
+        <StyledButtonContainer>
+          <NavLink to="/" style={{ textDecoration: "none" }}>
+            <GreenBtn label="홈으로" type={0} isDisable={false} />
+          </NavLink>
+          <NavLink to={`/cafe/${props.storeId}`} style={{ textDecoration: "none" }}>
+            <GrayBtn label="돌아가기" type={0} isDisable={false} />
+          </NavLink>
+        </StyledButtonContainer>
       </StyledContainer>
     </>
   );
@@ -81,11 +80,11 @@ const StyledContainer = styled.div`
   background-color: ${(props) => props.theme.colors.secondaryBg};
   border-radius: 32px;
   box-sizing: border-box;
-  padding: 24px;
+  padding: 64px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 40px;
   @media screen and (max-width: 700px) {
     width: 90%;
   }
@@ -97,17 +96,6 @@ const StyledContainer = styled.div`
       display: none;
     }
   }
-`;
-
-const StyledCloseIcon = styled.div`
-  margin-left: 95%;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-`;
-
-const StyledCloseIconColor = styled.div`
-  color: ${(props) => props.theme.colors.primaryText};
 `;
 
 const StyledCheckIcon = styled.div`
@@ -159,4 +147,15 @@ const StyledBold = styled.span`
 
 const StyledSpan = styled.span`
   font: ${(props) => props.theme.fonts.mainContent};
+`;
+
+const StyledButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  @media screen and (max-width: 416px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;

@@ -12,12 +12,12 @@ const sampleStorePlayInfo = {
   playInfo: {
     playDateTime: "2023-02-03 09:00",
     title: "도마뱀 밥주기 체험",
-    description: "먹이주기 체험",
     runningTime: 4,
     notice:
       "방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사 항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항",
   },
   storeInfo: {
+    id: 1,
     storename: "마리쥬 파충류 카페",
     address: "서울 종로구 인사동길 23",
     tel: "02-783-4383",
@@ -32,6 +32,7 @@ const StoreReservation = function () {
     <StyledContainer>
       {isCompleteModalOpen && (
         <StoreReservationCompleteModal
+          storeId={sampleStorePlayInfo.storeInfo.id}
           playInfo={sampleStorePlayInfo.playInfo}
           numberOfVisitor={numberOfVisitor}
         />
@@ -59,11 +60,14 @@ export default StoreReservation;
 const StyledContainer = styled.div`
   height: 100vh;
   box-sizing: border-box;
-  padding: 96px 10vw;
+  padding: 96px 8.25vw;
   display: flex;
   gap: 32px;
   background: ${(props) => props.theme.colors.primaryBg};
   @media screen and (max-width: 1200px) {
+    padding: 96px 2vw;
+  }
+  @media screen and (max-width: 1024px) {
     flex-direction: column;
     height: 100%;
     padding: 96px 2vw 32px;

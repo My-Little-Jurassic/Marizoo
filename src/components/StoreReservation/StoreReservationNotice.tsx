@@ -2,11 +2,12 @@ import Checkbox from "./Checkbox";
 import React, { useState } from "react";
 import styled from "styled-components";
 import CheckBtn from "./CheckBtn";
+import { useDispatch } from "react-redux";
+import { openModal, setContent } from "../../store/modalSlice";
 
 interface IPlayInfo {
   playDateTime: string;
   title: string;
-  description: string;
   runningTime: number;
   notice: string;
 }
@@ -19,18 +20,22 @@ interface IProps {
 
 const StoreReservationNotice = function (props: IProps) {
   const [checked, setChecked] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const reserve = function () {
     if (props.numberOfVisitor === null || props.numberOfVisitor === 0) {
-      alert("방문자 수를 입력해주세요");
+      dispatch(setContent("StoreReservationEmpty"));
+      dispatch(openModal());
       return;
     }
     if (isNaN(props.numberOfVisitor)) {
-      alert("방문자 수를 숫자로 입력해주세요");
+      dispatch(setContent("StoreReservationNotNumber"));
+      dispatch(openModal());
       return;
     }
     if (!checked) {
-      alert("유의사항에 동의 후 예약해주세요");
+      dispatch(setContent("StoreReservationAgree"));
+      dispatch(openModal());
       return;
     }
     // 예약 axios
@@ -55,7 +60,7 @@ export default StoreReservationNotice;
 
 const StyledContainer = styled.div`
   width: 100%;
-  height: 592px;
+  height: 560px;
   border-radius: 32px;
   background-color: ${(props) => props.theme.colors.secondaryBg};
   box-shadow: 2px 2px 8px rgba(67, 67, 67, 0.2);
@@ -65,15 +70,23 @@ const StyledContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  @media screen and (max-width: 1024px) {
+    height: 100%;
+    gap: 32px;
+  }
 `;
 
 const StyledNotice = styled.span`
   color: ${(props) => props.theme.colors.primaryText};
   font: ${(props) => props.theme.fonts.mainContent};
-  max-height: 376px;
+  max-height: 344px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
+  }
+  @media screen and (max-width: 1024px) {
+    overflow-y: visible;
+    max-height: 100%;
   }
 `;
 

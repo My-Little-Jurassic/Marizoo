@@ -9,10 +9,13 @@ import useTheme from "./styles/themes/useTheme";
 import { Nav } from "./components/common/navbar";
 import { darkTheme } from "./styles/themes/darkTheme";
 import { lightTheme } from "./styles/themes/lightTheme";
-import StoreReservation from "./pages/StoreReservation";
+import { useAppSelector } from "./store";
+import { selectModal } from "./store/modalSlice";
+import { Modal } from "./components/common/modal";
 
 function App() {
   const [themeMode, toggleTheme] = useTheme();
+  const modal = useAppSelector(selectModal);
   const theme: Itheme = themeMode === "light" ? lightTheme : darkTheme;
 
   return (
@@ -20,8 +23,9 @@ function App() {
       <Nav themeMode={themeMode} toggleTheme={toggleTheme}></Nav>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/s" element={<StoreReservation />}></Route>
       </Routes>
+
+      {modal.visible ? <Modal content={modal.content} /> : null}
     </ThemeProvider>
   );
 }

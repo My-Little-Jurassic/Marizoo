@@ -5,7 +5,6 @@ import { Input } from "../common/input/index";
 interface IPlayInfo {
   playDateTime: string;
   title: string;
-  description: string;
   runningTime: number;
   notice: string;
 }
@@ -28,10 +27,6 @@ const StoreReservationInfo = function (props: IProps) {
         <StyledSpan>{props.playInfo.runningTime}H</StyledSpan>
       </StyledContent>
       <StyledContent>
-        <StyledBold>방문 유형</StyledBold>
-        <StyledSpan>{props.playInfo.description}</StyledSpan>
-      </StyledContent>
-      <StyledContent>
         <StyledBold>방문자 수</StyledBold>
         <StyledSpan>
           <Input
@@ -50,7 +45,7 @@ export default StoreReservationInfo;
 
 const StyledContainer = styled.div`
   width: 100%;
-  height: 352px;
+  height: 320px;
   border-radius: 32px;
   box-sizing: border-box;
   padding: 56px 40px;
