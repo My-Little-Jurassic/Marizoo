@@ -9,7 +9,6 @@ import useTheme from "./styles/themes/useTheme";
 import { Nav } from "./components/common/navbar";
 import { darkTheme } from "./styles/themes/darkTheme";
 import { lightTheme } from "./styles/themes/lightTheme";
-import Broadcast from "./pages/Broadcast";
 
 function App() {
   const [themeMode, toggleTheme] = useTheme();
@@ -20,7 +19,6 @@ function App() {
       <Nav themeMode={themeMode} toggleTheme={toggleTheme}></Nav>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/broadcast" element={<Broadcast />}></Route>
       </Routes>
     </ThemeProvider>
   );
