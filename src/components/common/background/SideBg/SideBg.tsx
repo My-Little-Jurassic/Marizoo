@@ -28,7 +28,7 @@ function SideBg() {
       key={`backgroundImage-${index}`}
       top={option.top + getRandomArbitrary(-5, 5)}
       left={option.left + getRandomArbitrary(-20, 20)}
-      time={getRandomArbitrary(10, 30)}
+      time={getRandomArbitrary(5, 15)}
       position={getRandomArbitrary(-50, 50)}
     >
       <img src={`./images/${option.src}`}></img>
@@ -68,9 +68,9 @@ const StyledSideBgLeft = styled.div`
   left: calc(50vw - 700px);
   bottom: 0px;
   @media screen and (max-width: 900px) {
-    left: calc(50vw - 520px);
+    left: calc(50vw - 500px);
   }
-  width: 200px;
+  width: 300px;
   height: 90vh;
 `;
 
@@ -79,9 +79,9 @@ const StyledSideBgright = styled.div`
   right: calc(50vw - 700px);
   bottom: 0px;
   @media screen and (max-width: 900px) {
-    right: calc(50vw - 520px);
+    right: calc(50vw - 500px);
   }
-  width: 200px;
+  width: 300px;
   height: 90vh;
   transform: rotate(0.5turn);
 `;
