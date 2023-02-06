@@ -44,15 +44,9 @@ class BroadcastServiceTest {
         List<Long> animalIdList = new ArrayList<>();
         animalIdList.add(1L);
         animalIdList.add(2L);
-        String voteTitle = "마리쥬 보트으";
-        List<Long> feedIdList = new ArrayList<>();
-        feedIdList.add(1L);
-        feedIdList.add(1L);
-        feedIdList.add(1L);
-        feedIdList.add(1L);
 
         int originFeedVoteSize = feedVoteRepository.findAll().size();
-        Long broadcastId = broadcastService.createBroadcast(title, desc, thumbnail, animalStoreId, animalIdList, voteTitle, feedIdList);
+        Long broadcastId = broadcastService.createBroadcast(title, desc, thumbnail, animalStoreId, animalIdList);
 
         //Then
         // 방송 정보 확인
@@ -64,11 +58,6 @@ class BroadcastServiceTest {
         // 방송 출연 동물 마리수 확인
         List<BroadcastAnimal> broadcastAnimalList = broadcastAnimalRepository.findByBroadcastId(broadcastId);
         assertThat(broadcastAnimalList.size()).isEqualTo(animalIdList.size());
-
-        // 투표 옵션 확인
-        List<FeedVote> feedVoteList = feedVoteRepository.findAll();
-        assertThat(feedVoteList.size()).isEqualTo(originFeedVoteSize + 4);
-
     }
 
     @Test
@@ -82,14 +71,8 @@ class BroadcastServiceTest {
         List<Long> animalIdList = new ArrayList<>();
         animalIdList.add(1L);
         animalIdList.add(2L);
-        String voteTitle = "마리쥬 보트으";
-        List<Long> feedIdList = new ArrayList<>();
-        feedIdList.add(1L);
-        feedIdList.add(1L);
-        feedIdList.add(1L);
-        feedIdList.add(1L);
 
-        Long broadcastId = broadcastService.createBroadcast(title, desc, thumbnail, animalStoreId, animalIdList, voteTitle, feedIdList);
+        Long broadcastId = broadcastService.createBroadcast(title, desc, thumbnail, animalStoreId, animalIdList);
 
         // When
         broadcastService.saveEndTime(broadcastId);

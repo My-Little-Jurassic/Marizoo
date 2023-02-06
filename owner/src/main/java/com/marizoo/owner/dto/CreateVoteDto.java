@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class VoteDto {
+public class CreateVoteDto {
     private String title;
     private List<Long> feedIdList;
 }

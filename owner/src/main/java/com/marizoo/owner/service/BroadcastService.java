@@ -44,9 +44,9 @@ public class BroadcastService {
      * @return boolean :
      */
     @Transactional
-    public CreateBroadcastResponse createBroadcast(
+    public Long createBroadcast(
             String title, String description, String thumbnail, Long animalStoreId,
-            List<Long> animalIdList, String voteTitle, List<Long> feedIdList
+            List<Long> animalIdList
     ){
         // entity
         // animal store find
@@ -68,26 +68,11 @@ public class BroadcastService {
             broadcastAnimalList.add(broadcastAnimal);
         }
 
-        // feedVoteList 생성 : 투표 옵션 리슽
-        List<FeedVote> feedVoteList = new ArrayList<>();
-        for (Long aLong : feedIdList) {
-            Optional<Feed> optionalFeed = feedRepository.findById(aLong);
-            if (optionalFeed.isEmpty()) {
-                return null;
-            }
-            FeedVote feedVote = FeedVote.createFeedVote(optionalFeed.get());
-            feedVoteList.add(feedVote);
-        }
-
-        // vote 생성
-        Vote vote = Vote.createVote(voteTitle, feedVoteList);
-        voteRepository.save(vote);
-
         // 방송 생성
-        Broadcast broadcast = Broadcast.createBroadcast(title, description, thumbnail, animalStore, broadcastAnimalList, vote);
+        Broadcast broadcast = Broadcast.createBroadcast(title, description, thumbnail, animalStore, broadcastAnimalList);
 
         // 방송 저장
         broadcastRepository.save(broadcast);
-        return new CreateBroadcastResponse(broadcast.getId(), vote.getId());
+        return broadcast.getId();
     }
 }
