@@ -5,31 +5,35 @@ import { TbUsers, TbThumbUp } from "react-icons/tb";
 import { GreenBtn, LikeBtn } from "../common/button/index";
 import VoteModal from "./VoteModal";
 import VoteResultModal from "./VoteResultModal";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { broadcastActions } from "../../store/broadcastSlice";
+import { ovActions } from "../../store/ovSlice";
 
 interface IProps {
   title: string;
   detail: string;
   feedList: { id: number; feedName: string; imgSrc: string }[];
-  vote: (selectedFeed: string) => void;
-  isVoted: boolean;
-  isLiked: boolean | string;
-  like: () => void;
-  viewers: number;
-  numberOfLikes: number;
+  // isVoted: boolean;
+  // isLiked: boolean | string;
+  // like: () => void;
+  // viewers: number;
+  // numberOfLikes: number;
 }
 
 const BroadcastContent = function (props: IProps) {
+  const dispatch = useAppDispatch();
+  const isLiked = useAppSelector((state) => state.broadcast.isLiked);
+  const isVoted = useAppSelector((state) => state.broadcast.isVoted);
+  const numberOfLikes = useAppSelector((state) => state.broadcast.numberOfLikes);
+  const numberOfViewers = useAppSelector((state) => state.broadcast.numberOfViewers);
+
   const [isVoteModalOpened, setIsVoteModalOpened] = useState<boolean>(false);
   const [isResultModalOpened, setIsResultModalOpened] = useState<boolean>(false);
 
   return (
     <StyledContainer>
       {isVoteModalOpened && (
-        <VoteModal
-          feedList={props.feedList}
-          closeModal={() => setIsVoteModalOpened(false)}
-          vote={(selectedFeed) => props.vote(selectedFeed)}
-        />
+        <VoteModal feedList={props.feedList} closeModal={() => setIsVoteModalOpened(false)} />
       )}
       {isResultModalOpened && (
         <VoteResultModal
@@ -41,7 +45,7 @@ const BroadcastContent = function (props: IProps) {
       <StyledSubTitleContainer>
         <StyledTitle>{props.title}</StyledTitle>
         <StyledButtonContainer>
-          {props.isVoted ? (
+          {isVoted ? (
             <GreenBtn label="투표하기" type={0} isDisable={true} />
           ) : (
             <GreenBtn
@@ -51,14 +55,20 @@ const BroadcastContent = function (props: IProps) {
               onClick={() => setIsVoteModalOpened(true)}
             />
           )}
-          <LikeBtn onClick={props.like} isLiked={props.isLiked} />
+          <LikeBtn
+            onClick={() => {
+              dispatch(broadcastActions.toggleLike());
+              dispatch(ovActions.like());
+            }}
+            isLiked={isLiked}
+          />
         </StyledButtonContainer>
       </StyledSubTitleContainer>
       <StyledCountInfoContainer>
         <TbUsers size={20} />
-        <StyledSpan>{props.viewers} 명</StyledSpan>
+        <StyledSpan>{numberOfViewers} 명</StyledSpan>
         <TbThumbUp size={20} />
-        <StyledSpan>{props.numberOfLikes} 회</StyledSpan>
+        <StyledSpan>{numberOfLikes} 회</StyledSpan>
       </StyledCountInfoContainer>
 
       <StyledHr />

@@ -7,6 +7,8 @@ import BroadcastScreen from "./BroadcastScreen";
 import BroadcastRecommendations from "./BroadcastRecommendations";
 import Grid from "@mui/material/Grid";
 import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { ovActions } from "../../store/ovSlice";
 
 // 임시 방송 정보
 const sampleBroadcastInfo = {
@@ -56,66 +58,53 @@ const tmpFeedList = [
 ];
 
 const BroadcastHome = function () {
-  const [isMaximized, setIsMaximized] = useState<boolean>(false);
-  const [selectedFeed, setSelectedFeed] = useState<string | null>(null);
-  const [isVoted, setIsVoted] = useState<boolean>(false);
-  const [isLiked, setIsLiked] = useState<string | boolean>("neverClicked");
-  const [numberOfViewers, setNumberOfViewers] = useState<number>(0);
-  const [numberOfLikes, setNumberOfLikes] = useState<number>(0);
+  // const [isMaximized, setIsMaximized] = useState<boolean>(false);
+  // const [selectedFeed, setSelectedFeed] = useState<string | null>(null);
+  // const [isVoted, setIsVoted] = useState<boolean>(false);
+  // const [isLiked, setIsLiked] = useState<string | boolean>("neverClicked");
+  // const [numberOfViewers, setNumberOfViewers] = useState<number>(0);
+  // const [numberOfLikes, setNumberOfLikes] = useState<number>(0);
+
+  const isMaximized = useAppSelector((state) => state.broadcast.isMaximized);
+  const selectedFeed = useAppSelector((state) => state.broadcast.selectedFeed);
+  const isVoted = useAppSelector((state) => state.broadcast.isVoted);
+  const isLiked = useAppSelector((state) => state.broadcast.isLiked);
+  const numberOfViewers = useAppSelector((state) => state.broadcast.numberOfViewers);
+  const numberOfLikes = useAppSelector((state) => state.broadcast.numberOfLikes);
 
   const params = useParams();
 
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    setIsMaximized(false);
-    setSelectedFeed(null);
-    setIsVoted(false);
-    setIsLiked("neverClicked");
-    setNumberOfViewers(0);
-    setNumberOfLikes(0);
-  }, [params.id]);
+    dispatch(ovActions.createOpenvidu({ nickname: "user1", roomId: params.id }));
+  }, []);
 
-  const like = function () {
-    if (isLiked === true) {
-      setIsLiked(false);
-    } else {
-      setIsLiked(true);
-    }
-  };
+  // useEffect(() => {
+  //   setIsMaximized(false);
+  //   setSelectedFeed(null);
+  //   setIsVoted(false);
+  //   setIsLiked("neverClicked");
+  //   setNumberOfViewers(0);
+  //   setNumberOfLikes(0);
+  // }, [params.id]);
+
+  // const like = function () {
+  //   if (isLiked === true) {
+  //     setIsLiked(false);
+  //   } else {
+  //     setIsLiked(true);
+  //   }
+  // };
 
   return (
     <StyledContainer>
       <StyledLeftSection>
-        <BroadcastScreen
-          title={sampleBroadcastInfo.broadcast.title}
-          isMaximized={isMaximized}
-          toggleScreenMode={() => setIsMaximized(!isMaximized)}
-          feedList={tmpFeedList}
-          selectedFeed={selectedFeed}
-          vote={(selectedFeed) => {
-            setSelectedFeed(selectedFeed);
-            setIsVoted(true);
-          }}
-          isVoted={isVoted}
-          isLiked={isLiked}
-          numberOfViewers={numberOfViewers}
-          numberOfLikes={numberOfLikes}
-          changeNumberOfViewers={(viewers) => setNumberOfViewers(viewers)}
-          changeNumberOfLikes={(likes) => setNumberOfLikes(likes)}
-        />
+        <BroadcastScreen title={sampleBroadcastInfo.broadcast.title} feedList={tmpFeedList} />
         {!isMaximized && (
           <BroadcastContent
             title={sampleBroadcastInfo.broadcast.title}
             detail={sampleBroadcastInfo.broadcast.description}
             feedList={tmpFeedList}
-            vote={(selectedFeed) => {
-              setSelectedFeed(selectedFeed);
-              setIsVoted(true);
-            }}
-            isVoted={isVoted}
-            isLiked={isLiked}
-            like={like}
-            viewers={numberOfViewers}
-            numberOfLikes={numberOfLikes}
           />
         )}
       </StyledLeftSection>

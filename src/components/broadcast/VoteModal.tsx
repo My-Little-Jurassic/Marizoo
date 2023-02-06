@@ -1,31 +1,31 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 
 import { GreenBtn } from "../common/button";
 import { CardVote } from "../common/card/index";
 import { Grid } from "@mui/material";
+import { useAppDispatch } from "../../store";
+import { broadcastActions } from "../../store/broadcastSlice";
 
 interface Iprops {
   feedList: { id: number; feedName: string; imgSrc: string }[];
   closeModal: () => void;
-  vote: (selectedFeed: string) => void;
 }
 
 const VoteModal = function (props: Iprops) {
+  const dispatch = useAppDispatch();
+
   const [selectedFeed, setSelectedFeed] = useState<string | null>(null);
 
   // 먹이 고르기
-  const selectFeed = useCallback(
-    (feed: string) => {
-      if (selectedFeed === feed) {
-        setSelectedFeed(null);
-      } else {
-        setSelectedFeed(feed);
-      }
-    },
-    [selectedFeed],
-  );
+  const selectFeed = function (feed: string) {
+    if (selectedFeed === feed) {
+      setSelectedFeed(null);
+    } else {
+      setSelectedFeed(feed);
+    }
+  };
 
   // 먹이 투표 카드들
   const Cards = props.feedList.map((feed) => {
@@ -42,14 +42,13 @@ const VoteModal = function (props: Iprops) {
   });
 
   // 투표하기
-  const vote = useCallback(() => {
-    console.log(selectedFeed, typeof selectedFeed);
+  const vote = function () {
     if (typeof selectedFeed === "string") {
-      props.vote(selectedFeed);
-      localStorage.setItem("isVoted", "true");
+      dispatch(broadcastActions.vote(selectedFeed));
+      // localStorage.setItem("isVoted", "true");
       props.closeModal();
     }
-  }, [selectedFeed]);
+  };
 
   return (
     <StyledModal>

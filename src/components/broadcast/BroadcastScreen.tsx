@@ -14,20 +14,22 @@ import { GreenBtn, ReactionBtn } from "../common/button";
 import VoteModal from "./VoteModal";
 import BroadcastVideo from "./BroadcastVideo";
 import BroadcastCombo from "./BroadcastCombo";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { broadcastActions } from "../../store/broadcastSlice";
 
 interface IProps {
   title: string;
-  isMaximized: boolean;
-  toggleScreenMode: () => void;
   feedList: { id: number; feedName: string; imgSrc: string }[];
-  selectedFeed: string | null;
-  vote: (selectedFeed: string) => void;
-  isVoted: boolean;
-  isLiked: boolean | string;
-  numberOfViewers: number;
-  numberOfLikes: number;
-  changeNumberOfViewers: (viewers: number) => void;
-  changeNumberOfLikes: (likes: number) => void;
+  // changeNumberOfViewers: (viewers: number) => void;
+  // changeNumberOfLikes: (likes: number) => void;
+  // vote: (selectedFeed: string) => void;
+  // toggleScreenMode: () => void;
+  // isMaximized: boolean;
+  // selectedFeed: string | null;
+  // isVoted: boolean;
+  // isLiked: boolean | string;
+  // numberOfViewers: number;
+  // numberOfLikes: number;
 }
 
 const BroadcastScreen = function (props: IProps) {
@@ -39,6 +41,15 @@ const BroadcastScreen = function (props: IProps) {
   const [isReactionPlaying, setIsReactionPlaying] = useState<boolean>(false);
   const [clientX, setClientX] = useState<number | null>(null);
   const [clientY, setClientY] = useState<number | null>(null);
+
+  const isMaximized = useAppSelector((state) => state.broadcast.isMaximized);
+  const selectedFeed = useAppSelector((state) => state.broadcast.selectedFeed);
+  const isVoted = useAppSelector((state) => state.broadcast.isVoted);
+  const isLiked = useAppSelector((state) => state.broadcast.isLiked);
+  const numberOfViewers = useAppSelector((state) => state.broadcast.numberOfViewers);
+  const numberOfLikes = useAppSelector((state) => state.broadcast.numberOfLikes);
+
+  const dispatch = useAppDispatch();
 
   // 마우스 멈추면 버튼들 사라지게
   useEffect(() => {
@@ -101,7 +112,7 @@ const BroadcastScreen = function (props: IProps) {
   return (
     <StyledContainer
       onMouseMove={showBtns}
-      isMaximized={props.isMaximized}
+      isMaximized={isMaximized}
       isBtnShown={isBtnShown}
       isVoteModalOpened={isVoteModalOpened}
       waitingReaction={waitingReaction}
@@ -128,23 +139,16 @@ const BroadcastScreen = function (props: IProps) {
           clientY={clientY}
         />
       )}
-      <BroadcastVideo
-        selectedFeed={props.selectedFeed}
-        isLiked={props.isLiked}
-        onClick={doReaction}
-        changeNumberOfViewers={(viewers) => props.changeNumberOfViewers(viewers)}
-        changeNumberOfLikes={(likes) => props.changeNumberOfLikes(likes)}
-        isVoted={props.isVoted}
-      />
-      {props.isMaximized && (
+      <BroadcastVideo onClick={doReaction} />
+      {isMaximized && (
         <StyledHeader isBtnShown={isBtnShown}>
           <StyledTopShadow />
           <StyledTitle>{props.title}</StyledTitle>
           <StyledCountInfoContainer>
             <TbUsers size={20} />
-            <StyledSpan>{props.numberOfViewers} 명</StyledSpan>
+            <StyledSpan>{numberOfViewers} 명</StyledSpan>
             <TbThumbUp size={20} />
-            <StyledSpan>{props.numberOfLikes} 회</StyledSpan>
+            <StyledSpan>{numberOfLikes} 회</StyledSpan>
           </StyledCountInfoContainer>
         </StyledHeader>
       )}
@@ -153,7 +157,7 @@ const BroadcastScreen = function (props: IProps) {
           onMouseOver={() => setIsMouseOver(true)}
           onMouseOut={() => setIsMouseOver(false)}
           isBtnShown={isBtnShown}
-          isMaximized={props.isMaximized}
+          isMaximized={isMaximized}
         >
           <ReactionBtn
             label="쓰다듬기"
@@ -175,13 +179,13 @@ const BroadcastScreen = function (props: IProps) {
           />
         </StyledReactionContainer>
       )}
-      {props.isMaximized && (
+      {isMaximized && (
         <StyledBtnContainer
           onMouseOver={() => setIsMouseOver(true)}
           onMouseOut={() => setIsMouseOver(false)}
           isBtnShown={isBtnShown}
         >
-          {props.isVoted ? (
+          {isVoted ? (
             <GreenBtn label="투표하기" type={0} isDisable={true} />
           ) : (
             <GreenBtn
@@ -194,34 +198,30 @@ const BroadcastScreen = function (props: IProps) {
         </StyledBtnContainer>
       )}
       {isVoteModalOpened && (
-        <VoteModal
-          feedList={props.feedList}
-          closeModal={() => setIsVoteModalOpened(false)}
-          vote={(selectedFeed) => props.vote(selectedFeed)}
-        />
+        <VoteModal feedList={props.feedList} closeModal={() => setIsVoteModalOpened(false)} />
       )}
-      {!props.isMaximized && (
+      {!isMaximized && (
         <StyledModeChangeIconContainer
           onMouseOver={() => setIsMouseOver(true)}
           onMouseOut={() => setIsMouseOver(false)}
           isBtnShown={isBtnShown}
           onClick={() => {
             document.documentElement.requestFullscreen();
-            props.toggleScreenMode();
+            dispatch(broadcastActions.maximize());
             setIsMouseOver(false);
           }}
         >
           <TbMaximize size={30} />
         </StyledModeChangeIconContainer>
       )}
-      {props.isMaximized && (
+      {isMaximized && (
         <StyledModeChangeIconContainer
           onMouseOver={() => setIsMouseOver(true)}
           onMouseOut={() => setIsMouseOver(false)}
           isBtnShown={isBtnShown}
           onClick={() => {
             document.exitFullscreen();
-            props.toggleScreenMode();
+            dispatch(broadcastActions.maximize());
             setIsMouseOver(false);
           }}
         >
