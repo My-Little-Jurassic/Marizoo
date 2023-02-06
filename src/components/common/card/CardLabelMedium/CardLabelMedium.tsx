@@ -25,7 +25,7 @@ const CardLabelMedium = function (props: IProps) {
 export default CardLabelMedium;
 
 const StyledContainer = styled.div`
-  width: 240px;
+  width: 100%;
   height: 200px;
 `;
 

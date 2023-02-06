@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { EInputStatus } from "../";
 import InputVerifyItem from "./InputVerifyItem";
@@ -17,13 +17,19 @@ export interface IInputVerifyResult {
 }
 
 interface IProps {
-  inputVerifyResultList: IInputVerifyResult[];
+  inputVerifyResultList: Promise<IInputVerifyResult[]>;
 }
 
 const InputVerifyList = ({ inputVerifyResultList }: IProps): JSX.Element => {
+  const [verifyList, setVerifyList] = useState<IInputVerifyResult[]>([]);
+
+  useEffect(() => {
+    inputVerifyResultList.then((data) => setVerifyList(data));
+  }, [inputVerifyResultList]);
+
   return (
     <StyledUl>
-      {inputVerifyResultList.map((item, index) => (
+      {verifyList.map((item, index) => (
         <InputVerifyItem key={index} description={item.description} result={item.result} />
       ))}
     </StyledUl>
