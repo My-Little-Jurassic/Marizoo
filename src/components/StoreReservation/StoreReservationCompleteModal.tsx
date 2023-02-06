@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { TbCircleCheck } from "react-icons/tb";
 import GreenBtn from "./StoreReservationGreenBtn";
 import GrayBtn from "./StoreReservationGrayBtn";
@@ -15,10 +15,11 @@ interface IPlayInfo {
 interface IProps {
   playInfo: IPlayInfo;
   numberOfVisitor: number | null;
-  storeId: number;
 }
 
 const StoreReservationCompleteModal = function (props: IProps) {
+  const params = useParams();
+
   return (
     <>
       <StyledBlackDiv />
@@ -46,7 +47,7 @@ const StoreReservationCompleteModal = function (props: IProps) {
           <NavLink to="/" style={{ textDecoration: "none" }}>
             <GreenBtn label="홈으로" type={0} isDisable={false} />
           </NavLink>
-          <NavLink to={`/cafe/${props.storeId}`} style={{ textDecoration: "none" }}>
+          <NavLink to={`/cafe/${params.cafe_id}`} style={{ textDecoration: "none" }}>
             <GrayBtn label="돌아가기" type={0} isDisable={false} />
           </NavLink>
         </StyledButtonContainer>
