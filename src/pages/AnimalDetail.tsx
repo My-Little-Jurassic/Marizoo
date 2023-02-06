@@ -7,6 +7,7 @@ import {
 } from "../components/AnimalDetail";
 
 const AnimalDetail = function () {
+  // /stores/{animal_id}/animal_detail
   const sampleAnimalProfile = {
     animalInfo: {
       gender: "male",
@@ -30,9 +31,13 @@ const AnimalDetail = function () {
       info: "아무 설명 아무 설명 아무 설명아무 설명 아무 설명 아무 설명아무 설명아무 설명아무 설명아무 설명아무 설명아무 설명아무 설명 아무 설명",
       classificationImg: "https://picsum.photos/200/300",
     },
+    broadcast: {
+      status: "onair",
+    },
     feeds: ["고등어 초밥", "귀뚜라미"],
   };
 
+  // /stores/{store_id}/animals
   const sampleStoreAnimals = [
     {
       animalName: "우파파",
@@ -102,6 +107,8 @@ const StyledLeftSide = styled.div`
   }
   @media screen and (max-width: 1200px) {
     width: 100%;
+    height: 100%;
+    overflow: visible;
   }
 `;
 
@@ -111,6 +118,6 @@ const StyledRightSide = styled.div`
   flex-direction: column;
   gap: 40px;
   @media screen and (max-width: 800px) {
-    gap: 320px;
+    width: 100%;
   }
 `;
