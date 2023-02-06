@@ -1,14 +1,17 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { getCheckNickname, getCheckUid, postRegist } from "../../api";
 import {
   validateEmail,
   validateIdChar,
   validateIdLength,
+  validatePhoneNumber,
   validatePWChar,
   validatePWLength,
 } from "../../utils/registerValidation";
 import { GreenBtn } from "../common/button";
-import { IInputVerify, Input, VerifyInput } from "../common/input";
+import { IInputVerify, VerifyInput } from "../common/input";
 
 const StyledForm = styled.form`
   display: flex;
@@ -22,9 +25,14 @@ const StyledForm = styled.form`
   & > input {
     margin-bottom: 32px;
   }
+  & > .notice {
+    font: ${({ theme }) => theme.fonts.tinyContentBold};
+    color: ${({ theme }) => theme.colors.red};
+    margin: 16px auto 0;
+  }
 
   & > .submit-btn {
-    margin-top: 60px;
+    margin-top: 18px;
     width: 148px;
     & > button {
       width: 100%;
@@ -34,14 +42,17 @@ const StyledForm = styled.form`
   }
 `;
 
+interface IInputValue {
+  value: string;
+  pass: boolean;
+}
 interface IRegistForm {
-  uid: string;
-  pwd: string;
-  pwdCheck: string;
-  nickname: string;
-  phoneNumber: string;
-  email: string;
-  validation: boolean;
+  uid: IInputValue;
+  pwd: IInputValue;
+  pwdCheck: IInputValue;
+  nickname: IInputValue;
+  phoneNumber: IInputValue;
+  email: IInputValue;
 }
 type RegistInputId = "uid" | "pwd" | "pwdCheck" | "email" | "nickname" | "phoneNumber";
 
@@ -50,23 +61,24 @@ interface IInput {
   type: string;
   ref?: React.MutableRefObject<HTMLInputElement | null>;
   placeholder: string;
-  inputVerifyList?: IInputVerify[];
+  inputVerifyList: IInputVerify[];
 }
 
 const RegistForm = () => {
   const [data, setData] = useState<IRegistForm>({
-    uid: "",
-    pwd: "",
-    pwdCheck: "",
-    nickname: "",
-    phoneNumber: "",
-    email: "",
-    validation: false,
+    uid: { value: "", pass: false },
+    pwd: { value: "", pass: false },
+    pwdCheck: { value: "", pass: false },
+    nickname: { value: "", pass: false },
+    phoneNumber: { value: "", pass: false },
+    email: { value: "", pass: false },
   });
+  const [message, setMessage] = useState<string>("");
+  const navigate = useNavigate();
 
-  const updateData = (id: RegistInputId, value: string) => {
+  const updateData = (id: RegistInputId, value: string, pass: boolean, data: IRegistForm) => {
     const newData = { ...data };
-    newData[id] = value;
+    newData[id] = { value, pass };
     setData(newData);
   };
   const pwdRef = useRef<HTMLInputElement>(null);
@@ -81,22 +93,50 @@ const RegistForm = () => {
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    // TODO: 회원가입 POST요청
+    let validate = true;
+    Object.values(data).forEach((item: IInputValue) => (validate = validate && item.pass));
+    console.log("validate", validate);
+    if (!validate) {
+      setMessage("입력한 정보가 올바르지 않습니다.");
+      return;
+    }
+
+    const { uid, pwd, nickname, phoneNumber, email } = data;
+    const body = {
+      uid: uid.value,
+      pwd: pwd.value,
+      nickname: nickname.value,
+      phoneNumber: phoneNumber.value,
+      email: email.value,
+    };
+
+    postRegist(body)
+      .then(() => {
+        setMessage("");
+        alert("회원가입에 성공하였습니다! 로그인해주세요.");
+        navigate("/login");
+      })
+      .catch(({ response }) => {
+        switch (response.status) {
+          case 409:
+            setMessage("이미 가입된 이메일입니다.");
+            break;
+          default:
+            setMessage("회원가입 처리에 실패하였습니다.\n잠시후 시도해주세요.");
+        }
+      });
   };
 
-  const validateIdUnique = (uid: string): boolean => {
-    // TODO: 아이디 중복 검사 요청
-    return true;
+  const validateIdUnique = async (uid: string): Promise<boolean> => {
+    return getCheckUid({ uid })
+      .then(() => true)
+      .catch(() => false);
   };
 
-  const validateUserUnique = (email: string): boolean => {
-    // TODO: 회원 중복 검사 요청
-    return true;
-  };
-
-  const validateNicknameUnique = (nickname: string): boolean => {
-    // TODO: 닉네임 중복 검사 요청
-    return true;
+  const validateNicknameUnique = async (nickname: string): Promise<boolean> => {
+    return getCheckNickname({ nickname })
+      .then(() => true)
+      .catch(() => false);
   };
 
   const inputList: IInput[] = [
@@ -143,15 +183,19 @@ const RegistForm = () => {
         },
       ],
     },
-    { id: "phoneNumber", type: "tel", placeholder: "연락처" },
+    {
+      id: "phoneNumber",
+      type: "tel",
+      placeholder: "연락처",
+      inputVerifyList: [
+        { description: "올바른 연락처 형식", verify: validatePhoneNumber, lazy: true },
+      ],
+    },
     {
       id: "email",
       type: "email",
       placeholder: "이메일",
-      inputVerifyList: [
-        { description: "올바른 이메일 형식", verify: validateEmail, lazy: true },
-        { description: "새로운 회원", verify: validateUserUnique, lazy: true },
-      ],
+      inputVerifyList: [{ description: "올바른 이메일 형식", verify: validateEmail, lazy: true }],
     },
   ];
 
@@ -159,34 +203,21 @@ const RegistForm = () => {
     <StyledForm onSubmit={onSubmit}>
       {inputList.map((item, index) => {
         const { id, type, ref, placeholder, inputVerifyList } = item;
-        if (inputVerifyList)
-          return (
-            <VerifyInput
-              key={index}
-              ref={ref}
-              value={data[id]}
-              type={type}
-              placeholder={placeholder}
-              inputVerifyList={inputVerifyList}
-              submitInputResult={(val) => {
-                updateData(id, val);
-              }}
-            />
-          );
-        else
-          return (
-            <Input
-              key={index}
-              ref={ref}
-              value={data[id]}
-              type={type}
-              placeholder={placeholder}
-              setValue={(val) => {
-                updateData(id, val);
-              }}
-            />
-          );
+        return (
+          <VerifyInput
+            key={index}
+            ref={ref}
+            value={data[id].value}
+            type={type}
+            placeholder={placeholder}
+            inputVerifyList={inputVerifyList}
+            submitInputResult={function (val, result) {
+              updateData(id, val, result, data);
+            }}
+          />
+        );
       })}
+      <span className="notice">{message}</span>
       <div className="submit-btn">
         <GreenBtn label={"가입"} type={0} isDisable={false} />
       </div>
@@ -194,4 +225,4 @@ const RegistForm = () => {
   );
 };
 
-export default React.memo(RegistForm);
+export default RegistForm;
