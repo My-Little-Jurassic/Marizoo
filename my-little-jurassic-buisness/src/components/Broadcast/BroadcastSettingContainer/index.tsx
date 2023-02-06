@@ -1,41 +1,22 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { IBroadcastSetting } from "../../../types";
 import BroadcastTable from "./BroadcastTable";
 
-interface IAnimal {
-  id: number;
-  name: string;
-  select: boolean;
-  classification: string;
+interface IProps {
+  initSetting: IBroadcastSetting;
 }
 
-interface IBroadcastSetting {
-  id: number;
-  title: string;
-  description: string;
-  thumbnail: string;
-  animals: IAnimal[];
-  status: "DEFAULT" | "RESERVE" | "ONAIR" | "FINISH";
-  viewers: number;
-  likes: number;
-}
-
-const BroadcastSettingContainer = () => {
-  const [data, setaData] = useState<IBroadcastSetting>({
-    id: 0,
-    title: "",
-    description: "",
-    thumbnail: "",
-    animals: [],
-    status: "DEFAULT",
-    viewers: 0,
-    likes: 0,
+const BroadcastSettingContainer = ({ initSetting }: IProps) => {
+  const [broadcastSetting, setBroadcastSetting] = useState<IBroadcastSetting>({
+    ...initSetting,
   });
+  const { title, description, thumbnail, animals, videoDevice } = broadcastSetting;
 
   return (
     <StyledDiv className="BroadcastStatusViewer">
       <label>방송제목</label>
-      <input />
+      <input value={title} />
       <br />
 
       <label>방송동물</label>
@@ -43,20 +24,18 @@ const BroadcastSettingContainer = () => {
       <br />
 
       <label>방송설명</label>
-      <textarea />
+      <textarea value={description} />
       <br />
       <div className="thumbnail-area">
         <div>
           <label>썸눼일 설정</label>
           <button>업로드</button>
-          <br />
-
-          <label>캐뭐라 설정</label>
-          <input list="camera" />
+          <img src={thumbnail} />
         </div>
         <div>
-          <label>썸눼일 미리보기</label>
-          <img />
+          <label>캐뭐라 설정</label>
+          <input list="camera" />
+          <video />
         </div>
       </div>
       <datalist id="camera">
@@ -92,16 +71,31 @@ const StyledDiv = styled.div`
 
   & > .thumbnail-area {
     display: flex;
+    flex-wrap: wrap;
     & > * {
-      flex: 1 1 0;
+      flex: 1 1 50%;
+      display: flex;
+      flex-direction: column;
     }
     & > *:first-child {
-      margin-right: 16px;
+      & > * {
+        flex-shrink: 0;
+      }
+      & img {
+        flex: 1;
+        background-color: ${({ theme }) => theme.colors.brandColors.basaltGray[900]};
+      }
+    }
+    & > *:last-child {
+      & video {
+        width: 100%;
+        background-color: ${({ theme }) => theme.colors.brandColors.basaltGray[900]};
+      }
     }
     & button {
       width: 100%;
       height: 40px;
-      margin-bottom: 32px;
+      margin-bottom: 16px;
       font: ${({ theme }) => theme.fonts.header5};
     }
     & input {
@@ -109,13 +103,9 @@ const StyledDiv = styled.div`
       width: 100%;
       margin-bottom: 16px;
     }
-    & > *:last-child {
-      display: flex;
-      flex-direction: column;
-      & img {
-        width: 100%;
-        height: 100%;
-        background-color: ${({ theme }) => theme.colors.brandColors.basaltGray[900]};
+    @media screen and (max-width: 600px) {
+      & > * {
+        flex: 1 1 100%;
       }
     }
   }

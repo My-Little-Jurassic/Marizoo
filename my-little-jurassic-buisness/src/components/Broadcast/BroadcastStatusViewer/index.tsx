@@ -1,38 +1,33 @@
-import React, { useState } from "react";
+import React, { forwardRef } from "react";
 import { TbUser, TbThumbUp } from "react-icons/tb";
 import styled from "styled-components";
+import { TStatus } from "../../../types/Broadcast";
 
-interface IBroadcastStatus {
-  title: string;
-  status: "DEFAULT" | "RESERVE" | "ONAIR" | "FINISH";
+export interface IProps {
+  status: TStatus;
   viewers: number;
-  likeAmount: number;
+  likes: number;
 }
-const BroadcastStatusViewer = () => {
-  const [data, setaData] = useState<IBroadcastStatus>({
-    title: "방송제목",
-    status: "DEFAULT",
-    viewers: 0,
-    likeAmount: 0,
-  });
 
-  return (
-    <StyledDiv className="BroadcastStatusViewer">
-      <video />
-      <h2>{data.title}</h2>
-      <div>
+const BroadcastStatusViewer = forwardRef<HTMLVideoElement, IProps>(
+  ({ status, viewers, likes }: IProps, ref) => {
+    return (
+      <StyledDiv className="BroadcastStatusViewer">
+        <video ref={ref} />
         <div>
-          <TbUser />
-          {data.viewers}명
+          <div>
+            <TbUser />
+            {viewers}명
+          </div>
+          <div>
+            <TbThumbUp />
+            {likes}회
+          </div>
         </div>
-        <div>
-          <TbThumbUp />
-          {data.likeAmount}회
-        </div>
-      </div>
-    </StyledDiv>
-  );
-};
+      </StyledDiv>
+    );
+  },
+);
 
 const StyledDiv = styled.div`
   padding: 32px 16px;
@@ -42,11 +37,8 @@ const StyledDiv = styled.div`
     width: 100%;
     background-color: ${({ theme }) => theme.colors.brandColors.basaltGray[900]};
   }
-  & > h2 {
-    font: ${({ theme }) => theme.fonts.header2};
-    margin-top: 16px;
-  }
   & > div {
+    margin-top: 16px;
     font: ${({ theme }) => theme.fonts.subContent};
     display: flex;
     & > div {
@@ -61,4 +53,5 @@ const StyledDiv = styled.div`
   }
 `;
 
+BroadcastStatusViewer.displayName = "BroadcastStatusViewer";
 export default BroadcastStatusViewer;
