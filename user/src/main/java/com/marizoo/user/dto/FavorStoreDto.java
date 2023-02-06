@@ -11,10 +11,16 @@ public class FavorStoreDto {
 
     private Long animalStoreId;
     private String storeName;
+    private String tel;
+    private String address;
+    private String img;
 
     @QueryProjection
-    public FavorStoreDto(Long animalStoreId, String storeName) {
+    public FavorStoreDto(Long animalStoreId, String storeName, String tel, String address, String img) {
         this.animalStoreId = animalStoreId;
         this.storeName = storeName;
+        this.tel = tel;
+        this.address = address;
+        this.img = img;
     }
 }

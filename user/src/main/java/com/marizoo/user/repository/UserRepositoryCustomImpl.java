@@ -28,7 +28,10 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         return queryFactory
                 .select(new QFavorStoreDto(
                         usersAnimalStore.animalStore.id,
-                        usersAnimalStore.animalStore.storeName
+                        usersAnimalStore.animalStore.storeName,
+                        usersAnimalStore.animalStore.tel,
+                        usersAnimalStore.animalStore.address,
+                        usersAnimalStore.animalStore.profileImg
                 ))
                 .from(usersAnimalStore)
                 .where(usersAnimalStore.user.id.eq(userId))
