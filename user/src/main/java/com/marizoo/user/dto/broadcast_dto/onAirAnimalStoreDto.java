@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class onAirAnimalStoreDto {
+    private Long id;
     private String name;
     private String profile;
 }

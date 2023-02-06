@@ -55,12 +55,12 @@ public class BroadcastController {
         List<onAirAnimalDto> animals = new ArrayList<>();
         for (BroadcastAnimal broadcastAnimal : broadcastAnimalList) {
             Animal animal = broadcastAnimal.getAnimal();
-            animals.add(new onAirAnimalDto(animal.getName(), animal.getGender(), animal.getSpecies().getClassification()));
+            animals.add(new onAirAnimalDto(animal.getId(), animal.getName(), animal.getGender(), animal.getSpecies().getClassification()));
         }
 
         // 방송 주체 = 가게  |  dto 형식으로 변환
         AnimalStore animalStore = broadcast.getAnimalStore();
-        onAirAnimalStoreDto animalStoreDto = new onAirAnimalStoreDto(animalStore.getStoreName(), animalStore.getProfileImg());
+        onAirAnimalStoreDto animalStoreDto = new onAirAnimalStoreDto(animalStore.getId(), animalStore.getStoreName(), animalStore.getProfileImg());
 
 //        api 형식으로 변환
         return new ResponseEntity<BroadcastApi>(new BroadcastApi(broadcastDto, animals, animalStoreDto), HttpStatus.OK);
