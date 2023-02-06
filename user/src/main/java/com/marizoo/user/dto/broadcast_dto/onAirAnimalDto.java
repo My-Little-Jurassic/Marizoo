@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class onAirAnimalDto {
+    private Long id;
     private String name;
     private Gender gender;
     private String classification;
