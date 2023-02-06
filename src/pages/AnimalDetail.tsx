@@ -32,38 +32,11 @@ const AnimalDetail = function () {
       classificationImg: "https://picsum.photos/200/300",
     },
     broadcast: {
+      id: 1,
       status: "onair",
     },
     feeds: ["고등어 초밥", "귀뚜라미"],
   };
-
-  // /stores/{store_id}/animals
-  const sampleStoreAnimals = [
-    {
-      animalName: "우파파",
-      classification: "axolotl",
-      img: "https://picsum.photos/200/300",
-      gender: "male",
-    },
-    {
-      animalName: "대파",
-      classification: "axolotl",
-      img: "https://picsum.photos/200/300",
-      gender: "female",
-    },
-    {
-      animalName: "쪽파",
-      classification: "axolotl",
-      img: "https://picsum.photos/200/300",
-      gender: "male",
-    },
-    {
-      animalName: "양파",
-      classification: "axolotl",
-      img: "https://picsum.photos/200/300",
-      gender: "female",
-    },
-  ];
 
   return (
     <StyledContainer>
@@ -71,7 +44,6 @@ const AnimalDetail = function () {
         <AnimalDetailSide
           currentAnimalName={sampleAnimalProfile.animalInfo.animalName}
           storeInfo={sampleAnimalProfile.storeInfo}
-          storeAnimals={sampleStoreAnimals}
         />
       </StyledLeftSide>
       <StyledRightSide>

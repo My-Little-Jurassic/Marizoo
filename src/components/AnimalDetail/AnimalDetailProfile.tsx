@@ -1,5 +1,6 @@
 import React from "react";
 import { TbGenderFemale, TbGenderMale } from "react-icons/tb";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import AnimalDetailRedBtn from "./AnimalDetailRedBtn";
 
@@ -14,6 +15,7 @@ interface IAnimalInfo {
 }
 
 interface IBroadcast {
+  id: number;
   status: string;
 }
 
@@ -33,7 +35,14 @@ const AnimalDetailProfile = function (props: IProps) {
   if (props.animalProfile.broadcast.status === "reserve") {
     statusBtn = <AnimalDetailRedBtn label="방송 대기중" type={0} isDisable={true} />;
   } else if (props.animalProfile.broadcast.status === "onair") {
-    statusBtn = <AnimalDetailRedBtn label="지금 방송중!" type={0} isDisable={false} />;
+    statusBtn = (
+      <NavLink
+        to={`/broadcast/${props.animalProfile.broadcast.id}`}
+        style={{ textDecoration: "none" }}
+      >
+        <AnimalDetailRedBtn label="지금 방송중!" type={0} isDisable={false} />
+      </NavLink>
+    );
   } else if (props.animalProfile.broadcast.status === "finish") {
     statusBtn = <AnimalDetailRedBtn label="방송 종료" type={0} isDisable={true} />;
   }
