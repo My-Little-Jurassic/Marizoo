@@ -23,7 +23,7 @@ const CardVote = function (props: IProps) {
 export default CardVote;
 
 const StyledContainer = styled.div<{ isSelected: boolean }>`
-  width: 240px;
+  width: 100%;
   height: 160px;
   display: flex;
   justify-content: center;

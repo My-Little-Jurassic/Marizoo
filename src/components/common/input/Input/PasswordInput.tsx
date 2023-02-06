@@ -111,7 +111,7 @@ const PasswordInput = forwardRef<HTMLInputElement, IProps>(
           onBlur={onBlur}
         />
         <button onClick={toggleType} type="button">
-          {type === "password" ? <TbEye /> : <TbEyeOff />}
+          {type === "password" ? <TbEyeOff /> : <TbEye />}
         </button>
       </StyledDiv>
     );
