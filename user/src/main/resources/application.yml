@@ -5,9 +5,13 @@ spring:
     username: # MySQL DB Username
     password: # MySQL DB password
 
-jpa:
-  hibernate:
-    ddl-auto: create
-  properties:
+  jpa:
     hibernate:
-      format_sql: true
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher # swagger
