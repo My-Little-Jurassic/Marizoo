@@ -39,7 +39,7 @@ function LikeBtn(props: IProps) {
       }}
     >
       <div className="thumb-up-icon">
-        <TbThumbUp size={32} />
+        <TbThumbUp size={32} fill={props.isLiked === true ? "#f2c619" : "none"} />
       </div>
       <StyledLabel>좋아요</StyledLabel>
     </StyledLikeBtn>

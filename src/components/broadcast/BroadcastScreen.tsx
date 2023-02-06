@@ -13,6 +13,7 @@ import {
 import { GreenBtn, ReactionBtn } from "../common/button";
 import VoteModal from "./VoteModal";
 import BroadcastVideo from "./BroadcastVideo";
+import BroadcastCombo from "./BroadcastCombo";
 
 interface IProps {
   title: string;
@@ -80,7 +81,7 @@ const BroadcastScreen = function (props: IProps) {
     setIsReactionPlaying(true);
   };
 
-  // 리액션 3초 하고 다시 돌리기
+  // 리액션 3초 하고 다시 돌리기 -> 콤보 끝날때까지로 변경 필요
   useEffect(() => {
     if (isReactionPlaying === false) {
       return;
@@ -94,7 +95,7 @@ const BroadcastScreen = function (props: IProps) {
       } else {
         localStorage.setItem("effectCnt", "1");
       }
-    }, 3000);
+    }, 20000);
   }, [isReactionPlaying]);
 
   return (
@@ -105,6 +106,7 @@ const BroadcastScreen = function (props: IProps) {
       isVoteModalOpened={isVoteModalOpened}
       waitingReaction={waitingReaction}
     >
+      {isReactionPlaying && <BroadcastCombo clientX={clientX} clientY={clientY} />}
       {isReactionPlaying && waitingReaction === "쓰다듬기" && (
         <SytledIframe
           src="https://embed.lottiefiles.com/animation/97180"

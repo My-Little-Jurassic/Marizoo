@@ -38,14 +38,8 @@ const BroadcastContent = function (props: IProps) {
           closeModal={() => setIsResultModalOpened(false)}
         />
       )}
-      <StyledTitle>{props.title}</StyledTitle>
       <StyledSubTitleContainer>
-        <StyledCountInfoContainer>
-          <TbUsers size={20} />
-          <StyledSpan>{props.viewers} 명</StyledSpan>
-          <TbThumbUp size={20} />
-          <StyledSpan>{props.numberOfLikes} 회</StyledSpan>
-        </StyledCountInfoContainer>
+        <StyledTitle>{props.title}</StyledTitle>
         <StyledButtonContainer>
           {props.isVoted ? (
             <GreenBtn label="투표하기" type={0} isDisable={true} />
@@ -60,6 +54,13 @@ const BroadcastContent = function (props: IProps) {
           <LikeBtn onClick={props.like} isLiked={props.isLiked} />
         </StyledButtonContainer>
       </StyledSubTitleContainer>
+      <StyledCountInfoContainer>
+        <TbUsers size={20} />
+        <StyledSpan>{props.viewers} 명</StyledSpan>
+        <TbThumbUp size={20} />
+        <StyledSpan>{props.numberOfLikes} 회</StyledSpan>
+      </StyledCountInfoContainer>
+
       <StyledHr />
       <StyledDetail>
         {props.detail}
@@ -80,7 +81,7 @@ const StyledContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 `;
 
 const StyledTitle = styled.div`

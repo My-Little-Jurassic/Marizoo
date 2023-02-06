@@ -145,7 +145,11 @@ const StyledContainer = styled.div`
   height: 100%;
   display: flex;
   gap: 32px;
+  @media screen and (max-width: 1400px) {
+    padding: 80px 2vw;
+  }
   @media screen and (max-width: 900px) {
+    padding: 80px 4vw;
     flex-direction: column;
   }
   @media screen and (max-width: 600px) {
@@ -170,6 +174,7 @@ const StyledRightSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+  padding: 0 8px;
   overflow: scroll;
   &::-webkit-scrollbar {
     display: none;
