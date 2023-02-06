@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class OwnedAnimalDto {
 
+    private Long id;
     private String name;
     private String classification;
     private String img;
@@ -16,7 +17,8 @@ public class OwnedAnimalDto {
     }
 
     @QueryProjection
-    public OwnedAnimalDto(String name, String classification, String img, Gender gender) {
+    public OwnedAnimalDto(Long id, String name, String classification, String img, Gender gender) {
+        this.id = id;
         this.name = name;
         this.classification = classification;
         this.img = img;

@@ -1,5 +1,7 @@
 package com.marizoo.user.api.animalstore_api;
 
+import com.marizoo.user.dto.animalstore_dto.ReservationAnimalStoreDto;
+import com.marizoo.user.dto.play_dto.ReservationPlayDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,9 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReservationResponse {
 
-    private Long userPlayId;
-    private String store_name;
-    private LocalDateTime playDateTime;
-    private Integer totalVisitor;
+    private ReservationAnimalStoreDto animalStoreInfo;
+    private ReservationPlayDto playInfo;
 
 }

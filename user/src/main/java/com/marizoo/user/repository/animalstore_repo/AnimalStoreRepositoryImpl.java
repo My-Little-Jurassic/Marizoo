@@ -46,7 +46,7 @@ public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
     public List<OwnedAnimalDto> findOwnedAnimalInfo(Long storeId){
 
         List<OwnedAnimalDto> findOwnedAnimal = queryFactory
-                .select(new QOwnedAnimalDto(animal.name, species.classification, animal.img, animal.gender))
+                .select(new QOwnedAnimalDto(animal.id, animal.name, species.classification, animal.img, animal.gender))
                 .from(animal)
                 .join(animal.species, species)
                 .where(animal.animalStore.id.eq(storeId))
@@ -81,7 +81,8 @@ public class AnimalStoreRepositoryImpl implements AnimalStoreRepositoryCustom{
 
     public UsersPlayDto findStoreNameForReservation(Long bookId){
         UsersPlayDto ReservationInfo = queryFactory
-                .select(new QUsersPlayDto(animalStore.storeName, play.playDateTime))
+                .select(new QUsersPlayDto(animalStore.id, animalStore.storeName,
+                        play.title, play.runningTime, play.maxVisitor, play.playDateTime))
                 .from(play)
                 .join(play.animalStore, animalStore)
                 .where(play.eq(

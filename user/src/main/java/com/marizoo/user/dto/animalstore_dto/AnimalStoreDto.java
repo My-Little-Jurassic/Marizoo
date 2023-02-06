@@ -7,6 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class AnimalStoreDto {
 
+    private Long id;
     private String store_name;
     private String tel;
     private String address;

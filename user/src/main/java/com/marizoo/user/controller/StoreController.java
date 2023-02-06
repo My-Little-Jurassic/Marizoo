@@ -36,6 +36,7 @@ public class StoreController {
         List<AnimalStore> AnimalStoreList = animalStoreService.findAnimalStores();
         List<AnimalStoreDto> AnimalStoreDtoList = AnimalStoreList.stream()
                 .map(as -> new AnimalStoreDto(
+                        as.getId(),
                         as.getStoreName(),
                         as.getTel(),
                         as.getAddress(),
@@ -70,6 +71,7 @@ public class StoreController {
             // 검색 결과 API 객체로 변환.
             AnimalStoreDtoList = storeList.stream()
                     .map(as -> new AnimalStoreDto(
+                            as.getId(),
                             as.getStoreName(),
                             as.getTel(),
                             as.getAddress(),
@@ -127,7 +129,10 @@ public class StoreController {
         List<Play> playlist = animalStoreService.findPlayByStore(store_id);
         List<StorePlayDto> playDtoList = playlist.stream()
                 .map(m -> new StorePlayDto(
+                        m.getId(),
+                        m.getPlayDateTime(),
                         m.getTitle(),
+                        m.getDescription(),
                         m.getImg())).collect(Collectors.toList());
 
         return new ResponseEntity<>(new StorePlayListResponse(playDtoList), HttpStatus.OK);
