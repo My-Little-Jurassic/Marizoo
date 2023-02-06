@@ -34,11 +34,17 @@ function CafeDetailMain(props: IProps) {
 export default CafeDetailMain;
 
 const StyledCafeDetailMain = styled.div`
-  width: 100%;
-  min-height: 100px;
+  min-height: 100vh;
   & > h3 {
     font: ${({ theme }) => theme.fonts.header3};
     color: ${({ theme }) => theme.colors.primaryText};
+    padding-inline: 16px;
+  }
+  & .free-mode-swiper {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    margin-bottom: 32px;
   }
   @media screen and (min-width: 900px) {
     margin-top: 220px;

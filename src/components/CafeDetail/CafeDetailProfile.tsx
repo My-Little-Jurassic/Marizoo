@@ -64,7 +64,12 @@ function CafeDetailProfile(props: IProps) {
 export default CafeDetailProfile;
 
 const StyledCafeDetailProfile = styled.aside`
+  padding-inline: 16px;
+  box-sizing: border-box;
   width: 100%;
+  @media screen and (max-width: 900px) {
+    margin-top: 10vh;
+  }
 `;
 
 const StyledProfileImg = styled.div<{ imgSrc: string }>`

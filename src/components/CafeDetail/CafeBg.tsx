@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+
 const { kakao } = window as any;
 
 function CafeBg(props: { lat: number; lng: number }) {
-  const [map, setMap] = useState<Element | null>(null);
-
   //최초 1회 지도 생성
   useEffect(() => {
     const roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import { CardLabelLarge } from "../common/card";
+import { FreeModeSwiper } from "../common/swiper";
 
 const dataList = [
   {
@@ -30,6 +31,8 @@ const dataList = [
       "https://picsum.photos/200/300",
       "https://picsum.photos/200/300",
       "https://picsum.photos/200/300",
+      "https://picsum.photos/200/300",
+      "https://picsum.photos/200/300",
     ],
   },
 ];
@@ -37,30 +40,21 @@ const dataList = [
 function CafeDetailOnairs() {
   const onairSwiper = dataList.map((data, index) => (
     <Link to={"/"} key={`data-${index}`} style={{ textDecoration: "none" }}>
-      <StyledCafeOnairs>
-        <CardLabelLarge
-          title={data.title}
-          thumbnailSrc={data.thumbnail}
-          classficationImgList={data.classificationsImgs}
-        ></CardLabelLarge>
-      </StyledCafeOnairs>
+      <CardLabelLarge
+        title={data.title}
+        thumbnailSrc={data.thumbnail}
+        classficationImgList={data.classificationsImgs}
+      ></CardLabelLarge>
     </Link>
   ));
 
-  return <StyledCafeDetailOnairs>{onairSwiper}</StyledCafeDetailOnairs>;
+  return (
+    <FreeModeSwiper
+      elementList={onairSwiper}
+      slidesPerView={window.innerWidth > 600 ? 2.5 : 1.5}
+      spaceBetween={16}
+    ></FreeModeSwiper>
+  );
 }
 
 export default CafeDetailOnairs;
-
-const StyledCafeDetailOnairs = styled.section`
-  white-space: nowrap;
-  overflow: auto;
-  display: flex;
-  align-items: center;
-  padding-block: 16px;
-`;
-
-const StyledCafeOnairs = styled.div`
-  width: 285px;
-  margin: 16px;
-`;

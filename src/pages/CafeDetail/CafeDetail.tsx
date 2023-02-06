@@ -42,7 +42,6 @@ function CafeDetail() {
 export default CafeDetail;
 
 const StyledCafeDetail = styled.main`
-  z-index: -99;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -54,12 +53,11 @@ const StyledCafeBg = styled.div`
   z-index: 0;
   position: absolute;
   width: 100%;
-  height: 280px;
-  margin-top: 60px;
+  height: 340px;
 `;
 
 const StyledCafeDetailGrid = styled.div`
   margin-top: 160px;
-  width: calc(100% - 32px);
+  width: 100%;
   max-width: 1056px;
 `;
