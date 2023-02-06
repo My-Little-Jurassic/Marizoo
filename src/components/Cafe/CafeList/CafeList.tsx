@@ -11,7 +11,7 @@ interface IProps {
   cafeData: {
     animal_store_id: number;
     store_name: string;
-    discription: string;
+    description: string;
     address: string;
     tel: string;
     profile_img: string;
@@ -119,6 +119,8 @@ const StyledCafeList = styled.aside<{ isListMax: boolean; cafeDataLen: number }>
     border-radius: 32px 32px 0px 0px;
     background-color: ${(props) => props.theme.colors.secondaryBg + "cc"};
     backdrop-filter: blur(10px);
+    padding: 0px 16px 16px 16px;
+    box-sizing: border-box;
   }
   @media screen and (min-width: 600px) {
     z-index: 50;
@@ -129,6 +131,7 @@ const StyledCafeList = styled.aside<{ isListMax: boolean; cafeDataLen: number }>
     width: 32vw;
     height: 100%;
     padding: 16px;
+    box-sizing: border-box;
     background-color: ${(props) => props.theme.colors.secondaryBg + "33"};
     backdrop-filter: blur(10px);
   }
@@ -159,7 +162,7 @@ const StyledMaxBar = styled.div`
 
 const StyledSearchInputBox = styled.div`
   @media screen and (max-width: 600px) {
-    padding: 0px 16px 8px 16px;
+    margin-bottom: 16px;
   }
 `;
 

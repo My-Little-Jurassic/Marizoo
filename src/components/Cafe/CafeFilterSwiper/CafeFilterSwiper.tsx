@@ -41,7 +41,7 @@ function FilterSwiper(props: IProps) {
 export default FilterSwiper;
 
 const StyledSwiper = styled.div<{ searchKeyword: string | null }>`
-  width: 90%;
+  width: 100%;
   height: ${(props) => (props.searchKeyword === null ? "80px" : "0px")};
   filter: ${(props) => (props.searchKeyword === null ? "opacity(1)" : "opacity(0)")};
   transition: all 0.5s;

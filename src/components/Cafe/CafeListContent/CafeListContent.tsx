@@ -6,7 +6,7 @@ interface IProps {
   cafe: {
     animal_store_id: number;
     store_name: string;
-    discription: string;
+    description: string;
     address: string;
     tel: string;
     profile_img: string;
@@ -38,9 +38,6 @@ function CafeListContent(props: IProps) {
             >
               {props.cafe.store_name}
               <StyledStoreContent>{props.cafe.address}</StyledStoreContent>
-              {props.focusedCafe === props.cafe.animal_store_id ? (
-                <StyledStoreDiscription>{props.cafe.discription}</StyledStoreDiscription>
-              ) : null}
             </StyledStoreName>
           </StyledCafeInfoBox>
         </StyledCafeProfile>
@@ -69,8 +66,7 @@ const StyledCafeListContent = styled.div<{ focusedCafe: number | null; animal_st
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  margin-block: 8px;
-  width: 100%;
+  box-sizing: border-box;
   @media screen and (min-width: 600px) {
     ${(props) => props.theme.shadow};
     ${(props) => props.theme.styles.card};
@@ -80,18 +76,13 @@ const StyledCafeListContent = styled.div<{ focusedCafe: number | null; animal_st
         : props.theme.colors.primaryBg + "aa"};
     scale: ${(props) => (props.focusedCafe === props.animal_store_id ? "1.02" : "1")};
   }
+  margin-bottom: 8px;
 `;
 
 const StyledCafeProfile = styled.div`
   width: 100%;
   display: flex;
-  @media screen and (max-width: 600px) {
-    padding-inline: 16px;
-    padding-bottom: 16px;
-  }
-  @media screen and (min-width: 600px) {
-    padding: 16px;
-  }
+  padding: 16px;
 `;
 
 const StyledCafeProfileImg = styled.img`
@@ -100,13 +91,15 @@ const StyledCafeProfileImg = styled.img`
   height: 64px;
   border-radius: 32px;
   object-fit: cover;
+  flex-shrink: 0;
 `;
 
 const StyledCafeInfoBox = styled.div`
   display: inline-flex;
-  width: calc(100% - 100px);
+  width: 100%;
   flex-direction: column;
   margin-left: 16px;
+  justify-content: center;
 `;
 
 const StyledStoreName = styled.h3<{ focusedCafe: number | null; animal_store_id: number }>`
@@ -119,14 +112,8 @@ const StyledStoreName = styled.h3<{ focusedCafe: number | null; animal_store_id:
         : props.theme.colors.primaryText};
   }
   word-break: break-all;
-  margin-bottom: 4px;
 `;
 const StyledStoreContent = styled.p`
   font: ${(props) => props.theme.fonts.tinyContent};
-  word-break: break-all;
-`;
-
-const StyledStoreDiscription = styled.p`
-  font: ${(props) => props.theme.fonts.tinyContentBold};
   word-break: break-all;
 `;

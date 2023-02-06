@@ -9,7 +9,7 @@ const cafeData = [
   {
     animal_store_id: 0,
     store_name: "마리쥬 파충류카페asfasdfasdfasdfasdfasdfasdf",
-    discription: "설명 어쩌구 저쩌구",
+    description: "설명 어쩌구 저쩌구",
     address: "천안시 어딘가",
     tel: "000-000-0000",
     profile_img: "https://picsum.photos/200/300",
@@ -19,7 +19,7 @@ const cafeData = [
   {
     animal_store_id: 1,
     store_name: "민우네집",
-    discription: "설명 어쩌구 저쩌구",
+    description: "설명 어쩌구 저쩌구",
     address: "롯데타워 352층",
     tel: "000-000-0000",
     profile_img: "https://picsum.photos/200/300",
@@ -29,7 +29,7 @@ const cafeData = [
   {
     animal_store_id: 2,
     store_name: "우파파루파파",
-    discription: "설명 어쩌구 저쩌구",
+    description: "설명 어쩌구 저쩌구",
     address: "어딘가",
     tel: "000-000-0000",
     profile_img: "https://picsum.photos/200/300",
@@ -39,7 +39,7 @@ const cafeData = [
   {
     animal_store_id: 3,
     store_name: "렙타일샵",
-    discription: "설명 어쩌구 저쩌구",
+    description: "설명 어쩌구 저쩌구",
     address: "제주도 어딘가",
     tel: "000-000-0000",
     profile_img: "https://picsum.photos/200/300",
@@ -54,7 +54,7 @@ const { kakao } = window as any;
 interface ICafeData {
   animal_store_id: number;
   store_name: string;
-  discription: string;
+  description: string;
   address: string;
   tel: string;
   profile_img: string;
