@@ -63,7 +63,7 @@ public class Broadcast extends BaseEntity {
 
     // 방송 시작
     public static Broadcast createBroadcast(
-            String title, String description, String thumbnail, AnimalStore animalStore, List<BroadcastAnimal> broadcastAnimalList, Vote vote){
+            String title, String description, String thumbnail, AnimalStore animalStore, List<BroadcastAnimal> broadcastAnimalList){
         Broadcast broadcast = new Broadcast();
         broadcast.setTitle(title);
         broadcast.setDescription(description);
@@ -74,8 +74,6 @@ public class Broadcast extends BaseEntity {
         for (BroadcastAnimal broadcastAnimal : broadcastAnimalList) {
             broadcast.addBroadcastAnimal(broadcastAnimal);
         }
-
-        broadcast.setVote(vote);
 
         return broadcast;
     }

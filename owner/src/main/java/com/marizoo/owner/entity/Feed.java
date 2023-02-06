@@ -20,4 +20,11 @@ public class Feed extends BaseEntity {
     private String name;
 
     private String img;
+
+    @OneToMany(mappedBy = "feed")
+    private List<AnimalFeed> animalFeeds = new ArrayList<>();
+
+    @OneToMany(mappedBy = "species")
+    private List<SpeciesFeed> speciesFeeds = new ArrayList<>();
+
 }

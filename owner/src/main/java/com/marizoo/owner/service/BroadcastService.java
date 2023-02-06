@@ -1,12 +1,13 @@
 package com.marizoo.owner.service;
 
+import com.marizoo.owner.api.response.CreateBroadcastResponse;
 import com.marizoo.owner.entity.*;
 import com.marizoo.owner.repository.*;
+import com.marizoo.owner.repository.animalStore.AnimalStoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BroadcastService {
     private final BroadcastRepository broadcastRepository;
-    private final AnimalStoretRepository animalStoretRepository;
+    private final AnimalStoreRepository animalStoretRepository;
     private final FeedRepository feedRepository;
     private final VoteRepository voteRepository;
     private final AnimalRepository animalRepository;
@@ -45,13 +46,13 @@ public class BroadcastService {
     @Transactional
     public Long createBroadcast(
             String title, String description, String thumbnail, Long animalStoreId,
-            List<Long> animalIdList, String voteTitle, List<Long> feedIdList
+            List<Long> animalIdList
     ){
         // entity
         // animal store find
         Optional<AnimalStore> optionalAnimalStore = animalStoretRepository.findById(animalStoreId);
         if(optionalAnimalStore.isEmpty()){
-            return -1L;
+            return null;
         }
         AnimalStore animalStore = optionalAnimalStore.get();
 
@@ -60,30 +61,15 @@ public class BroadcastService {
         for (Long aLong : animalIdList) {
             Optional<Animal> optionalAnimal = animalRepository.findById(aLong);
             if (optionalAnimal.isEmpty()) {
-                return -1L;
+                return null;
             }
             Animal animal = optionalAnimal.get();
             BroadcastAnimal broadcastAnimal = BroadcastAnimal.createBroadcastAnimal(animal, animal.getSpecies().getClassification(), animal.getSpecies().getClassificationImg());
             broadcastAnimalList.add(broadcastAnimal);
         }
 
-        // feedVoteList 생성 : 투표 옵션 리슽
-        List<FeedVote> feedVoteList = new ArrayList<>();
-        for (Long aLong : feedIdList) {
-            Optional<Feed> optionalFeed = feedRepository.findById(aLong);
-            if (optionalFeed.isEmpty()) {
-                return -1L;
-            }
-            FeedVote feedVote = FeedVote.createFeedVote(optionalFeed.get());
-            feedVoteList.add(feedVote);
-        }
-
-        // vote 생성
-        Vote vote = Vote.createVote(voteTitle, feedVoteList);
-        voteRepository.save(vote);
-
         // 방송 생성
-        Broadcast broadcast = Broadcast.createBroadcast(title, description, thumbnail, animalStore, broadcastAnimalList, vote);
+        Broadcast broadcast = Broadcast.createBroadcast(title, description, thumbnail, animalStore, broadcastAnimalList);
 
         // 방송 저장
         broadcastRepository.save(broadcast);
