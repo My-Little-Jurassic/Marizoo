@@ -14,7 +14,7 @@ function HomeNavTab() {
       setActiveTab(0);
     } else if (location.pathname === "/cafe") {
       setActiveTab(1);
-    } else if (location.pathname === "/dict") {
+    } else if (location.pathname === "/pedia") {
       setActiveTab(2);
     }
   }, [location]);
@@ -43,7 +43,7 @@ function HomeNavTab() {
           </StyledTabIcon>
         </NavLink>
         <NavLink
-          to={"/dict"}
+          to={"/pedia"}
           style={{ textDecoration: "none" }}
           className={({ isActive }) => (isActive ? "active" : "deactive")}
         >

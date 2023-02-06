@@ -1,10 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import PediaContent from "./PediaContent";
 import PediaSpeciesList from "./PediaSpeciesList";
 
 const PediaContainer = (): JSX.Element => {
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const thumbUpIcon: Element | null = document.querySelector("#lens"); // 엄지 아이콘
+    thumbUpIcon?.animate(
+      // 아이콘이 움직일 애니메이션
+      [
+        { filter: "none" },
+        { filter: "brightness(3)" },
+        { filter: "none" },
+        { filter: "brightness(3)" },
+        { filter: "none" },
+        { filter: "brightness(3)" },
+        { filter: "none" },
+        { filter: "brightness(3)" },
+        { filter: "none" },
+        { filter: "brightness(3)" },
+        { filter: "none" },
+      ],
+      {
+        duration: 1000, // 시간
+      },
+    );
+  }, [selectedSpeciesId]);
 
   return (
     <StyledPediaContainer>
@@ -67,10 +90,14 @@ const flicker = () => keyframes`
 
 const StyledPediaContainer = styled.main`
   @media screen and (max-width: 900px) {
+    margin-top: 156px;
+  }
+  @media screen and (max-width: 600px) {
     margin-top: 60px;
+    margin-bottom: 80px;
   }
   @media screen and (min-width: 900px) {
-    margin-top: 80px;
+    margin-top: 156px;
     border-radius: 32px;
     margin-bottom: 32px;
   }
@@ -106,7 +133,7 @@ const StyledPediaContainer = styled.main`
     }
     & #redLed {
       ${({ theme }) => theme.shadow};
-      animation: ${flicker} 3s linear infinite;
+      animation: ${flicker} 3s ease infinite;
       width: 16px;
       height: 16px;
       border: 2px solid white;
@@ -115,7 +142,7 @@ const StyledPediaContainer = styled.main`
     }
     & #yellowLed {
       ${({ theme }) => theme.shadow};
-      animation: ${flicker} 7s linear infinite;
+      animation: ${flicker} 7s ease infinite;
       width: 16px;
       height: 16px;
       border: 2px solid white;
@@ -124,7 +151,7 @@ const StyledPediaContainer = styled.main`
     }
     & #greenLed {
       ${({ theme }) => theme.shadow};
-      animation: ${flicker} 5s linear infinite;
+      animation: ${flicker} 5s ease infinite;
       width: 16px;
       height: 16px;
       border: 2px solid white;

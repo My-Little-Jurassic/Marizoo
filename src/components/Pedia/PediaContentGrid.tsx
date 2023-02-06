@@ -43,9 +43,11 @@ const StyledPediaContentGrid = styled.section`
   border-radius: 32px;
   margin-top: 32px;
   padding: 32px;
+  border: ${({ theme }) => theme.colors.brandColors.basaltGray[900]} 8px solid;
+  box-shadow: rgb(41, 171, 69) 3px 3px 6px 0px inset,
+    rgba(195, 195, 195, 0.5) -3px -3px 6px 1px inset;
   background-color: ${({ theme }) => theme.colors.brandColors.jurassicGreen[300]};
   & div {
     filter: grayscale(100);
-    mix-blend-mode: multiply;
   }
 `;

@@ -37,7 +37,7 @@ const StyledPediaSpecies = styled.div<{ spaciesId: number; selectedSpeciesId: nu
     border: ${(props) =>
         props.spaciesId === props.selectedSpeciesId
           ? ({ theme }) => theme.colors.yellow
-          : ({ theme }) => theme.colors.secondaryBg}
+          : ({ theme }) => theme.colors.brandColors.basaltGray[50]}
       4px solid;
     ${(props) =>
       props.spaciesId === props.selectedSpeciesId
@@ -58,7 +58,7 @@ const StyledPediaSpecies = styled.div<{ spaciesId: number; selectedSpeciesId: nu
     background-color: ${(props) =>
       props.spaciesId === props.selectedSpeciesId
         ? ({ theme }) => theme.colors.yellow
-        : ({ theme }) => theme.colors.secondaryBg};
+        : ({ theme }) => theme.colors.brandColors.basaltGray[50]};
     & > img {
       width: 48px;
     }

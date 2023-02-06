@@ -9,6 +9,7 @@ import useTheme from "./styles/themes/useTheme";
 import { Nav } from "./components/common/navbar";
 import { darkTheme } from "./styles/themes/darkTheme";
 import { lightTheme } from "./styles/themes/lightTheme";
+import Pedia from "./pages/Pedia/Pedia";
 
 function App() {
   const [themeMode, toggleTheme] = useTheme();
@@ -19,6 +20,7 @@ function App() {
       <Nav themeMode={themeMode} toggleTheme={toggleTheme}></Nav>
       <Routes>
         <Route path="/" element={<Home />}></Route>
+        <Route path="/pedia" element={<Pedia></Pedia>}></Route>
       </Routes>
     </ThemeProvider>
   );
