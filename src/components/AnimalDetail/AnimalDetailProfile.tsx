@@ -33,7 +33,7 @@ const AnimalDetailProfile = function (props: IProps) {
 
   let statusBtn;
   if (props.animalProfile.broadcast.status === "reserve") {
-    statusBtn = <AnimalDetailRedBtn label="방송 대기중" type={0} isDisable={true} />;
+    statusBtn = <AnimalDetailRedBtn label="방송 대기중" type={2} isDisable={true} />;
   } else if (props.animalProfile.broadcast.status === "onair") {
     statusBtn = (
       <NavLink
@@ -44,7 +44,7 @@ const AnimalDetailProfile = function (props: IProps) {
       </NavLink>
     );
   } else if (props.animalProfile.broadcast.status === "finish") {
-    statusBtn = <AnimalDetailRedBtn label="방송 종료" type={0} isDisable={true} />;
+    statusBtn = <AnimalDetailRedBtn label="지금은 쉬고 있어요" type={1} isDisable={true} />;
   }
 
   return (

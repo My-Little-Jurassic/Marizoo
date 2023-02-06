@@ -17,7 +17,7 @@ const AnimalDetailDescription = function (props: IProps) {
   return (
     <StyledContainer>
       <StyledHeader>
-        저는 <StyledColorHeader>{props.speciesInfo.classification}</StyledColorHeader>이에요
+        저는 <StyledColorHeader>{props.speciesInfo.classification}</StyledColorHeader>입니다.
       </StyledHeader>
       <StyledSpan>
         평균 수명은 <StyledBold>{props.speciesInfo.lifeSpan}년</StyledBold>이에요.

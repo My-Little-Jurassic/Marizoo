@@ -40,30 +40,35 @@ const StyledBtn = styled.button<{ btnType: number; isDisable: boolean }>`
         return props.theme.colors.red;
       }
     } else if (props.btnType === 1) {
-      return props.theme.colors.primaryBg;
+      if (props.isDisable) {
+        return props.theme.colors.disable;
+      } else {
+        return props.theme.colors.yellow;
+      }
     } else {
-      return props.theme.colors.secondaryBg;
+      return props.theme.colors.yellow;
     }
   }};
   box-shadow: 0 0 0
     ${(props) => {
-      if (props.btnType !== 1) {
-        return null;
+      if (props.btnType === 2) {
+        return `4px ${props.theme.colors.yellow}`;
+      }
+      if (props.isDisable) {
+        return `4px ${props.theme.colors.disable}`;
       } else {
-        if (props.isDisable) {
-          return `4px ${props.theme.colors.disable}`;
-        } else {
-          return `4px ${props.theme.colors.red}`;
-        }
+        return `4px ${props.theme.colors.red}`;
       }
     }}
     inset;
   color: ${(props) => {
     if (props.btnType === 0) {
       return props.theme.colors.primaryBg;
+    } else if (props.btnType === 2) {
+      return props.theme.colors.brandColors.basaltGray["900"];
     } else {
       if (props.isDisable) {
-        return props.theme.colors.disable;
+        return props.theme.colors.primaryText;
       } else {
         return props.theme.colors.red;
       }
