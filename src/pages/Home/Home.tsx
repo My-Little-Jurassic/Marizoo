@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { TbX } from "react-icons/tb";
 import styled from "styled-components";
-import { SearchInput } from "../../components/common/input";
 
-import { HomeNav } from "../../components/common/navbar";
-import { FilterSwiper, LiveGrid } from "../../components/Home";
+import { SearchInput } from "../../components/common/input";
+import { HomeFilterSwiper, HomeLiveGrid } from "../../components/Home";
 
 function Home() {
   // 동물 정보 더미데이터
@@ -24,7 +23,7 @@ function Home() {
 
   // search keyword 변화에 다른 hook
   useEffect(() => {
-    console.log(searchKeyword);
+    console.log("input search", searchKeyword);
     if (searchKeyword === "") {
       setSearchKeyword(null);
     }
@@ -32,7 +31,6 @@ function Home() {
 
   return (
     <StyledMain>
-      <StyledSpacer space={180} />
       <StyledHomeInput>
         <SearchInput
           value={""} // 초기 값
@@ -46,7 +44,7 @@ function Home() {
         ></SearchInput>
       </StyledHomeInput>
       <StyledSpacer space={32} />
-      <FilterSwiper
+      <HomeFilterSwiper
         animalList={animalList}
         focusdFilter={focusdFilter}
         setFocusdFilter={setFocusdFilter}
@@ -68,7 +66,7 @@ function Home() {
           </StyledSearchResetBtn>
         )}
       </StyledTitle>
-      <LiveGrid></LiveGrid>
+      <HomeLiveGrid />
     </StyledMain>
   );
 }
@@ -80,24 +78,33 @@ const StyledMain = styled.main`
   flex-direction: column;
   align-items: center;
   background-color: ${(props) => props.theme.colors.primaryBg};
+  padding: 16px;
 `;
 
 const StyledHomeInput = styled.div`
   display: flex;
   justify-content: center;
-  width: 80%;
+  width: 90%;
+  @media screen and (max-width: 600px) {
+    margin-top: 80px;
+  }
+  @media screen and (min-width: 600px) {
+    margin-top: 180px;
+    margin-bottom: 20px;
+  }
 `;
 
 const StyledTitle = styled.h4`
   font: ${(props) => props.theme.fonts.header4};
   color: ${(props) => props.theme.colors.primaryText};
   text-align: left;
-  width: 90%;
+  width: 100%;
   max-width: 927px;
+  padding-inline: 16px;
+  box-sizing: border-box;
   @media screen and (max-width: 900px) {
     max-width: 620px;
   }
-  margin-bottom: 32px;
 `;
 
 const StyledSpacer = styled.div<{ space: number }>`

@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { Grid } from "@mui/material";
 
-import CardLabelLarge from "../../common/card/CardLabelLarge/CardLabelLarge";
+import { CardLabelLarge } from "../common/card";
 
 const itemList: JSX.Element[] = [];
 for (let i = 0; i < 10; i++) {
@@ -18,20 +18,22 @@ for (let i = 0; i < 10; i++) {
   );
 }
 
-function LiveGrid() {
+function HomeLiveGrid() {
   return (
-    <StyledLiveGridContainer>
+    <StyledHomeLiveGrid>
       <Grid container columnSpacing={4}>
         {itemList}
       </Grid>
-    </StyledLiveGridContainer>
+    </StyledHomeLiveGrid>
   );
 }
 
-export default LiveGrid;
+export default HomeLiveGrid;
 
-const StyledLiveGridContainer = styled.div`
-  width: 90%;
+const StyledHomeLiveGrid = styled.div`
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
   max-width: 927px;
   @media screen and (max-width: 900px) {
     max-width: 620px;
