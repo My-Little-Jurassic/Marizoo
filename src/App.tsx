@@ -12,7 +12,6 @@ import { lightTheme } from "./styles/themes/lightTheme";
 import { useAppSelector } from "./store";
 import { selectModal } from "./store/modalSlice";
 import { Modal } from "./components/common/modal";
-import StoreReservation from "./pages/StoreReservation";
 
 function App() {
   const [themeMode, toggleTheme] = useTheme();
@@ -24,7 +23,6 @@ function App() {
       <Nav themeMode={themeMode} toggleTheme={toggleTheme}></Nav>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/reservation/:cafe_id/:play_id" element={<StoreReservation />}></Route>
       </Routes>
 
       {modal.visible ? <Modal content={modal.content} /> : null}
