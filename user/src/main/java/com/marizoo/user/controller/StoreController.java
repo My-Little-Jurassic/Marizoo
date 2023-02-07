@@ -155,13 +155,15 @@ public class StoreController {
     }
 
 
-    // 예약 정보 기입
-
-    @GetMapping("/stores/books")
+    // 체험 프로그램 예약
+    @PostMapping("/stores/books")
     public ResponseEntity postReservation(@RequestBody ReservationRequest reservationRequest){
-
-
-        return new ResponseEntity(HttpStatus.OK);
+        Long usersPlayId = reservationService.reserve(reservationRequest.getUid(), reservationRequest.getPlayId(), reservationRequest.getTotalVisitor());
+        if(usersPlayId != null){
+            return new ResponseEntity<>(usersPlayId, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("예약 실패",HttpStatus.BAD_REQUEST);
+        }
     }
 
     // 동물 상세 정보 제공.
