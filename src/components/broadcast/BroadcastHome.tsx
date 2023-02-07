@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { ProfileStore, ProfileLarge } from "../common/profile/index";
@@ -7,45 +7,10 @@ import BroadcastScreen from "./BroadcastScreen";
 import BroadcastRecommendations from "./BroadcastRecommendations";
 import Grid from "@mui/material/Grid";
 import { useAppSelector } from "../../store";
-
-// 임시 방송 정보
-const sampleBroadcastInfo = {
-  broadcast: {
-    title: "우파루파 먹방",
-    description: "우리 우파루파 얼마나 맛있게 먹는지 보러 올 사람?",
-  },
-  animals: [
-    {
-      name: "우파",
-      gender: "male",
-      classification: "axolotl",
-      image: "https://picsum.photos/200/300",
-    },
-    {
-      name: "우파파",
-      gender: "female",
-      classification: "axolotl",
-      image: "https://picsum.photos/200/300",
-    },
-  ],
-  store: {
-    name: "마리쥬 카페",
-    profile: "https://picsum.photos/200/300",
-  },
-};
-
-const animalProfileList = sampleBroadcastInfo.animals.map((animal) => {
-  return (
-    <Grid key={animal.name} item xs={12} sm={6} md={12}>
-      <ProfileLarge
-        animalName={animal.name}
-        gender={animal.gender}
-        classification={animal.classification}
-        imgSrc={animal.image}
-      />
-    </Grid>
-  );
-});
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { IBroadcastInfo, IAnimalInfo, IStoreInfo } from "./type";
+import { NavLink } from "react-router-dom";
 
 // 임시 먹이 리스트
 const tmpFeedList = [
@@ -56,31 +21,72 @@ const tmpFeedList = [
 ];
 
 const BroadcastHome = function () {
+  const [broadcastInfo, setBroadcastInfo] = useState<IBroadcastInfo | null>(null);
+  const [animalList, setAnimalList] = useState<React.ReactNode[] | null>(null);
+  const [storeInfo, setStoreInfo] = useState<IStoreInfo | null>(null);
+
   const isMaximized = useAppSelector((state) => state.broadcast.isMaximized);
+  const params = useParams();
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_API_URL}/broadcasts/${params.id}`,
+    })
+      .then((res) => {
+        // DB에는 thumbnail로 되어 있는데 description으로 수정 필요
+        // setBroadcastInfo(res.data.broadcast)
+        const tmp = { title: res.data.broadcast.title, description: res.data.broadcast.thumbnail };
+        setBroadcastInfo(tmp);
+
+        const tmpAnimalList = res.data.animals.map((animal: IAnimalInfo) => {
+          return (
+            <Grid key={animal.name} item xs={12} sm={6} md={12}>
+              <NavLink to={`/animal/${animal.id}`} style={{ textDecoration: "none" }}>
+                <ProfileLarge
+                  animalName={animal.name}
+                  gender={animal.gender}
+                  classification={animal.classification}
+                  imgSrc={animal.profile}
+                />
+              </NavLink>
+            </Grid>
+          );
+        });
+        setAnimalList(tmpAnimalList);
+        setStoreInfo(res.data.stores);
+      })
+      .catch((err) => console.log(err));
+  }, [params.id]);
+
+  // 투표 생기면 axios 보내기
 
   return (
     <StyledContainer>
-      <StyledLeftSection>
-        <BroadcastScreen title={sampleBroadcastInfo.broadcast.title} feedList={tmpFeedList} />
-        {!isMaximized && (
-          <BroadcastContent
-            title={sampleBroadcastInfo.broadcast.title}
-            detail={sampleBroadcastInfo.broadcast.description}
-            feedList={tmpFeedList}
-          />
-        )}
-      </StyledLeftSection>
-      {!isMaximized && (
-        <StyledRightSection>
-          <ProfileStore
-            storeName={sampleBroadcastInfo.store.name}
-            imgSrc={sampleBroadcastInfo.store.profile}
-          />
-          <Grid container spacing={4}>
-            {animalProfileList}
-          </Grid>
-          <BroadcastRecommendations />
-        </StyledRightSection>
+      {broadcastInfo && animalList && storeInfo && (
+        <>
+          <StyledLeftSection>
+            <BroadcastScreen title={broadcastInfo.title} feedList={tmpFeedList} />
+            {!isMaximized && (
+              <BroadcastContent
+                title={broadcastInfo.title}
+                detail={broadcastInfo.description}
+                feedList={tmpFeedList}
+              />
+            )}
+          </StyledLeftSection>
+          {!isMaximized && (
+            <StyledRightSection>
+              <NavLink to={`/cafe/${storeInfo.id}`} style={{ textDecoration: "none" }}>
+                <ProfileStore storeName={storeInfo.name} imgSrc={storeInfo.profile} />
+              </NavLink>
+              <Grid container spacing={4}>
+                {animalList}
+              </Grid>
+              <BroadcastRecommendations />
+            </StyledRightSection>
+          )}
+        </>
       )}
     </StyledContainer>
   );

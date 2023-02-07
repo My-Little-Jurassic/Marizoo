@@ -1,45 +1,55 @@
 import { Grid } from "@mui/material";
-import React from "react";
-import { NavLink } from "react-router-dom";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { NavLink, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { CardLabelMedium } from "../common/card";
+import { IRelatedBroadcastInfo } from "./type";
 
 const BroadcastRecommendations = function () {
-  // 임시 추천 방송 목록
-  const tmpRecommendedBroadcastList = [
-    {
-      id: 1,
-      title: "우파루파 먹방",
-      imgSrc: "https://picsum.photos/200/300",
-    },
-    {
-      id: 2,
-      title: "눈싸움",
-      imgSrc: "https://picsum.photos/200/300",
-    },
-    {
-      id: 3,
-      title: "핸들링",
-      imgSrc: "https://picsum.photos/200/300",
-    },
-  ];
+  const [relatedBroadcastList, setRelatedBroadcastList] = useState<React.ReactNode[] | null>(null);
 
-  const recommendedBroadcastCardList = tmpRecommendedBroadcastList.map((broadcast) => {
-    return (
-      <Grid key={broadcast.id} item xs={12} sm={6} md={12}>
-        <NavLink to={"/room/" + broadcast.id} style={{ textDecoration: "none" }}>
-          <CardLabelMedium key={broadcast.id} title={broadcast.title} imgSrc={broadcast.imgSrc} />
-        </NavLink>
-      </Grid>
-    );
-  });
+  const params = useParams();
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_API_URL}/broadcasts/${params.id}/related`,
+    })
+      .then((res) => {
+        const sampleRelatedBroadcastList = res.data.onAir.map(
+          (broadcast: IRelatedBroadcastInfo) => {
+            if (broadcast.id === Number(params.id)) {
+              return;
+            }
+            return (
+              <Grid key={broadcast.id} item xs={12} sm={6} md={12}>
+                <NavLink to={"/broadcast/" + broadcast.id} style={{ textDecoration: "none" }}>
+                  <CardLabelMedium
+                    key={broadcast.id}
+                    title={broadcast.title}
+                    imgSrc={broadcast.thumbnail}
+                  />
+                </NavLink>
+              </Grid>
+            );
+          },
+        );
+        setRelatedBroadcastList(sampleRelatedBroadcastList);
+      })
+      .catch((err) => console.log(err));
+  }, [params.id]);
 
   return (
     <StyledContainer>
-      <StyledHeader3>추천 방송</StyledHeader3>
-      <Grid container columnSpacing={4}>
-        {recommendedBroadcastCardList}
-      </Grid>
+      {relatedBroadcastList && (
+        <>
+          <StyledHeader3>추천 방송</StyledHeader3>
+          <Grid container columnSpacing={4}>
+            {relatedBroadcastList}
+          </Grid>
+        </>
+      )}
     </StyledContainer>
   );
 };
