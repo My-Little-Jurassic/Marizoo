@@ -36,11 +36,17 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<UsersAnimalStore> followings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UsersPlay> bookList = new ArrayList<>();
 
+//   === 연관관계 메서드 ===
     public void addBadge(UsersBadge badge) {
         badgeList.add(badge);
         badge.setUser(this);
+    }
+
+    public void addUsersPlay(UsersPlay usersPlay) {
+        bookList.add(usersPlay);
+        usersPlay.setUser(this);
     }
 }
