@@ -3,30 +3,18 @@ import styled from "styled-components";
 import CafeDetailAnimals from "./CafeDetailAnimals";
 import CafeDetailOnairs from "./CafeDetailOnairs";
 import CafeDetailPlays from "./CafeDetailPlays";
+import { ICafeDetail } from "./type";
 
-interface IProps {
-  data: {
-    store_name: string;
-    description: string;
-    address: string;
-    opening_hours: string;
-    tel: string;
-    email: string;
-    prifile_img: string;
-    lat: number;
-    lng: number;
-  };
-}
-
-function CafeDetailMain(props: IProps) {
+function CafeDetailMain(props: { cafeInfo: ICafeDetail }) {
+  console.log(props.cafeInfo);
   return (
     <StyledCafeDetailMain>
-      <h3>{props.data.store_name} 식구들</h3>
-      <CafeDetailAnimals></CafeDetailAnimals>
+      <h3>{props.cafeInfo.storename} 식구들</h3>
+      <CafeDetailAnimals cafeId={props.cafeInfo.storeId}></CafeDetailAnimals>
       <h3>지금 스트리밍 중!</h3>
-      <CafeDetailOnairs></CafeDetailOnairs>
+      <CafeDetailOnairs cafeId={props.cafeInfo.storeId}></CafeDetailOnairs>
       <h3>체험 프로그램 예약</h3>
-      <CafeDetailPlays></CafeDetailPlays>
+      <CafeDetailPlays cafeId={props.cafeInfo.storeId}></CafeDetailPlays>
     </StyledCafeDetailMain>
   );
 }

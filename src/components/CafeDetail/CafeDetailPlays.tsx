@@ -1,57 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getStorePlayList } from "../../api";
 import { FreeModeSwiper } from "../common/swiper";
+import { ICafePlay } from "./type";
 
-const dataList = [
-  {
-    broadcast_id: "1",
-    title: "도롱뇽 먹 이asdfasdfas fasdfasdfas dfasdfas주기",
-    img: "https://picsum.photos/200/300",
-  },
-  {
-    broadcast_id: "1",
-    title: "도롱뇽 먹이asdfasdfasdfasdfasdfasdfasdfas주기",
-    img: "https://picsum.photos/200/300",
-  },
-  {
-    broadcast_id: "1",
-    title: "도롱뇽 먹이asdfasdfasdfasdfasdfasdfasdfas주기",
-    img: "https://picsum.photos/200/300",
-  },
-  {
-    broadcast_id: "1",
-    title: "도롱뇽 먹이asdfasdfasdfasdfasdfasdfasdfas주기",
-    img: "https://picsum.photos/200/300",
-  },
-  {
-    broadcast_id: "1",
-    title: "도롱뇽 먹이asdfasdfasdfasdfasdfasdfasdfas주기",
-    img: "https://picsum.photos/200/300",
-  },
-];
+function CafeDetailPlays(props: { cafeId: number }) {
+  const [cafePlayList, setCafePlayList] = useState<ICafePlay[]>();
+  const [playSwiper, setPlaySwiper] = useState<JSX.Element[]>();
 
-function CafeDetailPlays() {
-  const playList = dataList.map((data, index) => (
-    <StyledCafePlays key={`play-${index}`} imgSrc={data.img}>
-      <div>
-        <label>{data.title}</label>
-      </div>
-    </StyledCafePlays>
-  ));
+  useEffect(() => {
+    getStorePlayList(String(props.cafeId))
+      .then((res) => {
+        setCafePlayList(res.data.plays);
+      })
+      .catch((e) => {
+        console.log("카페 동물 정보 요청 실패", e);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (cafePlayList) {
+      const newPlaySwiper = cafePlayList.map((play, index) => (
+        <StyledCafePlays key={`play-${index}`} imgSrc={play.img}>
+          <div>
+            <label>{play.title}</label>
+          </div>
+        </StyledCafePlays>
+      ));
+      setPlaySwiper(newPlaySwiper);
+    }
+  }, [cafePlayList]);
+
   return (
-    <FreeModeSwiper
-      elementList={playList}
-      slidesPerView={
-        window.innerWidth > 680
-          ? window.innerWidth > 900
-            ? 2.5
-            : 3.5
-          : window.innerWidth > 530
-          ? 2.5
-          : 1.5
-      }
-      spaceBetween={16}
-    ></FreeModeSwiper>
+    <div>
+      {playSwiper && (
+        <FreeModeSwiper
+          elementList={playSwiper}
+          slidesPerView={
+            window.innerWidth > 680
+              ? window.innerWidth > 900
+                ? 2.5
+                : 3.5
+              : window.innerWidth > 530
+              ? 2.5
+              : 1.5
+          }
+          spaceBetween={16}
+        ></FreeModeSwiper>
+      )}
+    </div>
   );
 }
 

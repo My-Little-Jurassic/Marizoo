@@ -1,58 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FreeModeSwiper } from "../common/swiper";
+import { getStoreAinmalList } from "../../api";
+import { ICafeAnimal } from "./type";
 
-const data = [
-  {
-    name: "롱뇽asdfasdfasdfasfasd이",
-    classification: "도롱뇽",
-    img: "https://picsum.photos/200/300",
-    gender: "수컷",
-  },
-  {
-    name: "롱뇽이",
-    classification: "도롱뇽",
-    img: "https://picsum.photos/200/300",
-    gender: "수컷",
-  },
-  {
-    name: "롱뇽이",
-    classification: "도롱뇽",
-    img: "https://picsum.photos/200/300",
-    gender: "수컷",
-  },
-  {
-    name: "롱뇽이",
-    classification: "도롱뇽",
-    img: "https://picsum.photos/200/300",
-    gender: "수컷",
-  },
-  {
-    name: "롱뇽이",
-    classification: "도롱뇽",
-    img: "https://picsum.photos/200/300",
-    gender: "수컷",
-  },
-];
+function CafeDetailAnimals(props: { cafeId: number }) {
+  const [cafeAnimalList, setCafeAnimalList] = useState<ICafeAnimal[]>();
+  const [animalSwiper, setAnimalSwiper] = useState<JSX.Element[]>();
 
-function CafeDetailAnimals() {
-  const AnimalSwiper = data.map((animal, index) => (
-    <Link to={`/animal/${animal.name}`} key={`animal-${index}`} style={{ textDecoration: "none" }}>
-      <StyledCafeAnimal imgSrc={animal.img}>
-        <div></div>
-        <div id="name">{animal.name}</div>
-        <div id="classification">{animal.classification}</div>
-      </StyledCafeAnimal>
-    </Link>
-  ));
+  useEffect(() => {
+    getStoreAinmalList(String(props.cafeId))
+      .then((res) => {
+        setCafeAnimalList(res.data.animals);
+      })
+      .catch((e) => {
+        console.log("카페 동물 정보 요청 실패", e);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (cafeAnimalList) {
+      const newAnimalSwiper = cafeAnimalList.map((animal, index) => (
+        <Link
+          to={`/animal/${animal.name}`}
+          key={`animal-${index}`}
+          style={{ textDecoration: "none" }}
+        >
+          <StyledCafeAnimal imgSrc={animal.img}>
+            <div></div>
+            <div id="name">{animal.name}</div>
+            <div id="classification">{animal.classification}</div>
+          </StyledCafeAnimal>
+        </Link>
+      ));
+      setAnimalSwiper(newAnimalSwiper);
+    }
+  }, [cafeAnimalList]);
 
   return (
-    <FreeModeSwiper
-      elementList={AnimalSwiper}
-      slidesPerView={window.innerWidth > 600 ? 5.5 : 3.5}
-      spaceBetween={16}
-    ></FreeModeSwiper>
+    <div>
+      {animalSwiper && (
+        <FreeModeSwiper
+          elementList={animalSwiper}
+          slidesPerView={window.innerWidth > 600 ? 5.5 : 3.5}
+          spaceBetween={16}
+        ></FreeModeSwiper>
+      )}
+    </div>
   );
 }
 

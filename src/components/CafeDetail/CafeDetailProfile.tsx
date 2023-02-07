@@ -4,29 +4,16 @@ import styled from "styled-components";
 import { TbMapPin, TbClock, TbPhone, TbMail } from "react-icons/tb";
 import { Grid } from "@mui/material";
 import { GreenBtn } from "../common/button";
+import { ICafeDetail } from "./type";
 
-interface IProps {
-  data: {
-    store_name: string;
-    description: string;
-    address: string;
-    opening_hours: string;
-    tel: string;
-    email: string;
-    prifile_img: string;
-    lat: number;
-    lng: number;
-  };
-}
-
-function CafeDetailProfile(props: IProps) {
+function CafeDetailProfile(props: { cafeInfo: ICafeDetail }) {
   const [isFollowed, setIsFollowed] = useState(false);
   return (
     <StyledCafeDetailProfile>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={5} md={12}>
-          <StyledProfileImg imgSrc={props.data.prifile_img}>
-            <p>{props.data.store_name}</p>
+          <StyledProfileImg imgSrc={props.cafeInfo.prifileImg}>
+            <p>{props.cafeInfo.storename}</p>
             <GreenBtn
               label={isFollowed ? "팔로우 취소" : "팔로우"}
               type={isFollowed ? 2 : 0}
@@ -37,22 +24,22 @@ function CafeDetailProfile(props: IProps) {
         </Grid>
         <Grid item xs={12} sm={7} md={12}>
           <StyledProfileContent>
-            <p>{props.data.description}</p>
+            <p>{props.cafeInfo.description}</p>
             <StyledProfileContentRow>
               <TbMapPin></TbMapPin>
-              <span>{props.data.address}</span>
+              <span>{props.cafeInfo.address}</span>
             </StyledProfileContentRow>
             <StyledProfileContentRow>
               <TbClock></TbClock>
-              <span>{props.data.opening_hours}</span>
+              <span>{props.cafeInfo.openingHours}</span>
             </StyledProfileContentRow>
             <StyledProfileContentRow>
               <TbPhone></TbPhone>
-              <a href={`tel:${props.data.tel}`}>{props.data.tel}</a>
+              <a href={`tel:${props.cafeInfo.tel}`}>{props.cafeInfo.tel}</a>
             </StyledProfileContentRow>
             <StyledProfileContentRow>
               <TbMail></TbMail>
-              <a href={`mailto:${props.data.email}`}>{props.data.email}</a>
+              <a href={`mailto:${props.cafeInfo.email}`}>{props.cafeInfo.email}</a>
             </StyledProfileContentRow>
           </StyledProfileContent>
         </Grid>
@@ -118,8 +105,12 @@ const StyledProfileContentRow = styled.p`
   align-items: center;
   & > * {
     margin-left: 8px;
-    margin-block: 4px;
+    margin-block: 8px;
+    text-decoration: none;
     font: ${({ theme }) => theme.fonts.subContent};
     color: ${({ theme }) => theme.colors.secondaryText};
+  }
+  & *:first-child {
+    flex-shrink: 0;
   }
 `;
