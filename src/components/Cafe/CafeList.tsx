@@ -8,11 +8,19 @@ import { SearchInput } from "../common/input";
 import { searchStores } from "../../api";
 import { ICafe } from "./type";
 
+const { kakao } = window as any;
+
 interface IProps {
+  map: any;
   cafeDataList: ICafe[] | [];
-  setCafeDataList: () => void;
+  setCafeDataList: (cafeList: ICafe[]) => void;
+  originalCafeDataList: ICafe[] | [];
   focusedCafe: number | null;
   setFocusedCafe: (id: number | null) => void;
+  searchKeyword: string | null;
+  setSearchKeyword: (index: string | null) => void;
+  filterKeyword: string | null;
+  setFilterKeyword: (index: string | null) => void;
 }
 
 function CafeList(props: IProps) {
@@ -29,25 +37,26 @@ function CafeList(props: IProps) {
   // focus된 아이콘
   const [focusdFilter, setFocusdFilter] = useState<number | null>(null);
   // search keyword
-  const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
 
   const [searchCafeData, setSearchCafeData] = useState<ICafe[] | []>(props.cafeDataList);
 
   const [activeSearch, setActiveSearch] = useState<boolean>(true);
 
-  // search keyword 변화에 다른 hook
+  // cafe data 변화에 다른 hook
   useEffect(() => {
-    if (searchKeyword === null) {
+    if (props.searchKeyword === null) {
       setSearchCafeData(props.cafeDataList);
     }
   }, [props.cafeDataList]);
 
   // search keyword 변화에 다른 hook
   useEffect(() => {
-    if (searchKeyword === "" || null) {
-      setSearchKeyword(null);
+    if (props.searchKeyword === "" || null) {
+      props.setSearchKeyword(null);
+      props.setFilterKeyword(null);
+      props.setCafeDataList(props.originalCafeDataList);
       setSearchCafeData(props.cafeDataList);
-    } else if (searchKeyword) {
+    } else if (props.searchKeyword) {
       if (activeSearch) {
         setActiveSearch(false);
         setTimeout(() => {
@@ -55,12 +64,25 @@ function CafeList(props: IProps) {
         }, 500);
       }
     }
-  }, [searchKeyword]);
+  }, [props.searchKeyword]);
+
+  // filter keyword 변화에 다른 hook
+  useEffect(() => {
+    searchStores({ classification: props.filterKeyword })
+      .then((res) => {
+        console.log("필터결과", res.data.stores);
+        props.setCafeDataList(res.data.stores);
+        setSearchCafeData(res.data.stores);
+      })
+      .catch((e) => console.log("카페 검색 데이터 요청 실패", e));
+  }, [props.filterKeyword]);
 
   useEffect(() => {
-    if (activeSearch && searchKeyword) {
-      searchStores({ storename: searchKeyword })
+    if (activeSearch && props.searchKeyword) {
+      searchStores({ storename: props.searchKeyword })
         .then((res) => {
+          console.log("검색결과", res.data.stores);
+          props.setCafeDataList(res.data.stores);
           setSearchCafeData(res.data.stores);
         })
         .catch((e) => console.log("카페 검색 데이터 요청 실패", e));
@@ -92,11 +114,11 @@ function CafeList(props: IProps) {
         <SearchInput
           value={""} // 초기 값
           setValue={(value: string) => {
-            setSearchKeyword(value);
+            props.setSearchKeyword(value);
           }} // value값을 전달받을 함수
           placeholder="검색어를 입력해주세요"
           onSearch={(value: string) => {
-            setSearchKeyword(value);
+            props.setSearchKeyword(value);
           }}
         ></SearchInput>
       </StyledSearchInputBox>
@@ -104,16 +126,26 @@ function CafeList(props: IProps) {
         animalList={animalList}
         focusdFilter={focusdFilter}
         setFocusdFilter={setFocusdFilter}
-        searchKeyword={searchKeyword}
-        setSearchKeyword={setSearchKeyword}
+        searchKeyword={props.searchKeyword}
+        setSearchKeyword={props.setSearchKeyword}
+        filterKeyword={props.filterKeyword}
+        setFilterKeyword={props.setFilterKeyword}
       ></CafeFilterSwiper>
-      {searchKeyword === null || "" ? null : (
+      {props.searchKeyword === null && props.filterKeyword === null ? null : (
         <StyledTitle>
-          {`"${searchKeyword}" 검색결과`}
+          {props.searchKeyword !== null
+            ? `"${props.searchKeyword}" 검색 결과 ${searchCafeData.length}건`
+            : `"${props.filterKeyword}" 필터 결과 ${searchCafeData.length}건`}
           <StyledSearchResetBtn
             onClick={() => {
-              setSearchKeyword(null);
+              props.setSearchKeyword(null);
+              props.setFilterKeyword(null);
               setSearchCafeData(props.cafeDataList);
+              props.setCafeDataList(props.originalCafeDataList);
+              props.map.setCenter(
+                new kakao.maps.LatLng(35.7, window.innerWidth <= 600 ? 128 : 128.8),
+              );
+              props.map.setLevel(13);
             }}
           >
             <TbX></TbX>

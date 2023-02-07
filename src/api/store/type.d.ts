@@ -11,6 +11,6 @@ export interface IResponse {
  * 요청 기본 결과 폼
  */
 export interface ISearchStores {
-  storename?: string;
-  classification?: string;
+  storename?: string | null;
+  classification?: string | null;
 }

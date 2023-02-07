@@ -18,39 +18,46 @@ interface IMapBounds {
 
 function CafeMap() {
   const [map, setMap] = useState<any>(null);
-  const [marker, setMarker] = useState<any>(null);
+  const [markerList, setMarkerList] = useState<any[]>([]);
   const [mapBounds, setMapBounds] = useState<IMapBounds | null>(null);
   const [cafeDataList, setCafeDataList] = useState<ICafe[]>();
+  const [originalCafeDataList, setOriginalCafeDataList] = useState<ICafe[] | []>([]);
   const [filterdCafeData, setFilterdCafeData] = useState<ICafe[] | []>([]);
   const [focusedCafe, setFocusedCafe] = useState<number | null>(null);
   const [userPosition, setUserPosition] = useState<{ lat: number; lng: number }>({
     lat: window.innerWidth <= 600 ? 128 : 128.8,
     lng: 35.7,
   });
+  const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
+  const [filterKeyword, setFilterKeyword] = useState<string | null>(null);
 
   useEffect(() => {
     getStoresList()
       .then((res) => {
         setCafeDataList(res.data.stores);
+        setOriginalCafeDataList(res.data.stores);
       })
       .catch((e) => console.log("카페 리스트 데이터 요청 실패", e));
   }, []);
 
   useEffect(() => {
+    console.log(cafeDataList);
     if (cafeDataList) {
+      markerList.map((marker: any) => {
+        marker.setMap(null);
+      });
       // 마커 이미지
       const markerImgSrc =
         "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
       // 각 카페 배열 순회하며 마커 생성
-      cafeDataList.map((cafe: ICafe) => {
+      const newMarkerList = cafeDataList.map((cafe: ICafe) => {
         // 마커 사이즈 생성
         const markerSize = new kakao.maps.Size(24, 35);
         // 마커 이미지 생성
         const markerImg = new kakao.maps.MarkerImage(markerImgSrc, markerSize);
         // 마커 생성
         const marker = new kakao.maps.Marker({
-          map: map, // 마커를 표시할 지도
           position: new kakao.maps.LatLng(cafe.lat, cafe.lng), // 마커를 표시할 위치
           title: cafe.store_name, // 마커의 타이틀
           image: markerImg, // 마커 이미지
@@ -68,11 +75,18 @@ function CafeMap() {
         kakao.maps.event.addListener(marker, "mouseout", () => {
           setFocusedCafe(null);
         });
-
         return marker;
       });
+      setMarkerList(newMarkerList);
     }
   }, [cafeDataList]);
+
+  useEffect(() => {
+    markerList.map((marker: any) => {
+      marker.setMap(map);
+      console.log(marker);
+    });
+  }, [markerList]);
 
   //최초 1회 지도 생성
   useEffect(() => {
@@ -112,10 +126,13 @@ function CafeMap() {
     });
   }, [map]);
 
-  // 죄표가 다시 생성될 때 카페 리스트 다시 필터링하기
+  // 죄표가 다시 생성될 때 화면 내 가게로 필터링, 사용자와 가까운 순서로 정렬
   useEffect(() => {
-    if (cafeDataList) {
-      console.log(cafeDataList);
+    if (
+      cafeDataList &&
+      (searchKeyword === null || searchKeyword === "") &&
+      (filterKeyword === null || filterKeyword === "")
+    ) {
       const newfilterdData = cafeDataList
         .filter((cafe) => {
           if (mapBounds === null) {
@@ -149,8 +166,9 @@ function CafeMap() {
         });
       setFilterdCafeData(newfilterdData);
     }
-  }, [mapBounds]);
+  }, [mapBounds, cafeDataList]);
 
+  // 사용자 위치 마커생성
   useEffect(() => {
     // 사용자 위치 마커 이미지
     const userPositionImgSrc =
@@ -174,12 +192,16 @@ function CafeMap() {
   return (
     <KakaoMap id="map">
       <CafeList
+        map={map}
         cafeDataList={filterdCafeData}
-        setCafeDataList={() => {
-          setCafeDataList;
-        }}
+        originalCafeDataList={originalCafeDataList}
+        setCafeDataList={setCafeDataList}
         focusedCafe={focusedCafe}
         setFocusedCafe={setFocusedCafe}
+        searchKeyword={searchKeyword}
+        setSearchKeyword={setSearchKeyword}
+        filterKeyword={filterKeyword}
+        setFilterKeyword={setFilterKeyword}
       />
       <StyledMapIconSet>
         <StyledMapIcon

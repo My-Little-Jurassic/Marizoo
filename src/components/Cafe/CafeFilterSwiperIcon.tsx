@@ -5,8 +5,8 @@ interface IProps {
   animal: { species_id: number; animalName: string; imgUrl: string };
   focusdFilter: number | null;
   setFocusdFilter: (index: number | null) => void;
-  searchKeyword: string | null;
-  setSearchKeyword: (index: string | null) => void;
+  filterKeyword: string | null;
+  setFilterKeyword: (index: string | null) => void;
 }
 
 function CafeFilterSwiperIcon(props: IProps) {
@@ -19,7 +19,8 @@ function CafeFilterSwiperIcon(props: IProps) {
         props.setFocusdFilter(null);
       }}
       onClick={() => {
-        props.setSearchKeyword(props.animal.animalName);
+        console.log(props.animal.animalName);
+        props.setFilterKeyword(props.animal.animalName);
       }}
       animal={props.animal}
       focusdIcon={props.focusdFilter}
