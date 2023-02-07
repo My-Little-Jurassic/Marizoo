@@ -1,43 +1,32 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+import { ICafe } from "./type";
 
 interface IProps {
-  cafe: {
-    animal_store_id: number;
-    store_name: string;
-    description: string;
-    address: string;
-    tel: string;
-    profile_img: string;
-    lat: number;
-    lng: number;
-  };
+  cafeData: ICafe;
   focusedCafe: number | null;
   setFocusedCafe: (id: number | null) => void;
 }
 function CafeListContent(props: IProps) {
   return (
-    <Link to={`/cafe/${props.cafe.animal_store_id}`} style={{ textDecoration: "none" }}>
+    <Link to={`/cafe/${props.cafeData.id}`} style={{ textDecoration: "none" }}>
       <StyledCafeListContent
         focusedCafe={props.focusedCafe}
-        animal_store_id={props.cafe.animal_store_id}
+        animal_store_id={props.cafeData.id}
         onMouseOver={() => {
-          props.setFocusedCafe(props.cafe.animal_store_id);
+          props.setFocusedCafe(props.cafeData.id);
         }}
         onMouseOut={() => {
           props.setFocusedCafe(null);
         }}
       >
         <StyledCafeProfile>
-          <StyledCafeProfileImg src={props.cafe.profile_img} />
+          <StyledCafeProfileImg src={props.cafeData.profile_img} />
           <StyledCafeInfoBox>
-            <StyledStoreName
-              focusedCafe={props.focusedCafe}
-              animal_store_id={props.cafe.animal_store_id}
-            >
-              {props.cafe.store_name}
-              <StyledStoreContent>{props.cafe.address}</StyledStoreContent>
+            <StyledStoreName focusedCafe={props.focusedCafe} animal_store_id={props.cafeData.id}>
+              {props.cafeData.store_name}
+              <StyledStoreContent>{props.cafeData.address}</StyledStoreContent>
             </StyledStoreName>
           </StyledCafeInfoBox>
         </StyledCafeProfile>

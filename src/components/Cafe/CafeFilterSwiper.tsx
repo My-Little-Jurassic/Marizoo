@@ -5,6 +5,7 @@ import CafeFilterSwiperIcon from "./CafeFilterSwiperIcon";
 
 interface IProps {
   animalList: {
+    species_id: number;
     animalName: string;
     imgUrl: string;
   }[];
@@ -18,16 +19,20 @@ function FilterSwiper(props: IProps) {
   // swiper icon 배열 데이터 가공
   const swiperIcons = props.animalList.map((animal, index) => {
     return (
-      <CafeFilterSwiperIcon
+      <div
         key={`animal-${index}`}
-        index={index}
-        animalName={animal.animalName}
-        imgUrl={animal.imgUrl}
-        focusdFilter={props.focusdFilter}
-        setFocusdFilter={props.setFocusdFilter}
-        searchKeyword={props.searchKeyword}
-        setSearchKeyword={props.setSearchKeyword}
-      ></CafeFilterSwiperIcon>
+        onClick={() => {
+          props.setSearchKeyword(animal.animalName);
+        }}
+      >
+        <CafeFilterSwiperIcon
+          animal={animal}
+          focusdFilter={props.focusdFilter}
+          setFocusdFilter={props.setFocusdFilter}
+          searchKeyword={props.searchKeyword}
+          setSearchKeyword={props.setSearchKeyword}
+        ></CafeFilterSwiperIcon>
+      </div>
     );
   });
 

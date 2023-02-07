@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { TbChevronUp, TbChevronDown } from "react-icons/tb";
-import CafeListContent from "../CafeListContent/CafeListContent";
-import { SearchInput } from "../../common/input";
-import { CafeFilterSwiper } from "..";
 import { TbX } from "react-icons/tb";
+import { TbChevronUp, TbChevronDown } from "react-icons/tb";
+import { CafeFilterSwiper, CafeListContent } from ".";
+import { SearchInput } from "../common/input";
+import { searchStores } from "../../api";
+import { ICafe } from "./type";
 
 interface IProps {
-  cafeData: {
-    animal_store_id: number;
-    store_name: string;
-    description: string;
-    address: string;
-    tel: string;
-    profile_img: string;
-    lat: number;
-    lng: number;
-  }[];
+  cafeDataList: ICafe[] | [];
+  setCafeDataList: () => void;
   focusedCafe: number | null;
   setFocusedCafe: (id: number | null) => void;
 }
@@ -27,11 +20,10 @@ function CafeList(props: IProps) {
   const [isListMax, setIsListMax] = useState(false);
   // 동물 정보 더미데이터
   const animalList = [
-    { animalName: "도마뱀", imgUrl: "https://picsum.photos/200/300" },
-    { animalName: "뱀", imgUrl: "https://picsum.photos/200/300" },
-    { animalName: "거북이", imgUrl: "https://picsum.photos/200/300" },
-    { animalName: "악어", imgUrl: "https://picsum.photos/200/300" },
-    { animalName: "고등어초밥", imgUrl: "https://picsum.photos/200/300" },
+    { species_id: 0, animalName: "도마뱀", imgUrl: "https://picsum.photos/200/300" },
+    { species_id: 1, animalName: "뱀", imgUrl: "https://picsum.photos/200/300" },
+    { species_id: 2, animalName: "거북이", imgUrl: "https://picsum.photos/200/300" },
+    { species_id: 3, animalName: "악어", imgUrl: "https://picsum.photos/200/300" },
   ];
 
   // focus된 아이콘
@@ -39,20 +31,48 @@ function CafeList(props: IProps) {
   // search keyword
   const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
 
+  const [searchCafeData, setSearchCafeData] = useState<ICafe[] | []>(props.cafeDataList);
+
+  const [activeSearch, setActiveSearch] = useState<boolean>(true);
+
   // search keyword 변화에 다른 hook
   useEffect(() => {
-    if (searchKeyword === "") {
-      setSearchKeyword(null);
+    if (searchKeyword === null) {
+      setSearchCafeData(props.cafeDataList);
     }
-    console.log(searchKeyword);
+  }, [props.cafeDataList]);
+
+  // search keyword 변화에 다른 hook
+  useEffect(() => {
+    if (searchKeyword === "" || null) {
+      setSearchKeyword(null);
+      setSearchCafeData(props.cafeDataList);
+    } else if (searchKeyword) {
+      if (activeSearch) {
+        setActiveSearch(false);
+        setTimeout(() => {
+          return setActiveSearch(true);
+        }, 500);
+      }
+    }
   }, [searchKeyword]);
 
+  useEffect(() => {
+    if (activeSearch && searchKeyword) {
+      searchStores({ storename: searchKeyword })
+        .then((res) => {
+          setSearchCafeData(res.data.stores);
+        })
+        .catch((e) => console.log("카페 검색 데이터 요청 실패", e));
+    }
+  }, [activeSearch]);
+
   // 카페 리스트에 맞는 목록 컨텐츠 리스트 생성
-  const CafeList = props.cafeData.map((cafe, index) => {
+  const CafeList = searchCafeData.map((cafe, index) => {
     return (
       <CafeListContent
-        key={`cafe-${index}`}
-        cafe={cafe}
+        key={`searchCafe-${index}`}
+        cafeData={cafe}
         focusedCafe={props.focusedCafe}
         setFocusedCafe={props.setFocusedCafe}
       ></CafeListContent>
@@ -60,7 +80,7 @@ function CafeList(props: IProps) {
   });
 
   return (
-    <StyledCafeList isListMax={isListMax} cafeDataLen={props.cafeData.length}>
+    <StyledCafeList isListMax={isListMax} cafeDataLen={props.cafeDataList.length}>
       <StyledMaxBar
         onClick={() => {
           setIsListMax(!isListMax);
@@ -93,6 +113,7 @@ function CafeList(props: IProps) {
           <StyledSearchResetBtn
             onClick={() => {
               setSearchKeyword(null);
+              setSearchCafeData(props.cafeDataList);
             }}
           >
             <TbX></TbX>
@@ -170,7 +191,7 @@ const StyledTitle = styled.h4`
   font: ${(props) => props.theme.fonts.tinyContentBold};
   color: ${(props) => props.theme.colors.primaryText};
   text-align: left;
-  width: 90%;
+  width: 100%;
   min-height: 60px;
   max-width: 927px;
   @media screen and (max-width: 900px) {
@@ -180,6 +201,9 @@ const StyledTitle = styled.h4`
   align-items: center;
   justify-content: center;
   padding-inline: 16px;
+  word-break: break-all;
+  margin: 16px;
+  box-sizing: border-box;
 `;
 
 const StyledSearchResetBtn = styled.button`

@@ -16,8 +16,8 @@ function Cafe() {
 export default Cafe;
 
 const StyledCafe = styled.div`
-  width: 100%
-  height: 100%
+  width: 100%;
+  height: 100%;
 `;
 
 const StyledCafeMain = styled.main`

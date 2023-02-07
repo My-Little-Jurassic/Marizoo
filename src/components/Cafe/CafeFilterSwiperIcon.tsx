@@ -2,9 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 interface IProps {
-  index: number;
-  animalName: string;
-  imgUrl: string;
+  animal: { species_id: number; animalName: string; imgUrl: string };
   focusdFilter: number | null;
   setFocusdFilter: (index: number | null) => void;
   searchKeyword: string | null;
@@ -15,21 +13,20 @@ function CafeFilterSwiperIcon(props: IProps) {
   return (
     <StyledFilterSwiperIcon
       onMouseOver={() => {
-        props.setFocusdFilter(props.index);
+        props.setFocusdFilter(props.animal.species_id);
       }}
       onMouseOut={() => {
         props.setFocusdFilter(null);
       }}
       onClick={() => {
-        props.setSearchKeyword(props.animalName);
+        props.setSearchKeyword(props.animal.animalName);
       }}
-      index={props.index}
-      imgUrl={props.imgUrl}
+      animal={props.animal}
       focusdIcon={props.focusdFilter}
     >
       <StyledIcon
-        index={props.index}
-        imgUrl={props.imgUrl}
+        animalId={props.animal.species_id}
+        imgUrl={props.animal.imgUrl}
         focusdIcon={props.focusdFilter}
       ></StyledIcon>
     </StyledFilterSwiperIcon>
@@ -39,8 +36,7 @@ function CafeFilterSwiperIcon(props: IProps) {
 export default CafeFilterSwiperIcon;
 
 const StyledFilterSwiperIcon = styled.div<{
-  index: number;
-  imgUrl: string;
+  animal: { species_id: number; animalName: string; imgUrl: string };
   focusdIcon: number | null;
 }>`
   position: relative;
@@ -50,7 +46,7 @@ const StyledFilterSwiperIcon = styled.div<{
   }
 `;
 
-const StyledIcon = styled.div<{ index: number; imgUrl: string; focusdIcon: number | null }>`
+const StyledIcon = styled.div<{ animalId: number; imgUrl: string; focusdIcon: number | null }>`
   ${(props) => props.theme.styles.card}
   cursor: pointer;
   width: 48px;
@@ -62,7 +58,7 @@ const StyledIcon = styled.div<{ index: number; imgUrl: string; focusdIcon: numbe
   transition: all 0.2s;
   margin-right: -16px;
   filter: ${(props) =>
-    props.focusdIcon !== null && props.index !== props.focusdIcon
+    props.focusdIcon !== null && props.animalId !== props.focusdIcon
       ? "drop-shadow(2px 2px 8px rgba(67, 67, 67, 0.2)) brightness(0.5)"
       : "drop-shadow(2px 2px 8px rgba(67, 67, 67, 0.2)) brightness(1)"};
 `;
