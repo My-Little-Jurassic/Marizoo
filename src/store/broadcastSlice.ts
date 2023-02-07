@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isMaximized: false,
@@ -7,6 +7,7 @@ const initialState = {
   isLiked: false,
   numberOfViewers: 0,
   numberOfLikes: 0,
+  isOwner: true,
 };
 
 const broadcastSlice = createSlice({
@@ -32,6 +33,15 @@ const broadcastSlice = createSlice({
 
     changeNumberOfViewers(state, { payload }) {
       state.numberOfViewers = payload;
+    },
+
+    resetRoom(state) {
+      state.isMaximized = false;
+      state.selectedFeed = null;
+      state.isVoted = false;
+      state.isLiked = false;
+      state.numberOfViewers = 0;
+      state.numberOfLikes = 0;
     },
   },
 });

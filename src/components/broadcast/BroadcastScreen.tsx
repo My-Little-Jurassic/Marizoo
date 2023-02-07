@@ -43,9 +43,7 @@ const BroadcastScreen = function (props: IProps) {
   const [clientY, setClientY] = useState<number | null>(null);
 
   const isMaximized = useAppSelector((state) => state.broadcast.isMaximized);
-  const selectedFeed = useAppSelector((state) => state.broadcast.selectedFeed);
   const isVoted = useAppSelector((state) => state.broadcast.isVoted);
-  const isLiked = useAppSelector((state) => state.broadcast.isLiked);
   const numberOfViewers = useAppSelector((state) => state.broadcast.numberOfViewers);
   const numberOfLikes = useAppSelector((state) => state.broadcast.numberOfLikes);
 
@@ -92,22 +90,14 @@ const BroadcastScreen = function (props: IProps) {
     setIsReactionPlaying(true);
   };
 
-  // 리액션 3초 하고 다시 돌리기 -> 콤보 끝날때까지로 변경 필요
-  useEffect(() => {
+  // 콤보 끝나면 이펙트 종료
+  const finishEffect = function () {
     if (isReactionPlaying === false) {
       return;
     }
-    setTimeout(() => {
-      setIsReactionPlaying(false);
-      setWaitingReaction(null);
-      const originalEffectCnt = localStorage.getItem("effectCnt");
-      if (originalEffectCnt !== null) {
-        localStorage.setItem("effectCnt", String(Number(originalEffectCnt) + 1));
-      } else {
-        localStorage.setItem("effectCnt", "1");
-      }
-    }, 20000);
-  }, [isReactionPlaying]);
+    setIsReactionPlaying(false);
+    setWaitingReaction(null);
+  };
 
   return (
     <StyledContainer
@@ -117,7 +107,6 @@ const BroadcastScreen = function (props: IProps) {
       isVoteModalOpened={isVoteModalOpened}
       waitingReaction={waitingReaction}
     >
-      {isReactionPlaying && <BroadcastCombo clientX={clientX} clientY={clientY} />}
       {isReactionPlaying && waitingReaction === "쓰다듬기" && (
         <SytledIframe
           src="https://embed.lottiefiles.com/animation/97180"
@@ -140,6 +129,7 @@ const BroadcastScreen = function (props: IProps) {
         />
       )}
       <BroadcastVideo onClick={doReaction} />
+      {isReactionPlaying && <BroadcastCombo finishEffect={finishEffect} />}
       {isMaximized && (
         <StyledHeader isBtnShown={isBtnShown}>
           <StyledTopShadow />
@@ -152,33 +142,33 @@ const BroadcastScreen = function (props: IProps) {
           </StyledCountInfoContainer>
         </StyledHeader>
       )}
-      {!isReactionPlaying && (
-        <StyledReactionContainer
-          onMouseOver={() => setIsMouseOver(true)}
-          onMouseOut={() => setIsMouseOver(false)}
-          isBtnShown={isBtnShown}
-          isMaximized={isMaximized}
-        >
-          <ReactionBtn
-            label="쓰다듬기"
-            icon={TbHandStop}
-            color="#F1A604"
-            onClick={() => setWaitingReaction("쓰다듬기")}
-          />
-          <ReactionBtn
-            label="예뻐하기"
-            icon={TbHeart}
-            color="#ff38a4"
-            onClick={() => setWaitingReaction("예뻐하기")}
-          />
-          <ReactionBtn
-            label="응원하기"
-            icon={TbFlame}
-            color="#f33041"
-            onClick={() => setWaitingReaction("응원하기")}
-          />
-        </StyledReactionContainer>
-      )}
+
+      <StyledReactionContainer
+        onMouseOver={() => setIsMouseOver(true)}
+        onMouseOut={() => setIsMouseOver(false)}
+        isBtnShown={isBtnShown}
+        isMaximized={isMaximized}
+      >
+        <ReactionBtn
+          label="쓰다듬기"
+          icon={TbHandStop}
+          color="#F1A604"
+          onClick={() => setWaitingReaction("쓰다듬기")}
+        />
+        <ReactionBtn
+          label="예뻐하기"
+          icon={TbHeart}
+          color="#ff38a4"
+          onClick={() => setWaitingReaction("예뻐하기")}
+        />
+        <ReactionBtn
+          label="응원하기"
+          icon={TbFlame}
+          color="#f33041"
+          onClick={() => setWaitingReaction("응원하기")}
+        />
+      </StyledReactionContainer>
+
       {isMaximized && (
         <StyledBtnContainer
           onMouseOver={() => setIsMouseOver(true)}

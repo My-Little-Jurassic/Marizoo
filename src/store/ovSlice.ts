@@ -1,8 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Connection, OpenVidu, Session, Subscriber } from "openvidu-browser";
-import { useAppSelector } from ".";
-
-const isLiked = useAppSelector((state) => state.broadcast.isLiked);
 
 interface IInitialState {
   OV: null | OpenVidu;
@@ -11,6 +8,7 @@ interface IInitialState {
   session: undefined | Session;
   subscriber: undefined | Subscriber;
   ownerConnection: undefined | Connection;
+  params: undefined | number;
 }
 
 const initialState: IInitialState = {
@@ -20,6 +18,7 @@ const initialState: IInitialState = {
   session: undefined,
   subscriber: undefined,
   ownerConnection: undefined,
+  params: undefined,
 };
 
 const ovSlice = createSlice({
@@ -27,9 +26,20 @@ const ovSlice = createSlice({
   initialState,
   reducers: {
     createOpenvidu: (state, { payload }) => {
+      if (state.OV && state.params !== payload.roomId) {
+        state.session?.disconnect();
+        state.OV = null;
+        state.session = undefined;
+        state.subscriber = undefined;
+        state.mySessionId = undefined;
+        state.myUserName = undefined;
+        state.ownerConnection = undefined;
+      }
+
       if (!state.OV) {
         state.myUserName = payload.nickname;
         state.mySessionId = payload.roomId;
+        state.params = payload.roomId;
         state.OV = new OpenVidu();
         state.session = state.OV.initSession();
       }
@@ -53,14 +63,14 @@ const ovSlice = createSlice({
       state.session = undefined;
       state.subscriber = undefined;
       state.mySessionId = undefined;
+      state.params = undefined;
       state.myUserName = undefined;
-
-      // return payload
+      state.ownerConnection = undefined;
     },
 
-    like(state) {
+    like(state, { payload }) {
       if (state.session && state.ownerConnection) {
-        if (isLiked) {
+        if (!payload) {
           state.session.signal({
             data: "",
             to: [state.ownerConnection],

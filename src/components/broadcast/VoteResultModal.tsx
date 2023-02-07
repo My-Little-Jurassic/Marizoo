@@ -16,7 +16,9 @@ const VoteResultModal = function (props: Iprops) {
       <SytledIframe src="https://embed.lottiefiles.com/animation/32585" />
       <StyledContainer>
         <StyledHeader2>먹이 투표 결과</StyledHeader2>
-        <CardNotLabel imgSrc={props.imgSrc} />
+        <StyledCardBox>
+          <CardNotLabel imgSrc={props.imgSrc} />
+        </StyledCardBox>
         <StyledHeader2>1등</StyledHeader2>
         <StyledHeader3>{props.feedName}</StyledHeader3>
       </StyledContainer>
@@ -79,6 +81,10 @@ const StyledContainer = styled.div`
 
 const StyledHeader2 = styled.span`
   font: ${(props) => props.theme.fonts.header2};
+`;
+
+const StyledCardBox = styled.div`
+  width: 240px;
 `;
 
 const StyledHeader3 = styled.span`

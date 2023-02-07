@@ -8,6 +8,7 @@ import ovReducer from "./ovSlice";
 export const store = configureStore({
   // 로그인 유지용 access-token store
   reducer: { user: userReducer, modal: modalReducer, broadcast: broadcastReducer, ov: ovReducer },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export type AppDispatch = typeof store.dispatch;

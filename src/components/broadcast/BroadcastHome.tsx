@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { ProfileStore, ProfileLarge } from "../common/profile/index";
@@ -6,9 +6,7 @@ import BroadcastContent from "./BroadcastContent";
 import BroadcastScreen from "./BroadcastScreen";
 import BroadcastRecommendations from "./BroadcastRecommendations";
 import Grid from "@mui/material/Grid";
-import { useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { ovActions } from "../../store/ovSlice";
+import { useAppSelector } from "../../store";
 
 // 임시 방송 정보
 const sampleBroadcastInfo = {
@@ -58,43 +56,7 @@ const tmpFeedList = [
 ];
 
 const BroadcastHome = function () {
-  // const [isMaximized, setIsMaximized] = useState<boolean>(false);
-  // const [selectedFeed, setSelectedFeed] = useState<string | null>(null);
-  // const [isVoted, setIsVoted] = useState<boolean>(false);
-  // const [isLiked, setIsLiked] = useState<string | boolean>("neverClicked");
-  // const [numberOfViewers, setNumberOfViewers] = useState<number>(0);
-  // const [numberOfLikes, setNumberOfLikes] = useState<number>(0);
-
   const isMaximized = useAppSelector((state) => state.broadcast.isMaximized);
-  const selectedFeed = useAppSelector((state) => state.broadcast.selectedFeed);
-  const isVoted = useAppSelector((state) => state.broadcast.isVoted);
-  const isLiked = useAppSelector((state) => state.broadcast.isLiked);
-  const numberOfViewers = useAppSelector((state) => state.broadcast.numberOfViewers);
-  const numberOfLikes = useAppSelector((state) => state.broadcast.numberOfLikes);
-
-  const params = useParams();
-
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(ovActions.createOpenvidu({ nickname: "user1", roomId: params.id }));
-  }, []);
-
-  // useEffect(() => {
-  //   setIsMaximized(false);
-  //   setSelectedFeed(null);
-  //   setIsVoted(false);
-  //   setIsLiked("neverClicked");
-  //   setNumberOfViewers(0);
-  //   setNumberOfLikes(0);
-  // }, [params.id]);
-
-  // const like = function () {
-  //   if (isLiked === true) {
-  //     setIsLiked(false);
-  //   } else {
-  //     setIsLiked(true);
-  //   }
-  // };
 
   return (
     <StyledContainer>
