@@ -3,47 +3,32 @@ import { TbGenderFemale, TbGenderMale } from "react-icons/tb";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import AnimalDetailRedBtn from "./AnimalDetailRedBtn";
-
-interface IAnimalInfo {
-  gender: string;
-  animalName: string;
-  age: number;
-  character: string;
-  length: number;
-  weight: number;
-  img: string;
-}
-
-interface IBroadcast {
-  id: number;
-  status: string;
-}
+import { IAnimalInfo, IBroadcastInfo, IFeed } from "./type";
 
 interface IProps {
-  animalProfile: { animalInfo: IAnimalInfo; broadcast: IBroadcast; feeds: string[] };
+  animalInfo: IAnimalInfo;
+  broadcastInfo: IBroadcastInfo;
+  feedList: IFeed[];
 }
 
 const AnimalDetailProfile = function (props: IProps) {
-  const feeds = props.animalProfile.feeds.map((feed, idx) => {
-    if (idx == props.animalProfile.feeds.length - 1) {
-      return <span key={feed}>{feed} </span>;
+  const feeds = props.feedList.map((feed, idx) => {
+    if (idx == props.feedList.length - 1) {
+      return <span key={feed.name}>{feed.name} </span>;
     }
-    return <span key={feed}>{feed}, </span>;
+    return <span key={feed.name}>{feed.name}, </span>;
   });
 
   let statusBtn;
-  if (props.animalProfile.broadcast.status === "reserve") {
+  if (props.broadcastInfo.status === "RESERVE") {
     statusBtn = <AnimalDetailRedBtn label="방송 대기중" type={2} isDisable={true} />;
-  } else if (props.animalProfile.broadcast.status === "onair") {
+  } else if (props.broadcastInfo.status === "ONAIR") {
     statusBtn = (
-      <NavLink
-        to={`/broadcast/${props.animalProfile.broadcast.id}`}
-        style={{ textDecoration: "none" }}
-      >
+      <NavLink to={`/broadcast/${props.broadcastInfo.id}`} style={{ textDecoration: "none" }}>
         <AnimalDetailRedBtn label="지금 방송중!" type={0} isDisable={false} />
       </NavLink>
     );
-  } else if (props.animalProfile.broadcast.status === "finish") {
+  } else if (props.broadcastInfo.status === "FINISH") {
     statusBtn = <AnimalDetailRedBtn label="지금은 쉬고 있어요" type={1} isDisable={true} />;
   }
 
@@ -51,26 +36,26 @@ const AnimalDetailProfile = function (props: IProps) {
     <StyledContainer>
       <StyledLeftSideContainer>
         <StyledImageBox>
-          <StyledImage src="https://picsum.photos/200/300" />
+          <StyledImage src={props.animalInfo.img} />
         </StyledImageBox>
         {statusBtn}
       </StyledLeftSideContainer>
       <StyledRightSideContainer>
         <StyledTextHeader>
-          <StyledName>{props.animalProfile.animalInfo.animalName}</StyledName>
-          <StyledGender gender={props.animalProfile.animalInfo.gender}>
-            {props.animalProfile.animalInfo.gender === "male" ? (
+          <StyledName>{props.animalInfo.name}</StyledName>
+          <StyledGender gender={props.animalInfo.gender}>
+            {props.animalInfo.gender === "MALE" ? (
               <TbGenderMale size={32} />
             ) : (
               <TbGenderFemale size={32} />
             )}{" "}
           </StyledGender>
         </StyledTextHeader>
-        <StyledTextSpan>나이: {props.animalProfile.animalInfo.age}살</StyledTextSpan>
-        <StyledTextSpan>키: {props.animalProfile.animalInfo.length}cm</StyledTextSpan>
-        <StyledTextSpan>몸무게: {props.animalProfile.animalInfo.weight}g</StyledTextSpan>
+        <StyledTextSpan>나이: {props.animalInfo.age}살</StyledTextSpan>
+        <StyledTextSpan>키: {props.animalInfo.length}cm</StyledTextSpan>
+        <StyledTextSpan>몸무게: {props.animalInfo.weight}g</StyledTextSpan>
         <StyledTextSpan>좋아하는 먹이: {feeds}</StyledTextSpan>
-        <StyledTextSpan>성격: {props.animalProfile.animalInfo.character}</StyledTextSpan>
+        <StyledTextSpan>특징: {props.animalInfo.feature}</StyledTextSpan>
       </StyledRightSideContainer>
     </StyledContainer>
   );
@@ -168,7 +153,7 @@ const StyledGender = styled.span<{ gender: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${(props) => (props.gender == "male" ? props.theme.colors.blue : props.theme.colors.red)};
+  color: ${(props) => (props.gender == "MALE" ? props.theme.colors.blue : props.theme.colors.red)};
 `;
 
 const StyledTextSpan = styled.span`

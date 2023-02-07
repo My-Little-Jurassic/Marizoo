@@ -1,55 +1,62 @@
-import React from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
   AnimalDetailProfile,
   AnimalDetailDescription,
   AnimalDetailSide,
 } from "../components/AnimalDetail";
+import {
+  IAnimalInfo,
+  IBroadcastInfo,
+  IFeed,
+  ISpeciesInfo,
+  IStoreInfo,
+} from "../components/AnimalDetail/type";
 
 const AnimalDetail = function () {
-  // /stores/{animal_id}/animal_detail
-  const sampleAnimalProfile = {
-    animalInfo: {
-      gender: "male",
-      animalName: "우파파",
-      age: 3,
-      character: "까다롭고 예민한 편",
-      length: 30,
-      weight: 56,
-      img: "https://picsum.photos/200/300",
-    },
-    storeInfo: {
-      storeId: 1,
-      storeName: "마리쥬 카페",
-      storeImg: "https://picsum.photos/200/300",
-    },
-    speciesInfo: {
-      speciesId: 1,
-      classification: "도마뱀",
-      habitat: "대전",
-      lifeSpan: 10,
-      info: "아무 설명 아무 설명 아무 설명아무 설명 아무 설명 아무 설명아무 설명아무 설명아무 설명아무 설명아무 설명아무 설명아무 설명 아무 설명",
-      classificationImg: "https://picsum.photos/200/300",
-    },
-    broadcast: {
-      id: 1,
-      status: "onair",
-    },
-    feeds: ["고등어 초밥", "귀뚜라미"],
-  };
+  const APPLICATION_SERVER_URL = process.env.REACT_APP_API_URL;
+  const params = useParams();
+
+  const [animalInfo, setAnimalInfo] = useState<IAnimalInfo | null>(null);
+  const [broadcastInfo, setBroadcastInfo] = useState<IBroadcastInfo | null>(null);
+  const [feedList, setFeedList] = useState<IFeed[] | null>(null);
+  const [speciesInfo, setSpeciesInfo] = useState<ISpeciesInfo | null>(null);
+  const [storeInfo, setStoreInfo] = useState<IStoreInfo | null>(null);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${APPLICATION_SERVER_URL}/stores/${params.id}/animal_detail`,
+    })
+      .then((res) => {
+        setAnimalInfo(res.data.animalInfo);
+        setBroadcastInfo(res.data.broadcastInfo);
+        setFeedList(res.data.feeds);
+        setSpeciesInfo(res.data.speciesInfo);
+        setStoreInfo(res.data.storeInfo);
+      })
+      .catch((err) => console.log(err));
+  }, [params.id]);
 
   return (
     <StyledContainer>
-      <StyledLeftSide>
-        <AnimalDetailSide
-          currentAnimalName={sampleAnimalProfile.animalInfo.animalName}
-          storeInfo={sampleAnimalProfile.storeInfo}
-        />
-      </StyledLeftSide>
-      <StyledRightSide>
-        <AnimalDetailProfile animalProfile={sampleAnimalProfile} />
-        <AnimalDetailDescription speciesInfo={sampleAnimalProfile.speciesInfo} />
-      </StyledRightSide>
+      {animalInfo && broadcastInfo && feedList && speciesInfo && storeInfo && (
+        <>
+          <StyledLeftSide>
+            <AnimalDetailSide currentAnimalName={animalInfo.name} storeInfo={storeInfo} />
+          </StyledLeftSide>
+          <StyledRightSide>
+            <AnimalDetailProfile
+              animalInfo={animalInfo}
+              broadcastInfo={broadcastInfo}
+              feedList={feedList}
+            />
+            <AnimalDetailDescription speciesInfo={speciesInfo} />
+          </StyledRightSide>
+        </>
+      )}
     </StyledContainer>
   );
 };

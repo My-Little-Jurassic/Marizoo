@@ -1,15 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { ISpeciesInfo } from "./type";
 
 interface IProps {
-  speciesInfo: {
-    speciesId: number;
-    classification: string;
-    habitat: string;
-    lifeSpan: number;
-    info: string;
-    classificationImg: string;
-  };
+  speciesInfo: ISpeciesInfo;
 }
 
 // 백엔드에 저장될 정보 정해지면 나머지 하기

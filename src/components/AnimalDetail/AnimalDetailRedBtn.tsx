@@ -74,4 +74,8 @@ const StyledBtn = styled.button<{ btnType: number; isDisable: boolean }>`
       }
     }
   }};
+  &:hover {
+    transition: all 0.2s;
+    transform: ${(props) => !props.isDisable && `scale(1.02)`};
+  }
 `;
