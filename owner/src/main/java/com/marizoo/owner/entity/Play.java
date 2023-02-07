@@ -19,9 +19,6 @@ public class Play extends BaseEntity {
 
     private LocalDateTime playDateTime;
 
-    @Enumerated(EnumType.STRING)
-    private PlayType playType;
-
     private String title;
 
     private String description;
