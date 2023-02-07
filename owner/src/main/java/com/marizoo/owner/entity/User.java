@@ -33,7 +33,7 @@ public class User extends BaseEntity {
 
     private String refreshToken;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UsersBadge> badgeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
