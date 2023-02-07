@@ -1,5 +1,6 @@
 package com.marizoo.user.service;
 
+import com.marizoo.user.dto.SpeciesAnimalsDto;
 import com.marizoo.user.dto.animal_dto.AnimalDto;
 import com.marizoo.user.dto.animal_dto.OwnedAnimalDto;
 import com.marizoo.user.dto.broadcast_dto.BroadcastStatusDto;
@@ -45,5 +46,11 @@ public class AnimalService {
 
     public BroadcastStatusDto getBroadcastStatus(Long animalId){
         return animalRepository.findBroadcastStatus(animalId);
+    }
+
+    // 종에 해당하는 동물 목록 가져오기
+    public List<SpeciesAnimalsDto> getSpeciesAnimals(Long speciesId) {
+        List<Animal> bySpeciesId = animalRepository.findBySpeciesId(speciesId);
+        return bySpeciesId.stream().map(a->new SpeciesAnimalsDto(a.getId(), a.getName(), a.getGender(), a.getImg())).collect(Collectors.toList());
     }
 }
