@@ -1,4 +1,10 @@
+server:
+  port: 0
+
 spring:
+  application:
+    name: user
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/marizoo?
@@ -15,3 +21,13 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher # swagger
+
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
