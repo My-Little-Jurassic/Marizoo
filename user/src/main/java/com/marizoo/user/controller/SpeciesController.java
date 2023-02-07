@@ -37,7 +37,7 @@ public class SpeciesController {
 
     @ApiOperation(value = "종이 species_id인 동물 목록 가져오기 ")
     @GetMapping("/species/{species_id}")
-    public ResponseEntity<?> getSpeciesAnimals(@PathVariable("species_id") @ApiParam(value = "종 id") Long speciesId){
+    public ResponseEntity<?> getSpeciesAnimals(@PathVariable("species_id") @ApiParam(value = "종 id", example = "1") Long speciesId){
         List<SpeciesAnimalsDto> speciesAnimals = animalService.getSpeciesAnimals(speciesId);
         if(speciesAnimals.isEmpty()){
             return new ResponseEntity<>("종에 해당하는 동물 없음", HttpStatus.BAD_REQUEST);

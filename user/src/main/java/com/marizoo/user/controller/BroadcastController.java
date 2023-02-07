@@ -60,7 +60,7 @@ public class BroadcastController {
         List<onAirAnimalDto> animals = new ArrayList<>();
         for (BroadcastAnimal broadcastAnimal : broadcastAnimalList) {
             Animal animal = broadcastAnimal.getAnimal();
-            animals.add(new onAirAnimalDto(animal.getId(), animal.getName(), animal.getGender(), animal.getSpecies().getClassification()));
+            animals.add(new onAirAnimalDto(animal.getId(), animal.getName(), animal.getGender(), animal.getImg(), animal.getSpecies().getClassification()));
         }
 
         // 방송 주체 = 가게  |  dto 형식으로 변환
