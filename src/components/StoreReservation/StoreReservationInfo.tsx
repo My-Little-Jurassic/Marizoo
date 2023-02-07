@@ -1,13 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Input } from "../common/input/index";
-
-interface IPlayInfo {
-  playDateTime: string;
-  title: string;
-  runningTime: number;
-  notice: string;
-}
+import { IPlayInfo } from "./type";
 
 interface IProps {
   playInfo: IPlayInfo;

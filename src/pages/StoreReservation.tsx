@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
   StoreReservationProfile,
@@ -6,49 +8,56 @@ import {
   StoreReservationNotice,
   StoreReservationCompleteModal,
 } from "../components/StoreReservation";
-
-// /stores/{store_id}/plays/{play_id}
-const sampleStorePlayInfo = {
-  playInfo: {
-    playDateTime: "2023-02-03 09:00",
-    title: "도마뱀 밥주기 체험",
-    runningTime: 4,
-    notice:
-      "방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사 항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항 방문 유의사항",
-  },
-  storeInfo: {
-    storename: "마리쥬 파충류 카페",
-    address: "서울 종로구 인사동길 23",
-    tel: "02-783-4383",
-  },
-};
+import { IPlayInfo, IStoreInfo } from "../components/StoreReservation/type";
 
 const StoreReservation = function () {
+  const params = useParams();
+
+  const [playInfo, setPlayInfo] = useState<IPlayInfo | null>(null);
+  const [storeInfo, setStoreInfo] = useState<IStoreInfo | null>(null);
+
+  // playInfo에 description 담아져서 오는게 맞는지?
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_API_URL}/stores/${params.cafe_id}/plays/${params.play_id}`,
+    })
+      .then((res) => {
+        const tmpPlayInfo = res.data.playInfo;
+        const dateTime = tmpPlayInfo.playDateTime;
+        tmpPlayInfo.playDateTime = dateTime.slice(0, 10) + " " + dateTime.slice(11, 16);
+        setPlayInfo(tmpPlayInfo);
+        setStoreInfo(res.data.storeInfo);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   const [numberOfVisitor, setNumberOfVisitor] = useState<number | null>(null);
   const [isCompleteModalOpen, setIsCompleteModalOpen] = useState<boolean>(false);
 
   return (
     <StyledContainer>
-      {isCompleteModalOpen && (
-        <StoreReservationCompleteModal
-          playInfo={sampleStorePlayInfo.playInfo}
-          numberOfVisitor={numberOfVisitor}
-        />
+      {playInfo && storeInfo && (
+        <>
+          {isCompleteModalOpen && (
+            <StoreReservationCompleteModal playInfo={playInfo} numberOfVisitor={numberOfVisitor} />
+          )}
+          <StyledLeftSide>
+            <StoreReservationProfile storeInfo={storeInfo} />
+            <StoreReservationInfo
+              playInfo={playInfo}
+              changeNumberOfVisitor={(newNumberOfVisitor) => setNumberOfVisitor(newNumberOfVisitor)}
+            />
+          </StyledLeftSide>
+          <StyledRightSide>
+            <StoreReservationNotice
+              playInfo={playInfo}
+              numberOfVisitor={numberOfVisitor}
+              openCompleteModal={() => setIsCompleteModalOpen(true)}
+            />
+          </StyledRightSide>
+        </>
       )}
-      <StyledLeftSide>
-        <StoreReservationProfile storeInfo={sampleStorePlayInfo.storeInfo} />
-        <StoreReservationInfo
-          playInfo={sampleStorePlayInfo.playInfo}
-          changeNumberOfVisitor={(newNumberOfVisitor) => setNumberOfVisitor(newNumberOfVisitor)}
-        />
-      </StyledLeftSide>
-      <StyledRightSide>
-        <StoreReservationNotice
-          playInfo={sampleStorePlayInfo.playInfo}
-          numberOfVisitor={numberOfVisitor}
-          openCompleteModal={() => setIsCompleteModalOpen(true)}
-        />
-      </StyledRightSide>
     </StyledContainer>
   );
 };

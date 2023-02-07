@@ -2,15 +2,11 @@ import Checkbox from "./Checkbox";
 import React, { useState } from "react";
 import styled from "styled-components";
 import CheckBtn from "./CheckBtn";
-import { useDispatch } from "react-redux";
 import { openModal, setContent } from "../../store/modalSlice";
-
-interface IPlayInfo {
-  playDateTime: string;
-  title: string;
-  runningTime: number;
-  notice: string;
-}
+import { IPlayInfo } from "./type";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../store";
 
 interface IProps {
   playInfo: IPlayInfo;
@@ -20,7 +16,10 @@ interface IProps {
 
 const StoreReservationNotice = function (props: IProps) {
   const [checked, setChecked] = useState<boolean>(false);
-  const dispatch = useDispatch();
+  const params = useParams();
+  // 아직 스토어에 없음
+  // const uId = useAppSelector((state) => state.user.uId);
+  const dispatch = useAppDispatch();
 
   const reserve = function () {
     if (props.numberOfVisitor === null || props.numberOfVisitor === 0) {
@@ -38,7 +37,19 @@ const StoreReservationNotice = function (props: IProps) {
       dispatch(openModal());
       return;
     }
-    // 예약 axios
+    // uid 생기면 바꾸기
+    // 최대 인원 수 미리 알지, 요청 보내보고 에러 코드 받을 지 정하기
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_API_URL}/stores/${params.cafe_id}/plays/${params.play_id}`,
+      data: {
+        uId: "ASDF",
+        playId: params.play_id,
+        totalVisitor: props.numberOfVisitor,
+      },
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
     props.openCompleteModal();
   };
 

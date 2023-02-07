@@ -4,13 +4,7 @@ import { NavLink, useParams } from "react-router-dom";
 import { TbCircleCheck } from "react-icons/tb";
 import GreenBtn from "./StoreReservationGreenBtn";
 import GrayBtn from "./StoreReservationGrayBtn";
-
-interface IPlayInfo {
-  playDateTime: string;
-  title: string;
-  runningTime: number;
-  notice: string;
-}
+import { IPlayInfo } from "./type";
 
 interface IProps {
   playInfo: IPlayInfo;

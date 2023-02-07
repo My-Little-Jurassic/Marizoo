@@ -1,19 +1,18 @@
 import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-
-interface IStoreName {
-  storename: string;
-  address: string;
-  tel: string;
-}
+import { IStoreInfo } from "./type";
 
 interface IProps {
-  storeInfo: IStoreName;
+  storeInfo: IStoreInfo;
 }
 
 const StoreReservationProfile = function (props: IProps) {
+  const params = useParams();
+  const navigate = useNavigate();
+
   return (
-    <StyledContainer>
+    <StyledContainer onClick={() => navigate(`/cafe/${params.cafe_id}`, { replace: true })}>
       <StyledTitle>{props.storeInfo.storename}</StyledTitle>
       <StyledSpan>{props.storeInfo.address}</StyledSpan>
       <StyledSpan>{props.storeInfo.tel}</StyledSpan>
@@ -33,6 +32,15 @@ const StyledContainer = styled.div`
   box-sizing: border-box;
   padding: 40px;
   box-shadow: 2px 2px 8px rgba(67, 67, 67, 0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+  &:hover {
+    transform: scale(1.01);
+  }
+  &:active {
+    transform: scale(1);
+    filter: brightness(0.9);
+  }
 `;
 
 const StyledTitle = styled.span`
