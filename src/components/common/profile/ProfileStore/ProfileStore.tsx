@@ -20,7 +20,7 @@ const ProfileStore = function (props: IProps) {
 export default ProfileStore;
 
 const StyledContainer = styled.div`
-  width: 240px;
+  width: 100%;
   min-height: 88px;
   border-radius: 32px;
   background-color: ${(props) => props.theme.colors.yellow};

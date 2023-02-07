@@ -16,7 +16,7 @@ const CardNotLabel = function (props: IProps) {
 export default CardNotLabel;
 
 const StyledContainer = styled.div`
-  width: 240px;
+  width: 100%;
   height: 160px;
   display: flex;
   justify-content: center;

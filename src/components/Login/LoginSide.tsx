@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledDiv = styled.div`
@@ -9,6 +10,7 @@ const StyledDiv = styled.div`
   align-items: center;
 
   & > h1 {
+    cursor: pointer;
     margin: auto;
     position: fixed;
     font: ${({ theme }) => theme.fonts.display1};
@@ -41,9 +43,12 @@ const StyledDiv = styled.div`
 `;
 
 const LoginSide = (): JSX.Element => {
+  const navigate = useNavigate();
+
+  const onClick = () => navigate("/");
   return (
     <StyledDiv>
-      <h1>
+      <h1 onClick={onClick}>
         <span>마이</span>
         <span>리틀</span>
         <span>쥬라기</span>
