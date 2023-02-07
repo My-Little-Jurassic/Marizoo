@@ -14,5 +14,6 @@ public class onAirAnimalDto {
     private Long id;
     private String name;
     private Gender gender;
+    private String img;
     private String classification;
 }
