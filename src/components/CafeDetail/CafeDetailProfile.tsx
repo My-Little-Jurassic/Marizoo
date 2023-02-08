@@ -3,23 +3,34 @@ import styled from "styled-components";
 
 import { TbMapPin, TbClock, TbPhone, TbMail } from "react-icons/tb";
 import { Grid } from "@mui/material";
-import { GreenBtn } from "../common/button";
 import { ICafeDetail } from "./type";
+import { TbCheck } from "react-icons/tb";
+import { followStore } from "../../api";
+import { useAppSelector } from "../../store";
 
 function CafeDetailProfile(props: { cafeInfo: ICafeDetail }) {
   const [isFollowed, setIsFollowed] = useState(false);
+
+  const follow = () => {
+    followStore(1, String(props.cafeInfo.storeId))
+      .then((res) => {
+        console.log("팔로우 성공", res.data);
+        setIsFollowed(true);
+      })
+      .catch((e) => console.log("팔로우 실패", e));
+  };
+
+  // const userId = useAppSelector((state) => state.user.uid);
+
   return (
     <StyledCafeDetailProfile>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={5} md={12}>
-          <StyledProfileImg imgSrc={props.cafeInfo.prifileImg}>
+          <StyledProfileImg imgSrc={props.cafeInfo.prifileImg} isFollowed={isFollowed}>
             <p>{props.cafeInfo.storename}</p>
-            <GreenBtn
-              label={isFollowed ? "팔로우 취소" : "팔로우"}
-              type={isFollowed ? 2 : 0}
-              isDisable={false}
-              onClick={() => setIsFollowed(!isFollowed)}
-            ></GreenBtn>
+            <div onClick={() => follow()}>
+              {isFollowed ? <TbCheck size={32}></TbCheck> : "팔로우"}
+            </div>
           </StyledProfileImg>
         </Grid>
         <Grid item xs={12} sm={7} md={12}>
@@ -59,7 +70,7 @@ const StyledCafeDetailProfile = styled.aside`
   }
 `;
 
-const StyledProfileImg = styled.div<{ imgSrc: string }>`
+const StyledProfileImg = styled.div<{ imgSrc: string; isFollowed: boolean }>`
   ${(props) => props.theme.shadow}
   display: flex;
   flex-direction: column;
@@ -69,6 +80,8 @@ const StyledProfileImg = styled.div<{ imgSrc: string }>`
   min-height: 320px;
   height: 100%;
   border-radius: 32px;
+  padding: 16px;
+  box-sizing: border-box;
   background: linear-gradient(180deg, rgba(2, 0, 36, 0) 40%, rgba(0, 0, 0, 0.7) 100%),
     url(${({ imgSrc }) => imgSrc});
   background-size: cover;
@@ -78,8 +91,28 @@ const StyledProfileImg = styled.div<{ imgSrc: string }>`
     color: ${({ theme }) => theme.colors.brandColors.basaltGray[50]};
     margin-bottom: 8px;
   }
-  & button {
-    margin-bottom: 32px;
+  & div {
+    ${({ theme }) => theme.styles.button}
+    width: 120px;
+    height: 48px;
+    border: none;
+    border-radius: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    word-break: break-all;
+    font: ${(props) => props.theme.fonts.mainContentBold};
+    cursor: ${(props) => (props.isFollowed ? "default" : "pointer")};
+    background-color: ${(props) =>
+      props.isFollowed ? props.theme.colors.primaryBg : props.theme.colors.green};
+    color: ${(props) =>
+      props.isFollowed ? props.theme.colors.green : props.theme.colors.primaryBg};
+    &:hover {
+      ${(props) =>
+        props.isFollowed
+          ? `filter: drop-shadow(2px 2px 8px rgba(67, 67, 67, 0.2)) brightness(1);`
+          : null};
+    }
   }
 `;
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getStorePlayList } from "../../api";
 import { FreeModeSwiper } from "../common/swiper";
@@ -21,11 +22,13 @@ function CafeDetailPlays(props: { cafeId: number }) {
   useEffect(() => {
     if (cafePlayList) {
       const newPlaySwiper = cafePlayList.map((play, index) => (
-        <StyledCafePlays key={`play-${index}`} imgSrc={play.img}>
-          <div>
-            <label>{play.title}</label>
-          </div>
-        </StyledCafePlays>
+        <Link key={`play-${index}`} to={`/stores/books/${play.id}`}>
+          <StyledCafePlays imgSrc={play.img}>
+            <div>
+              <label>{play.title}</label>
+            </div>
+          </StyledCafePlays>
+        </Link>
       ));
       setPlaySwiper(newPlaySwiper);
     }

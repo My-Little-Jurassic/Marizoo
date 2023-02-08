@@ -14,6 +14,7 @@ function CafeDetailOnairs(props: { cafeId: number }) {
   useEffect(() => {
     getStoreBroadcastsList(String(props.cafeId))
       .then((res) => {
+        console.log(res.data.onAir);
         setCafeOnairList(res.data.onAir);
       })
       .catch((e) => {

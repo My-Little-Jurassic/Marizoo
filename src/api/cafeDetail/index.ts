@@ -25,3 +25,9 @@ export async function getStoreBroadcastsList(store_id?: string) {
 export async function getStorePlayList(store_id?: string) {
   return instance.get(`/stores/${store_id}/plays`);
 }
+/**
+ * POST: 가게 팔로우
+ */
+export async function followStore(uid: number, store_id?: string) {
+  return instance.post(`/stores/${store_id}`, { uid });
+}
