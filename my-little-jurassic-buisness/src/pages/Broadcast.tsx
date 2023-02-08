@@ -8,17 +8,20 @@ import {
 } from "../components/Broadcast";
 import { IBroadcastSetting } from "../types";
 import { IBroadcastStatus } from "../types/Broadcast";
+import { postBroadcast } from "../api";
 
 const Broadcast = () => {
+  // 방송설정 STATE
   const [broadcastSetting, setBroadcastSetting] = useState<IBroadcastSetting>({
-    id: 0,
+    id: "1",
     title: "",
     description: "",
-    thumbnail: "",
-    animals: [],
+    thumbnail: null,
+    animalIdList: [],
     videoDevice: null,
     audioDevice: null,
   });
+  // 방송상태 STATE
   const [broadcastStatus, setBroadcastStatus] = useState<IBroadcastStatus>({
     sessionId: "",
     viewers: 0,
@@ -26,10 +29,26 @@ const Broadcast = () => {
     vote: null,
     status: "DEFAULT",
   });
-
   const { id, title } = broadcastSetting;
   const { viewers, likes, status } = broadcastStatus;
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const startBroadcast = (setting: IBroadcastSetting) => {
+    const { id, title, description, animalIdList, thumbnail } = setting;
+
+    const formData = new FormData();
+    formData.append("animalStoreId", id);
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("animalIdList", JSON.stringify(animalIdList));
+    if (thumbnail) formData.append("thumbnail", thumbnail);
+
+    console.dir(formData);
+    postBroadcast(formData).then(() => {
+      setBroadcastStatus({ ...broadcastStatus, sessionId: "123", status: "ONAIR" });
+      setBroadcastSetting(setting);
+    });
+  };
 
   return (
     <StyledDiv className="Broadcast">
@@ -38,11 +57,11 @@ const Broadcast = () => {
         <BroadcastVoteContainer />
       </div>
       <div>
-        <BroadcastSettingContainer initSetting={broadcastSetting} />
-      </div>
-      <div className="btn-area">
-        <button>방송시작</button>
-        <button>방송종료</button>
+        <BroadcastSettingContainer
+          initSetting={broadcastSetting}
+          startBroadcast={startBroadcast}
+          status={status}
+        />
       </div>
     </StyledDiv>
   );
@@ -63,20 +82,6 @@ const StyledDiv = styled.div`
   }
   & > div:nth-child(2) {
     flex: 1 1 35%;
-  }
-  & > .btn-area {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    height: 60px;
-
-    & > button {
-      margin: 0 8px;
-      width: 240px;
-      max-width: 50%;
-      margin-bottom: 16px;
-      font: ${({ theme }) => theme.fonts.header4};
-    }
   }
 
   @media screen and (max-width: 1000px) {
