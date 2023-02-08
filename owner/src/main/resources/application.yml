@@ -15,7 +15,7 @@ spring:
     name: operator
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://i8b208.p.ssafy.io:3306/marizoo?
+    url: jdbc:mysql://3.36.112.78:3306/marizoo?
     username: ssafy # MySQL DB Username
     password: ssafy # MySQL DB password
 
