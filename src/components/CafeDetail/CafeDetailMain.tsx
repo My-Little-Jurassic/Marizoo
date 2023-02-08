@@ -6,7 +6,6 @@ import CafeDetailPlays from "./CafeDetailPlays";
 import { ICafeDetail } from "./type";
 
 function CafeDetailMain(props: { cafeInfo: ICafeDetail }) {
-  console.log(props.cafeInfo);
   return (
     <StyledCafeDetailMain>
       <h3>{props.cafeInfo.storename} 식구들</h3>
@@ -19,7 +18,7 @@ function CafeDetailMain(props: { cafeInfo: ICafeDetail }) {
   );
 }
 
-export default CafeDetailMain;
+export default React.memo(CafeDetailMain);
 
 const StyledCafeDetailMain = styled.div`
   min-height: 100vh;

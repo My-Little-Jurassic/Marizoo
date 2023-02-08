@@ -23,6 +23,7 @@ export interface ICafeAnimal {
 }
 
 export interface ICafeOnair {
+  id: number;
   title: string;
   thumbnail: string;
   classificationImgs: string[];

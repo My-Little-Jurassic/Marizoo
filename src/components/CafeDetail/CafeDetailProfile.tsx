@@ -6,7 +6,7 @@ import { Grid } from "@mui/material";
 import { ICafeDetail } from "./type";
 import { TbCheck } from "react-icons/tb";
 import { followStore } from "../../api";
-import { useAppSelector } from "../../store";
+// import { useAppSelector } from "../../store";
 
 function CafeDetailProfile(props: { cafeInfo: ICafeDetail }) {
   const [isFollowed, setIsFollowed] = useState(false);
@@ -59,7 +59,7 @@ function CafeDetailProfile(props: { cafeInfo: ICafeDetail }) {
   );
 }
 
-export default CafeDetailProfile;
+export default React.memo(CafeDetailProfile);
 
 const StyledCafeDetailProfile = styled.aside`
   padding-inline: 16px;

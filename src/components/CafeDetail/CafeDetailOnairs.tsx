@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import { CardLabelLarge } from "../common/card";
@@ -14,7 +13,6 @@ function CafeDetailOnairs(props: { cafeId: number }) {
   useEffect(() => {
     getStoreBroadcastsList(String(props.cafeId))
       .then((res) => {
-        console.log(res.data.onAir);
         setCafeOnairList(res.data.onAir);
       })
       .catch((e) => {
@@ -25,7 +23,11 @@ function CafeDetailOnairs(props: { cafeId: number }) {
   useEffect(() => {
     if (cafeOnairList) {
       const newOnairSwiper = cafeOnairList.map((onair, index) => (
-        <Link to={"/"} key={`data-${index}`} style={{ textDecoration: "none" }}>
+        <Link
+          to={`/broadcast/${onair.id}`}
+          key={`data-${index}`}
+          style={{ textDecoration: "none" }}
+        >
           <CardLabelLarge
             title={onair.title}
             thumbnailSrc={onair.thumbnail}
@@ -50,4 +52,4 @@ function CafeDetailOnairs(props: { cafeId: number }) {
   );
 }
 
-export default CafeDetailOnairs;
+export default React.memo(CafeDetailOnairs);

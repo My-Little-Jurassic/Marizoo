@@ -1,5 +1,5 @@
 import instance from "..";
-import * as type from "./type";
+// import * as type from "./type";
 
 /**
  * GET: 가게 정보

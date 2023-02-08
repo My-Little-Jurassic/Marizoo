@@ -55,7 +55,7 @@ function CafeDetailPlays(props: { cafeId: number }) {
   );
 }
 
-export default CafeDetailPlays;
+export default React.memo(CafeDetailPlays);
 
 const StyledCafePlays = styled.div<{ imgSrc: string }>`
   ${({ theme }) => theme.styles.card};

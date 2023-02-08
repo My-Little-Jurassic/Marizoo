@@ -51,7 +51,7 @@ function CafeDetailAnimals(props: { cafeId: number }) {
   );
 }
 
-export default CafeDetailAnimals;
+export default React.memo(CafeDetailAnimals);
 
 const StyledCafeAnimal = styled.div<{ imgSrc: string }>`
   cursor: pointer;
