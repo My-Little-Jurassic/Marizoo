@@ -1,46 +1,127 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { IBroadcastSetting } from "../../../types";
+import { IBroadcastSetting, TStatus } from "../../../types";
 import BroadcastTable from "./BroadcastTable";
 
 interface IProps {
   initSetting: IBroadcastSetting;
+  status: TStatus;
+  startBroadcast(setting: IBroadcastSetting): void;
 }
 
-const BroadcastSettingContainer = ({ initSetting }: IProps) => {
+const BroadcastSettingContainer = ({ initSetting, status, startBroadcast }: IProps) => {
+  // 방송 설정 STATE
   const [broadcastSetting, setBroadcastSetting] = useState<IBroadcastSetting>({
     ...initSetting,
   });
-  const { title, description, thumbnail, animals, videoDevice } = broadcastSetting;
+  const [videoList, setVideoList] = useState<MediaDeviceInfo[]>([]);
+  const { title, description, animalIdList } = broadcastSetting;
+
+  useEffect(() => {
+    getVideoList();
+  }, []);
+
+  // 숨겨둔 파일업로드 버튼을 찾기 위한 Ref
+  const preview = useRef<string | ArrayBuffer | null>(null);
+  const fileUploadRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // INPUT, TEXTAREA 변경 이벤트
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setBroadcastSetting({ ...broadcastSetting, [id]: value });
+  };
+  // 파일업로드 버튼 클릭 이벤트
+  const onClickFileUpload = () => fileUploadRef.current?.click();
+  // 파일업로드 이벤트
+  const onChangeUploadFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.length) return;
+    const reader = new FileReader();
+    const file = e.target.files[0];
+    reader.onloadend = () => {
+      preview.current = reader.result;
+      setBroadcastSetting({
+        ...broadcastSetting,
+        thumbnail: file,
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+  // 비디오 변경 이벤트
+  const onChangeVideo = (e: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    if (value === "-") {
+      setBroadcastSetting({ ...broadcastSetting, videoDevice: null });
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
+      return;
+    }
+    navigator.mediaDevices.getUserMedia({ video: { deviceId: value } }).then((stream) => {
+      setBroadcastSetting({ ...broadcastSetting, videoDevice: value });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    });
+  };
+  // 비디오 목록 가져오기
+  const getVideoList = async () => {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    setVideoList(devices.filter((device) => device.kind === "videoinput"));
+  };
+  // 방송 시작 함수
+  const onStartBroadcast = () => {
+    // TODO: 각각의 입력에 대해 유효한지 체크
+    startBroadcast(broadcastSetting);
+  };
+  const toggleAnimal = (list: string[]) => {
+    setBroadcastSetting({ ...broadcastSetting, animalIdList: list });
+  };
 
   return (
     <StyledDiv className="BroadcastStatusViewer">
       <label>방송제목</label>
-      <input value={title} />
+      <input id={"title"} value={title} onChange={onChange} />
       <br />
 
       <label>방송동물</label>
-      <BroadcastTable />
+      <BroadcastTable toggleAnimal={toggleAnimal} />
       <br />
 
       <label>방송설명</label>
-      <textarea value={description} />
+      <textarea id={"description"} value={description} onChange={onChange} />
       <br />
       <div className="thumbnail-area">
         <div>
           <label>썸눼일 설정</label>
-          <button>업로드</button>
-          <img src={thumbnail} />
+          <button onClick={onClickFileUpload}>업로드</button>
+          <input
+            type="file"
+            ref={fileUploadRef}
+            id={"thumbnail"}
+            accept="image/*"
+            onChange={onChangeUploadFile}
+            hidden
+          />
+          <img src={String(preview.current)} />
         </div>
         <div>
           <label>캐뭐라 설정</label>
-          <input list="camera" />
-          <video />
+          <select onChange={onChangeVideo}>
+            <option>-</option>
+            {videoList.map((item, index) => (
+              <option key={index} value={item.deviceId}>
+                {item?.label}
+              </option>
+            ))}
+          </select>
+          <video ref={videoRef} autoPlay />
         </div>
       </div>
-      <datalist id="camera">
-        <option defaultChecked value={"1번 카메라"} />
-      </datalist>
+      <div className="btn-area">
+        <button>방송종료</button>
+        <button onClick={onStartBroadcast}>방송시작</button>
+      </div>
     </StyledDiv>
   );
 };
@@ -71,7 +152,7 @@ const StyledDiv = styled.div`
 
   & > .thumbnail-area {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     & > * {
       flex: 1 1 50%;
       display: flex;
@@ -83,11 +164,13 @@ const StyledDiv = styled.div`
       }
       & img {
         flex: 1;
+        width: 100%;
         background-color: ${({ theme }) => theme.colors.brandColors.basaltGray[900]};
       }
     }
     & > *:last-child {
       & video {
+        flex: 1;
         width: 100%;
         background-color: ${({ theme }) => theme.colors.brandColors.basaltGray[900]};
       }
@@ -98,15 +181,32 @@ const StyledDiv = styled.div`
       margin-bottom: 16px;
       font: ${({ theme }) => theme.fonts.header5};
     }
-    & input {
+    & select {
+      height: 40px;
+      font: ${({ theme }) => theme.fonts.subContent};
       box-sizing: border-box;
       width: 100%;
       margin-bottom: 16px;
     }
     @media screen and (max-width: 600px) {
+      flex-wrap: wrap;
       & > * {
         flex: 1 1 100%;
       }
+    }
+  }
+  & > .btn-area {
+    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 60px;
+
+    & > button {
+      flex: 1;
+      min-width: 120px;
+      margin-bottom: 16px;
+      font: ${({ theme }) => theme.fonts.header4};
     }
   }
 `;
