@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,10 +25,10 @@ public class BroadcastController {
     private final VoteService voteService;
 
     @ApiOperation(value = "방송 생성하기")
-    @PostMapping("/broadcasts")
-    public ResponseEntity<?> createBroadcast(@RequestBody CreateBroadcastReq createBroadcastReq){
-        Long broadcastId = broadcastService.createBroadcast(createBroadcastReq.getBroadcastInfo().getTitle(), createBroadcastReq.getBroadcastInfo().getDescription(), createBroadcastReq.getBroadcastInfo().getThumbnail(),
-                createBroadcastReq.getBroadcastInfo().getAnimalStoreId(), createBroadcastReq.getBroadcastInfo().getAnimalIdList());
+    @PostMapping(value = "/broadcasts",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> createBroadcast(@RequestBody CreateBroadcastReq createBroadcastReq ){
+        Long broadcastId = broadcastService.createBroadcast(createBroadcastReq.getBroadcastInfo().getTitle(), createBroadcastReq.getBroadcastInfo().getDescription(),
+                createBroadcastReq.getBroadcastInfo().getAnimalStoreId(), createBroadcastReq.getBroadcastInfo().getAnimalIdList(), createBroadcastReq.getImg());
         if(broadcastId != null){
             return new ResponseEntity<>(broadcastId, HttpStatus.OK);
         }else{
