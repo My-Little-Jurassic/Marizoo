@@ -12,7 +12,7 @@ export async function postRegist(body: type.IRegistBody) {
  * GET: 유저 아이디 중복 체크
  */
 export async function getCheckUid(params: type.ICheckUidParams) {
-  return instance.get("/users/check-uid", { params });
+  return instance.get("/users/check-pk", { params });
 }
 
 /**
@@ -40,7 +40,7 @@ export async function getRefresh() {
  * GET: 유저 아이디 찾기
  */
 export async function getFindUid(params: type.IFindUidParams) {
-  return instance.get("/user/find-uid", { params });
+  return instance.get("/user/find-pk", { params });
 }
 
 /**
@@ -53,41 +53,41 @@ export async function getFinedPwd(params: type.IFindPwdParams) {
 /**
  * POST: 비밀번호 확인
  */
-export async function postPwd(uid: string, body: type.IGetUserBody, token: string) {
-  return instance.post(`/user/${uid}`, body, { headers: { "access-token": token } });
+export async function postPwd(pk: string, body: type.IGetUserBody, token: string) {
+  return instance.post(`/user/${pk}`, body, { headers: { "access-token": token } });
 }
 
 /**
  * PUT: 유저 정보 수정
  */
-export async function modifyUser(uid: string, body: type.IModifyUserBody, token: string) {
-  return instance.put(`/user/${uid}`, body, { headers: { "access-token": token } });
+export async function modifyUser(pk: string, body: type.IModifyUserBody, token: string) {
+  return instance.put(`/user/${pk}`, body, { headers: { "access-token": token } });
 }
 
 /**
  * DELETE: 유저 탈퇴
  */
-export async function withdrawUser(uid: string, token: string) {
-  return instance.delete(`/user/${uid}`, { headers: { "access-token": token } });
+export async function withdrawUser(pk: string, token: string) {
+  return instance.delete(`/user/${pk}`, { headers: { "access-token": token } });
 }
 
 /**
  * PUT: 유저 비밀번호 수정
  */
-export async function modifyUserPwd(uid: string, body: type.IModifyUserPwdBody, token: string) {
-  return instance.put(`user/${uid}/change-pwd`, body, { headers: { "access-token": token } });
+export async function modifyUserPwd(pk: string, body: type.IModifyUserPwdBody, token: string) {
+  return instance.put(`user/${pk}/change-pwd`, body, { headers: { "access-token": token } });
 }
 
 /**
  * GET: 배지 정보
  */
-export async function getBadges(uid: string) {
-  return instance.get(`user/${uid}/badges`);
+export async function getBadges(pk: string) {
+  return instance.get(`user/${pk}/badges`);
 }
 
 /**
  * GET: 팔로우 가게 정보
  */
-export async function getLikeStores(uid: string) {
-  return instance.get(`user/${uid}/stores`);
+export async function getLikeStores(pk: string) {
+  return instance.get(`user/${pk}/stores`);
 }
