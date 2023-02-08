@@ -17,12 +17,18 @@ interface IProps {
 const StoreReservationNotice = function (props: IProps) {
   const [checked, setChecked] = useState<boolean>(false);
   const params = useParams();
+
   const uid = useAppSelector((state) => state.user.uid);
   const dispatch = useAppDispatch();
 
   const reserve = function () {
     if (props.numberOfVisitor === null || props.numberOfVisitor === 0) {
       dispatch(setContent("StoreReservationEmpty"));
+      dispatch(openModal());
+      return;
+    }
+    if (props.numberOfVisitor > props.playInfo.availableVisitor) {
+      dispatch(setContent("StoreReservationExceed"));
       dispatch(openModal());
       return;
     }
@@ -39,7 +45,7 @@ const StoreReservationNotice = function (props: IProps) {
 
     axios({
       method: "post",
-      url: `${process.env.REACT_APP_API_URL}/stores/${params.cafe_id}/plays/${params.play_id}`,
+      url: `${process.env.REACT_APP_API_URL}/stores/books`,
       data: {
         uid: uid,
         playId: params.play_id,

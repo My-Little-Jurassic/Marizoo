@@ -6,6 +6,7 @@ import DefaultContent from "./DefaultContent";
 import StoreReservationNotNumber from "./StoreReservationNotNumber";
 import StoreReservationEmpty from "./StoreReservationEmpty";
 import StoreReservationAgree from "./StoreReservationAgree";
+import StoreReservationExceed from "./StoreReservationExceed";
 
 interface IProps {
   content: string;
@@ -33,6 +34,9 @@ const Modal = ({ content }: IProps): JSX.Element => {
       }
       case "StoreReservationAgree": {
         return <StoreReservationAgree onClose={onClose} />;
+      }
+      case "StoreReservationExceed": {
+        return <StoreReservationExceed onClose={onClose} />;
       }
       default:
         return <DefaultContent onClose={onClose} />;

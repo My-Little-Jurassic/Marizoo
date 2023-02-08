@@ -1,4 +1,5 @@
 export interface IPlayInfo {
+  availableVisitor: number;
   playDateTime: "string";
   title: "string";
   runningTime: number;

@@ -15,8 +15,9 @@ const StoreReservation = function () {
 
   const [playInfo, setPlayInfo] = useState<IPlayInfo | null>(null);
   const [storeInfo, setStoreInfo] = useState<IStoreInfo | null>(null);
+  const [isCompleteModalOpen, setIsCompleteModalOpen] = useState<boolean>(false);
+  const [numberOfVisitor, setNumberOfVisitor] = useState<number | null>(null);
 
-  // playInfo에 description 담아져서 오는게 맞는지?
   useEffect(() => {
     axios({
       method: "get",
@@ -31,9 +32,6 @@ const StoreReservation = function () {
       })
       .catch((err) => console.log(err));
   }, []);
-
-  const [numberOfVisitor, setNumberOfVisitor] = useState<number | null>(null);
-  const [isCompleteModalOpen, setIsCompleteModalOpen] = useState<boolean>(false);
 
   return (
     <StyledContainer>

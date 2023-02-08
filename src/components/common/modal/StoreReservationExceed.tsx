@@ -6,11 +6,14 @@ interface IProps {
   onClose(): void;
 }
 
-const StoreReservationAgree = ({ onClose }: IProps): JSX.Element => {
+const StoreReservationExceed = ({ onClose }: IProps): JSX.Element => {
   return (
     <StyledDiv>
       <h1>경고!</h1>
-      <span>유의사항에 동의해주세요.</span>
+      <div>
+        <span>예약 가능 인원 수보다 </span>
+        <span>적은 수를 입력해주세요.</span>
+      </div>
       <GreenBtn label={"확인"} type={0} isDisable={false} onClick={onClose} />
     </StyledDiv>
   );
@@ -18,6 +21,7 @@ const StoreReservationAgree = ({ onClose }: IProps): JSX.Element => {
 
 const StyledDiv = styled.div`
   width: 480px;
+  min-width: 300px;
   height: 320px;
   display: flex;
   flex-direction: column;
@@ -32,15 +36,21 @@ const StyledDiv = styled.div`
 
   @media screen and (max-width: 500px) {
     width: 90vw;
+    & > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
   }
 
   & > h1 {
     font: ${({ theme }) => theme.fonts.header2};
   }
 
-  & > span {
+  & > div > span {
     font: ${({ theme }) => theme.fonts.mainContent};
   }
 `;
 
-export default StoreReservationAgree;
+export default StoreReservationExceed;

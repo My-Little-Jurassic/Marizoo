@@ -20,17 +20,21 @@ const StoreReservationInfo = function (props: IProps) {
         <StyledBold>소요 시간</StyledBold>
         <StyledSpan>{props.playInfo.runningTime}H</StyledSpan>
       </StyledContent>
-      <StyledContent>
+      <StyledVisitor>
         <StyledBold>방문자 수</StyledBold>
-        <StyledSpan>
-          {/* 최대 방문자 수 추가 필요 */}
-          <Input
-            setValue={(val) => {
-              props.changeNumberOfVisitor(Number(val));
-            }}
-          />
-        </StyledSpan>
-      </StyledContent>
+        <StyledInputContainer>
+          <StyledSpan>
+            <Input
+              setValue={(val) => {
+                props.changeNumberOfVisitor(Number(val));
+              }}
+            />{" "}
+          </StyledSpan>
+          <StyledAvailableVisitor>
+            * 예약 가능 인원 수: {props.playInfo.availableVisitor}명
+          </StyledAvailableVisitor>
+        </StyledInputContainer>
+      </StyledVisitor>
     </StyledContainer>
   );
 };
@@ -71,14 +75,36 @@ const StyledContent = styled.div`
   }
 `;
 
+const StyledVisitor = styled.div`
+  color: ${(props) => props.theme.colors.primaryText};
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+`;
+
 const StyledBold = styled.span`
   font: ${(props) => props.theme.fonts.mainContentBold};
+`;
+
+const StyledInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 const StyledSpan = styled.span`
   font: ${(props) => props.theme.fonts.mainContent};
   & > input {
-    width: 88px;
+    width: 80%;
+    height: 40px;
+    margin-top: -6px;
+    filter: none;
+    -webkit-filter: none;
   }
   @media screen and (max-width: 500px) {
     & > input {
@@ -88,4 +114,9 @@ const StyledSpan = styled.span`
       }
     }
   }
+`;
+
+const StyledAvailableVisitor = styled.span`
+  font: ${(props) => props.theme.fonts.tinyContentBold};
+  color: ${(props) => props.theme.colors.red};
 `;
