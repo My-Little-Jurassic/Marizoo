@@ -72,7 +72,7 @@ const ovSlice = createSlice({
       if (state.session && state.ownerConnection) {
         if (!payload) {
           state.session.signal({
-            data: "",
+            data: "like",
             to: [state.ownerConnection],
             type: "like",
           });
@@ -80,9 +80,19 @@ const ovSlice = createSlice({
           state.session.signal({
             data: "",
             to: [state.ownerConnection],
-            type: "dislike",
+            type: "like",
           });
         }
+      }
+    },
+
+    vote(state, { payload }) {
+      if (state.session && state.ownerConnection) {
+        state.session.signal({
+          data: payload,
+          to: [state.ownerConnection],
+          type: "vote",
+        });
       }
     },
   },

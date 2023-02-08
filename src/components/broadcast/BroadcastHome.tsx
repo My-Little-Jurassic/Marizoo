@@ -12,14 +12,6 @@ import { useParams } from "react-router-dom";
 import { IBroadcastInfo, IAnimalInfo, IStoreInfo } from "./type";
 import { NavLink } from "react-router-dom";
 
-// 임시 먹이 리스트
-const tmpFeedList = [
-  { id: 1, feedName: "귀뚜라미", imgSrc: "https://picsum.photos/200/300" },
-  { id: 2, feedName: "지렁이", imgSrc: "https://picsum.photos/200/300" },
-  { id: 3, feedName: "쥐", imgSrc: "https://picsum.photos/200/300" },
-  { id: 4, feedName: "곤충젤리", imgSrc: "https://picsum.photos/200/300" },
-];
-
 const BroadcastHome = function () {
   const [broadcastInfo, setBroadcastInfo] = useState<IBroadcastInfo | null>(null);
   const [animalList, setAnimalList] = useState<React.ReactNode[] | null>(null);
@@ -31,14 +23,11 @@ const BroadcastHome = function () {
   useEffect(() => {
     axios({
       method: "get",
-      url: `${process.env.REACT_APP_API_URL}/broadcasts/${params.id}`,
+      url: `${process.env.REACT_APP_API_URL}/broadcasts/${params.broadcast_id}`,
     })
       .then((res) => {
-        // DB에는 thumbnail로 되어 있는데 description으로 수정 필요
-        // setBroadcastInfo(res.data.broadcast)
-        const tmp = { title: res.data.broadcast.title, description: res.data.broadcast.thumbnail };
-        setBroadcastInfo(tmp);
-
+        res.data.broadcast.description = res.data.broadcast.description.replace(/\./g, ".\n");
+        setBroadcastInfo(res.data.broadcast);
         const tmpAnimalList = res.data.animals.map((animal: IAnimalInfo) => {
           return (
             <Grid key={animal.name} item xs={12} sm={6} md={12}>
@@ -57,21 +46,19 @@ const BroadcastHome = function () {
         setStoreInfo(res.data.stores);
       })
       .catch((err) => console.log(err));
-  }, [params.id]);
-
-  // 투표 생기면 axios 보내기
+    window.scrollTo(0, 0);
+  }, [params.broadcast_id]);
 
   return (
     <StyledContainer>
       {broadcastInfo && animalList && storeInfo && (
         <>
           <StyledLeftSection>
-            <BroadcastScreen title={broadcastInfo.title} feedList={tmpFeedList} />
+            <BroadcastScreen title={broadcastInfo.title} />
             {!isMaximized && (
               <BroadcastContent
                 title={broadcastInfo.title}
-                detail={broadcastInfo.description}
-                feedList={tmpFeedList}
+                description={broadcastInfo.description}
               />
             )}
           </StyledLeftSection>

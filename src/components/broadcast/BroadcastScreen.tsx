@@ -19,17 +19,6 @@ import { broadcastActions } from "../../store/broadcastSlice";
 
 interface IProps {
   title: string;
-  feedList: { id: number; feedName: string; imgSrc: string }[];
-  // changeNumberOfViewers: (viewers: number) => void;
-  // changeNumberOfLikes: (likes: number) => void;
-  // vote: (selectedFeed: string) => void;
-  // toggleScreenMode: () => void;
-  // isMaximized: boolean;
-  // selectedFeed: string | null;
-  // isVoted: boolean;
-  // isLiked: boolean | string;
-  // numberOfViewers: number;
-  // numberOfLikes: number;
 }
 
 const BroadcastScreen = function (props: IProps) {
@@ -187,9 +176,7 @@ const BroadcastScreen = function (props: IProps) {
           )}
         </StyledBtnContainer>
       )}
-      {isVoteModalOpened && (
-        <VoteModal feedList={props.feedList} closeModal={() => setIsVoteModalOpened(false)} />
-      )}
+      {isVoteModalOpened && <VoteModal closeModal={() => setIsVoteModalOpened(false)} />}
       {!isMaximized && (
         <StyledModeChangeIconContainer
           onMouseOver={() => setIsMouseOver(true)}

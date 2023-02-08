@@ -111,29 +111,47 @@ function BroadcastVideo(props: IProps) {
     session?.on("signal", (event) => {
       if (event.type === "signal:welcome") {
         dispatch(ovActions.connectOwner(event.from));
+        if (event.data === undefined) {
+          return;
+        }
+        const roomInfo = JSON.parse(event.data);
+        if (roomInfo.voteStatus === "proceeding") {
+          dispatch(broadcastActions.startVote(roomInfo.feedList));
+        } else if (roomInfo.voteStatus === "finish") {
+          dispatch(broadcastActions.finishVote(roomInfo.winnerFeedId));
+        }
       }
-      if (event.type === "signal:badge") {
-        console.log("뱃지 받았다");
-      }
+
       if (event.type === "signal:numberOfLikes") {
         if (event.data !== undefined) {
           dispatch(broadcastActions.changeNumberOfLikes(Number(event.data)));
         }
       }
+
+      if (event.type === "signal:voteStart") {
+        if (event.data === undefined) {
+          return;
+        }
+        const feedList = JSON.parse(event.data);
+        dispatch(broadcastActions.startVote(feedList));
+      }
+
+      if (event.type === "signal:voteFinish") {
+        if (event.data != undefined) {
+          dispatch(broadcastActions.finishVote(event.data));
+        }
+      }
+
+      if (event.type === "signal:badge") {
+        axios({
+          method: "post",
+          url: `${process.env.REACT_APP_API_URL}/broadcasts/badges`,
+        })
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
+      }
     });
   }, [session]);
-
-  // 투표하기
-  useEffect(() => {
-    if (selectedFeed === null || ownerConnection === undefined) {
-      return;
-    }
-    session?.signal({
-      data: selectedFeed,
-      to: [ownerConnection],
-      type: "vote",
-    });
-  }, [selectedFeed, ownerConnection]);
 
   // 좋아요 및 좋아요 취소
   // useEffect(() => {

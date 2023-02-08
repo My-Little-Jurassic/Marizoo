@@ -1,27 +1,32 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
+import { useAppSelector } from "../../store";
 
 import { CardNotLabel } from "../common/card/index";
 
 interface Iprops {
-  feedName: string;
-  imgSrc: string;
   closeModal: () => void;
 }
 
 const VoteResultModal = function (props: Iprops) {
+  const winnerFeed = useAppSelector((state) => state.broadcast.winnerFeed);
+
   return (
     <StyledModal onClick={props.closeModal}>
-      <StyledBlackDiv />
-      <SytledIframe src="https://embed.lottiefiles.com/animation/32585" />
-      <StyledContainer>
-        <StyledHeader2>먹이 투표 결과</StyledHeader2>
-        <StyledCardBox>
-          <CardNotLabel imgSrc={props.imgSrc} />
-        </StyledCardBox>
-        <StyledHeader2>1등</StyledHeader2>
-        <StyledHeader3>{props.feedName}</StyledHeader3>
-      </StyledContainer>
+      {winnerFeed && (
+        <>
+          <StyledBlackDiv />
+          <SytledIframe src="https://embed.lottiefiles.com/animation/32585" />
+          <StyledContainer>
+            <StyledHeader2>먹이 투표 결과</StyledHeader2>
+            <StyledCardBox>
+              <CardNotLabel imgSrc={winnerFeed.img} />
+            </StyledCardBox>
+            <StyledHeader2>1등</StyledHeader2>
+            <StyledHeader3>{winnerFeed.name}</StyledHeader3>
+          </StyledContainer>
+        </>
+      )}
     </StyledModal>
   );
 };

@@ -22,3 +22,9 @@ export interface IRelatedBroadcastInfo {
   title: string;
   thumbnail: string;
 }
+
+export interface IFeed {
+  id: number;
+  name: string;
+  img: string;
+}

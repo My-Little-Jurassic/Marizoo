@@ -11,13 +11,7 @@ import { ovActions } from "../../store/ovSlice";
 
 interface IProps {
   title: string;
-  detail: string;
-  feedList: { id: number; feedName: string; imgSrc: string }[];
-  // isVoted: boolean;
-  // isLiked: boolean | string;
-  // like: () => void;
-  // viewers: number;
-  // numberOfLikes: number;
+  description: string;
 }
 
 const BroadcastContent = function (props: IProps) {
@@ -26,22 +20,15 @@ const BroadcastContent = function (props: IProps) {
   const isVoted = useAppSelector((state) => state.broadcast.isVoted);
   const numberOfLikes = useAppSelector((state) => state.broadcast.numberOfLikes);
   const numberOfViewers = useAppSelector((state) => state.broadcast.numberOfViewers);
+  const isVoting = useAppSelector((state) => state.broadcast.isVoting);
 
   const [isVoteModalOpened, setIsVoteModalOpened] = useState<boolean>(false);
   const [isResultModalOpened, setIsResultModalOpened] = useState<boolean>(false);
 
   return (
     <StyledContainer>
-      {isVoteModalOpened && (
-        <VoteModal feedList={props.feedList} closeModal={() => setIsVoteModalOpened(false)} />
-      )}
-      {isResultModalOpened && (
-        <VoteResultModal
-          feedName="귀뚜라미"
-          imgSrc="https://picsum.photos/200/300"
-          closeModal={() => setIsResultModalOpened(false)}
-        />
-      )}
+      {isVoteModalOpened && <VoteModal closeModal={() => setIsVoteModalOpened(false)} />}
+      {isResultModalOpened && <VoteResultModal closeModal={() => setIsResultModalOpened(false)} />}
       <StyledSubTitleContainer>
         <StyledTitle>{props.title}</StyledTitle>
         <StyledButtonContainer>
@@ -73,7 +60,7 @@ const BroadcastContent = function (props: IProps) {
 
       <StyledHr />
       <StyledDetail>
-        {props.detail}
+        {props.description}
         <GreenBtn
           label="투표결과"
           type={0}
@@ -132,6 +119,7 @@ const StyledButtonContainer = styled.div`
 const StyledDetail = styled.div`
   font: ${(props) => props.theme.fonts.paragraph};
   color: ${(props) => props.theme.colors.primaryText};
+  white-space: pre-line;
 `;
 
 const StyledHr = styled.hr`

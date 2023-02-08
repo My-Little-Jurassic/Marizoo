@@ -14,12 +14,12 @@ const BroadcastRecommendations = function () {
   useEffect(() => {
     axios({
       method: "get",
-      url: `${process.env.REACT_APP_API_URL}/broadcasts/${params.id}/related`,
+      url: `${process.env.REACT_APP_API_URL}/broadcasts/${params.broadcast_id}/related`,
     })
       .then((res) => {
         const sampleRelatedBroadcastList = res.data.onAir.map(
           (broadcast: IRelatedBroadcastInfo) => {
-            if (broadcast.id === Number(params.id)) {
+            if (broadcast.id === Number(params.broadcast_id)) {
               return;
             }
             return (
@@ -38,7 +38,7 @@ const BroadcastRecommendations = function () {
         setRelatedBroadcastList(sampleRelatedBroadcastList);
       })
       .catch((err) => console.log(err));
-  }, [params.id]);
+  }, [params.broadcast_id]);
 
   return (
     <StyledContainer>

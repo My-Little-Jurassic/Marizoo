@@ -1,13 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IFeed } from "../components/broadcast/type";
 
-const initialState = {
+interface IInitialState {
+  isMaximized: boolean;
+  selectedFeed: null | string;
+  isVoted: boolean;
+  isLiked: boolean;
+  numberOfViewers: number;
+  numberOfLikes: number;
+  isVoting: boolean;
+  winnerFeed: null | undefined | IFeed;
+  feedList: null | IFeed[];
+}
+
+const initialState: IInitialState = {
   isMaximized: false,
   selectedFeed: null,
   isVoted: false,
   isLiked: false,
   numberOfViewers: 0,
   numberOfLikes: 0,
-  isOwner: true,
+  isVoting: false,
+  winnerFeed: null,
+  feedList: null,
 };
 
 const broadcastSlice = createSlice({
@@ -33,6 +48,28 @@ const broadcastSlice = createSlice({
 
     changeNumberOfViewers(state, { payload }) {
       state.numberOfViewers = payload;
+    },
+
+    startVote(state, { payload }) {
+      state.feedList = payload;
+      state.isVoting = true;
+    },
+
+    finishVote(state, { payload }) {
+      state.isVoting = false;
+      if (state.feedList) {
+        state.winnerFeed = state.feedList.find((feed) => {
+          return feed.id === payload;
+        });
+      }
+    },
+
+    pickFeed(state, { payload }) {
+      if (state.selectedFeed === payload) {
+        state.selectedFeed = null;
+      } else {
+        state.selectedFeed = payload;
+      }
     },
 
     resetRoom(state) {
