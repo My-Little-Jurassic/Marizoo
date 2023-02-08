@@ -9,7 +9,7 @@ export interface IFeed {
   id: number;
   name: string;
   img: string;
-  numberOfVotes: number;
+  numberOfVotes?: number;
 }
 
 export type TStatus = "DEFAULT" | "RESERVE" | "ONAIR" | "FINISH";

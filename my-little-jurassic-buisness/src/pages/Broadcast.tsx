@@ -7,7 +7,7 @@ import {
   BroadcastVoteContainer,
 } from "../components/Broadcast";
 import { IBroadcastSetting } from "../types";
-import { IBroadcastStatus } from "../types/Broadcast";
+import { IBroadcastStatus, IVote } from "../types/Broadcast";
 import { postBroadcast } from "../api";
 import BroadcastVoteModal from "../components/Broadcast/BroadcastVoteModal";
 
@@ -33,6 +33,7 @@ const Broadcast = () => {
   const { viewers, likes, status } = broadcastStatus;
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // 방송시작 함수
   const startBroadcast = (setting: IBroadcastSetting) => {
     const { id, title, description, animalIdList, thumbnail } = setting;
 
@@ -55,9 +56,18 @@ const Broadcast = () => {
     });
     setBroadcastStatus({ ...broadcastStatus, status: "ONAIR" });
   };
+  // 방송종료 함수
   const endBroadcast = () => {
     // setBroadcastStatus({ ...broadcastStatus, status: "FINISH" });
     setBroadcastStatus({ ...broadcastStatus, status: "DEFAULT" });
+  };
+  // 투표 시작 함수
+  const startVote = (vote: IVote) => {
+    setBroadcastStatus({ ...broadcastStatus, vote, status: "ONAIR" });
+  };
+  // 투표 종료 함수
+  const endVote = () => {
+    setBroadcastStatus({ ...broadcastStatus, status: "FINISH" });
   };
 
   return (
@@ -74,7 +84,7 @@ const Broadcast = () => {
           status={status}
         />
       </div>
-      <BroadcastVoteModal />
+      <BroadcastVoteModal startVote={startVote} endVote={endVote} />
     </StyledDiv>
   );
 };
