@@ -14,3 +14,10 @@ export async function getStoresList() {
 export async function searchStores(params: type.ISearchStores) {
   return instance.get("/stores/search", { params });
 }
+
+/**
+ * GET : 필터 동물 종 목록
+ */
+export async function getSpeciesList() {
+  return instance.get("/species");
+}

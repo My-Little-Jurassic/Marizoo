@@ -41,7 +41,6 @@ function CafeMap() {
   }, []);
 
   useEffect(() => {
-    console.log(cafeDataList);
     if (cafeDataList) {
       markerList.map((marker: any) => {
         marker.setMap(null);
@@ -84,7 +83,6 @@ function CafeMap() {
   useEffect(() => {
     markerList.map((marker: any) => {
       marker.setMap(map);
-      console.log(marker);
     });
   }, [markerList]);
 

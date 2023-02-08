@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { ISpecies } from "./type";
 
 interface IProps {
-  animal: { species_id: number; animalName: string; imgUrl: string };
+  animal: ISpecies;
   focusdFilter: number | null;
   setFocusdFilter: (index: number | null) => void;
   filterKeyword: string | null;
@@ -13,21 +14,21 @@ function CafeFilterSwiperIcon(props: IProps) {
   return (
     <StyledFilterSwiperIcon
       onMouseOver={() => {
-        props.setFocusdFilter(props.animal.species_id);
+        props.setFocusdFilter(props.animal.id);
       }}
       onMouseOut={() => {
         props.setFocusdFilter(null);
       }}
       onClick={() => {
-        console.log(props.animal.animalName);
-        props.setFilterKeyword(props.animal.animalName);
+        console.log(props.animal.classification);
+        props.setFilterKeyword(props.animal.classification);
       }}
       animal={props.animal}
       focusdIcon={props.focusdFilter}
     >
       <StyledIcon
-        animalId={props.animal.species_id}
-        imgUrl={props.animal.imgUrl}
+        animalId={props.animal.id}
+        imgUrl={props.animal.classificationImg}
         focusdIcon={props.focusdFilter}
       ></StyledIcon>
     </StyledFilterSwiperIcon>
@@ -37,7 +38,7 @@ function CafeFilterSwiperIcon(props: IProps) {
 export default CafeFilterSwiperIcon;
 
 const StyledFilterSwiperIcon = styled.div<{
-  animal: { species_id: number; animalName: string; imgUrl: string };
+  animal: ISpecies;
   focusdIcon: number | null;
 }>`
   position: relative;

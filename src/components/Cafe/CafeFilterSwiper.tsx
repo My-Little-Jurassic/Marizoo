@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getSpeciesList } from "../../api";
 
 import CafeFilterSwiperIcon from "./CafeFilterSwiperIcon";
+import { ISpecies } from "./type";
 
 interface IProps {
   animalList: {
@@ -18,24 +20,41 @@ interface IProps {
 }
 
 function FilterSwiper(props: IProps) {
-  // swiper icon 배열 데이터 가공
-  const swiperIcons = props.animalList.map((animal, index) => {
-    return (
-      <div key={`animal-${index}`}>
-        <CafeFilterSwiperIcon
-          animal={animal}
-          focusdFilter={props.focusdFilter}
-          setFocusdFilter={props.setFocusdFilter}
-          filterKeyword={props.filterKeyword}
-          setFilterKeyword={props.setFilterKeyword}
-        ></CafeFilterSwiperIcon>
-      </div>
-    );
-  });
+  const [speciesDataList, setSpeciesDataList] = useState<ISpecies[] | null>(null);
+  const [speciesList, setSpeciesList] = useState<JSX.Element[] | null>(null);
+
+  useEffect(() => {
+    getSpeciesList()
+      .then((res) => {
+        setSpeciesDataList(res.data.species);
+      })
+      .catch((e) => {
+        console.log("종 목록 로드 실패", e);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (speciesDataList) {
+      const newSwiperIcons = speciesDataList.map((animal, index) => {
+        return (
+          <div key={`animal-${index}`}>
+            <CafeFilterSwiperIcon
+              animal={animal}
+              focusdFilter={props.focusdFilter}
+              setFocusdFilter={props.setFocusdFilter}
+              filterKeyword={props.filterKeyword}
+              setFilterKeyword={props.setFilterKeyword}
+            ></CafeFilterSwiperIcon>
+          </div>
+        );
+      });
+      setSpeciesList(newSwiperIcons);
+    }
+  }, [speciesDataList]);
 
   return (
     <StyledSwiper searchKeyword={props.searchKeyword} filterKeyword={props.filterKeyword}>
-      <StyledSwiperSlide>{swiperIcons}</StyledSwiperSlide>
+      <StyledSwiperSlide>{speciesList}</StyledSwiperSlide>
     </StyledSwiper>
   );
 }
