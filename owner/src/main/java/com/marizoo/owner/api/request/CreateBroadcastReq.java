@@ -7,5 +7,5 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class CreateBroadcastReq {
     private CreateBroadcastDto broadcastInfo;
-    private MultipartFile img;
+
 }

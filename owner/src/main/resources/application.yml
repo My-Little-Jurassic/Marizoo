@@ -4,7 +4,11 @@ spring:
     url: jdbc:mysql://localhost:3306/marizoo?
     username:  # MySQL DB Username
     password:  # MySQL DB password
-
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size: 128MB
+      enabled: true
   jpa:
     hibernate:
       ddl-auto: create

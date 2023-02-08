@@ -76,7 +76,7 @@ public class BroadcastService {
         }
 
         if(img.isEmpty()) {
-         return -1L;
+         return null;
         }
         String imgUrl = null;
         try {
