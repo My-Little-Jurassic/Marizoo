@@ -40,8 +40,8 @@ public class ReservationService {
     }
 
     // 체험 프로그램 예약
-    public Long reserve(Long uid, Long playId, Integer totalVisitor){
-        Optional<User> optionalUser = userRepository.findById(uid);
+    public Long reserve(String uid, Long playId, Integer totalVisitor){
+        Optional<User> optionalUser = userRepository.findByUid(uid);
         if(optionalUser.isEmpty()){
             return null;
         }
@@ -49,12 +49,14 @@ public class ReservationService {
 
         Play play = playRepository.findPlayById(playId);
 
+        if(play.getMaxVisitor() <= totalVisitor){
+            return null;
+        }
         UsersPlay usersPlay = UsersPlay.createUsersPlay(user, play, totalVisitor);
         usersPlayRepository.save(usersPlay);
         user.addUsersPlay(usersPlay);
 
         return usersPlay.getId();
     }
-
 
 }

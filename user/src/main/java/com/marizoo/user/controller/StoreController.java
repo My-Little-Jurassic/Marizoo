@@ -9,6 +9,7 @@ import com.marizoo.user.entity.AnimalStore;
 import com.marizoo.user.entity.Broadcast;
 import com.marizoo.user.entity.BroadcastAnimal;
 import com.marizoo.user.entity.Play;
+import com.marizoo.user.exception.PlayReservationCloasedException;
 import com.marizoo.user.service.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -149,9 +150,15 @@ public class StoreController {
     // 체험 프로그램에 대한 정보 제공.
     @ApiOperation(value = "store_id 가게가 제공하는 play_id 체험 프로그램에 대한 정보 가져오기")
     @GetMapping("/stores/{store_id}/plays/{play_id}")
-    public ResponseEntity<PlayAndStoreInfoResponse> getPlayInfo(@PathVariable(name = "store_id") @ApiParam(name = "동물가게 id", required = true, example = "1") Long storeId,
+    public ResponseEntity<?> getPlayInfo(@PathVariable(name = "store_id") @ApiParam(name = "동물가게 id", required = true, example = "1") Long storeId,
                                                                 @PathVariable(name = "play_id") @ApiParam(name = "체험 프로그램 id", required = true, example = "1") Long playId){
-        return new ResponseEntity<>(animalStoreService.findPlayInfo(storeId, playId), HttpStatus.OK);
+
+        PlayAndStoreInfoResponse playInfo = animalStoreService.findPlayInfo(storeId, playId);
+
+        if(playInfo.getStoreInfo() == null){
+            return new ResponseEntity<>("예약 불가", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(playInfo, HttpStatus.OK);
     }
 
 

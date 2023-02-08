@@ -14,5 +14,6 @@ public class PlayInfoDto {
     private String description;
     private Integer runningTime;
     private String notice;
+    private Integer playTotalVisitor;
 
 }
