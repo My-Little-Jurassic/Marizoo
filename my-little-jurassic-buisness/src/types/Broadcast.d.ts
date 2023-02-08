@@ -30,11 +30,11 @@ export interface IBroadcastStatus {
 }
 
 export interface IBroadcastSetting {
-  id: number;
+  id: string;
   title: string;
   description: string;
-  thumbnail: string;
-  animals: IAnimal[];
-  videoDevice: null;
+  thumbnail: Blob | null;
+  animalIdList: string[];
+  videoDevice: string | null;
   audioDevice: null;
 }
