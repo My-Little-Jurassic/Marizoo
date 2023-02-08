@@ -13,6 +13,8 @@ import { Nav } from "./components/common/navbar";
 import { darkTheme } from "./styles/themes/darkTheme";
 import { lightTheme } from "./styles/themes/lightTheme";
 
+import Badge from "./components/common/badge/Badge/Badge";
+
 function App() {
   const [themeMode, toggleTheme] = useTheme();
   const theme: Itheme = themeMode === "light" ? lightTheme : darkTheme;
@@ -21,7 +23,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <Nav themeMode={themeMode} toggleTheme={toggleTheme}></Nav>
       <Routes>
-        <Route path="/" element={<Home />}></Route>
+        <Route path="/" element={<Badge></Badge>}></Route>
+
         <Route path="/login" element={<Login />}></Route>
         <Route path="/regist" element={<Regist />}></Route>
         {/* <Route path="/user/:user_id" element={}></Route> */}
