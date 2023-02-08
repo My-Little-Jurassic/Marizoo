@@ -1,5 +1,5 @@
 import React from "react";
-import { RegistSide, RegistContainer, RegistVectorBg } from "../components/Regist";
+import { RegistSide, RegistContainer, RegistVectorBg } from "../../components/Regist";
 
 const Regist = (): JSX.Element => {
   return (

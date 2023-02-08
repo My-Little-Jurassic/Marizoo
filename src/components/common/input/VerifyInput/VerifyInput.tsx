@@ -10,7 +10,7 @@ const StyledDiv = styled.div`
 
 export interface IInputVerify {
   description: string; // 사용자에게 보여질 설명
-  verify(value: string): boolean; // value를 받아 참 거짓을 판별하는 함수
+  verify(value: string): boolean | Promise<boolean>; // value를 받아 참 거짓을 판별하는 함수
   lazy?: boolean; // focusOut 후에 판단할지를 결정하는
 }
 
@@ -35,23 +35,26 @@ const VerifyInput = forwardRef<HTMLInputElement, IProps>(
      * input 조건 판별 결과를 담은 배열
      */
     const getInputVerifyResultList = useCallback(
-      (str: string, all = false): IInputVerifyResult[] => {
-        const result = inputVerifyList
-          .filter((item) => !item.lazy || inputStatus !== EInputStatus.default || all)
-          .map<IInputVerifyResult>((item) => {
+      async (str: string, all = false): Promise<IInputVerifyResult[]> => {
+        const targetList = inputVerifyList.filter(
+          (item) => !item.lazy || inputStatus !== EInputStatus.default || all,
+        );
+        const result = await Promise.all(
+          targetList.map<Promise<IInputVerifyResult>>(async (item) => {
             const { description, verify } = item;
             let result = EInputStatus.default;
 
             if (item.lazy && !all) {
-              result = verify(value) ? EInputStatus.success : EInputStatus.fail;
+              result = (await verify(value)) ? EInputStatus.success : EInputStatus.fail;
             } else if (str && !isInitial.current) {
-              result = verify(str) ? EInputStatus.success : EInputStatus.fail;
+              result = (await verify(str)) ? EInputStatus.success : EInputStatus.fail;
             }
             return { description, result };
-          });
+          }),
+        );
         return result;
       },
-      [isInitial, inputStatus],
+      [isInitial, inputStatus, inputVerifyList],
     );
 
     /**
@@ -59,9 +62,10 @@ const VerifyInput = forwardRef<HTMLInputElement, IProps>(
      * @returns totalInputVerifyResult
      */
     const getTotalInputVerifyResult = useCallback(
-      (str: string): boolean => {
+      async (str: string): Promise<boolean> => {
         let totalInputVerifyResult = true;
-        getInputVerifyResultList(str, true).forEach((item) => {
+        const list = await getInputVerifyResultList(str, true);
+        list.forEach((item) => {
           totalInputVerifyResult = totalInputVerifyResult && item.result === EInputStatus.success;
         });
         return totalInputVerifyResult;
@@ -81,12 +85,12 @@ const VerifyInput = forwardRef<HTMLInputElement, IProps>(
      * input tag에 focusout 발생시 최종 input값과 판별결과를 상위에 알리는 함수
      */
     const focusOut = useCallback(
-      (newValue: string): void => {
-        const totalInputVerifyResult = getTotalInputVerifyResult(newValue);
+      async (newValue: string) => {
+        const totalInputVerifyResult = await getTotalInputVerifyResult(newValue);
         setInputStatus(totalInputVerifyResult ? EInputStatus.success : EInputStatus.fail);
         submitInputResult(newValue, totalInputVerifyResult);
       },
-      [getTotalInputVerifyResult],
+      [getTotalInputVerifyResult, submitInputResult],
     );
 
     return (
