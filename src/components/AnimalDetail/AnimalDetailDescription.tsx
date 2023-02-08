@@ -46,6 +46,7 @@ const StyledColorHeader = styled.span`
 const StyledSpan = styled.span`
   font: ${(props) => props.theme.fonts.mainContent};
   font-size: 24px;
+  white-space: pre-line;
 `;
 
 const StyledBold = styled.span`

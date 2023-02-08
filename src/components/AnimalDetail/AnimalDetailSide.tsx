@@ -8,44 +8,16 @@ import { IStoreInfo, IStoreAnimalInfo } from "./type";
 
 interface IProps {
   currentAnimalName: string;
+  speciesName: string;
+  speciesId: number;
   storeInfo: IStoreInfo;
 }
 
-// 현재 동물과 같은 종인 동물들 받아오기
-// api 아직 없음
-const sampleSameSpeciesAnimals = [
-  {
-    id: 1,
-    animalName: "도",
-    classification: "axolotl",
-    img: "https://picsum.photos/200/300",
-    gender: "male",
-  },
-  {
-    id: 2,
-    animalName: "레",
-    classification: "axolotl",
-    img: "https://picsum.photos/200/300",
-    gender: "female",
-  },
-  {
-    id: 3,
-    animalName: "미",
-    classification: "axolotl",
-    img: "https://picsum.photos/200/300",
-    gender: "male",
-  },
-  {
-    id: 4,
-    animalName: "파",
-    classification: "axolotl",
-    img: "https://picsum.photos/200/300",
-    gender: "female",
-  },
-];
-
 const AnimalDetailSide = function (props: IProps) {
   const [storeAnimalList, setStoreAnimalList] = useState<React.ReactNode[] | null>(null);
+  const [sameSpeciesAnimalList, setSameSpeciesAnimalList] = useState<React.ReactNode[] | null>(
+    null,
+  );
 
   const params = useParams();
 
@@ -75,25 +47,33 @@ const AnimalDetailSide = function (props: IProps) {
         setStoreAnimalList(tmpStoreAnimalList);
       })
       .catch((err) => console.log(err));
-  }, [params.id]);
 
-  const sameSpeciesAnimals = sampleSameSpeciesAnimals.map((animal) => {
-    if (animal.animalName === props.currentAnimalName) {
-      return;
-    }
-    return (
-      <Grid key={animal.animalName} item xs={12} sm={6} md={4} lg={12}>
-        <NavLink to={`/animal/${animal.id}`} style={{ textDecoration: "none" }}>
-          <ProfileLarge
-            animalName={animal.animalName}
-            gender={animal.gender}
-            classification={animal.classification}
-            imgSrc={animal.img}
-          />
-        </NavLink>
-      </Grid>
-    );
-  });
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_API_URL}/species/${props.speciesId}`,
+    })
+      .then((res) => {
+        const tmpSameSpeciesAnimalList = res.data.animals.map((animal: IStoreAnimalInfo) => {
+          if (animal.name === props.currentAnimalName) {
+            return;
+          }
+          return (
+            <Grid key={animal.id} item xs={12} sm={6} md={4} lg={12}>
+              <NavLink to={`/animal/${animal.id}`} style={{ textDecoration: "none" }}>
+                <ProfileLarge
+                  animalName={animal.name}
+                  gender={animal.gender}
+                  classification={props.speciesName}
+                  imgSrc={animal.img}
+                />
+              </NavLink>
+            </Grid>
+          );
+        });
+        setSameSpeciesAnimalList(tmpSameSpeciesAnimalList);
+      })
+      .catch((err) => console.log(err));
+  }, [params.animal_id]);
 
   return (
     <StyledContainer>
@@ -108,7 +88,7 @@ const AnimalDetailSide = function (props: IProps) {
           </Grid>
           <StyledSpan>같은 종의 동물들</StyledSpan>
           <Grid container spacing={2}>
-            {sameSpeciesAnimals}
+            {sameSpeciesAnimalList}
           </Grid>
         </>
       )}

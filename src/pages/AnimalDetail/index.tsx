@@ -1,23 +1,24 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
   AnimalDetailProfile,
   AnimalDetailDescription,
   AnimalDetailSide,
-} from "../components/AnimalDetail";
+} from "../../components/AnimalDetail";
 import {
   IAnimalInfo,
   IBroadcastInfo,
   IFeed,
   ISpeciesInfo,
   IStoreInfo,
-} from "../components/AnimalDetail/type";
+} from "../../components/AnimalDetail/type";
 
 const AnimalDetail = function () {
   const APPLICATION_SERVER_URL = process.env.REACT_APP_API_URL;
   const params = useParams();
+  const navigate = useNavigate();
 
   const [animalInfo, setAnimalInfo] = useState<IAnimalInfo | null>(null);
   const [broadcastInfo, setBroadcastInfo] = useState<IBroadcastInfo | null>(null);
@@ -28,24 +29,30 @@ const AnimalDetail = function () {
   useEffect(() => {
     axios({
       method: "get",
-      url: `${APPLICATION_SERVER_URL}/stores/${params.id}/animal_detail`,
+      url: `${APPLICATION_SERVER_URL}/stores/${params.animal_id}/animal_detail`,
     })
       .then((res) => {
+        res.data.speciesInfo.info = res.data.speciesInfo.info.replace(/\./g, ".\n");
         setAnimalInfo(res.data.animalInfo);
         setBroadcastInfo(res.data.broadcastInfo);
         setFeedList(res.data.feeds);
         setSpeciesInfo(res.data.speciesInfo);
         setStoreInfo(res.data.storeInfo);
       })
-      .catch((err) => console.log(err));
-  }, [params.id]);
+      .catch(() => navigate("/404", { replace: true }));
+  }, [params.animal_id]);
 
   return (
     <StyledContainer>
       {animalInfo && broadcastInfo && feedList && speciesInfo && storeInfo && (
         <>
           <StyledLeftSide>
-            <AnimalDetailSide currentAnimalName={animalInfo.name} storeInfo={storeInfo} />
+            <AnimalDetailSide
+              currentAnimalName={animalInfo.name}
+              speciesName={speciesInfo.classification}
+              speciesId={speciesInfo.speciesId}
+              storeInfo={storeInfo}
+            />
           </StyledLeftSide>
           <StyledRightSide>
             <AnimalDetailProfile
