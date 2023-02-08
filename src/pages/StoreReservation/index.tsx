@@ -1,17 +1,18 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
   StoreReservationProfile,
   StoreReservationInfo,
   StoreReservationNotice,
   StoreReservationCompleteModal,
-} from "../components/StoreReservation";
-import { IPlayInfo, IStoreInfo } from "../components/StoreReservation/type";
+} from "../../components/StoreReservation";
+import { IPlayInfo, IStoreInfo } from "../../components/StoreReservation/type";
 
 const StoreReservation = function () {
   const params = useParams();
+  const navigate = useNavigate();
 
   const [playInfo, setPlayInfo] = useState<IPlayInfo | null>(null);
   const [storeInfo, setStoreInfo] = useState<IStoreInfo | null>(null);
@@ -32,7 +33,7 @@ const StoreReservation = function () {
         setPlayInfo(tmpPlayInfo);
         setStoreInfo(res.data.storeInfo);
       })
-      .catch((err) => console.log(err));
+      .catch(() => navigate("/404", { replace: false }));
   }, []);
 
   return (
