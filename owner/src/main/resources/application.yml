@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/marizoo?
+    username:  # MySQL DB Username
+    password:  # MySQL DB password
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher # swagger
+cloud:
+  aws:
+    credentials:
+      access-key: # 이성복한테 문의
+      secret-key: # 이성복한테 문의
+    s3:
+      bucket: marizoo
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
