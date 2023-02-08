@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReservationRequest {
 
-    private Long uid;
+    private String uid;
     private Long playId;
     private Integer totalVisitor;
 
