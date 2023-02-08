@@ -28,9 +28,11 @@ const StyledPediaContentScreen = styled.section`
   display: flex;
   padding: 16px;
   width: 100%;
-  border: ${({ theme }) => theme.colors.primaryText} 8px solid;
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+  border: ${({ theme }) => theme.colors.brandColors.basaltGray[50]} 8px solid;
   border-radius: 32px;
-  background-color: ${({ theme }) => theme.colors.secondaryBg};
+  background-color: ${({ theme }) => theme.colors.brandColors.basaltGray[50]};
   @media screen and (max-width: 600px) {
     flex-direction: column;
   }
@@ -41,6 +43,8 @@ const StyledPediaContentScreen = styled.section`
     border-radius: 32px;
     height: 100%;
     object-fit: cover;
+    box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+      rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
     @media screen and (max-width: 600px) {
       width: 100%;
       height: 200px;
@@ -53,12 +57,12 @@ const StyledPediaContentScreen = styled.section`
     padding: 16px;
     & h3 {
       font: ${({ theme }) => theme.fonts.header2};
-      color: ${({ theme }) => theme.colors.green};
+      color: ${({ theme }) => theme.colors.brandColors.jurassicGreen[600]};
       margin-bottom: 16px;
     }
     & p {
       font: ${({ theme }) => theme.fonts.mainContentBold};
-      color: ${({ theme }) => theme.colors.primaryText};
+      color: ${({ theme }) => theme.colors.brandColors.basaltGray[900]};
       margin-bottom: 8px;
     }
   }
