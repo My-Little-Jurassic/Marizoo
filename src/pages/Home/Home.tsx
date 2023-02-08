@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { TbX } from "react-icons/tb";
 import styled from "styled-components";
@@ -7,19 +8,58 @@ import { HomeFilterSwiper, HomeLiveGrid } from "../../components/Home";
 
 function Home() {
   // 동물 정보 더미데이터
-  const animalList = [
-    { animalName: "도마뱀", imgUrl: "https://picsum.photos/200/300" },
-    { animalName: "뱀", imgUrl: "https://picsum.photos/200/300" },
-    { animalName: "거북이", imgUrl: "https://picsum.photos/200/300" },
-    { animalName: "악어", imgUrl: "https://picsum.photos/200/300" },
-    { animalName: "고등어초밥", imgUrl: "https://picsum.photos/200/300" },
-  ];
+  // const animalList = [
+  //   { animalName: "도마뱀", imgUrl: "https://picsum.photos/200/300" },
+  //   { animalName: "뱀", imgUrl: "https://picsum.photos/200/300" },
+  //   { animalName: "거북이", imgUrl: "https://picsum.photos/200/300" },
+  //   { animalName: "악어", imgUrl: "https://picsum.photos/200/300" },
+  //   { animalName: "고등어초밥", imgUrl: "https://picsum.photos/200/300" },
+  // ];
+
+  const [speciesList, setSpeciesList] = useState<ISpecies[] | null>();
+  const [allOfBroadcastList, setAllOfBroadcastList] = useState<IBroadcast[] | null>();
+  const [searchedBroadcastList, setSearchedBroadcastList] = useState<IBroadcast[]>();
 
   // focus된 아이콘
   const [focusdFilter, setFocusdFilter] = useState<number | null>(null);
 
   // search keyword
   const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
+
+  // 첫 렌더링
+  useEffect(() => {
+    // DB에 저장된 종 정보 요청하기
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_API_URL}/species`,
+    })
+      .then((res) => setSpeciesList(res.data.species))
+      .catch((err) => console.log(err));
+
+    // 현재 방송 중인 모든 방송 요청하기
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_API_URL}/broadcasts`,
+    })
+      .then((res) => setAllOfBroadcastList(res.data.onAir))
+      .catch((err) => console.log(err));
+  }, []);
+
+  // 검색 시 0.3초 동안 검색 멈추면 해당 종이 출연하는 방송 정보 요청하기
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      axios({
+        method: "get",
+        url: `${process.env.REACT_APP_API_URL}/broadcasts/search`,
+        params: {
+          keyword: searchKeyword,
+        },
+      })
+        .then((res) => setSearchedBroadcastList(res.data.onAir))
+        .catch(() => setSearchedBroadcastList([]));
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [searchKeyword]);
 
   // search keyword 변화에 다른 hook
   useEffect(() => {
@@ -31,42 +71,57 @@ function Home() {
 
   return (
     <StyledMain>
-      <StyledHomeInput>
-        <SearchInput
-          value={""} // 초기 값
-          setValue={(value: string) => {
-            setSearchKeyword(value);
-          }} // value값을 전달받을 함수
-          placeholder="검색어를 입력해주세요"
-          onSearch={(value: string) => {
-            setSearchKeyword(value);
-          }}
-        ></SearchInput>
-      </StyledHomeInput>
-      <StyledSpacer space={32} />
-      <HomeFilterSwiper
-        animalList={animalList}
-        focusdFilter={focusdFilter}
-        setFocusdFilter={setFocusdFilter}
-        searchKeyword={searchKeyword}
-        setSearchKeyword={setSearchKeyword}
-      />
-      <StyledTitle>
-        {searchKeyword === null || ""
-          ? "지금 진행중인 방송이에요"
-          : `"${searchKeyword}"키워드의 방송입니다.`}
-        {searchKeyword === null || "" ? null : (
-          <StyledSearchResetBtn
-            onClick={() => {
-              setSearchKeyword(null);
-            }}
-          >
-            초기화
-            <TbX></TbX>
-          </StyledSearchResetBtn>
-        )}
-      </StyledTitle>
-      <HomeLiveGrid />
+      {speciesList && (
+        <>
+          <StyledHomeInput>
+            <SearchInput
+              value={""} // 초기 값
+              setValue={(value: string) => {
+                setSearchKeyword(value);
+              }} // value값을 전달받을 함수
+              placeholder="검색어를 입력해주세요"
+              onSearch={(value: string) => {
+                setSearchKeyword(value);
+              }}
+            ></SearchInput>
+          </StyledHomeInput>
+          <StyledSpacer space={32} />
+          <HomeFilterSwiper
+            speciesList={speciesList}
+            focusdFilter={focusdFilter}
+            setFocusdFilter={setFocusdFilter}
+            searchKeyword={searchKeyword}
+            setSearchKeyword={setSearchKeyword}
+          />
+          <StyledTitle>
+            {searchKeyword === null || ""
+              ? "지금 진행중인 방송이에요"
+              : `"${searchKeyword}" 키워드의 방송입니다.`}
+            {searchKeyword === null || "" ? null : (
+              <StyledSearchResetBtn
+                onClick={() => {
+                  setSearchKeyword(null);
+                }}
+              >
+                초기화
+                <TbX></TbX>
+              </StyledSearchResetBtn>
+            )}
+          </StyledTitle>
+
+          {/* 검색 키워드가 있을 때만 검색 조건에 해당하는 방송 정보 렌더링 */}
+          {/* 검색 키워드 없을 때는 모든 방송 정보 렌더링 */}
+          {allOfBroadcastList && searchedBroadcastList && (
+            <>
+              {searchKeyword ? (
+                <HomeLiveGrid broadcastList={searchedBroadcastList} />
+              ) : (
+                <HomeLiveGrid broadcastList={allOfBroadcastList} />
+              )}
+            </>
+          )}
+        </>
+      )}
     </StyledMain>
   );
 }
@@ -79,6 +134,7 @@ const StyledMain = styled.main`
   align-items: center;
   background-color: ${(props) => props.theme.colors.primaryBg};
   padding: 16px;
+  min-height: 100vh;
 `;
 
 const StyledHomeInput = styled.div`

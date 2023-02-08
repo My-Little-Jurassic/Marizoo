@@ -3,10 +3,7 @@ import styled from "styled-components";
 import { FreeModeSwiper } from "../common/swiper";
 
 interface IProps {
-  animalList: {
-    animalName: string;
-    imgUrl: string;
-  }[];
+  speciesList: ISpecies[];
   focusdFilter: number | null;
   setFocusdFilter: (index: number | null) => void;
   searchKeyword: string | null;
@@ -21,7 +18,7 @@ function HomeFilterSwiper(props: IProps) {
     });
   }, []);
   // swiper icon 배열 데이터 가공
-  const homeAnimalList = props.animalList.map((animal, index) => {
+  const homeAnimalList = props.speciesList.map((species, index) => {
     return (
       <div
         key={`HomeSwiper-${index}`}
@@ -32,12 +29,12 @@ function HomeFilterSwiper(props: IProps) {
           props.setFocusdFilter(null);
         }}
         onClick={() => {
-          props.setSearchKeyword(animal.animalName);
+          props.setSearchKeyword(species.classification);
         }}
       >
         <StyledIcon
           index={index}
-          imgUrl={animal.imgUrl}
+          imgUrl={species.classificationImg}
           focusdIcon={props.focusdFilter}
         ></StyledIcon>
       </div>
@@ -49,7 +46,7 @@ function HomeFilterSwiper(props: IProps) {
       <h3>
         {props.focusdFilter === null
           ? "보고싶은 동물을 골라보세요"
-          : `"${props.animalList[props.focusdFilter].animalName}" 라이브 보기`}
+          : `"${props.speciesList[props.focusdFilter].classification}" 라이브 보기`}
       </h3>
       <FreeModeSwiper
         elementList={homeAnimalList}
