@@ -74,7 +74,7 @@ const BroadcastSettingContainer = ({ initSetting, status, startBroadcast }: IPro
     // TODO: 각각의 입력에 대해 유효한지 체크
     startBroadcast(broadcastSetting);
   };
-  const toggleAnimal = (list: string[]) => {
+  const toggleAnimal = (list: number[]) => {
     setBroadcastSetting({ ...broadcastSetting, animalIdList: list });
   };
 

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { IAnimal } from "../../../types";
 
 interface IProps {
-  toggleAnimal(list: (string | undefined)[]): void;
+  toggleAnimal(list: (number | undefined)[]): void;
 }
 
 const BroadcastTable = ({ toggleAnimal }: IProps) => {
@@ -15,7 +15,7 @@ const BroadcastTable = ({ toggleAnimal }: IProps) => {
     const index = Number(e.target.value);
     const newAnimalList = [...animalList];
     newAnimalList[index].select = !newAnimalList[index].select;
-    toggleAnimal(newAnimalList.map((item) => (item.select ? `${item.id}` : undefined)));
+    toggleAnimal(newAnimalList.map((item) => (item.select ? item.id : undefined)));
     setAnimalList(newAnimalList);
   };
   return (

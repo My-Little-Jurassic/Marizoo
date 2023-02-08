@@ -29,7 +29,6 @@ const Broadcast = () => {
     vote: null,
     status: "DEFAULT",
   });
-  const { id, title } = broadcastSetting;
   const { viewers, likes, status } = broadcastStatus;
   const videoRef = useRef<HTMLVideoElement>(null);
 

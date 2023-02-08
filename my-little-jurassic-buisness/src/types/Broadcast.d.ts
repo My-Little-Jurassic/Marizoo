@@ -34,7 +34,7 @@ export interface IBroadcastSetting {
   title: string;
   description: string;
   thumbnail: Blob | null;
-  animalIdList: string[];
+  animalIdList: number[];
   videoDevice: string | null;
   audioDevice: null;
 }
