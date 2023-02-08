@@ -7,9 +7,15 @@ interface IProps {
   initSetting: IBroadcastSetting;
   status: TStatus;
   startBroadcast(setting: IBroadcastSetting): void;
+  endBroadcast(): void;
 }
 
-const BroadcastSettingContainer = ({ initSetting, status, startBroadcast }: IProps) => {
+const BroadcastSettingContainer = ({
+  initSetting,
+  status,
+  startBroadcast,
+  endBroadcast,
+}: IProps) => {
   // 방송 설정 STATE
   const [broadcastSetting, setBroadcastSetting] = useState<IBroadcastSetting>({
     ...initSetting,
@@ -74,27 +80,46 @@ const BroadcastSettingContainer = ({ initSetting, status, startBroadcast }: IPro
     // TODO: 각각의 입력에 대해 유효한지 체크
     startBroadcast(broadcastSetting);
   };
+  // 동물 선택 반영 함수
   const toggleAnimal = (list: number[]) => {
     setBroadcastSetting({ ...broadcastSetting, animalIdList: list });
+  };
+  // 변경 가능여부 반환함수
+  const readOnly = () => {
+    switch (status) {
+      case "ONAIR":
+      case "RESERVE":
+      case "FINISH":
+        return true;
+      case "DEFAULT":
+      default:
+        return false;
+    }
   };
 
   return (
     <StyledDiv className="BroadcastStatusViewer">
       <label>방송제목</label>
-      <input id={"title"} value={title} onChange={onChange} />
+      <input id={"title"} value={title} onChange={onChange} disabled={readOnly()} />
       <br />
 
       <label>방송동물</label>
-      <BroadcastTable toggleAnimal={toggleAnimal} />
+      <BroadcastTable
+        disabled={readOnly()}
+        selectAnimalIdList={animalIdList}
+        toggleAnimal={toggleAnimal}
+      />
       <br />
 
       <label>방송설명</label>
-      <textarea id={"description"} value={description} onChange={onChange} />
+      <textarea id={"description"} value={description} onChange={onChange} disabled={readOnly()} />
       <br />
       <div className="thumbnail-area">
         <div>
           <label>썸눼일 설정</label>
-          <button onClick={onClickFileUpload}>업로드</button>
+          <button onClick={onClickFileUpload} disabled={readOnly()}>
+            업로드
+          </button>
           <input
             type="file"
             ref={fileUploadRef}
@@ -102,12 +127,13 @@ const BroadcastSettingContainer = ({ initSetting, status, startBroadcast }: IPro
             accept="image/*"
             onChange={onChangeUploadFile}
             hidden
+            readOnly={readOnly()}
           />
           <img src={String(preview.current)} />
         </div>
         <div>
           <label>캐뭐라 설정</label>
-          <select onChange={onChangeVideo}>
+          <select onChange={onChangeVideo} disabled={readOnly()}>
             <option>-</option>
             {videoList.map((item, index) => (
               <option key={index} value={item.deviceId}>
@@ -119,8 +145,12 @@ const BroadcastSettingContainer = ({ initSetting, status, startBroadcast }: IPro
         </div>
       </div>
       <div className="btn-area">
-        <button>방송종료</button>
-        <button onClick={onStartBroadcast}>방송시작</button>
+        <button onClick={endBroadcast} disabled={!readOnly()}>
+          방송종료
+        </button>
+        <button onClick={onStartBroadcast} disabled={readOnly()}>
+          방송시작
+        </button>
       </div>
     </StyledDiv>
   );

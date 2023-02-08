@@ -36,17 +36,27 @@ const Broadcast = () => {
     const { id, title, description, animalIdList, thumbnail } = setting;
 
     const formData = new FormData();
-    formData.append("animalStoreId", id);
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("animalIdList", JSON.stringify(animalIdList));
-    if (thumbnail) formData.append("thumbnail", thumbnail);
+    formData.append(
+      "broadcastInfo",
+      JSON.stringify({
+        title,
+        description,
+        animalIdList,
+        animalStoreId: id,
+      }),
+    );
+    if (thumbnail) formData.append("img", thumbnail);
 
     console.dir(formData);
     postBroadcast(formData).then(() => {
       setBroadcastStatus({ ...broadcastStatus, sessionId: "123", status: "ONAIR" });
       setBroadcastSetting(setting);
     });
+    setBroadcastStatus({ ...broadcastStatus, status: "ONAIR" });
+  };
+  const endBroadcast = () => {
+    // setBroadcastStatus({ ...broadcastStatus, status: "FINISH" });
+    setBroadcastStatus({ ...broadcastStatus, status: "DEFAULT" });
   };
 
   return (
@@ -59,6 +69,7 @@ const Broadcast = () => {
         <BroadcastSettingContainer
           initSetting={broadcastSetting}
           startBroadcast={startBroadcast}
+          endBroadcast={endBroadcast}
           status={status}
         />
       </div>

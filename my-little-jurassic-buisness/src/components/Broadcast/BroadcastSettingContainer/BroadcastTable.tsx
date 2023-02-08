@@ -1,17 +1,37 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import { IAnimal } from "../../../types";
 
 interface IProps {
+  disabled: boolean;
+  selectAnimalIdList: number[];
   toggleAnimal(list: (number | undefined)[]): void;
 }
 
-const BroadcastTable = ({ toggleAnimal }: IProps) => {
-  const [animalList, setAnimalList] = useState<IAnimal[]>([
-    // TODO: 비동기를 통한 샵 동물 목록을 받아와 저장
-    { id: 1, name: "레오", select: false, classification: "레오파드게코" },
-    { id: 2, name: "좌파", select: false, classification: "아홀로틀" },
-  ]);
+const BroadcastTable = ({ disabled, selectAnimalIdList, toggleAnimal }: IProps) => {
+  const [animalList, setAnimalList] = useState<IAnimal[]>([]);
+
+  useEffect(() => {
+    getAnimalList().then((val) => setAnimalList(val));
+  }, []);
+
+  const getAnimalList = async () => {
+    // TODO: getAnimalList 요청을 통한 동물
+    // select 값은 기본 false로 삽입한다.
+    const initialAnimalList = [
+      { id: 1, name: "레오", select: false, classification: "레오파드게코" },
+      { id: 2, name: "좌파", select: false, classification: "아홀로틀" },
+    ];
+
+    // 서버로부터 받은 동물 리스트에 대해 이미 선택되어있는 동물의 select 값을 true로 변경하여 반환한다.
+    return initialAnimalList.map((animal) => {
+      if (selectAnimalIdList.find((id) => id === animal.id)) {
+        animal.select = true;
+      }
+      return animal;
+    });
+  };
+
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const index = Number(e.target.value);
     const newAnimalList = [...animalList];
@@ -32,7 +52,13 @@ const BroadcastTable = ({ toggleAnimal }: IProps) => {
         {animalList.map((item, index) => (
           <tr key={index}>
             <td>
-              <input type="checkbox" value={index} checked={item.select} onChange={onChange} />
+              <input
+                type="checkbox"
+                value={index}
+                checked={item.select}
+                onChange={onChange}
+                disabled={disabled}
+              />
             </td>
             <td>{item.name}</td>
             <td>{item.classification}</td>
