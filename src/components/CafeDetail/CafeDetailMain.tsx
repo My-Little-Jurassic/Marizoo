@@ -34,6 +34,6 @@ const StyledCafeDetailMain = styled.div`
     margin-bottom: 32px;
   }
   @media screen and (min-width: 900px) {
-    margin-top: 220px;
+    margin-top: 320px;
   }
 `;

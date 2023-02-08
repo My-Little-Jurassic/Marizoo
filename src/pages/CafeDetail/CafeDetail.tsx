@@ -29,14 +29,16 @@ function CafeDetail() {
 
   const params = useParams();
   useEffect(() => {
-    getStoreDetail(params.cafe_id)
-      .then((res) => {
-        setCafeInfo(res.data);
-      })
-      .catch((e) => {
-        console.log("카페 상세 정보 요청 실패", e);
-        navigate("/404");
-      });
+    if (params.cafe_id) {
+      getStoreDetail(params.cafe_id)
+        .then((res) => {
+          setCafeInfo(res.data);
+        })
+        .catch((e) => {
+          console.log("카페 상세 정보 요청 실패", e);
+          navigate("/404");
+        });
+    }
   }, [params.cafe_id]);
 
   return (
