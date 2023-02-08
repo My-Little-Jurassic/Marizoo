@@ -11,6 +11,7 @@ const Pedia = (): JSX.Element => {
 };
 
 export default Pedia;
+
 const StyledPedia = styled.div`
   width: 100%;
   min-height: 100vh;

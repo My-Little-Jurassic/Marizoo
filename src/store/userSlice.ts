@@ -5,24 +5,42 @@ import { ILoginBody } from "../api/user/type";
 
 interface IUserState {
   isUser: boolean;
+  pk: string | undefined;
+  uid: string | undefined;
+  nickname: string | undefined;
   token: string | undefined;
   status: "default" | "loading" | "success" | "failed";
 }
 
 const initialState: IUserState = {
   isUser: false,
+  pk: undefined,
+  uid: undefined,
+  nickname: undefined,
   token: undefined,
   status: "default",
 };
 
 export const login = createAsyncThunk("user/login", async (body: ILoginBody) => {
   const res = await postLogin(body);
-  return res.headers["access-token"];
+  const data = {
+    pk: res.data.userId,
+    uid: res.data.uid,
+    nickname: res.data.nickname,
+    token: res.headers["access-token"],
+  };
+  return JSON.stringify(data);
 });
 
 export const refresh = createAsyncThunk("user/refresh", async () => {
   const res = await getRefresh();
-  return res.headers["access-token"];
+  const data = {
+    pk: res.data.userId,
+    uid: res.data.uid,
+    nickname: res.data.nickname,
+    token: res.headers["access-token"],
+  };
+  return JSON.stringify(data);
 });
 
 const userSlice = createSlice({
@@ -32,6 +50,9 @@ const userSlice = createSlice({
     logout: (state) => {
       state.status = "default";
       state.isUser = false;
+      state.pk = undefined;
+      state.uid = undefined;
+      state.nickname = undefined;
       state.token = undefined;
     },
   },
@@ -46,6 +67,9 @@ const userSlice = createSlice({
     });
     builder.addCase(login.rejected, (state) => {
       state.status = "failed";
+      state.pk = undefined;
+      state.uid = undefined;
+      state.nickname = undefined;
       state.token = undefined;
       state.isUser = false;
     });
@@ -55,12 +79,19 @@ const userSlice = createSlice({
     });
     builder.addCase(refresh.fulfilled, (state, { payload }) => {
       state.status = "success";
-      state.token = payload;
+      const { pk, uid, nickname, token } = JSON.parse(payload);
+      state.pk = pk;
+      state.uid = uid;
+      state.nickname = nickname;
+      state.token = token;
       state.isUser = true;
     });
     builder.addCase(refresh.rejected, (state) => {
       state.status = "default";
       state.isUser = false;
+      state.pk = undefined;
+      state.uid = undefined;
+      state.nickname = undefined;
       state.token = undefined;
     });
   },

@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { ISpecies } from "./type";
 
 interface IProps {
-  spaciesId: number;
-  imgSrc: string;
-  speciesName: string;
+  species: ISpecies;
   selectedSpeciesId: number | null;
   onClick: () => void;
 }
@@ -12,17 +11,17 @@ interface IProps {
 const PediaSpecies = (props: IProps): JSX.Element => {
   return (
     <StyledPediaSpecies
-      spaciesId={props.spaciesId}
+      spaciesId={props.species.id}
       selectedSpeciesId={props.selectedSpeciesId}
       onClick={props.onClick}
     >
-      <img src={props.imgSrc}></img>
-      <span>{props.speciesName}</span>
+      <img src={props.species.classificationImg}></img>
+      <span>{props.species.classification}</span>
     </StyledPediaSpecies>
   );
 };
 
-export default PediaSpecies;
+export default React.memo(PediaSpecies);
 
 const StyledPediaSpecies = styled.div<{ spaciesId: number; selectedSpeciesId: number | null }>`
   ${({ theme }) => theme.styles.button};

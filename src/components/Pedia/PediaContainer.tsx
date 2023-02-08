@@ -7,9 +7,8 @@ const PediaContainer = (): JSX.Element => {
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | null>(null);
 
   useEffect(() => {
-    const thumbUpIcon: Element | null = document.querySelector("#lens"); // 엄지 아이콘
-    thumbUpIcon?.animate(
-      // 아이콘이 움직일 애니메이션
+    const lensImg: Element | null = document.querySelector("#lens");
+    lensImg?.animate(
       [
         { filter: "none" },
         { filter: "brightness(3)" },
@@ -51,7 +50,7 @@ const PediaContainer = (): JSX.Element => {
   );
 };
 
-export default PediaContainer;
+export default React.memo(PediaContainer);
 
 const flicker = () => keyframes`
 0% {box-shadow: none;
@@ -90,7 +89,7 @@ const flicker = () => keyframes`
 
 const StyledPediaContainer = styled.main`
   @media screen and (max-width: 900px) {
-    margin-top: 156px;
+    margin-top: 140px;
   }
   @media screen and (max-width: 600px) {
     margin-top: 60px;

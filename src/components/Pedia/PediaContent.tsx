@@ -4,16 +4,6 @@ import PediaContentGrid from "./PediaContentGrid";
 
 import PediaContentScreen from "./PediaContentScreen";
 
-const speciesData = {
-  speciesInfo: {
-    habitat: "서식지",
-    classification: "생물학적 분류체계",
-    lifeSpan: "수명",
-    info: "설명, 애완동물 장단점",
-  },
-  feeds: [],
-};
-
 interface IProps {
   selectedSpeciesId: number | null;
 }
@@ -21,13 +11,14 @@ interface IProps {
 const PediaContent = (props: IProps): JSX.Element => {
   return (
     <StyledPediaContent>
-      <PediaContentScreen speciesData={speciesData}></PediaContentScreen>
-      <PediaContentGrid></PediaContentGrid>
+      <PediaContentScreen selectedSpeciesId={props.selectedSpeciesId}></PediaContentScreen>
+      <PediaContentGrid selectedSpeciesId={props.selectedSpeciesId}></PediaContentGrid>
     </StyledPediaContent>
   );
 };
 
-export default PediaContent;
+export default React.memo(PediaContent);
+
 const StyledPediaContent = styled.section`
   display: flex;
   flex-direction: column;

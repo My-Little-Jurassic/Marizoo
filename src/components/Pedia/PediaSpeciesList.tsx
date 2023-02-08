@@ -1,27 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getSpeciesList } from "../../api/pedia";
 import PediaSpecies from "./PediaSpecies";
-
-const speciesData = [
-  {
-    spacies_id: 0,
-    imgSrc: "./images/SpeciesIconChameleon.svg",
-    classification: "카멜레온",
-  },
-  { spacies_id: 1, imgSrc: "./images/SpeciesIconCobra.svg", classification: "코브라" },
-  { spacies_id: 2, imgSrc: "./images/SpeciesIconCrocodile.svg", classification: "악어" },
-  {
-    spacies_id: 3,
-    imgSrc: "./images/SpeciesIconFrilledLizard.svg",
-    classification: "목도리도마뱀",
-  },
-  { spacies_id: 4, imgSrc: "./images/SpeciesIconFrog.svg", classification: "개구리" },
-  { spacies_id: 5, imgSrc: "./images/SpeciesIconIguana.svg", classification: "이구아나" },
-  { spacies_id: 6, imgSrc: "./images/SpeciesIconLizard.svg", classification: "도마뱀" },
-  { spacies_id: 7, imgSrc: "./images/SpeciesIconSalamander.svg", classification: "도롱뇽" },
-  { spacies_id: 8, imgSrc: "./images/SpeciesIconSnake.svg", classification: "뱀" },
-  { spacies_id: 9, imgSrc: "./images/SpeciesIconTurtle.svg", classification: "거북" },
-];
+import { ISpecies } from "./type";
 
 interface IProps {
   selectedSpeciesId: number | null;
@@ -29,23 +10,42 @@ interface IProps {
 }
 
 const PediaSpeciesList = (props: IProps): JSX.Element => {
-  const speciesList = speciesData.map((species, index) => (
-    <PediaSpecies
-      key={`species-${index}`}
-      spaciesId={species.spacies_id}
-      imgSrc={species.imgSrc}
-      speciesName={species.classification}
-      selectedSpeciesId={props.selectedSpeciesId}
-      onClick={() => {
-        props.setSelectedSpeciesId(species.spacies_id);
-      }}
-    ></PediaSpecies>
-  ));
+  const [speciesDataList, setSpeciesDataList] = useState<ISpecies[] | null>(null);
+  const [speciesList, setSpeciesList] = useState<JSX.Element[] | null>(null);
+
+  useEffect(() => {
+    getSpeciesList()
+      .then((res) => {
+        setSpeciesDataList(res.data.species);
+      })
+      .catch((e) => {
+        console.log("종 목록 로드 실패", e);
+      });
+  }, [props.selectedSpeciesId]);
+
+  useEffect(() => {
+    console.log(speciesDataList);
+    if (speciesDataList) {
+      const newSpeciesList = speciesDataList.map((species: ISpecies, index: number) => (
+        <PediaSpecies
+          key={`species-${index}`}
+          species={species}
+          selectedSpeciesId={props.selectedSpeciesId}
+          onClick={() => {
+            console.log(species.id);
+            props.setSelectedSpeciesId(species.id);
+          }}
+        ></PediaSpecies>
+      ));
+      setSpeciesList(newSpeciesList);
+    }
+  }, [speciesDataList]);
 
   return <StyledPediaSpeciesListContainer>{speciesList}</StyledPediaSpeciesListContainer>;
 };
 
-export default PediaSpeciesList;
+export default React.memo(PediaSpeciesList);
+
 const StyledPediaSpeciesListContainer = styled.aside`
   width: 30%;
   height: 100%;
