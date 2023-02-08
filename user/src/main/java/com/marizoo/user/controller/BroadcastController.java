@@ -36,7 +36,7 @@ public class BroadcastController {
             for (BroadcastAnimal broadcastAnimal : onair.getBroadcastAnimalList()) {
                 classificationImgs.add(broadcastAnimal.getAnimal().getSpecies().getClassificationImg());
             }
-            result.add(new BroadcastsDto(onair.getTitle(), onair.getThumbnail(), classificationImgs));
+            result.add(new BroadcastsDto(onair.getId(),onair.getTitle(), onair.getThumbnail(), classificationImgs));
         }
         return new ResponseEntity<>(new OnairApi(result), HttpStatus.OK);
     }
