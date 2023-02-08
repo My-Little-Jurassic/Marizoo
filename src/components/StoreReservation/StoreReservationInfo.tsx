@@ -23,8 +23,8 @@ const StoreReservationInfo = function (props: IProps) {
       <StyledContent>
         <StyledBold>방문자 수</StyledBold>
         <StyledSpan>
+          {/* 최대 방문자 수 추가 필요 */}
           <Input
-            placeholder="방문자 수를 입력해주세요."
             setValue={(val) => {
               props.changeNumberOfVisitor(Number(val));
             }}
@@ -77,6 +77,9 @@ const StyledBold = styled.span`
 
 const StyledSpan = styled.span`
   font: ${(props) => props.theme.fonts.mainContent};
+  & > input {
+    width: 88px;
+  }
   @media screen and (max-width: 500px) {
     & > input {
       width: 80%;

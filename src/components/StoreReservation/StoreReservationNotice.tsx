@@ -17,8 +17,7 @@ interface IProps {
 const StoreReservationNotice = function (props: IProps) {
   const [checked, setChecked] = useState<boolean>(false);
   const params = useParams();
-  // 아직 스토어에 없음
-  // const uId = useAppSelector((state) => state.user.uId);
+  const uid = useAppSelector((state) => state.user.uid);
   const dispatch = useAppDispatch();
 
   const reserve = function () {
@@ -37,13 +36,12 @@ const StoreReservationNotice = function (props: IProps) {
       dispatch(openModal());
       return;
     }
-    // uid 생기면 바꾸기
-    // 최대 인원 수 미리 알지, 요청 보내보고 에러 코드 받을 지 정하기
+
     axios({
       method: "post",
       url: `${process.env.REACT_APP_API_URL}/stores/${params.cafe_id}/plays/${params.play_id}`,
       data: {
-        uId: "ASDF",
+        uid: uid,
         playId: params.play_id,
         totalVisitor: props.numberOfVisitor,
       },
@@ -55,7 +53,16 @@ const StoreReservationNotice = function (props: IProps) {
 
   return (
     <StyledContainer>
-      <StyledNotice>{props.playInfo.notice}</StyledNotice>
+      <StyledNoticeBox>
+        <StyledHeader>체험 설명</StyledHeader>
+        <StyledContent>{props.playInfo.description}</StyledContent>
+      </StyledNoticeBox>
+
+      <StyledNoticeBox>
+        <StyledHeader>유의사항</StyledHeader>
+        <StyledContent>{props.playInfo.notice}</StyledContent>
+      </StyledNoticeBox>
+
       <StyledBottom>
         <StyledCheckboxContainer onClick={() => setChecked(!checked)}>
           <Checkbox checked={checked} />
@@ -76,7 +83,7 @@ const StyledContainer = styled.div`
   background-color: ${(props) => props.theme.colors.secondaryBg};
   box-shadow: 2px 2px 8px rgba(67, 67, 67, 0.2);
   box-sizing: border-box;
-  padding: 64px 32px 32px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -87,7 +94,30 @@ const StyledContainer = styled.div`
   }
 `;
 
-const StyledNotice = styled.span`
+const StyledNoticeBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-height: 168px;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  @media screen and (max-width: 1024px) {
+    max-height: 100%;
+    gap: 16px;
+    overflow: visible;
+  }
+`;
+
+const StyledHeader = styled.span`
+  color: ${(props) => props.theme.colors.primaryText};
+  font: ${(props) => props.theme.fonts.header3};
+  font-weight: 800;
+`;
+
+const StyledContent = styled.span`
   color: ${(props) => props.theme.colors.primaryText};
   font: ${(props) => props.theme.fonts.mainContent};
   max-height: 344px;
