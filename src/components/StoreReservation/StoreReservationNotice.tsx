@@ -96,7 +96,7 @@ const StyledContainer = styled.div`
   align-items: center;
   @media screen and (max-width: 1024px) {
     height: 100%;
-    gap: 32px;
+    gap: 80px;
   }
 `;
 
@@ -128,6 +128,7 @@ const StyledContent = styled.span`
   font: ${(props) => props.theme.fonts.mainContent};
   max-height: 344px;
   overflow-y: scroll;
+  white-space: pre-line;
   &::-webkit-scrollbar {
     display: none;
   }

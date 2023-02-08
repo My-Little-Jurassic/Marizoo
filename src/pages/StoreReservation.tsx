@@ -27,6 +27,8 @@ const StoreReservation = function () {
         const tmpPlayInfo = res.data.playInfo;
         const dateTime = tmpPlayInfo.playDateTime;
         tmpPlayInfo.playDateTime = dateTime.slice(0, 10) + " " + dateTime.slice(11, 16);
+        tmpPlayInfo.description = tmpPlayInfo.description.replace(/\./g, ".\n");
+        tmpPlayInfo.notice = tmpPlayInfo.notice.replace(/\./g, ".\n");
         setPlayInfo(tmpPlayInfo);
         setStoreInfo(res.data.storeInfo);
       })
