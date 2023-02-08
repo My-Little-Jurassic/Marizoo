@@ -9,6 +9,7 @@ import {
 import { IBroadcastSetting } from "../types";
 import { IBroadcastStatus } from "../types/Broadcast";
 import { postBroadcast } from "../api";
+import BroadcastVoteModal from "../components/Broadcast/BroadcastVoteModal";
 
 const Broadcast = () => {
   // 방송설정 STATE
@@ -73,6 +74,7 @@ const Broadcast = () => {
           status={status}
         />
       </div>
+      <BroadcastVoteModal />
     </StyledDiv>
   );
 };
