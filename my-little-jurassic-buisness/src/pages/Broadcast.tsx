@@ -27,10 +27,11 @@ const Broadcast = () => {
     sessionId: "",
     viewers: 0,
     likes: 0,
-    vote: null,
+    vote: { options: [], voteStatus: "default", winnerFeed: 0 },
     status: "DEFAULT",
   });
-  const { viewers, likes, status } = broadcastStatus;
+  const { animalIdList } = broadcastSetting;
+  const { viewers, likes, status, vote } = broadcastStatus;
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // 방송시작 함수
@@ -63,18 +64,22 @@ const Broadcast = () => {
   };
   // 투표 시작 함수
   const startVote = (vote: IVote) => {
-    setBroadcastStatus({ ...broadcastStatus, vote, status: "ONAIR" });
+    console.log(vote);
+    setBroadcastStatus({ ...broadcastStatus, vote });
   };
   // 투표 종료 함수
-  const endVote = () => {
-    setBroadcastStatus({ ...broadcastStatus, status: "FINISH" });
+  const finishVote = () => {
+    const vote = broadcastStatus.vote;
+    if (vote === null) return;
+    vote.voteStatus = "finish";
+    setBroadcastStatus({ ...broadcastStatus, vote });
   };
 
   return (
     <StyledDiv className="Broadcast">
       <div>
         <BroadcastStatusViewer ref={videoRef} status={status} viewers={viewers} likes={likes} />
-        <BroadcastVoteContainer />
+        <BroadcastVoteContainer vote={vote} status={status} finishVote={finishVote} />
       </div>
       <div>
         <BroadcastSettingContainer
@@ -84,7 +89,7 @@ const Broadcast = () => {
           status={status}
         />
       </div>
-      <BroadcastVoteModal startVote={startVote} endVote={endVote} />
+      <BroadcastVoteModal startVote={startVote} animalIdList={animalIdList} />
     </StyledDiv>
   );
 };
