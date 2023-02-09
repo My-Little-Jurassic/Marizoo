@@ -7,7 +7,6 @@ import java.util.List;
 public class CreateBroadcastDto {
     private String title;
     private String description;
-    private String thumbnail;
     private Long animalStoreId;
     private List<Long> animalIdList;
 }
