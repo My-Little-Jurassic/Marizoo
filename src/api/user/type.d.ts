@@ -1,13 +1,4 @@
 /**
- * 요청 기본 결과 폼
- */
-export interface IResponse {
-  code: number;
-  message?: string;
-  data?: any;
-}
-
-/**
  * 회원가입 요청 폼
  */
 export interface IRegistBody {
@@ -69,13 +60,6 @@ export interface IModifyUserBody {
   nickname: string;
   phoneNumber: string;
   email: string;
-}
-
-/**
- * 유저탈퇴 파라미터
- */
-export interface IWithdrawUserPrams {
-  uid: string;
 }
 
 /**
