@@ -26,7 +26,6 @@ const BroadcastScreen = function (props: IProps) {
   const [isVoteModalOpened, setIsVoteModalOpened] = useState<boolean>(false);
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
   const [waitingReaction, setWaitingReaction] = useState<string | null>(null);
-
   const [isReactionPlaying, setIsReactionPlaying] = useState<boolean>(false);
   const [clientX, setClientX] = useState<number | null>(null);
   const [clientY, setClientY] = useState<number | null>(null);

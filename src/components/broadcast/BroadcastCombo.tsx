@@ -5,6 +5,7 @@ interface IProps {
   finishEffect(): void;
 }
 
+// 수정 필요
 function BroadcastCombo(props: IProps) {
   const [comboCount, setComboCount] = useState(0);
   const [comboTimerCount, setComboTimerCount] = useState(0);
