@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BroadcastRepositoryCustom {
     // onair 방송에 대해 종 검색
-    List<SearchBroadcastDto> searchOnAirsHavingSpecies(String input);
+    List<Broadcast> searchOnAirsHavingSpecies(String input);
 
     // 현재 방송과 관련된 방송 목록
     List<SearchBroadcastDto> searchBroadcastRelated(List<String> classifications);

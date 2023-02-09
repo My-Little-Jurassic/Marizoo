@@ -38,6 +38,9 @@ public class BroadcastController {
             }
             result.add(new BroadcastsDto(onair.getId(),onair.getTitle(), onair.getThumbnail(), classificationImgs));
         }
+        if(result.isEmpty()){
+            return new ResponseEntity<>("방송 없음", HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(new OnairApi(result), HttpStatus.OK);
     }
 
@@ -93,11 +96,19 @@ public class BroadcastController {
 @ApiOperation(value = "keyword에 해당하는 종이 방송에 출연하는 현재 방송중인 방송 목록 가져오기")
     @GetMapping("/broadcasts/search")
     public ResponseEntity<?> getSearchOnairs(@RequestParam(value = "keyword") @ApiParam(name = "검색어", required = true)String keyword){
-        List<SearchBroadcastDto> searchOnairs = broadcastService.searchOnAirsHavingSpeciesList(keyword);
-        if(searchOnairs.isEmpty()){
-            return new ResponseEntity<>("검색 결과 없음", HttpStatus.BAD_REQUEST);
+        List<Broadcast> searchOnairs = broadcastService.searchOnAirsHavingSpeciesList(keyword);
+        List<BroadcastsDto> result = new ArrayList<>();
+        for (Broadcast onair : searchOnairs) {
+            List<String> classificationImgs = new ArrayList<>();
+            for (BroadcastAnimal broadcastAnimal : onair.getBroadcastAnimalList()) {
+                classificationImgs.add(broadcastAnimal.getAnimal().getSpecies().getClassificationImg());
+            }
+            result.add(new BroadcastsDto(onair.getId(),onair.getTitle(), onair.getThumbnail(), classificationImgs));
         }
-        return new ResponseEntity<>(new OnairApi(searchOnairs), HttpStatus.OK);
+        if(result.isEmpty()){
+            return new ResponseEntity<>("방송 없음", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(new OnairApi(result), HttpStatus.OK);
     }
 
     @ApiOperation(value = "broadcast_id 방송과 연관된 방송 목록 가져오기")
