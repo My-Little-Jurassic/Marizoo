@@ -9,14 +9,14 @@ export interface IFeed {
   id: number;
   name: string;
   img: string;
-  numberOfVotes?: number;
+  numberOfVotes: number;
 }
 
 export type TVoteStatus = "default" | "proceeding" | "finish";
 export type TStatus = "DEFAULT" | "RESERVE" | "ONAIR" | "FINISH";
 
 export interface IVote {
-  winnerFeed: number | undefined;
+  winnerFeed: number;
   voteStatus: TVoteStatus;
   options: IFeed[];
 }
@@ -36,6 +36,9 @@ export interface IBroadcastSetting {
   description: string;
   thumbnail: Blob | null;
   animalIdList: number[];
-  videoDevice: string | null;
-  audioDevice: null;
+  videoDevice: string | undefined;
+  audioDevice: undefined;
 }
+
+export type TUserId = string;
+export type TConnectionId = string;

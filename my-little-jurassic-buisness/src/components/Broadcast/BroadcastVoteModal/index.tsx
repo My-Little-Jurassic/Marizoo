@@ -20,7 +20,7 @@ const BroadcastVoteModal = ({ startVote, animalIdList }: IProps) => {
   };
   const onStartVote = () => {
     startVote({
-      winnerFeed: undefined,
+      winnerFeed: 0,
       voteStatus: "proceeding",
       options: feedList,
     });

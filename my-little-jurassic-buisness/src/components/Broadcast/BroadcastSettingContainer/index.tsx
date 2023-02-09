@@ -57,7 +57,7 @@ const BroadcastSettingContainer = ({
   const onChangeVideo = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
     if (value === "-") {
-      setBroadcastSetting({ ...broadcastSetting, videoDevice: null });
+      setBroadcastSetting({ ...broadcastSetting, videoDevice: undefined });
       if (videoRef.current) {
         videoRef.current.srcObject = null;
       }
