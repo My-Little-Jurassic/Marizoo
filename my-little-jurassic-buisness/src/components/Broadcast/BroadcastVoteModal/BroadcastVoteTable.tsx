@@ -51,7 +51,7 @@ const BroadcastVoteTable = ({ animalIdList, setFeedList }: IProps) => {
       return feed;
     });
     setFeeds(newFeeds);
-    setFeedList(newFeeds.map((feed) => (feed.select ? feed : undefined)));
+    setFeedList(newFeeds.map((feed) => (feed.select ? feed : undefined)).filter((item) => item));
   };
   return (
     <StyledTable>

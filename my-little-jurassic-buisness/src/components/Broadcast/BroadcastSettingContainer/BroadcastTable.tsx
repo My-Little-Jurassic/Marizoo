@@ -36,7 +36,9 @@ const BroadcastTable = ({ disabled, selectAnimalIdList, toggleAnimal }: IProps) 
     const index = Number(e.target.value);
     const newAnimalList = [...animalList];
     newAnimalList[index].select = !newAnimalList[index].select;
-    toggleAnimal(newAnimalList.map((item) => (item.select ? item.id : undefined)));
+    toggleAnimal(
+      newAnimalList.map((item) => (item.select ? item.id : undefined)).filter((item) => item),
+    );
     setAnimalList(newAnimalList);
   };
   return (
