@@ -56,7 +56,7 @@ public class BroadcastService {
      */
     @Transactional
     public Long createBroadcast(
-            String title, String description, Long animalStoreId,
+            String title, String description, String sessionId, Long animalStoreId,
             List<Long> animalIdList, MultipartFile img
     ){
         // entity
@@ -89,15 +89,11 @@ public class BroadcastService {
             throw new RuntimeException(e);
         }
         // 방송 생성
-        Broadcast broadcast = Broadcast.createBroadcast(title, description, imgUrl, animalStore, broadcastAnimalList);
+        Broadcast broadcast = Broadcast.createBroadcast(title, description, imgUrl, sessionId, animalStore, broadcastAnimalList);
 
         // 방송 저장
         broadcastRepository.save(broadcast);
         return broadcast.getId();
-    }
-    public void saveSessionId(Long broadcastId, String sessionId){
-        Broadcast broadcastById = broadcastRepository.findBroadcastById(broadcastId);
-        broadcastById.setSessionId(sessionId);
     }
     
     public void finishBroadcast(Long broadcastId){
