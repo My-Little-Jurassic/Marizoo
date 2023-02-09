@@ -1,17 +1,9 @@
 server:
   port: 0
-  ssl:
-    key-store: classpath:keystore.p12
-    key-store-type: PKCS12
-    key-store-password: 0000
-    key-alias: tomcat
-  http2:
-    enabled: true
 
 spring:
   application:
     name: user
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://3.36.112.78:3306/marizoo?
