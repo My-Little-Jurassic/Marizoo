@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api/user/")
 public class StoreController {
     private final AnimalStoreService animalStoreService;
     private final AnimalService animalService;
