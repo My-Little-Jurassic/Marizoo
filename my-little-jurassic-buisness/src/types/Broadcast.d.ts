@@ -23,6 +23,7 @@ export interface IVote {
 
 export interface IBroadcastStatus {
   sessionId: string;
+  pk: number;
   viewers: number;
   likes: number;
   vote: IVote;

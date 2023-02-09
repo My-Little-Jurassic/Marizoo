@@ -25,6 +25,7 @@ const Broadcast = () => {
   // 방송상태 STATE
   const [broadcastStatus, setBroadcastStatus] = useState<IBroadcastStatus>({
     sessionId: "",
+    pk: 0,
     viewers: 0,
     likes: 0,
     vote: { options: [], voteStatus: "default", winnerFeed: 0 },
@@ -39,20 +40,19 @@ const Broadcast = () => {
     const { id, title, description, animalIdList, thumbnail } = setting;
 
     const formData = new FormData();
-    formData.append(
-      "broadcastInfo",
-      JSON.stringify({
-        title,
-        description,
-        animalIdList,
-        animalStoreId: id,
-      }),
-    );
+    const broadcastInfo = JSON.stringify({
+      title,
+      description,
+      animalIdList,
+      animalStoreId: id,
+    });
+    formData.append("broadcastInfo", new Blob([broadcastInfo], { type: "application/json" }));
     if (thumbnail) formData.append("img", thumbnail);
 
-    console.dir(formData);
-    postBroadcast(formData).then(() => {
-      setBroadcastStatus({ ...broadcastStatus, sessionId: "123", status: "ONAIR" });
+    console.dir("formData:", formData);
+    postBroadcast(formData).then((res) => {
+      console.log("res:", res);
+      setBroadcastStatus({ ...broadcastStatus, sessionId: "123", pk: 1, status: "ONAIR" });
       setBroadcastSetting(setting);
     });
     setBroadcastStatus({ ...broadcastStatus, status: "ONAIR" });
