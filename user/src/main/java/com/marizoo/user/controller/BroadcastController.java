@@ -36,7 +36,7 @@ public class BroadcastController {
             for (BroadcastAnimal broadcastAnimal : onair.getBroadcastAnimalList()) {
                 classificationImgs.add(broadcastAnimal.getAnimal().getSpecies().getClassificationImg());
             }
-            result.add(new BroadcastsDto(onair.getId(),onair.getTitle(), onair.getThumbnail(), classificationImgs));
+            result.add(new BroadcastsDto(onair.getId(), onair.getSessionId(),onair.getTitle(), onair.getThumbnail(), classificationImgs));
         }
         if(result.isEmpty()){
             return new ResponseEntity<>("방송 없음", HttpStatus.BAD_REQUEST);
@@ -103,7 +103,7 @@ public class BroadcastController {
             for (BroadcastAnimal broadcastAnimal : onair.getBroadcastAnimalList()) {
                 classificationImgs.add(broadcastAnimal.getAnimal().getSpecies().getClassificationImg());
             }
-            result.add(new BroadcastsDto(onair.getId(),onair.getTitle(), onair.getThumbnail(), classificationImgs));
+            result.add(new BroadcastsDto(onair.getId(),onair.getSessionId(),onair.getTitle(), onair.getThumbnail(), classificationImgs));
         }
         if(result.isEmpty()){
             return new ResponseEntity<>("방송 없음", HttpStatus.BAD_REQUEST);

@@ -20,6 +20,7 @@ public class Broadcast extends BaseEntity {
     private String title;
     private String description;
     private String thumbnail;
+    private String sessionId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     @Enumerated(EnumType.STRING)
