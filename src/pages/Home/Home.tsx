@@ -24,7 +24,6 @@ function Home() {
 
   // search keyword 변화에 다른 hook
   useEffect(() => {
-    console.log(searchKeyword);
     if (searchKeyword === "") {
       setSearchKeyword(null);
     }
@@ -86,6 +85,12 @@ const StyledHomeInput = styled.div`
   display: flex;
   justify-content: center;
   width: 80%;
+  @media screen and (max-width: 600px) {
+    margin-top: 96px;
+  }
+  @media screen and (min-width: 600px) {
+    margin-top: 180px;
+  }
 `;
 
 const StyledTitle = styled.h4`
@@ -112,8 +117,8 @@ const StyledSearchResetBtn = styled.button`
   background-color: ${(props) => props.theme.colors.secondaryBg};
   outline: none;
   border: none;
-  margin-left: 5px;
-  padding-inline: 10px;
+  margin-left: 8px;
+  padding-inline: 8px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
