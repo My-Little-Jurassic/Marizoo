@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { TbX } from "react-icons/tb";
 import styled from "styled-components";
-
+import { SideBg } from "../../components/common/background";
 import { SearchInput } from "../../components/common/input";
+
 import { FilterSwiper, LiveGrid } from "../../components/Home";
 
 function Home() {
@@ -30,6 +31,8 @@ function Home() {
 
   return (
     <StyledMain>
+      <SideBg></SideBg>
+      <StyledSpacer space={180} />
       <StyledHomeInput>
         <SearchInput
           value={""} // 초기 값
@@ -76,10 +79,6 @@ const StyledMain = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: ${(props) => props.theme.colors.primaryBg};
-  @media screen and (max-width: 600px) {
-    padding-bottom: 64px;
-  }
 `;
 
 const StyledHomeInput = styled.div`
