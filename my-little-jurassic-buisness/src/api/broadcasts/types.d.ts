@@ -5,3 +5,12 @@ export interface IPostBroadcastInfo {
   thumbnail: Blob | null;
   animalIdList: string[];
 }
+
+export interface IPostBroadcastFeeds {
+  animalIdList: number[];
+}
+
+export interface IPostBroadcastBadge {
+  userIdList: number[];
+  badgeId: number;
+}

@@ -9,3 +9,4 @@ instance.defaults.headers.post["Content-Type"] = "application/json";
 instance.defaults.withCredentials = true;
 
 export * from "./broadcasts";
+export * from "./stores";
