@@ -8,7 +8,7 @@ import BroadcastRecommendations from "./BroadcastRecommendations";
 import Grid from "@mui/material/Grid";
 import { useAppSelector } from "../../store";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IBroadcastInfo, IAnimalInfo, IStoreInfo } from "./type";
 import { NavLink } from "react-router-dom";
 
@@ -18,6 +18,7 @@ const BroadcastHome = function () {
   const [storeInfo, setStoreInfo] = useState<IStoreInfo | null>(null);
 
   const isMaximized = useAppSelector((state) => state.broadcast.isMaximized);
+  const navigate = useNavigate();
   const params = useParams();
 
   useEffect(() => {
@@ -45,7 +46,7 @@ const BroadcastHome = function () {
         setAnimalList(tmpAnimalList);
         setStoreInfo(res.data.stores);
       })
-      .catch((err) => console.log(err));
+      .catch(() => navigate("/404", { replace: false }));
     window.scrollTo(0, 0);
   }, [params.broadcast_id]);
 
