@@ -22,7 +22,7 @@ public class AnimalController {
     private final FeedService feedService;
 
     @ApiOperation(value = "동물이 선호하는 먹이 목록 가져오기")
-    @PostMapping("/animals/feeds")
+    @PostMapping("/broadcasts/feeds")
     public ResponseEntity<?> getFeedListforAnimals(@RequestBody AnimalFeedRequest animalFeedRequest) {
         List<Feed> animalFeedList = feedService.findFeedListforAnimals(animalFeedRequest.getAnimalIdList());
         List<FeedDto> result = animalFeedList.stream().map(af -> new FeedDto(af.getId(), af.getName(), af.getImg())).collect(Collectors.toList());

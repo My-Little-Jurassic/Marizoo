@@ -4,6 +4,7 @@ import com.marizoo.owner.api.request.CreateBroadcastReq;
 import com.marizoo.owner.api.request.CreateVoteRequest;
 import com.marizoo.owner.api.request.EndVoteRequest;
 import com.marizoo.owner.api.response.CreateBroadcastResponse;
+import com.marizoo.owner.dto.CreateBroadcastDto;
 import com.marizoo.owner.service.BroadcastService;
 import com.marizoo.owner.service.FeedService;
 import com.marizoo.owner.service.VoteService;
@@ -29,12 +30,12 @@ public class BroadcastController {
 
     @ApiOperation(value = "방송 생성하기")
     @PostMapping(value = "/broadcasts", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> createBroadcast(@RequestPart CreateBroadcastReq createBroadcastReq, @RequestPart MultipartFile img){
+    public ResponseEntity<?> createBroadcast(@RequestPart CreateBroadcastDto broadcastInfo, @RequestPart MultipartFile img){
         log.info("!!!!!!!!!!!들어왔다");
-        log.info("!!!!!!!!!! title : " + createBroadcastReq.getBroadcastInfo().getTitle());
-        log.info("!!!!!!!!!! animal ID List : " + createBroadcastReq.getBroadcastInfo().getAnimalIdList().toString());
-        Long broadcastId = broadcastService.createBroadcast(createBroadcastReq.getBroadcastInfo().getTitle(), createBroadcastReq.getBroadcastInfo().getDescription(),
-                createBroadcastReq.getBroadcastInfo().getAnimalStoreId(), createBroadcastReq.getBroadcastInfo().getAnimalIdList(), img);
+        log.info("!!!!!!!!!! title : " + broadcastInfo.getTitle());
+        log.info("!!!!!!!!!! animal ID List : " + broadcastInfo.getAnimalIdList().toString());
+        Long broadcastId = broadcastService.createBroadcast(broadcastInfo.getTitle(), broadcastInfo.getDescription(),
+                broadcastInfo.getAnimalStoreId(), broadcastInfo.getAnimalIdList(), img);
         if(broadcastId != null){
             return new ResponseEntity<>(broadcastId, HttpStatus.OK);
         }else{
