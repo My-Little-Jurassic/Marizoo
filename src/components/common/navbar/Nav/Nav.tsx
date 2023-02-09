@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { NavLink, useLocation } from "react-router-dom";
 
 import { ThemeBtn } from "../../button/index";
 import { MdAccountCircle } from "react-icons/md";
 import HomeNav from "../HomeNav/HomeNav";
+import { useAppSelector } from "../../../../store";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../../store/userSlice";
 
 interface IProps {
   // 테마 버튼 props type
@@ -14,6 +17,8 @@ interface IProps {
 
 function Nav(props: IProps) {
   const location = useLocation(); // 현재 url
+  const userId = useAppSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   return (
     <StyledNavbar>
@@ -25,14 +30,28 @@ function Nav(props: IProps) {
         </NavLink>
         {/* 오른쪽 버튼 */}
         <StyledNavbarRSide>
-          <NavLink to={"/login"} style={{ textDecoration: "none" }}>
-            <StyledNavBtn>로그인</StyledNavBtn>
-          </NavLink>
-          <NavLink to={"/account"} style={{ textDecoration: "none" }}>
-            <StyledNavBtn>
-              <MdAccountCircle size={30}></MdAccountCircle>
-            </StyledNavBtn>
-          </NavLink>
+          {userId.isUser ? (
+            <NavLink to={"/"} style={{ textDecoration: "none" }}>
+              <StyledNavBtn
+                onClick={() => {
+                  dispatch(logout());
+                }}
+              >
+                로그아웃
+              </StyledNavBtn>
+            </NavLink>
+          ) : (
+            <NavLink to={"/login"} style={{ textDecoration: "none" }}>
+              <StyledNavBtn>로그인</StyledNavBtn>
+            </NavLink>
+          )}
+          {userId.isUser && (
+            <NavLink to={`/user/${userId.pk}`} style={{ textDecoration: "none" }}>
+              <StyledNavBtn onClick={() => console.log(userId)}>
+                <MdAccountCircle size={30}></MdAccountCircle>
+              </StyledNavBtn>
+            </NavLink>
+          )}
           <ThemeBtn themeMode={props.themeMode} toggleTheme={props.toggleTheme}></ThemeBtn>
         </StyledNavbarRSide>
       </StyledNavContainer>
