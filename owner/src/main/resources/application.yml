@@ -1,16 +1,16 @@
 server:
   port: 0
-  ssl:
-    key-store: classpath:keystore.p12
-    key-store-type: PKCS12
-    key-store-password: 0000
-    key-alias: tomcat
-  http2:
-    enabled: true
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-type: PKCS12
+#    key-store-password: ssafy
 
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+#    non-secure-port-enabled: false
+#    secure-port-enabled: true
+#    secure-port: ${server.port}
   client:
     register-with-eureka: true
     fetch-registry: true
@@ -35,6 +35,8 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher # swagger
+
+
 cloud:
   aws:
     credentials:
