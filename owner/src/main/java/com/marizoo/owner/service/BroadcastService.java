@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -74,5 +75,14 @@ public class BroadcastService {
         // 방송 저장
         broadcastRepository.save(broadcast);
         return broadcast.getId();
+    }
+    public void saveSessionId(Long broadcastId, String sessionId){
+        Broadcast broadcastById = broadcastRepository.findBroadcastById(broadcastId);
+        broadcastById.setSessionId(sessionId);
+    }
+    
+    public void finishBroadcast(Long broadcastId){
+        Broadcast broadcastById = broadcastRepository.findBroadcastById(broadcastId);
+        broadcastById.setEndTime(LocalDateTime.now());
     }
 }
