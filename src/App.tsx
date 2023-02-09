@@ -13,9 +13,13 @@ import NotFound from "./pages/NotFound/NotFound";
 import { Nav } from "./components/common/navbar";
 import { darkTheme } from "./styles/themes/darkTheme";
 import { lightTheme } from "./styles/themes/lightTheme";
+import { useAppSelector } from "./store";
+import { selectModal } from "./store/modalSlice";
+import { Modal } from "./components/common/modal";
 
 function App() {
   const [themeMode, toggleTheme] = useTheme();
+  const modal = useAppSelector(selectModal);
   const theme: Itheme = themeMode === "light" ? lightTheme : darkTheme;
 
   return (
@@ -36,6 +40,8 @@ function App() {
         {/* <Route path="/animal/:animal_id" element={}></Route> */}
         <Route path="/*" element={<NotFound />}></Route>
       </Routes>
+
+      {modal.visible ? <Modal content={modal.content} /> : null}
     </ThemeProvider>
   );
 }
