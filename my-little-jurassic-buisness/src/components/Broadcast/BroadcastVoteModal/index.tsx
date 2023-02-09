@@ -1,36 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { IVote } from "../../../types";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import { closeModal, selectModal } from "../../../store/ModalSlice";
+import { IFeed, IVote } from "../../../types";
 import BroadcastVoteTable from "./BroadcastVoteTable";
 
 interface IProps {
   startVote(vote: IVote): void;
-  endVote(): void;
+  animalIdList: number[];
 }
 
-const BroadcastVoteModal = ({ startVote, endVote }: IProps) => {
+const BroadcastVoteModal = ({ startVote, animalIdList }: IProps) => {
+  const [feedList, setFeedList] = useState<IFeed[]>([]);
+  const modal = useAppSelector(selectModal);
+  const dispatch = useAppDispatch();
+
+  const updateFeedList = (list: IFeed[]) => {
+    setFeedList(list);
+  };
+  const onStartVote = () => {
+    startVote({
+      winnerFeed: undefined,
+      voteStatus: "proceeding",
+      options: feedList,
+    });
+    onClose();
+  };
+  const onClose = () => {
+    dispatch(closeModal());
+  };
+
   return (
-    <StyledDiv>
+    <StyledDiv visible={modal.visible}>
       <div>
         <h1>먹이 투표 생성</h1>
-        <BroadcastVoteTable />
+        <BroadcastVoteTable animalIdList={animalIdList} setFeedList={updateFeedList} />
         <div className="btn-area">
-          <button>취소</button>
-          <button>생성</button>
+          <button onClick={onClose}>취소</button>
+          <button onClick={onStartVote}>생성</button>
         </div>
       </div>
     </StyledDiv>
   );
 };
 
-const StyledDiv = styled.div`
+const StyledDiv = styled.div<{ visible: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.2);
-  display: flex;
+  display: ${({ visible }) => (visible ? "flex" : "none")};
   justify-content: center;
   align-items: center;
 

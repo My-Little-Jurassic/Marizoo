@@ -1,33 +1,34 @@
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
+import { useAppDispatch } from "../../../store";
+import { openModal } from "../../../store/ModalSlice";
+import { IVote, TStatus } from "../../../types";
 
-interface IFeed {
-  id: number;
-  name: string;
-  img: string;
-  numberOfVotes: number;
+interface IProps {
+  vote: IVote;
+  status: TStatus;
+  finishVote(): void;
 }
 
-interface IVote {
-  title: string;
-  result: string;
-  status: "DEFAULT" | "RESERVE" | "ONAIR" | "FINISH";
-  options: IFeed[];
-}
+const BroadcastVoteContainer = ({ vote, status, finishVote }: IProps) => {
+  const { winnerFeed, voteStatus, options } = vote;
+  const dispatch = useAppDispatch();
+  const onClick = () => {
+    dispatch(openModal());
+  };
+  const checkDisable = useMemo(() => {
+    return status !== "ONAIR" || voteStatus !== "default";
+  }, [status, voteStatus]);
 
-const BroadcastVoteContainer = () => {
-  const [vote, setVote] = useState<IVote>({
-    title: "",
-    result: "귀뚜라미",
-    status: "DEFAULT",
-    options: [],
-  });
   return (
     <StyledDiv className="BroadcastVoteContainer">
       <h4>
-        투표 결과 <span>{vote.result}</span>
+        투표 결과{" "}
+        <span>{winnerFeed ? options.find((item) => item.id === winnerFeed)?.name : "-"}</span>
       </h4>
-      <button>투표 생성</button>
+      <button onClick={onClick} disabled={checkDisable}>
+        투표 생성
+      </button>
     </StyledDiv>
   );
 };
@@ -63,4 +64,4 @@ const StyledDiv = styled.div`
   }
 `;
 
-export default BroadcastVoteContainer;
+export default React.memo(BroadcastVoteContainer);

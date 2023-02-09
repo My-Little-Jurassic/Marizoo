@@ -1,106 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import { IFeed } from "../../../types";
 
-const BroadcastVoteTable = () => {
-  const [feeds, setFeeds] = useState<IFeed[]>([]);
+interface IProps {
+  animalIdList: number[];
+  setFeedList(list: (IFeed | undefined)[]): void;
+}
+
+interface ISelectFeed extends IFeed {
+  select: boolean;
+}
+
+const BroadcastVoteTable = ({ animalIdList, setFeedList }: IProps) => {
+  const [feeds, setFeeds] = useState<ISelectFeed[]>([]);
+
   useEffect(() => {
     initFeeds().then((val) => setFeeds(val));
   }, []);
 
-  const initFeeds = async (): Promise<IFeed[]> => {
+  // 먹이 정보를 가져오는 함수
+  const initFeeds = async (): Promise<ISelectFeed[]> => {
     return [
       {
         id: 1,
         name: "밀웜",
         img: "test.png",
+        select: false,
+        numberOfVotes: 0,
       },
       {
-        id: 1,
-        name: "밀웜",
+        id: 2,
+        name: "귀뚜라미",
         img: "test.png",
+        select: false,
+        numberOfVotes: 0,
       },
       {
-        id: 1,
-        name: "밀웜",
+        id: 3,
+        name: "개미",
         img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-      },
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
+        select: false,
+        numberOfVotes: 0,
       },
     ];
+  };
+  const changeFeeds = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = e.target;
+    const newFeeds = feeds.map((feed) => {
+      if (feed.id === +value) feed.select = checked;
+      return feed;
+    });
+    setFeeds(newFeeds);
+    setFeedList(newFeeds.map((feed) => (feed.select ? feed : undefined)));
   };
   return (
     <StyledTable>
@@ -115,7 +66,7 @@ const BroadcastVoteTable = () => {
           <tr key={index}>
             <td>{feed.name}</td>
             <td>
-              <input type="checkbox" />
+              <input type="checkbox" value={feed.id} onChange={changeFeeds} checked={feed.select} />
             </td>
           </tr>
         ))}
@@ -175,4 +126,4 @@ const StyledTable = styled.table`
     margin: 0;
   }
 `;
-export default BroadcastVoteTable;
+export default React.memo(BroadcastVoteTable);
