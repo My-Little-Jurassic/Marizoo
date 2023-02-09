@@ -3,6 +3,7 @@ package com.marizoo.user.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.marizoo.user.api.LoginResponseApi;
 import com.marizoo.user.auth.PrincipalDetails;
 import com.marizoo.user.dto.LoginRequestDto;
 import com.marizoo.user.entity.User;
@@ -61,10 +62,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String refreshToken = createRefreshToken(principalDetails);
 
         // DB에 refreshToken 저장한다.
-        saveRefreshToken(principalDetails, refreshToken);
+        User user = saveRefreshToken(principalDetails, refreshToken);
 
         // header에 access token을 저장한다.
         response.addHeader(AT_HEADER, TOKEN_HEADER_PREFIX + accessToken);
+        response.getWriter().write(om.writeValueAsString(new LoginResponseApi(user.getId(), user.getUid(), user.getNickname())));
 
         // refresh token 쿠키에 저장한다.
         setCookieRefreshToken(response, refreshToken);
@@ -107,13 +109,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader("Set-Cookie", cookie.toString());
     }
 
-    private void saveRefreshToken(PrincipalDetails principalDetails, String refreshToken) {
+    private User saveRefreshToken(PrincipalDetails principalDetails, String refreshToken) {
         User user = userRepository.findByUid(principalDetails.getUser().getUid()).orElseThrow(
                 () -> new UsernameNotFoundException("로그인 중 에러가 발생하였습니다.")
         );
 
         user.setRefreshToken(refreshToken);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     private static String createRefreshToken(PrincipalDetails principalDetails) {
