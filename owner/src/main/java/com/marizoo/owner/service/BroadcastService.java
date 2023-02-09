@@ -29,6 +29,8 @@ public class BroadcastService {
     @Autowired
     private AwsS3Uploader s3Uploader;
 
+    private static String dirName = "test";
+
     /**
      * broadcast_id에 해당하는 방송 종료 시간
      * @param broadcastId : 방송 PK
@@ -80,7 +82,7 @@ public class BroadcastService {
         }
         String imgUrl = null;
         try {
-            imgUrl = s3Uploader.upload(img, "temp");
+            imgUrl = s3Uploader.upload(img, dirName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
