@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import { Nav } from "./components/common/navbar";
 import { darkTheme } from "./styles/themes/darkTheme";
 import { lightTheme } from "./styles/themes/lightTheme";
+import AnimalDetail from "./pages/AnimalDetail";
 
 function App() {
   const [themeMode, toggleTheme] = useTheme();
@@ -33,7 +34,7 @@ function App() {
         {/* <Route path="/cafe/:cafe_id" element={}></Route> */}
         {/* <Route path="/reservation/:cafe_id/:play_id" element={}></Route> */}
         {/* <Route path="/pedia" element={}></Route> */}
-        {/* <Route path="/animal/:animal_id" element={}></Route> */}
+        <Route path="/animal/:animal_id" element={<AnimalDetail />}></Route>
         <Route path="/*" element={<NotFound />}></Route>
       </Routes>
     </ThemeProvider>

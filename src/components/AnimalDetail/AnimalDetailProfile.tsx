@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TbGenderFemale, TbGenderMale } from "react-icons/tb";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
@@ -12,6 +12,8 @@ interface IProps {
 }
 
 const AnimalDetailProfile = function (props: IProps) {
+  const [statusBtn, setStatusBtn] = useState<React.ReactNode | null>(null);
+
   const feeds = props.feedList.map((feed, idx) => {
     if (idx == props.feedList.length - 1) {
       return <span key={feed.name}>{feed.name} </span>;
@@ -19,18 +21,19 @@ const AnimalDetailProfile = function (props: IProps) {
     return <span key={feed.name}>{feed.name}, </span>;
   });
 
-  let statusBtn;
-  if (props.broadcastInfo.status === "RESERVE") {
-    statusBtn = <AnimalDetailRedBtn label="방송 대기중" type={2} isDisable={true} />;
-  } else if (props.broadcastInfo.status === "ONAIR") {
-    statusBtn = (
-      <NavLink to={`/broadcast/${props.broadcastInfo.id}`} style={{ textDecoration: "none" }}>
-        <AnimalDetailRedBtn label="지금 방송중!" type={0} isDisable={false} />
-      </NavLink>
-    );
-  } else if (props.broadcastInfo.status === "FINISH") {
-    statusBtn = <AnimalDetailRedBtn label="지금은 쉬고 있어요" type={1} isDisable={true} />;
-  }
+  useEffect(() => {
+    if (props.broadcastInfo.status === "RESERVE") {
+      setStatusBtn(<AnimalDetailRedBtn label="방송 대기중" type={2} isDisable={true} />);
+    } else if (props.broadcastInfo.status === "ONAIR") {
+      setStatusBtn(
+        <NavLink to={`/broadcast/${props.broadcastInfo.id}`} style={{ textDecoration: "none" }}>
+          <AnimalDetailRedBtn label="지금 방송중!" type={0} isDisable={false} />
+        </NavLink>,
+      );
+    } else if (props.broadcastInfo.status === "FINISH") {
+      setStatusBtn(<AnimalDetailRedBtn label="지금은 쉬고 있어요" type={1} isDisable={true} />);
+    }
+  }, []);
 
   return (
     <StyledContainer>

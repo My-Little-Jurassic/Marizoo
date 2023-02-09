@@ -77,15 +77,19 @@ const AnimalDetailSide = function (props: IProps) {
 
   return (
     <StyledContainer>
+      <NavLink to={`/cafe/${props.storeInfo.storeId}`} style={{ textDecoration: "none" }}>
+        <ProfileStore storeName={props.storeInfo.storeName} imgSrc={props.storeInfo.img} />
+      </NavLink>
       {storeAnimalList !== null && (
         <>
-          <NavLink to={`/cafe/${props.storeInfo.storeId}`} style={{ textDecoration: "none" }}>
-            <ProfileStore storeName={props.storeInfo.storeName} imgSrc={props.storeInfo.img} />
-          </NavLink>
           <StyledSpan>카페 동물들</StyledSpan>
           <Grid container spacing={2}>
             {storeAnimalList}
           </Grid>
+        </>
+      )}
+      {sameSpeciesAnimalList !== null && (
+        <>
           <StyledSpan>같은 종의 동물들</StyledSpan>
           <Grid container spacing={2}>
             {sameSpeciesAnimalList}

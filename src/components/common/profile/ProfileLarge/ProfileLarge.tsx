@@ -20,7 +20,7 @@ const ProfileLarge = function (props: IProps) {
         <StyledFooter>
           <StyledClassification>{props.classification}</StyledClassification>
           <StyledGenderBox gender={props.gender}>
-            {props.gender == "MALE" ? <TbGenderMale size={20} /> : <TbGenderFemale size={20} />}
+            {props.gender === "MALE" ? <TbGenderMale size={20} /> : <TbGenderFemale size={20} />}
           </StyledGenderBox>
         </StyledFooter>
       </StyledInfo>
