@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
@@ -8,30 +8,7 @@ import { ovActions } from "../../store/ovSlice";
 import { broadcastActions } from "../../store/broadcastSlice";
 
 interface IProps {
-  // selectedFeed: string | null;
-  // isLiked: boolean | string;
-  // changeNumberOfViewers: (viewers: number) => void;
-  // changeNumberOfLikes: (likes: number) => void;
   onClick: () => void;
-}
-
-function useInterval(callback: () => void, delay: number) {
-  const savedCallback = useRef(callback); // 최근에 들어온 callback을 저장할 ref를 하나 만든다.
-
-  useEffect(() => {
-    savedCallback.current = callback; // callback이 바뀔 때마다 ref를 업데이트 해준다.
-  }, [callback]);
-
-  useEffect(() => {
-    function tick() {
-      savedCallback.current(); // tick이 실행되면 callback 함수를 실행시킨다.
-    }
-    if (delay !== null) {
-      // 만약 delay가 null이 아니라면
-      const id = setInterval(tick, delay); // delay에 맞추어 interval을 새로 실행시킨다.
-      return () => clearInterval(id); // unmount될 때 clearInterval을 해준다.
-    }
-  }, [delay]); // delay가 바뀔 때마다 새로 실행된다.
 }
 
 function BroadcastVideo(props: IProps) {
@@ -40,9 +17,8 @@ function BroadcastVideo(props: IProps) {
   const dispatch = useDispatch();
   const params = useParams();
 
-  const { mySessionId, myUserName, session, subscriber, ownerConnection } = useAppSelector(
-    (state) => state.ov,
-  );
+  const { pk, uid } = useAppSelector((state) => state.user);
+  const { mySessionId, myUserName, session, subscriber } = useAppSelector((state) => state.ov);
   const selectedFeed = useAppSelector((state) => state.broadcast.selectedFeed);
   const APPLICATION_SERVER_URL = "http://localhost:5000/";
 
@@ -50,7 +26,7 @@ function BroadcastVideo(props: IProps) {
     if (session) {
       dispatch(broadcastActions.resetRoom());
     }
-    dispatch(ovActions.createOpenvidu({ nickname: "user1", roomId: params.id }));
+    dispatch(ovActions.createOpenvidu({ nickname: uid, roomId: params.broadcast_id }));
 
     // 방 퇴장
     return () => {
@@ -74,7 +50,7 @@ function BroadcastVideo(props: IProps) {
       // localStorage.removeItem("isVoted");
       // totalTime, effectCnt, feedCount
     };
-  }, [params.id]);
+  }, [params.broadcast_id]);
 
   // 방송 화면 출력
   const streamRef = useRef<HTMLVideoElement>(null);
@@ -88,13 +64,14 @@ function BroadcastVideo(props: IProps) {
   const createToken = async function (sessionId: string) {
     const response = await axios({
       method: "post",
-      url: APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+      url: "/sessions/" + sessionId + "/connections",
       data: JSON.stringify({}),
       headers: { "Content-Type": "application/json" },
     });
     return response.data;
   };
 
+  // 토큰 생성 및 비디오 연결
   useEffect(() => {
     if (session && mySessionId) {
       createToken(mySessionId).then((token: string) => {
@@ -108,8 +85,16 @@ function BroadcastVideo(props: IProps) {
       }
     });
 
+    // 방장과 주고받는 시그널
     session?.on("signal", (event) => {
       if (event.type === "signal:welcome") {
+        if (event.from) {
+          session?.signal({
+            data: String(pk),
+            to: [event.from],
+            type: "thankYou",
+          });
+        }
         dispatch(ovActions.connectOwner(event.from));
         if (event.data === undefined) {
           return;
@@ -122,7 +107,7 @@ function BroadcastVideo(props: IProps) {
         }
       }
 
-      if (event.type === "signal:numberOfLikes") {
+      if (event.type === "signal:roomInfo") {
         if (event.data !== undefined) {
           dispatch(broadcastActions.changeNumberOfLikes(Number(event.data)));
         }
@@ -150,28 +135,12 @@ function BroadcastVideo(props: IProps) {
           .then((res) => console.log(res))
           .catch((err) => console.log(err));
       }
+
+      if (event.type === "signal:voteFinish") {
+        console.log(event.data);
+      }
     });
   }, [session]);
-
-  // 좋아요 및 좋아요 취소
-  // useEffect(() => {
-  //   if (ownerConnection === undefined || isLiked === "neverClicked") {
-  //     return;
-  //   }
-  //   if (isLiked === false) {
-  //     session?.signal({
-  //       data: "",
-  //       to: [ownerConnection],
-  //       type: "dislike",
-  //     });
-  //   } else {
-  //     session?.signal({
-  //       data: "",
-  //       to: [ownerConnection],
-  //       type: "like",
-  //     });
-  //   }
-  // }, [isLiked]);
 
   // 시청자 수 4초마다 갱신
   useInterval(() => {

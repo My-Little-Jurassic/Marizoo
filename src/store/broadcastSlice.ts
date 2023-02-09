@@ -11,6 +11,8 @@ interface IInitialState {
   isVoting: boolean;
   winnerFeed: null | undefined | IFeed;
   feedList: null | IFeed[];
+  isOwner: boolean;
+  tmpId: number;
 }
 
 const initialState: IInitialState = {
@@ -23,12 +25,22 @@ const initialState: IInitialState = {
   isVoting: false,
   winnerFeed: null,
   feedList: null,
+  isOwner: false,
+  tmpId: 0,
 };
 
 const broadcastSlice = createSlice({
   name: "broadcastSlice",
   initialState,
   reducers: {
+    changeId(state) {
+      state.tmpId = state.tmpId + 1;
+    },
+
+    change(state) {
+      state.isOwner = !state.isOwner;
+    },
+
     maximize(state) {
       state.isMaximized = !state.isMaximized;
     },

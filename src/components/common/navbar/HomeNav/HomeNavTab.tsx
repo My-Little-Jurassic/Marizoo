@@ -28,7 +28,7 @@ function HomeNavTab() {
           className={({ isActive }) => (isActive ? "active" : "deactive")}
         >
           <StyledTabIcon>
-            <TbDeviceTvOld size={30}></TbDeviceTvOld>
+            <TbDeviceTvOld size={24}></TbDeviceTvOld>
             <StyledTabLabel>라이브 방송</StyledTabLabel>
           </StyledTabIcon>
         </NavLink>
@@ -38,7 +38,7 @@ function HomeNavTab() {
           className={({ isActive }) => (isActive ? "active" : "deactive")}
         >
           <StyledTabIcon>
-            <TbMap2 size={30}></TbMap2>
+            <TbMap2 size={24}></TbMap2>
             <StyledTabLabel>카페 탐방</StyledTabLabel>
           </StyledTabIcon>
         </NavLink>
@@ -48,7 +48,7 @@ function HomeNavTab() {
           className={({ isActive }) => (isActive ? "active" : "deactive")}
         >
           <StyledTabIcon>
-            <TbBooks size={30}></TbBooks>
+            <TbBooks size={24}></TbBooks>
             <StyledTabLabel>동물 도감</StyledTabLabel>
           </StyledTabIcon>
         </NavLink>
@@ -108,7 +108,7 @@ const StyledTabIcon = styled.div`
 `;
 
 const StyledTabLabel = styled.div`
-  margin-top: 8px;
+  margin-top: 4px;
 `;
 
 const StyledActiveTabLine = styled.div<{ activeTab: number }>`

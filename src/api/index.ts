@@ -11,3 +11,4 @@ instance.defaults.withCredentials = true;
 export default instance;
 
 export * from "./user";
+export * from "./store";
