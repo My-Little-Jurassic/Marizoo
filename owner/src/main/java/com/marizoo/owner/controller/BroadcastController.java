@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
-
+@RequestMapping("/api/owner/")
 public class BroadcastController {
     private final BroadcastService broadcastService;
     private final VoteService voteService;

@@ -12,7 +12,7 @@ eureka:
 
 spring:
   application:
-    name: operator
+    name: owner
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://3.36.112.78:3306/marizoo?
