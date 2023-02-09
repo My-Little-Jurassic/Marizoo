@@ -26,18 +26,18 @@ const Modal = ({ content }: IProps): JSX.Element => {
 
   const modalContent = useMemo(() => {
     switch (content) {
-      case "StoreReservationNotNumber": {
+      case "StoreReservationNotNumber":
         return <StoreReservationNotNumber onClose={onClose} />;
-      }
-      case "StoreReservationEmpty": {
+
+      case "StoreReservationEmpty":
         return <StoreReservationEmpty onClose={onClose} />;
-      }
-      case "StoreReservationAgree": {
+
+      case "StoreReservationAgree":
         return <StoreReservationAgree onClose={onClose} />;
-      }
-      case "StoreReservationExceed": {
+
+      case "StoreReservationExceed":
         return <StoreReservationExceed onClose={onClose} />;
-      }
+
       default:
         return <DefaultContent onClose={onClose} />;
     }
