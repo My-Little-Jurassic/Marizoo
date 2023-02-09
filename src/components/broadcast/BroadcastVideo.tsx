@@ -6,21 +6,22 @@ import { useAppSelector } from "../../store";
 import { useDispatch } from "react-redux";
 import { ovActions } from "../../store/ovSlice";
 import { broadcastActions } from "../../store/broadcastSlice";
+import { openModal, setContent } from "../../store/modalSlice";
 
 interface IProps {
   onClick: () => void;
 }
 
 function BroadcastVideo(props: IProps) {
-  // const startTime = useState<number>(Date.now())[0];
-
   const dispatch = useDispatch();
   const params = useParams();
 
   const { pk, uid } = useAppSelector((state) => state.user);
   const { mySessionId, myUserName, session, subscriber } = useAppSelector((state) => state.ov);
-  const selectedFeed = useAppSelector((state) => state.broadcast.selectedFeed);
-  const APPLICATION_SERVER_URL = "http://localhost:5000/";
+  const startTime = useState<number>(Date.now())[0];
+  const effectCnt = useAppSelector((state) => state.broadcast.effectCnt);
+  const isVoted = useAppSelector((state) => state.broadcast.isVoted);
+  // const APPLICATION_SERVER_URL = "http://localhost:5000/";
 
   useEffect(() => {
     if (session) {
@@ -32,23 +33,21 @@ function BroadcastVideo(props: IProps) {
     return () => {
       dispatch(ovActions.leaveSession());
       dispatch(broadcastActions.resetRoom());
-      // const totalTime = Date.now() - startTime;
-      // let effectCnt: number;
-      // if (localStorage.getItem("effectCnt") === null) {
-      //   effectCnt = 0;
-      // } else {
-      //   effectCnt = Number(localStorage.getItem("effectCnt"));
-      // }
-      // let feedCount: number;
-      // if (localStorage.getItem("isVoted") === null) {
-      //   feedCount = 0;
-      // } else {
-      //   feedCount = 1;
-      // }
+      const totalTime = Math.floor((Date.now() - startTime) / 3600000);
+      const voteCnt = isVoted ? 1 : 0;
 
-      // localStorage.removeItem("effectCnt");
-      // localStorage.removeItem("isVoted");
-      // totalTime, effectCnt, feedCount
+      axios({
+        method: "put",
+        url: `${process.env.REACT_APP_API_URL}/users/watchEnd`,
+        data: {
+          userId: pk,
+          effectCount: effectCnt,
+          feedCount: voteCnt,
+          watchTime: totalTime,
+        },
+      })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
     };
   }, [params.broadcast_id]);
 
@@ -79,6 +78,7 @@ function BroadcastVideo(props: IProps) {
       });
     }
 
+    // 방장 비디오 연결
     session?.on("streamCreated", (event) => {
       if (streamRef.current !== null) {
         dispatch(ovActions.subscribeVideo(event.stream));
@@ -109,7 +109,7 @@ function BroadcastVideo(props: IProps) {
 
       if (event.type === "signal:roomInfo") {
         if (event.data !== undefined) {
-          dispatch(broadcastActions.changeNumberOfLikes(Number(event.data)));
+          dispatch(broadcastActions.changeRoomInfo(event.data));
         }
       }
 
@@ -128,26 +128,17 @@ function BroadcastVideo(props: IProps) {
       }
 
       if (event.type === "signal:badge") {
-        axios({
-          method: "post",
-          url: `${process.env.REACT_APP_API_URL}/broadcasts/badges`,
-        })
-          .then((res) => console.log(res))
-          .catch((err) => console.log(err));
+        console.log("배지 받았다");
       }
 
-      if (event.type === "signal:voteFinish") {
-        console.log(event.data);
+      if (event.type === "signal:finish") {
+        dispatch(broadcastActions.resetRoom());
+        dispatch(ovActions.leaveSession());
+        dispatch(setContent("BroadcastFinish"));
+        dispatch(openModal());
       }
     });
   }, [session]);
-
-  // 시청자 수 4초마다 갱신
-  useInterval(() => {
-    if (session !== undefined) {
-      dispatch(broadcastActions.changeNumberOfViewers(session?.remoteConnections.size));
-    }
-  }, 4000);
 
   return (
     <StyledContainer onClick={props.onClick}>

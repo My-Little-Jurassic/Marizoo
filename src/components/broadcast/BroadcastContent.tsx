@@ -32,14 +32,26 @@ const BroadcastContent = function (props: IProps) {
       <StyledSubTitleContainer>
         <StyledTitle>{props.title}</StyledTitle>
         <StyledButtonContainer>
-          {isVoted ? (
-            <GreenBtn label="투표하기" type={0} isDisable={true} />
-          ) : (
+          {isVoting === "proceeding" && (
+            <>
+              {isVoted ? (
+                <GreenBtn label="투표하기" type={0} isDisable={true} />
+              ) : (
+                <GreenBtn
+                  label="투표하기"
+                  type={0}
+                  isDisable={false}
+                  onClick={() => setIsVoteModalOpened(true)}
+                />
+              )}
+            </>
+          )}
+          {isVoting === "finish" && (
             <GreenBtn
-              label="투표하기"
+              label="투표결과"
               type={0}
               isDisable={false}
-              onClick={() => setIsVoteModalOpened(true)}
+              onClick={() => setIsResultModalOpened(true)}
             />
           )}
           <LikeBtn
@@ -59,15 +71,7 @@ const BroadcastContent = function (props: IProps) {
       </StyledCountInfoContainer>
 
       <StyledHr />
-      <StyledDetail>
-        {props.description}
-        <GreenBtn
-          label="투표결과"
-          type={0}
-          isDisable={false}
-          onClick={() => setIsResultModalOpened(true)}
-        />
-      </StyledDetail>
+      <StyledDetail>{props.description}</StyledDetail>
     </StyledContainer>
   );
 };
