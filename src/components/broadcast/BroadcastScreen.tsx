@@ -14,20 +14,11 @@ import { GreenBtn, ReactionBtn } from "../common/button";
 import VoteModal from "./VoteModal";
 import BroadcastVideo from "./BroadcastVideo";
 import BroadcastCombo from "./BroadcastCombo";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { broadcastActions } from "../../store/broadcastSlice";
 
 interface IProps {
   title: string;
-  isMaximized: boolean;
-  toggleScreenMode: () => void;
-  feedList: { id: number; feedName: string; imgSrc: string }[];
-  selectedFeed: string | null;
-  vote: (selectedFeed: string) => void;
-  isVoted: boolean;
-  isLiked: boolean | string;
-  numberOfViewers: number;
-  numberOfLikes: number;
-  changeNumberOfViewers: (viewers: number) => void;
-  changeNumberOfLikes: (likes: number) => void;
 }
 
 const BroadcastScreen = function (props: IProps) {
@@ -39,6 +30,13 @@ const BroadcastScreen = function (props: IProps) {
   const [isReactionPlaying, setIsReactionPlaying] = useState<boolean>(false);
   const [clientX, setClientX] = useState<number | null>(null);
   const [clientY, setClientY] = useState<number | null>(null);
+
+  const isMaximized = useAppSelector((state) => state.broadcast.isMaximized);
+  const isVoted = useAppSelector((state) => state.broadcast.isVoted);
+  const numberOfViewers = useAppSelector((state) => state.broadcast.numberOfViewers);
+  const numberOfLikes = useAppSelector((state) => state.broadcast.numberOfLikes);
+
+  const dispatch = useAppDispatch();
 
   // 마우스 멈추면 버튼들 사라지게
   useEffect(() => {
@@ -81,32 +79,23 @@ const BroadcastScreen = function (props: IProps) {
     setIsReactionPlaying(true);
   };
 
-  // 리액션 3초 하고 다시 돌리기 -> 콤보 끝날때까지로 변경 필요
-  useEffect(() => {
+  // 콤보 끝나면 이펙트 종료
+  const finishEffect = function () {
     if (isReactionPlaying === false) {
       return;
     }
-    setTimeout(() => {
-      setIsReactionPlaying(false);
-      setWaitingReaction(null);
-      const originalEffectCnt = localStorage.getItem("effectCnt");
-      if (originalEffectCnt !== null) {
-        localStorage.setItem("effectCnt", String(Number(originalEffectCnt) + 1));
-      } else {
-        localStorage.setItem("effectCnt", "1");
-      }
-    }, 20000);
-  }, [isReactionPlaying]);
+    setIsReactionPlaying(false);
+    setWaitingReaction(null);
+  };
 
   return (
     <StyledContainer
       onMouseMove={showBtns}
-      isMaximized={props.isMaximized}
+      isMaximized={isMaximized}
       isBtnShown={isBtnShown}
       isVoteModalOpened={isVoteModalOpened}
       waitingReaction={waitingReaction}
     >
-      {isReactionPlaying && <BroadcastCombo clientX={clientX} clientY={clientY} />}
       {isReactionPlaying && waitingReaction === "쓰다듬기" && (
         <SytledIframe
           src="https://embed.lottiefiles.com/animation/97180"
@@ -128,60 +117,54 @@ const BroadcastScreen = function (props: IProps) {
           clientY={clientY}
         />
       )}
-      <BroadcastVideo
-        selectedFeed={props.selectedFeed}
-        isLiked={props.isLiked}
-        onClick={doReaction}
-        changeNumberOfViewers={(viewers) => props.changeNumberOfViewers(viewers)}
-        changeNumberOfLikes={(likes) => props.changeNumberOfLikes(likes)}
-        isVoted={props.isVoted}
-      />
-      {props.isMaximized && (
+      <BroadcastVideo onClick={doReaction} />
+      {isReactionPlaying && <BroadcastCombo finishEffect={finishEffect} />}
+      {isMaximized && (
         <StyledHeader isBtnShown={isBtnShown}>
           <StyledTopShadow />
           <StyledTitle>{props.title}</StyledTitle>
           <StyledCountInfoContainer>
             <TbUsers size={20} />
-            <StyledSpan>{props.numberOfViewers} 명</StyledSpan>
+            <StyledSpan>{numberOfViewers} 명</StyledSpan>
             <TbThumbUp size={20} />
-            <StyledSpan>{props.numberOfLikes} 회</StyledSpan>
+            <StyledSpan>{numberOfLikes} 회</StyledSpan>
           </StyledCountInfoContainer>
         </StyledHeader>
       )}
-      {!isReactionPlaying && (
-        <StyledReactionContainer
-          onMouseOver={() => setIsMouseOver(true)}
-          onMouseOut={() => setIsMouseOver(false)}
-          isBtnShown={isBtnShown}
-          isMaximized={props.isMaximized}
-        >
-          <ReactionBtn
-            label="쓰다듬기"
-            icon={TbHandStop}
-            color="#F1A604"
-            onClick={() => setWaitingReaction("쓰다듬기")}
-          />
-          <ReactionBtn
-            label="예뻐하기"
-            icon={TbHeart}
-            color="#ff38a4"
-            onClick={() => setWaitingReaction("예뻐하기")}
-          />
-          <ReactionBtn
-            label="응원하기"
-            icon={TbFlame}
-            color="#f33041"
-            onClick={() => setWaitingReaction("응원하기")}
-          />
-        </StyledReactionContainer>
-      )}
-      {props.isMaximized && (
+
+      <StyledReactionContainer
+        onMouseOver={() => setIsMouseOver(true)}
+        onMouseOut={() => setIsMouseOver(false)}
+        isBtnShown={isBtnShown}
+        isMaximized={isMaximized}
+      >
+        <ReactionBtn
+          label="쓰다듬기"
+          icon={TbHandStop}
+          color="#F1A604"
+          onClick={() => setWaitingReaction("쓰다듬기")}
+        />
+        <ReactionBtn
+          label="예뻐하기"
+          icon={TbHeart}
+          color="#ff38a4"
+          onClick={() => setWaitingReaction("예뻐하기")}
+        />
+        <ReactionBtn
+          label="응원하기"
+          icon={TbFlame}
+          color="#f33041"
+          onClick={() => setWaitingReaction("응원하기")}
+        />
+      </StyledReactionContainer>
+
+      {isMaximized && (
         <StyledBtnContainer
           onMouseOver={() => setIsMouseOver(true)}
           onMouseOut={() => setIsMouseOver(false)}
           isBtnShown={isBtnShown}
         >
-          {props.isVoted ? (
+          {isVoted ? (
             <GreenBtn label="투표하기" type={0} isDisable={true} />
           ) : (
             <GreenBtn
@@ -193,35 +176,29 @@ const BroadcastScreen = function (props: IProps) {
           )}
         </StyledBtnContainer>
       )}
-      {isVoteModalOpened && (
-        <VoteModal
-          feedList={props.feedList}
-          closeModal={() => setIsVoteModalOpened(false)}
-          vote={(selectedFeed) => props.vote(selectedFeed)}
-        />
-      )}
-      {!props.isMaximized && (
+      {isVoteModalOpened && <VoteModal closeModal={() => setIsVoteModalOpened(false)} />}
+      {!isMaximized && (
         <StyledModeChangeIconContainer
           onMouseOver={() => setIsMouseOver(true)}
           onMouseOut={() => setIsMouseOver(false)}
           isBtnShown={isBtnShown}
           onClick={() => {
             document.documentElement.requestFullscreen();
-            props.toggleScreenMode();
+            dispatch(broadcastActions.maximize());
             setIsMouseOver(false);
           }}
         >
           <TbMaximize size={30} />
         </StyledModeChangeIconContainer>
       )}
-      {props.isMaximized && (
+      {isMaximized && (
         <StyledModeChangeIconContainer
           onMouseOver={() => setIsMouseOver(true)}
           onMouseOut={() => setIsMouseOver(false)}
           isBtnShown={isBtnShown}
           onClick={() => {
             document.exitFullscreen();
-            props.toggleScreenMode();
+            dispatch(broadcastActions.maximize());
             setIsMouseOver(false);
           }}
         >

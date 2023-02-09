@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 
 interface IProps {
-  clientX: number | null;
-  clientY: number | null;
+  finishEffect(): void;
 }
 
 function BroadcastCombo(props: IProps) {
@@ -17,6 +16,7 @@ function BroadcastCombo(props: IProps) {
     } else if (comboTimerCount === 1) {
       setComboCount(0);
       setComboTimerCount(0);
+      props.finishEffect();
       clearTimeout(comboTimer);
     }
   }, 1000 / (comboTimerCount / 5));
@@ -28,19 +28,23 @@ function BroadcastCombo(props: IProps) {
   };
 
   return (
-    <StyledCombo
-      onClick={hitCombo}
-      comboTimerCount={comboTimerCount}
-      clientX={props.clientX}
-      clientY={props.clientY}
-    >
-      <div>x{comboCount}combo</div>
-      <div></div>
-    </StyledCombo>
+    <StyledContainer onClick={hitCombo}>
+      <StyledCombo comboTimerCount={comboTimerCount}>
+        <div>x{comboCount}combo</div>
+        <div></div>
+      </StyledCombo>
+    </StyledContainer>
   );
 }
 
 export default BroadcastCombo;
+
+const StyledContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+`;
 
 const shake = (comboTimerCount: number) => keyframes`
 0% {
@@ -70,16 +74,13 @@ const shake = (comboTimerCount: number) => keyframes`
 
 const StyledCombo = styled.div<{
   comboTimerCount: number;
-  clientX: number | null;
-  clientY: number | null;
 }>`
-  margin: 200px;
-  width: 300px;
-  height: 100px;
+  width: 120px;
+  height: 30px;
   position: absolute;
-  Z-index: 10;
-  top: ${(props) => props.clientY}
-  left: ${(props) => props.clientX}
+  z-index: 10;
+  top: 24px;
+  right: 48px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

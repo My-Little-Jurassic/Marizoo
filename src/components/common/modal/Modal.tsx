@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { useAppDispatch } from "../../../store";
 import { closeModal } from "../../../store/modalSlice";
+import BroadcastFinish from "./BroadcastFinish";
 import DefaultContent from "./DefaultContent";
 
 interface IProps {
@@ -13,7 +14,7 @@ const Modal = ({ content }: IProps): JSX.Element => {
   const [state, setState] = useState("");
 
   useEffect(() => {
-    if (state === "close") setTimeout(() => dispatch(closeModal), 500);
+    if (state === "close") setTimeout(() => dispatch(closeModal()), 500);
   }, [state]);
 
   const onClose = () => {
@@ -22,6 +23,9 @@ const Modal = ({ content }: IProps): JSX.Element => {
 
   const modalContent = useMemo(() => {
     switch (content) {
+      case "BroadcastFinish":
+        return <BroadcastFinish onClose={onClose} />;
+
       default:
         return <DefaultContent onClose={onClose} />;
     }

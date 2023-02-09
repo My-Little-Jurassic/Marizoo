@@ -1,39 +1,47 @@
-import React, { useCallback, useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 
 import { GreenBtn } from "../common/button";
 import { CardVote } from "../common/card/index";
 import { Grid } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { broadcastActions } from "../../store/broadcastSlice";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { IFeed } from "./type";
+import { ovActions } from "../../store/ovSlice";
 
 interface Iprops {
-  feedList: { id: number; feedName: string; imgSrc: string }[];
   closeModal: () => void;
-  vote: (selectedFeed: string) => void;
 }
 
 const VoteModal = function (props: Iprops) {
-  const [selectedFeed, setSelectedFeed] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
+  const params = useParams();
 
-  // 먹이 고르기
-  const selectFeed = useCallback(
-    (feed: string) => {
-      if (selectedFeed === feed) {
-        setSelectedFeed(null);
-      } else {
-        setSelectedFeed(feed);
-      }
-    },
-    [selectedFeed],
-  );
+  const [feedList, setFeedList] = useState<IFeed[] | null>(null);
+  const selectedFeed = useAppSelector((state) => state.broadcast.selectedFeed);
 
-  // 먹이 투표 카드들
-  const Cards = props.feedList.map((feed) => {
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_API_URL}/broadcasts/${params.broadcast_id}/vote`,
+    })
+      .then((res) => setFeedList(res.data.feeds))
+      .catch((err) => console.log(err));
+  }, []);
+
+  const selectFeed = function (feed: string) {
+    dispatch(broadcastActions.pickFeed(feed));
+  };
+
+  const feedCardList = feedList?.map((feed: IFeed) => {
     return (
-      <Grid key={feed.id} item xs={12} sm={12} md={6}>
+      <Grid key={feed.name} item xs={12} sm={6} md={6}>
         <CardVote
-          title={feed.feedName}
-          imgSrc={feed.imgSrc}
+          title={feed.name}
+          imgSrc={feed.img}
           selectedFeed={selectedFeed}
           selectFeed={selectFeed}
         />
@@ -41,31 +49,33 @@ const VoteModal = function (props: Iprops) {
     );
   });
 
-  // 투표하기
-  const vote = useCallback(() => {
-    console.log(selectedFeed, typeof selectedFeed);
+  const vote = function () {
     if (typeof selectedFeed === "string") {
-      props.vote(selectedFeed);
-      localStorage.setItem("isVoted", "true");
+      dispatch(broadcastActions.vote(selectedFeed));
+      dispatch(ovActions.vote(selectFeed));
       props.closeModal();
     }
-  }, [selectedFeed]);
+  };
 
   return (
     <StyledModal>
-      <StyledBlackDiv onClick={props.closeModal} />
-      <StyledContainer>
-        <StyledMdClose onClick={props.closeModal}>
-          <MdClose size={32} />
-        </StyledMdClose>
-        <StyledHeader>먹이를 투표해주세요.</StyledHeader>
-        <StyledCardContainer>
-          <Grid container spacing={4}>
-            {Cards}
-          </Grid>
-        </StyledCardContainer>
-        <GreenBtn label="투표하기" type={0} isDisable={false} onClick={vote} />
-      </StyledContainer>
+      {feedCardList && (
+        <>
+          <StyledBlackDiv onClick={props.closeModal} />
+          <StyledContainer>
+            <StyledMdClose onClick={props.closeModal}>
+              <MdClose size={32} />
+            </StyledMdClose>
+            <StyledHeader>먹이를 투표해주세요.</StyledHeader>
+            <StyledCardContainer>
+              <Grid container spacing={4}>
+                {feedCardList}
+              </Grid>
+            </StyledCardContainer>
+            <GreenBtn label="투표하기" type={0} isDisable={false} onClick={vote} />
+          </StyledContainer>
+        </>
+      )}
     </StyledModal>
   );
 };
@@ -93,7 +103,8 @@ const StyledContainer = styled.div`
   transform: translate(-50%, -50%);
   max-width: 720px;
   min-width: 646px;
-  height: 620px;
+  min-height: 440px;
+  max-height: 620px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -109,11 +120,11 @@ const StyledContainer = styled.div`
   }
   @media screen and (max-width: 700px) {
     min-width: 90vw;
-    height: 80%;
+    min-height: 60%;
     max-height: 620px;
   }
   @media screen and (max-width: 555px) {
-    height: 80%;
+    min-height: 80%;
   }
   @media screen and (max-width: 400px) {
     min-width: 320px;
@@ -133,9 +144,5 @@ const StyledHeader = styled.span`
 `;
 
 const StyledCardContainer = styled.div`
-  // display: flex;
-  // flex-direction: row;
-  // flex-wrap: wrap;
-  // justify-content: center;
-  // gap: 20px;
+  width: 90%;
 `;

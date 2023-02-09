@@ -1,178 +1,144 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Connection, OpenVidu, Session } from "openvidu-browser";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
+import { useAppSelector } from "../../store";
+import { useDispatch } from "react-redux";
+import { ovActions } from "../../store/ovSlice";
+import { broadcastActions } from "../../store/broadcastSlice";
+import { openModal, setContent } from "../../store/modalSlice";
 
 interface IProps {
-  selectedFeed: string | null;
-  isLiked: boolean | string;
   onClick: () => void;
-  changeNumberOfViewers: (viewers: number) => void;
-  changeNumberOfLikes: (likes: number) => void;
-  isVoted: boolean;
-}
-
-function useInterval(callback: () => void, delay: number) {
-  const savedCallback = useRef(callback); // 최근에 들어온 callback을 저장할 ref를 하나 만든다.
-
-  useEffect(() => {
-    savedCallback.current = callback; // callback이 바뀔 때마다 ref를 업데이트 해준다.
-  }, [callback]);
-
-  useEffect(() => {
-    function tick() {
-      savedCallback.current(); // tick이 실행되면 callback 함수를 실행시킨다.
-    }
-    if (delay !== null) {
-      // 만약 delay가 null이 아니라면
-      const id = setInterval(tick, delay); // delay에 맞추어 interval을 새로 실행시킨다.
-      return () => clearInterval(id); // unmount될 때 clearInterval을 해준다.
-    }
-  }, [delay]); // delay가 바뀔 때마다 새로 실행된다.
 }
 
 function BroadcastVideo(props: IProps) {
-  const [session, setSession] = useState<Session | undefined>(undefined);
-  const [ownerConnection, setOwnerConnection] = useState<Connection | undefined>(undefined);
-  const startTime = useState<number>(Date.now())[0];
-
-  const OV = useMemo(() => new OpenVidu(), []);
-  const APPLICATION_SERVER_URL = "http://localhost:5000/";
-
+  const dispatch = useDispatch();
   const params = useParams();
 
-  const mySessionId = String(params.id);
-  const myUserName = "myUserName1";
+  const { pk, uid } = useAppSelector((state) => state.user);
+  const { mySessionId, myUserName, session, subscriber } = useAppSelector((state) => state.ov);
+  const startTime = useState<number>(Date.now())[0];
+  const effectCnt = useAppSelector((state) => state.broadcast.effectCnt);
+  const isVoted = useAppSelector((state) => state.broadcast.isVoted);
+  // const APPLICATION_SERVER_URL = "http://localhost:5000/";
 
-  // useEffect(() => {
-  //   setSession(OV.initSession());
-  // }, [OV]);
-
-  // 스트리밍 화면 출력
-  const streamRef = useRef<HTMLVideoElement>(null);
-
-  // 세션 생성
   useEffect(() => {
-    const newSession = OV.initSession();
-    newSession.on("streamCreated", (event) => {
-      if (streamRef.current !== null) {
-        const ownerStream = newSession.subscribe(event.stream, streamRef.current);
-        ownerStream?.addVideoElement(streamRef.current);
-      }
-    });
-    // 메세지 받기
-    newSession.on("signal", (event) => {
-      if (event.type === "signal:welcome") {
-        setOwnerConnection(event.from);
-      }
-      if (event.type === "signal:badge") {
-        console.log("뱃지 받았다");
-      }
-      if (event.type === "signal:numberOfLikes") {
-        if (event.data !== undefined) {
-          props.changeNumberOfLikes(Number(event.data));
-        }
-      }
-    });
-    setSession(newSession);
-  }, [params.id]);
+    if (session) {
+      dispatch(broadcastActions.resetRoom());
+    }
+    dispatch(ovActions.createOpenvidu({ nickname: uid, roomId: params.broadcast_id }));
+
+    // 방 퇴장
+    return () => {
+      dispatch(ovActions.leaveSession());
+      dispatch(broadcastActions.resetRoom());
+      const totalTime = Math.floor((Date.now() - startTime) / 3600000);
+      const voteCnt = isVoted ? 1 : 0;
+
+      axios({
+        method: "put",
+        url: `${process.env.REACT_APP_API_URL}/users/watchEnd`,
+        data: {
+          userId: pk,
+          effectCount: effectCnt,
+          feedCount: voteCnt,
+          watchTime: totalTime,
+        },
+      })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    };
+  }, [params.broadcast_id]);
+
+  // 방송 화면 출력
+  const streamRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    if (subscriber && streamRef.current) {
+      subscriber.addVideoElement(streamRef.current);
+    }
+  }, [subscriber]);
 
   // 토큰 생성
   const createToken = async function (sessionId: string) {
     const response = await axios({
       method: "post",
-      url: APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+      url: "/sessions/" + sessionId + "/connections",
       data: JSON.stringify({}),
       headers: { "Content-Type": "application/json" },
     });
     return response.data;
   };
 
-  // 토큰 가져오기
-  // const getToken = async function () {
-  //   return await createToken(mySessionId);
-  // };
-
-  // 방 입장
+  // 토큰 생성 및 비디오 연결
   useEffect(() => {
-    if (session !== undefined) {
+    if (session && mySessionId) {
       createToken(mySessionId).then((token: string) => {
         session.connect(token, { clientData: myUserName });
       });
-
-      // 방 퇴장
-      return () => {
-        session.disconnect();
-        const totalTime = Date.now() - startTime;
-        let effectCnt: number;
-        if (localStorage.getItem("effectCnt") === null) {
-          effectCnt = 0;
-        } else {
-          effectCnt = Number(localStorage.getItem("effectCnt"));
-        }
-        let feedCount: number;
-        if (localStorage.getItem("isVoted") === null) {
-          feedCount = 0;
-        } else {
-          feedCount = 1;
-        }
-
-        localStorage.removeItem("effectCnt");
-        localStorage.removeItem("isVoted");
-        // totalTime, effectCnt, feedCount
-      };
     }
-  }, [session]);
 
-  // 세션 입장
-  // const joinRoom = function () {
-  //   getToken().then((token: string) => {
-  //     if (session === undefined) {
-  //       return;
-  //     }
-  //     session.connect(token, { clientData: myUserName });
-  //   });
-  // };
-
-  // 투표하기
-  useEffect(() => {
-    if (props.selectedFeed === null || ownerConnection === undefined) {
-      return;
-    }
-    session?.signal({
-      data: props.selectedFeed,
-      to: [ownerConnection],
-      type: "vote",
+    // 방장 비디오 연결
+    session?.on("streamCreated", (event) => {
+      if (streamRef.current !== null) {
+        dispatch(ovActions.subscribeVideo(event.stream));
+      }
     });
-  }, [props.selectedFeed, ownerConnection]);
 
-  // 좋아요 및 좋아요 취소
-  useEffect(() => {
-    if (ownerConnection === undefined || props.isLiked === "neverClicked") {
-      return;
-    }
-    if (props.isLiked === false) {
-      session?.signal({
-        data: "",
-        to: [ownerConnection],
-        type: "dislike",
-      });
-    } else {
-      session?.signal({
-        data: "",
-        to: [ownerConnection],
-        type: "like",
-      });
-    }
-  }, [props.isLiked]);
+    // 방장과 주고받는 시그널
+    session?.on("signal", (event) => {
+      if (event.type === "signal:welcome") {
+        if (event.from) {
+          session?.signal({
+            data: String(pk),
+            to: [event.from],
+            type: "thankYou",
+          });
+        }
+        dispatch(ovActions.connectOwner(event.from));
+        if (event.data === undefined) {
+          return;
+        }
+        const roomInfo = JSON.parse(event.data);
+        if (roomInfo.voteStatus === "proceeding") {
+          dispatch(broadcastActions.startVote(roomInfo.feedList));
+        } else if (roomInfo.voteStatus === "finish") {
+          dispatch(broadcastActions.finishVote(roomInfo.winnerFeedId));
+        }
+      }
 
-  // 시청자 수 4초마다 갱신
-  useInterval(() => {
-    if (session !== undefined) {
-      props.changeNumberOfViewers(session?.remoteConnections.size);
-    }
-  }, 4000);
+      if (event.type === "signal:roomInfo") {
+        if (event.data !== undefined) {
+          dispatch(broadcastActions.changeRoomInfo(event.data));
+        }
+      }
+
+      if (event.type === "signal:voteStart") {
+        if (event.data === undefined) {
+          return;
+        }
+        const feedList = JSON.parse(event.data);
+        dispatch(broadcastActions.startVote(feedList));
+      }
+
+      if (event.type === "signal:voteFinish") {
+        if (event.data != undefined) {
+          dispatch(broadcastActions.finishVote(event.data));
+        }
+      }
+
+      if (event.type === "signal:badge") {
+        console.log("배지 받았다");
+      }
+
+      if (event.type === "signal:finish") {
+        dispatch(broadcastActions.resetRoom());
+        dispatch(ovActions.leaveSession());
+        dispatch(setContent("BroadcastFinish"));
+        dispatch(openModal());
+      }
+    });
+  }, [session]);
 
   return (
     <StyledContainer onClick={props.onClick}>
