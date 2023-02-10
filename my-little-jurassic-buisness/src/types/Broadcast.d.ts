@@ -21,17 +21,20 @@ export interface IVote {
   options: IFeed[];
 }
 
-export interface IBroadcastStatus {
-  sessionId: string;
-  pk: number;
+export interface IBroadcastVariable {
   viewers: number;
   likes: number;
   vote: IVote;
-  status: TStatus;
+}
+
+export interface IBroadcastStatus extends IBroadcastVariable {
+  sessionId: string;
+  pk: number;
 }
 
 export interface IBroadcastSetting {
   id: string;
+  status: TStatus;
   title: string;
   description: string;
   thumbnail: Blob | null;
