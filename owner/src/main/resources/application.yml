@@ -1,12 +1,5 @@
 server:
   port: 0
-  ssl:
-    key-store: classpath:keystore.p12
-    key-store-type: PKCS12
-    key-store-password: 0000
-    key-alias: tomcat
-  http2:
-    enabled: true
 
 eureka:
   instance:
@@ -35,6 +28,8 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher # swagger
+
+
 cloud:
   aws:
     credentials:
