@@ -12,6 +12,10 @@ const MypageHeader = () => {
   );
 };
 
-const StyledHeader = styled.header``;
+const StyledHeader = styled.header`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 60px;
+`;
 
 export default MypageHeader;

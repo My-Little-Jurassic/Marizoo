@@ -23,9 +23,20 @@ const Mypage = (): JSX.Element => {
 const StyledMain = styled.main`
   width: 100vw;
   max-width: 1056px;
-  height: 100vh;
+  height: auto;
   margin: auto;
   padding: 60px 16px;
+  color: ${({ theme }) => theme.colors.primaryText};
+
+  & h1 {
+    color: ${({ theme }) => theme.colors.primaryText};
+    font: ${({ theme }) => theme.fonts.header1};
+  }
+  & h2 {
+    color: ${({ theme }) => theme.colors.primaryText};
+    font: ${({ theme }) => theme.fonts.header2};
+    margin: 56px 0 24px;
+  }
 `;
 
 export default Mypage;

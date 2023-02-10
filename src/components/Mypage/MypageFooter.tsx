@@ -10,6 +10,10 @@ const MypageFooter = () => {
   );
 };
 
-const StyledFooter = styled.footer``;
+const StyledFooter = styled.footer`
+  display: flex;
+  justify-content: end;
+  width: 100%;
+`;
 
 export default MypageFooter;

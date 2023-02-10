@@ -11,6 +11,8 @@ const MypageStoreReservationContainer = () => {
   );
 };
 
-const StyledDiv = styled.div``;
+const StyledDiv = styled.div`
+  margin-top: 312px;
+`;
 
 export default MypageStoreReservationContainer;

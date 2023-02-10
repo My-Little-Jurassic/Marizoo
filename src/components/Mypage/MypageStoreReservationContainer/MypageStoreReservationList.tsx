@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 const MypageStoreReservationList = () => {
-  return <StyledDiv></StyledDiv>;
+  return <StyledUl></StyledUl>;
 };
 
-const StyledDiv = styled.div``;
+const StyledUl = styled.ul``;
 
 export default MypageStoreReservationList;

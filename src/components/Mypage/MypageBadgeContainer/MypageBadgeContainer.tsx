@@ -15,6 +15,13 @@ const MypageBadgeContainer = () => {
   );
 };
 
-const StyledDiv = styled.div``;
+const StyledDiv = styled.div`
+  & > .badge-area {
+    border-radius: 32px;
+    padding: 40px;
+    background-color: ${({ theme }) => theme.colors.secondaryBg};
+    ${({ theme }) => theme.shadow};
+  }
+`;
 
 export default MypageBadgeContainer;
