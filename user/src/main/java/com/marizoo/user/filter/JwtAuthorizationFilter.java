@@ -31,15 +31,18 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("권한이나 인증 처리를 위한 필터 입장:)");
         String servletPath = request.getServletPath();
         String jwtHeader = request.getHeader(AT_HEADER);
 
         if (servletPath.equals("/refresh")) {
+            log.info("리프레스 요청을 처리하는 필터 입장:)");
             filterChain.doFilter(request, response);
             return;
         }
 
         if (jwtHeader == null || !jwtHeader.startsWith(TOKEN_HEADER_PREFIX)) {
+            log.info("Jwt 헤더가 없거나 Barer Jwt가 아닌경우 처리하는 필터 입장:)");
             filterChain.doFilter(request, response);
             return;
         }
@@ -49,7 +52,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (jwtToken != null) {
             String uid = validateJwtToken(jwtToken);
 
-            if (uid == null){
+            if (uid == null) {
                 log.error("UID is NULL");
                 throw new AccessTokenException("엑세스 토큰이 잘못되었습니다.");
             }
