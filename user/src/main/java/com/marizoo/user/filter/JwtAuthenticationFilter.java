@@ -41,6 +41,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        log.info("로그인 요청이 들어왔을 때 실행되는 메서드");
         try {
             LoginRequestDto loginRequestDto = om.readValue(request.getInputStream(), LoginRequestDto.class);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequestDto.getUid(), loginRequestDto.getPwd());
@@ -53,31 +54,36 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        log.info("로그인 아이디 비밀번호가 일치하여 로그인이 성공한 경우");
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-        
+
         // access token 생성
+        log.info("엑세스 토큰 생성");
         String accessToken = createAccessToken(principalDetails);
 
         // refresh token 생성
+        log.info("리프레시 토큰 생성");
         String refreshToken = createRefreshToken(principalDetails);
 
         // DB에 refreshToken 저장한다.
+        log.info("리프레시 토큰 디비에 저장");
         User user = saveRefreshToken(principalDetails, refreshToken);
 
         // header에 access token을 저장한다.
+        log.info("헤더에 access token 저장");
         response.addHeader(AT_HEADER, TOKEN_HEADER_PREFIX + accessToken);
         response.getWriter().write(om.writeValueAsString(new LoginResponseApi(user.getId(), user.getUid(), user.getNickname())));
 
         // refresh token 쿠키에 저장한다.
+        log.info("쿠키에 refresh token 저장");
         setCookieRefreshToken(response, refreshToken);
 
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
+        log.error("로그인 에러");
         if (failed instanceof BadCredentialsException) {
-            log.error("로그인 에러");
-
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
