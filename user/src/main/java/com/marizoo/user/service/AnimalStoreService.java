@@ -50,8 +50,18 @@ public class AnimalStoreService {
      * @return : 가게
      */
 
-    public AnimalStoreWholeDto findAnimalStore(Long storeId) {
-        AnimalStore animalStore = animalStoreRepository.findAnimalStoreById(storeId).get();
+    public AnimalStoreWholeDto findAnimalStore(Long storeId, Long userId) {
+        AnimalStore animalStore = animalStoreRepository.findAnimalStoreAndFollowersById(storeId).get();
+
+        boolean followFlag = false;
+        List<UsersAnimalStore> followers = animalStore.getFollowers();
+        for (UsersAnimalStore usersAnimalStore : followers) {
+            if (usersAnimalStore.getUser().getId() == userId) {
+                followFlag = true;
+                break;
+            }
+        }
+
         return new AnimalStoreWholeDto(
                 animalStore.getId(),
                 animalStore.getStoreName(),
@@ -62,7 +72,8 @@ public class AnimalStoreService {
                 animalStore.getEmail(),
                 animalStore.getProfileImg(),
                 animalStore.getLat(),
-                animalStore.getLng());
+                animalStore.getLng(),
+                followFlag);
     }
 
     /**
@@ -87,7 +98,7 @@ public class AnimalStoreService {
     // 팔로우
      public void followingStore(Long storeId, Long userId){
         User user = userRepository.findById(userId).get();
-        AnimalStore animalStore = animalStoreRepository.findAnimalStoreById(storeId).get();
+        AnimalStore animalStore = animalStoreRepository.findById(storeId).get();
         UsersAnimalStore follower = new UsersAnimalStore(animalStore, user);
         animalStoreFollowRepository.save(follower);
      }
@@ -117,7 +128,7 @@ public class AnimalStoreService {
              return new PlayAndStoreInfoResponse(playInfoDto, null);
          }
 
-         AnimalStore animalStore = animalStoreRepository.findAnimalStoreById(store_id).get();
+         AnimalStore animalStore = animalStoreRepository.findById(store_id).get();
          StoreInfoDto storeInfoDto= new StoreInfoDto(animalStore.getStoreName(),
                                                  animalStore.getAddress(),
                                                  animalStore.getTel());

@@ -19,5 +19,6 @@ public class AnimalStoreWholeDto {
     private String profileImg;
     private Float lat;
     private Float lng;
+    private boolean isFollowing;
 
 }

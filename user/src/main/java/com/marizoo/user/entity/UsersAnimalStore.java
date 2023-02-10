@@ -29,4 +29,7 @@ public class UsersAnimalStore extends BaseEntity {
         this.user = user;
     }
 
+    public UsersAnimalStore() {
+
+    }
 }

@@ -100,8 +100,10 @@ public class StoreController {
     // 해당 가게 전체 정보 제공
     @ApiOperation(value = "store_id 동물 가게 정보 가져오기")
     @GetMapping("/stores/{store_id}")
-    public ResponseEntity<AnimalStoreWholeDto> reserveToStore(@PathVariable(name = "store_id") @ApiParam(name = "동물가게 id", required = true, example = "1") Long store_id){
-        return new ResponseEntity<>(animalStoreService.findAnimalStore(store_id), HttpStatus.OK);
+    public ResponseEntity<AnimalStoreWholeDto> reserveToStore(
+            @PathVariable(name = "store_id") @ApiParam(name = "동물가게 id", required = true, example = "1") Long store_id,
+            @RequestParam Long userId){
+        return new ResponseEntity<>(animalStoreService.findAnimalStore(store_id, userId), HttpStatus.OK);
     }
 
     // 해당 가게 있는 동물 목록 조회.

@@ -204,11 +204,22 @@ public class UserService {
     }
 
     public List<BadgeDto> getBadgeList(Long userId) {
-        User user = userRepository.findById(userId).get();
+//        User user = userRepository.findById(userId).get();
+//        List<BadgeDto> badgeDtoList = new ArrayList<>();
+//        for (UsersBadge usersBadge : user.getBadgeList()) {
+//            badgeDtoList.add(new BadgeDto(usersBadge.getBadge().getImg(), usersBadge.getBadge().getBadgeType(), usersBadge.getBadge().getDescription()));
+//        }
+        List<Badge> badgeList = userRepository.getBadgeList(userId);
         List<BadgeDto> badgeDtoList = new ArrayList<>();
-        for (UsersBadge usersBadge : user.getBadgeList()) {
-            badgeDtoList.add(new BadgeDto(usersBadge.getBadge().getImg(), usersBadge.getBadge().getBadgeType(), usersBadge.getBadge().getDescription()));
+        for (Badge badge : badgeList) {
+            badgeDtoList.add(new BadgeDto(badge.getImg(), badge.getBadgeType(), badge.getDescription()));
         }
+
+//        User user = userRepository.getBadgeList(userId);
+//        List<BadgeDto> badgeDtoList = new ArrayList<>();
+//        for (UsersBadge usersBadge : user.getBadgeList()) {
+//            badgeDtoList.add(new BadgeDto(usersBadge.getBadge().getImg(), usersBadge.getBadge().getBadgeType(), usersBadge.getBadge().getDescription()));
+//        }
         return badgeDtoList;
     }
 
