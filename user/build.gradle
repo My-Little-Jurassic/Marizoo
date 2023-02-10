@@ -34,6 +34,7 @@ dependencies {
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'io.openvidu:openvidu-java-client:2.25.0'	// openvidu
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	// querydsl 사용
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"

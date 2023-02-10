@@ -14,6 +14,7 @@ import java.util.List;
 public class BroadcastsDto {
     // 방송 제목, 방송 썸네일, 종
     private Long id;
+    private String sessionId;
     private String title;
     private String thumbnail;
     private List<String> classificationImgs;
