@@ -6,6 +6,12 @@ export interface IPostBroadcastInfo {
   animalIdList: string[];
 }
 
+export interface IPostBroadcastInfoRes {
+  broadcastId: number;
+  sessionId: string;
+  connectionToken: string;
+}
+
 export interface IPostBroadcastFeeds {
   animalIdList: number[];
 }

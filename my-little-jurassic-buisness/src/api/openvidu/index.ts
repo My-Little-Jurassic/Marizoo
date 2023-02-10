@@ -9,7 +9,7 @@ const SECRET = "MY_SECRET";
  * @returns sessionId
  */
 export function postOpenViduSession(body: IPostOpenViduSessionBody): Promise<string> {
-  return instance.post("/api/sessions", body, {
+  return instance.post("/sessions", body, {
     headers: {
       Authorization: "Basic " + Buffer.from("OPENVIDUAPP:" + SECRET, "base64"),
     },
@@ -23,7 +23,7 @@ export function postOpenViduSession(body: IPostOpenViduSessionBody): Promise<str
  */
 export function postOpenViduToken(sessionId: string): Promise<string> {
   return instance.post(
-    `/api/sessions/${sessionId}/connections`,
+    `/sessions/${sessionId}/connections`,
     {},
     {
       headers: {
