@@ -25,7 +25,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/users")
+@RequestMapping("/api/user/")
 public class BroadcastController {
 //    @Value("${OPENVIDU_URL}")
     private static String OPENVIDU_URL = "https://i8b208.p.ssafy.io:8445/";
