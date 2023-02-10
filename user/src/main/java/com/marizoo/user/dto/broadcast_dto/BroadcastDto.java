@@ -13,5 +13,5 @@ import lombok.RequiredArgsConstructor;
 public class BroadcastDto {
     // 방송 제목, 방송 설명
     private String title;
-    private String thumbnail;
+    private String description;
 }

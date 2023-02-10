@@ -63,8 +63,10 @@ public class SecurityConfig {
         @Override
         public void configure(HttpSecurity http) throws Exception {
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, userRepository, om);
+            jwtAuthenticationFilter.setFilterProcessesUrl("/api/user/login");
             http
-                    .addFilter(new JwtAuthenticationFilter(authenticationManager, userRepository, om))
+                    .addFilter(jwtAuthenticationFilter)
                     .addFilterBefore(new JwtAuthorizationFilter(userRepository), UsernamePasswordAuthenticationFilter.class)
                     .addFilterBefore(new ExceptionHandlerFilter(om), JwtAuthorizationFilter.class);
         }

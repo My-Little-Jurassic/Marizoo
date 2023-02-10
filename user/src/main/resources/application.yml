@@ -1,5 +1,7 @@
 server:
-  port: 0
+  port: 5000
+  ssl:
+    enabled: false
 
 spring:
   application:
@@ -21,6 +23,20 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher # swagger
 
+cloud:
+  aws:
+    credentials:
+      access-key: # 이성복한테 문의
+      secret-key: # 이성복한테 문의
+    s3:
+      bucket: marizoo
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+OPENVIDU_URL: https://i8b208.p.ssafy.io:8445/
+OPENVIDU_SECRET: MY_SECRET
 
 eureka:
   instance:

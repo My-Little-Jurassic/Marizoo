@@ -7,11 +7,13 @@ import com.marizoo.user.dto.broadcast_dto.BroadcastsDto;
 import com.marizoo.user.dto.play_dto.PlayInfoDto;
 import com.marizoo.user.dto.play_dto.StorePlayDto;
 import com.marizoo.user.entity.*;
+import com.marizoo.user.exception.PlayReservationCloasedException;
 import com.marizoo.user.repository.UserRepository;
 import com.marizoo.user.repository.animalstore_repo.AnimalStoreFollowRepository;
 import com.marizoo.user.repository.animalstore_repo.AnimalStoreRepository;
 import com.marizoo.user.repository.broadcast_repo.BroadcastRepository;
 import com.marizoo.user.repository.play_repo.PlayRepository;
+import com.marizoo.user.repository.reservation_repo.UsersPlayRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class AnimalStoreService {
     private final AnimalStoreRepository animalStoreRepository;
     private final AnimalStoreFollowRepository animalStoreFollowRepository;
     private final PlayRepository playRepository;
+    private final UsersPlayRepository usersPlayRepository;
     private final BroadcastRepository broadcastRepository;
 
     /**
@@ -47,8 +50,18 @@ public class AnimalStoreService {
      * @return : 가게
      */
 
-    public AnimalStoreWholeDto findAnimalStore(Long storeId) {
-        AnimalStore animalStore = animalStoreRepository.findAnimalStoreById(storeId).get();
+    public AnimalStoreWholeDto findAnimalStore(Long storeId, Long userId) {
+        AnimalStore animalStore = animalStoreRepository.findAnimalStoreAndFollowersById(storeId).get();
+
+        boolean followFlag = false;
+        List<UsersAnimalStore> followers = animalStore.getFollowers();
+        for (UsersAnimalStore usersAnimalStore : followers) {
+            if (usersAnimalStore.getUser().getId() == userId) {
+                followFlag = true;
+                break;
+            }
+        }
+
         return new AnimalStoreWholeDto(
                 animalStore.getId(),
                 animalStore.getStoreName(),
@@ -59,7 +72,8 @@ public class AnimalStoreService {
                 animalStore.getEmail(),
                 animalStore.getProfileImg(),
                 animalStore.getLat(),
-                animalStore.getLng());
+                animalStore.getLng(),
+                followFlag);
     }
 
     /**
@@ -84,7 +98,7 @@ public class AnimalStoreService {
     // 팔로우
      public void followingStore(Long storeId, Long userId){
         User user = userRepository.findById(userId).get();
-        AnimalStore animalStore = animalStoreRepository.findAnimalStoreById(storeId).get();
+        AnimalStore animalStore = animalStoreRepository.findById(storeId).get();
         UsersAnimalStore follower = new UsersAnimalStore(animalStore, user);
         animalStoreFollowRepository.save(follower);
      }
@@ -100,13 +114,21 @@ public class AnimalStoreService {
 
     public PlayAndStoreInfoResponse findPlayInfo(Long store_id, Long play_id){
          Play play = playRepository.findPlayById(play_id);
+         Integer playMaxVisitor = play.getMaxVisitor();
+         Integer playTotalVisitor = usersPlayRepository.findPlayTotalVisitor(play_id);
+
          // 보내는 날짜와 시간은 아직 형식을 정하지 않아서 , localDateTime으로 보냄.
          PlayInfoDto playInfoDto = new PlayInfoDto(play.getPlayDateTime(),
                                                 play.getTitle(),
                                                 play.getDescription(),
                                                 play.getRunningTime(),
-                                                play.getNotice());
-         AnimalStore animalStore = animalStoreRepository.findAnimalStoreById(store_id).get();
+                                                play.getNotice(), playTotalVisitor);
+
+         if(playMaxVisitor <= playTotalVisitor){
+             return new PlayAndStoreInfoResponse(playInfoDto, null);
+         }
+
+         AnimalStore animalStore = animalStoreRepository.findById(store_id).get();
          StoreInfoDto storeInfoDto= new StoreInfoDto(animalStore.getStoreName(),
                                                  animalStore.getAddress(),
                                                  animalStore.getTel());

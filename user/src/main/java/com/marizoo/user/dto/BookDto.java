@@ -1,5 +1,6 @@
 package com.marizoo.user.dto;
 
+import com.marizoo.user.entity.BookStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,5 +18,7 @@ public class BookDto {
     private Integer totalVisitor;
     private String StoreName;
     private String tel;
+    private String img;
+    private BookStatus status;
 //    private PlayType playType;
 }

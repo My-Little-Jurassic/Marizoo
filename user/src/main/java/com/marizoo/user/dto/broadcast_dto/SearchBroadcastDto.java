@@ -5,6 +5,8 @@ import lombok.Data;
 
 @Data
 public class SearchBroadcastDto {
+    private Long id;
+    private String sessionId;
     private String title;
     private String thumbnail;
 
@@ -12,7 +14,8 @@ public class SearchBroadcastDto {
     }
 
     @QueryProjection
-    public SearchBroadcastDto(String title, String thumbnail){
+    public SearchBroadcastDto(Long id, String sessionId, String title, String thumbnail){
+        this.id = id;
         this.title = title;
         this.thumbnail = thumbnail;
     }

@@ -3,6 +3,7 @@ package com.marizoo.user.service;
 import com.marizoo.user.api.MyPageRequestApi;
 import com.marizoo.user.api.PwdChangeRequestApi;
 import com.marizoo.user.api.WatchEndRequestApi;
+import com.marizoo.user.constant.BadgeCondition;
 import com.marizoo.user.dto.BadgeDto;
 import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.MailDto;
@@ -29,6 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static com.marizoo.user.constant.BadgeCondition.*;
 
 @Service
 @Slf4j
@@ -201,19 +204,67 @@ public class UserService {
     }
 
     public List<BadgeDto> getBadgeList(Long userId) {
-        User user = userRepository.findById(userId).get();
+//        User user = userRepository.findById(userId).get();
+//        List<BadgeDto> badgeDtoList = new ArrayList<>();
+//        for (UsersBadge usersBadge : user.getBadgeList()) {
+//            badgeDtoList.add(new BadgeDto(usersBadge.getBadge().getImg(), usersBadge.getBadge().getBadgeType(), usersBadge.getBadge().getDescription()));
+//        }
+        List<Badge> badgeList = userRepository.getBadgeList(userId);
         List<BadgeDto> badgeDtoList = new ArrayList<>();
-        for (UsersBadge usersBadge : user.getBadgeList()) {
-            badgeDtoList.add(new BadgeDto(usersBadge.getBadge().getImg(), usersBadge.getBadge().getBadgeType(), usersBadge.getBadge().getDescription()));
+        for (Badge badge : badgeList) {
+            badgeDtoList.add(new BadgeDto(badge.getImg(), badge.getBadgeType(), badge.getDescription()));
         }
+
+//        User user = userRepository.getBadgeList(userId);
+//        List<BadgeDto> badgeDtoList = new ArrayList<>();
+//        for (UsersBadge usersBadge : user.getBadgeList()) {
+//            badgeDtoList.add(new BadgeDto(usersBadge.getBadge().getImg(), usersBadge.getBadge().getBadgeType(), usersBadge.getBadge().getDescription()));
+//        }
         return badgeDtoList;
     }
 
     @Transactional
     public void updateCountAndWatchTimeAcc(WatchEndRequestApi watchEndRequestApi) {
         User user = userRepository.findById(watchEndRequestApi.getUserId()).get();
-        user.setWatchTimeAcc(user.getWatchTimeAcc() + watchEndRequestApi.getWatchTime());
-        user.setEffectClickAcc(user.getEffectClickAcc() + watchEndRequestApi.getEffectCount());
-        user.setFeedClickAcc(user.getFeedClickAcc() + watchEndRequestApi.getFeedCount());
+
+        // 배지 획득 조건 달성 체크
+        Long plusWatchTime = user.getWatchTimeAcc();
+        for (int i = 1; i <= watchEndRequestApi.getWatchTime(); i++) {
+            plusWatchTime += i;
+            if (watch.containsKey(plusWatchTime)) {
+                Badge badge = badgeRepository.findById(watch.get(plusWatchTime)).orElseThrow(
+                        () -> new BadgeNotFoundException("해당하는 배지가 없습니다.")
+                );
+                UsersBadge.createUsersBadge(badge);
+            }
+        }
+
+        user.setWatchTimeAcc(plusWatchTime);
+
+        Long plusEffectClick = user.getEffectClickAcc();
+        for (int i = 1; i <= watchEndRequestApi.getEffectCount(); i++) {
+            plusEffectClick += i;
+            if (effect.containsKey(plusEffectClick)) {
+                Badge badge = badgeRepository.findById(effect.get(plusEffectClick)).orElseThrow(
+                        () -> new BadgeNotFoundException("해당하는 배지가 없습니다.")
+                );
+                UsersBadge.createUsersBadge(badge);
+            }
+        }
+
+        user.setEffectClickAcc(plusEffectClick);
+
+        Long plusFeedClick = user.getFeedClickAcc();
+        for (int i = 1; i <= watchEndRequestApi.getFeedCount(); i++) {
+            plusFeedClick += i;
+            if (feed.containsKey(plusFeedClick)) {
+                Badge badge = badgeRepository.findById(feed.get(plusFeedClick)).orElseThrow(
+                        () -> new BadgeNotFoundException("해당하는 배지가 없습니다.")
+                );
+                UsersBadge.createUsersBadge(badge);
+            }
+        }
+
+        user.setFeedClickAcc(plusFeedClick);
     }
 }

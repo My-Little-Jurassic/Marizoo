@@ -56,9 +56,9 @@ public class BroadcastService {
      * @param input : 검색어(종)
      * @return 라이브 방송 중 검색어 종이 출연하는 방송 목록
      */
-    public List<SearchBroadcastDto> searchOnAirsHavingSpeciesList(String input){
+    public List<Broadcast> searchOnAirsHavingSpeciesList(String input){
         String keyword = "%" + input + "%";
-        List<SearchBroadcastDto> searchSpecies = broadcastRepository.searchOnAirsHavingSpecies(keyword);
+        List<Broadcast> searchSpecies = broadcastRepository.searchOnAirsHavingSpecies(keyword);
         return searchSpecies;
     }
 

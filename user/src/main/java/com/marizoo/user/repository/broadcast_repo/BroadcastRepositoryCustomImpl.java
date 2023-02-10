@@ -21,10 +21,10 @@ public class BroadcastRepositoryCustomImpl implements BroadcastRepositoryCustom 
     }
 
     @Override
-    public List<SearchBroadcastDto> searchOnAirsHavingSpecies(String input) {
+    public List<Broadcast> searchOnAirsHavingSpecies(String input) {
         BroadcastStatus status = BroadcastStatus.ONAIR;
         return queryFactory
-                .select(new QSearchBroadcastDto(broadcast.title, broadcast.thumbnail)).distinct()
+                .select(broadcast).distinct()
                 .from(broadcastAnimal)
                 .join(broadcastAnimal.broadcast, broadcast)
                 .where(onAir(status).and(classificationLike(input)))
@@ -47,7 +47,7 @@ public class BroadcastRepositoryCustomImpl implements BroadcastRepositoryCustom 
     public List<SearchBroadcastDto> searchBroadcastRelated(List<String> classifications) {
         BroadcastStatus status = BroadcastStatus.ONAIR;
         return queryFactory
-                .select(new QSearchBroadcastDto(broadcast.title, broadcast.thumbnail)).distinct()
+                .select(new QSearchBroadcastDto(broadcast.id, broadcast.sessionId, broadcast.title, broadcast.thumbnail)).distinct()
                 .from(broadcastAnimal)
                 .join(broadcastAnimal.broadcast, broadcast)
                 .where(onAir(status), classificationsIn(classifications))

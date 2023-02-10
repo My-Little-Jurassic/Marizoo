@@ -25,4 +25,14 @@ public class UsersPlay extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private BookStatus status;
 
+//    === 생성 메서드 ===
+    public static UsersPlay createUsersPlay(User user, Play play, Integer totalVisitor){
+        UsersPlay usersPlay = new UsersPlay();
+        usersPlay.setUser(user);
+        usersPlay.setPlay(play);
+        usersPlay.setTotalVisitor(totalVisitor);
+        usersPlay.setStatus(BookStatus.BOOK);
+        return usersPlay;
+    }
+
 }

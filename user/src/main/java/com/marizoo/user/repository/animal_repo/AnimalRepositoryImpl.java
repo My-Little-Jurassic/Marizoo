@@ -1,5 +1,7 @@
 package com.marizoo.user.repository.animal_repo;
 
+import com.marizoo.user.dto.broadcast_dto.BroadcastStatusDto;
+import com.marizoo.user.dto.broadcast_dto.QBroadcastStatusDto;
 import com.marizoo.user.entity.Broadcast;
 import com.marizoo.user.entity.BroadcastStatus;
 import com.marizoo.user.entity.QBroadcast;
@@ -20,10 +22,10 @@ public class AnimalRepositoryImpl implements AnimalRepositoryCustom{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public BroadcastStatus findBroadcastStatus(Long animalId){
+    public BroadcastStatusDto findBroadcastStatus(Long animalId){
 
-        BroadcastStatus status = queryFactory
-                .select(broadcast.status)
+        BroadcastStatusDto status = queryFactory
+                .select(new QBroadcastStatusDto(broadcast.id, broadcast.status))
                 .from(broadcastAnimal)
                 .join(broadcastAnimal.broadcast, broadcast)
                 .where(broadcastAnimal.animal.id.eq(animalId))

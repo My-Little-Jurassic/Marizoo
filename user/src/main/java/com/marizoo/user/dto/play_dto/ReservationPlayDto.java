@@ -7,12 +7,10 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class StorePlayDto {
-
-    private Long id;
+public class ReservationPlayDto {
+    private Long userPlayId;
+    private String playTitle;
+    private Integer runningTime;
     private LocalDateTime playDateTime;
-    private String title;
-    private String description;
-    private String img;
-
+    private Integer totalVisitor;
 }
