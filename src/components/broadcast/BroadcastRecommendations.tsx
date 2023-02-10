@@ -14,7 +14,7 @@ const BroadcastRecommendations = function () {
   useEffect(() => {
     axios({
       method: "get",
-      url: `${process.env.REACT_APP_API_URL}/broadcasts/${params.broadcast_id}/related`,
+      url: `/api/user/broadcasts/${params.broadcast_id}/related`,
     })
       .then((res) => {
         const sampleRelatedBroadcastList = res.data.onAir.map(

@@ -1,33 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 
 interface IProps {
   finishEffect(): void;
 }
 
+function useInterval(callback: () => void, delay: number) {
+  const savedCallback = useRef(callback); // 최근에 들어온 callback을 저장할 ref를 하나 만든다.
+
+  useEffect(() => {
+    savedCallback.current = callback; // callback이 바뀔 때마다 ref를 업데이트 해준다.
+  }, [callback]);
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current(); // tick이 실행되면 callback 함수를 실행시킨다.
+    }
+    if (delay !== null) {
+      // 만약 delay가 null이 아니라면
+      const id = setInterval(tick, delay); // delay에 맞추어 interval을 새로 실행시킨다.
+      return () => clearInterval(id); // unmount될 때 clearInterval을 해준다.
+    }
+  }, [delay]); // delay가 바뀔 때마다 새로 실행된다.
+}
+
 // 수정 필요
 function BroadcastCombo(props: IProps) {
   const [comboCount, setComboCount] = useState(0);
   const [comboTimerCount, setComboTimerCount] = useState(0);
+  const comboRef = useRef<number>(0);
+  console.log("outside");
 
-  console.log(comboTimerCount);
-
-  const comboTimer = setTimeout(() => {
-    // clearTimeout(comboTimer);
-    if (comboTimerCount > 1) {
-      setComboTimerCount(comboTimerCount - 1);
-    } else if (comboTimerCount <= 0.5 && comboTimerCount !== 0) {
+  useInterval(() => {
+    console.log("interval");
+    if (comboTimerCount < 0.96 && comboTimerCount !== 0) {
       setComboCount(0);
-      setComboTimerCount(0);
-      clearTimeout(comboTimer);
       props.finishEffect();
     }
-  }, 1000 / (comboTimerCount / 6));
+    if (comboTimerCount === 0) {
+      return;
+    }
+    if (comboTimerCount < 20) {
+      setComboTimerCount(comboTimerCount * 0.95);
+    } else {
+      setComboTimerCount(comboTimerCount * 0.93);
+    }
+  }, 100);
 
   const hitCombo = () => {
-    // clearTimeout(comboTimer);
     setComboCount(comboCount + 1);
-    setComboTimerCount(comboTimerCount + 1.5);
+    setComboTimerCount(comboTimerCount + 2);
   };
 
   return (
@@ -111,7 +133,7 @@ const StyledCombo = styled.div<{
         0
       );
     transition: all 0.2s;
-    width: ${({ comboTimerCount }) => comboTimerCount}%;
+    width: ${({ comboTimerCount }) => comboTimerCount * 3}%;
   }
   &:active {
     animation: ${(props) => shake((props.comboTimerCount / 8) * 2)} 0.1s linear;

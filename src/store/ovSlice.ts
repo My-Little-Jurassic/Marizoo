@@ -69,6 +69,7 @@ const ovSlice = createSlice({
     },
 
     like(state, { payload }) {
+      console.log("좋ㅇ요좋ㅇ요좋ㅇ요좋ㅇ요좋ㅇ요좋ㅇ요좋ㅇ요좋ㅇ요좋ㅇ요");
       if (state.session && state.ownerConnection) {
         if (!payload) {
           state.session.signal({

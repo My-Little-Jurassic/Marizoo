@@ -17,13 +17,12 @@ function BroadcastVideo() {
   const startTime = useState<number>(Date.now())[0];
   const effectCnt = useAppSelector((state) => state.broadcast.effectCnt);
   const isVoted = useAppSelector((state) => state.broadcast.isVoted);
-  // const APPLICATION_SERVER_URL = "http://localhost:5000/";
 
   useEffect(() => {
     if (session) {
       dispatch(broadcastActions.resetRoom());
     }
-    dispatch(ovActions.createOpenvidu({ nickname: uid, roomId: params.broadcast_id }));
+    dispatch(ovActions.createOpenvidu({ nickname: uid, roomId: params.session_id }));
 
     // 방 퇴장
     return () => {
@@ -45,7 +44,22 @@ function BroadcastVideo() {
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
     };
-  }, [params.broadcast_id]);
+  }, [params.session_id]);
+
+  // 토큰 생성
+  const createToken = async function (sessionId: string) {
+    const response = await axios({
+      method: "post",
+      url: `/api/user/broadcasts/${params.broadcast_id}/${params.session_id}`,
+      data: JSON.stringify({}),
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+        Authorization: "Basic " + btoa("OPENVIDUAPP:MY_SECRET"),
+      },
+    });
+    return response.data.connectionToken;
+  };
 
   // 방송 화면 출력
   const streamRef = useRef<HTMLVideoElement>(null);
@@ -54,17 +68,6 @@ function BroadcastVideo() {
       subscriber.addVideoElement(streamRef.current);
     }
   }, [subscriber]);
-
-  // 토큰 생성
-  const createToken = async function (sessionId: string) {
-    const response = await axios({
-      method: "post",
-      url: "/sessions/" + sessionId + "/connections",
-      data: JSON.stringify({}),
-      headers: { "Content-Type": "application/json" },
-    });
-    return response.data;
-  };
 
   // 토큰 생성 및 비디오 연결
   useEffect(() => {

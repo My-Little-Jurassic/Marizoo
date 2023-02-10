@@ -12,7 +12,7 @@ import {
 
 import { GreenBtn, ReactionBtn } from "../common/button";
 import VoteModal from "./VoteModal";
-import BroadcastVideo from "./BroadcastVideo";
+import BroadcastTmp from "./BroadcastTmp";
 import BroadcastCombo from "./BroadcastCombo";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { broadcastActions } from "../../store/broadcastSlice";
@@ -84,6 +84,7 @@ const BroadcastScreen = function (props: IProps) {
     }
     setTimeout(() => {
       setPlayingReaction(null);
+      setIsMouseOver(false);
     }, 5000);
   }, [playingReaction]);
 
@@ -120,8 +121,17 @@ const BroadcastScreen = function (props: IProps) {
           <BroadcastCombo finishEffect={finishEffect} />
         </>
       )}
-      <BroadcastVideo />
-      {isMaximized && (
+      {playingReaction && (
+        <StyledReactionCancleContainer
+          onMouseOver={() => setIsMouseOver(true)}
+          onMouseOut={() => setIsMouseOver(false)}
+          isBtnShown={isBtnShown}
+        >
+          <TbMaximize size={30} />
+        </StyledReactionCancleContainer>
+      )}
+      <BroadcastTmp />
+      {isMaximized && !playingReaction && (
         <StyledHeader isBtnShown={isBtnShown}>
           <StyledTopShadow />
           <StyledTitle>{props.title}</StyledTitle>
@@ -134,31 +144,33 @@ const BroadcastScreen = function (props: IProps) {
         </StyledHeader>
       )}
 
-      <StyledReactionContainer
-        onMouseOver={() => setIsMouseOver(true)}
-        onMouseOut={() => setIsMouseOver(false)}
-        isBtnShown={isBtnShown}
-        isMaximized={isMaximized}
-      >
-        <ReactionBtn
-          label="쓰다듬기"
-          icon={TbHandStop}
-          color="#F1A604"
-          onClick={() => setPlayingReaction("쓰다듬기")}
-        />
-        <ReactionBtn
-          label="예뻐하기"
-          icon={TbHeart}
-          color="#ff38a4"
-          onClick={() => setPlayingReaction("예뻐하기")}
-        />
-        <ReactionBtn
-          label="응원하기"
-          icon={TbFlame}
-          color="#f33041"
-          onClick={() => setPlayingReaction("응원하기")}
-        />
-      </StyledReactionContainer>
+      {!playingReaction && (
+        <StyledReactionContainer
+          onMouseOver={() => setIsMouseOver(true)}
+          onMouseOut={() => setIsMouseOver(false)}
+          isBtnShown={isBtnShown}
+          isMaximized={isMaximized}
+        >
+          <ReactionBtn
+            label="쓰다듬기"
+            icon={TbHandStop}
+            color="#F1A604"
+            onClick={() => setPlayingReaction("쓰다듬기")}
+          />
+          <ReactionBtn
+            label="예뻐하기"
+            icon={TbHeart}
+            color="#ff38a4"
+            onClick={() => setPlayingReaction("예뻐하기")}
+          />
+          <ReactionBtn
+            label="응원하기"
+            icon={TbFlame}
+            color="#f33041"
+            onClick={() => setPlayingReaction("응원하기")}
+          />
+        </StyledReactionContainer>
+      )}
 
       {isMaximized && (
         <StyledBtnContainer
@@ -183,7 +195,7 @@ const BroadcastScreen = function (props: IProps) {
         </StyledBtnContainer>
       )}
       {isVoteModalOpened && <VoteModal closeModal={() => setIsVoteModalOpened(false)} />}
-      {!isMaximized && (
+      {!isMaximized && !playingReaction && (
         <StyledModeChangeIconContainer
           onMouseOver={() => setIsMouseOver(true)}
           onMouseOut={() => setIsMouseOver(false)}
@@ -197,7 +209,7 @@ const BroadcastScreen = function (props: IProps) {
           <TbMaximize size={30} />
         </StyledModeChangeIconContainer>
       )}
-      {isMaximized && (
+      {isMaximized && !playingReaction && (
         <StyledModeChangeIconContainer
           onMouseOver={() => setIsMouseOver(true)}
           onMouseOut={() => setIsMouseOver(false)}
@@ -298,6 +310,31 @@ const StyledBtnContainer = styled.div<{ isBtnShown: boolean }>`
   left: 50%;
   transform: translateX(-50%);
   transition: bottom 0.5s;
+`;
+
+const StyledReactionCancleContainer = styled.div<{ isBtnShown: boolean }>`
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 32px;
+  color: ${(props) => props.theme.colors.brandColors.basaltGray["50"]};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: ${(props) => (props.isBtnShown ? "1" : "0")};
+  background-color: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.2s;
+  &:hover {
+    transform: translateX(-50%) scale(1.02);
+  }
+  &:active {
+    transform: translateX(-50%) scale(1);
+    filter: brightness(0.8);
+  }
 `;
 
 const StyledModeChangeIconContainer = styled.div<{ isBtnShown: boolean }>`

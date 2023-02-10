@@ -11,6 +11,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { IBroadcastInfo, IAnimalInfo, IStoreInfo } from "./type";
 import { NavLink } from "react-router-dom";
+import BroadcastVideo from "./BroadcastVideo";
 
 const BroadcastHome = function () {
   const [broadcastInfo, setBroadcastInfo] = useState<IBroadcastInfo | null>(null);
@@ -23,8 +24,12 @@ const BroadcastHome = function () {
 
   useEffect(() => {
     axios({
-      method: "get",
-      url: `${process.env.REACT_APP_API_URL}/broadcasts/${params.broadcast_id}`,
+      method: "post",
+      url: `/api/user/broadcasts/${params.broadcast_id}/${params.session_id}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + btoa("OPENVIDUAPP:MY_SECRET"),
+      },
     })
       .then((res) => {
         res.data.broadcast.description = res.data.broadcast.description.replace(/\./g, ".\n");
