@@ -6,10 +6,12 @@ import lombok.RequiredArgsConstructor;
 @Data
 public class CreateBroadcastResponse {
     private Long broadcastId ;
-    private Long voteId;
+    private String sessionId;
+    private String connectionToken;
 
-    public CreateBroadcastResponse(Long broadcastId, Long voteId) {
+    public CreateBroadcastResponse(Long broadcastId, String sessionId, String connectionToken) {
         this.broadcastId = broadcastId;
-        this.voteId = voteId;
+        this.sessionId = sessionId;
+        this.connectionToken = connectionToken;
     }
 }

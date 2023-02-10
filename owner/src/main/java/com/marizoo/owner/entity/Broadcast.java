@@ -20,6 +20,7 @@ public class Broadcast extends BaseEntity {
     private String title;
     private String description;
     private String thumbnail;
+    private String sessionId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     @Enumerated(EnumType.STRING)
@@ -63,11 +64,12 @@ public class Broadcast extends BaseEntity {
 
     // 방송 시작
     public static Broadcast createBroadcast(
-            String title, String description, String thumbnail, AnimalStore animalStore, List<BroadcastAnimal> broadcastAnimalList){
+            String title, String description, String thumbnail, String sessionId, AnimalStore animalStore, List<BroadcastAnimal> broadcastAnimalList){
         Broadcast broadcast = new Broadcast();
         broadcast.setTitle(title);
         broadcast.setDescription(description);
         broadcast.setThumbnail(thumbnail);
+        broadcast.setSessionId(sessionId);
         broadcast.setStartTime(LocalDateTime.now());
         broadcast.setStatus(BroadcastStatus.ONAIR);
         broadcast.setAnimalStore(animalStore);
