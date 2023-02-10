@@ -109,8 +109,11 @@ const Broadcast = () => {
       console.log("connection destroyed");
       const connectionId = e.connection.connectionId;
       const userId = connectionMap.current.get(connectionId);
-      connectionMap.current.delete(connectionId);
-      if (userId) viewerMap.current.delete(userId);
+      let remove = connectionMap.current.delete(connectionId);
+      if (userId) {
+        remove = viewerMap.current.delete(userId) || remove;
+      }
+      if (remove) variableRef.current.viewers--;
     });
     // thankYou SIGNAL 감지시 해당 유저 정보 저장
     session.on("signal:thankYou", (e) => {
