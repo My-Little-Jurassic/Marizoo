@@ -10,6 +10,14 @@ interface IProps {
 }
 
 const CardLabelLarge = function (props: IProps) {
+  // 중복되는 종 이미지 제거
+  const newClassficationImgList: string[] = [];
+  props.classficationImgList.forEach((img) => {
+    if (!newClassficationImgList.includes(img)) {
+      newClassficationImgList.push(img);
+    }
+  });
+
   return (
     <StyledContainer>
       <StyledThumbnailContainer>
@@ -23,16 +31,14 @@ const CardLabelLarge = function (props: IProps) {
           <StyledThumbnail src={props.thumbnailSrc} alt="" />
 
           {/* 종 이미지들 */}
-          <StyledSpeciesFirstImg src={props.classficationImgList[0]} alt="" />
-          {props.classficationImgList.length > 1 ? (
-            <StyledSpeciesSecondImg src={props.classficationImgList[1]} alt="" />
+          <StyledSpeciesFirstImg src={newClassficationImgList[0]} alt="" />
+          {newClassficationImgList.length > 1 ? (
+            <StyledSpeciesSecondImg src={newClassficationImgList[1]} alt="" />
           ) : (
             ""
           )}
-          {props.classficationImgList.length > 2 ? (
-            <StyledSpeciesRemainCnt>
-              +{props.classficationImgList.length - 2}
-            </StyledSpeciesRemainCnt>
+          {newClassficationImgList.length > 2 ? (
+            <StyledSpeciesRemainCnt>+{newClassficationImgList.length - 2}</StyledSpeciesRemainCnt>
           ) : (
             ""
           )}
