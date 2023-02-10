@@ -54,7 +54,7 @@ public class AnimalStoreService {
 
     public AnimalStoreWholeDto findAnimalStore(Long storeId, Long userId) {
         log.info("가게 아이디로 가게 조회, 가게 아이디 = {} 유저 아이디 = {}", storeId, userId);
-        AnimalStore animalStore = animalStoreRepository.findAnimalStoreAndFollowersById(storeId).get();
+        AnimalStore animalStore = animalStoreRepository.findById(storeId).get();
 
         boolean followFlag = false;
         List<UsersAnimalStore> followers = animalStore.getFollowers();
