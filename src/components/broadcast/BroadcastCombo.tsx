@@ -10,22 +10,24 @@ function BroadcastCombo(props: IProps) {
   const [comboCount, setComboCount] = useState(0);
   const [comboTimerCount, setComboTimerCount] = useState(0);
 
+  console.log(comboTimerCount);
+
   const comboTimer = setTimeout(() => {
-    clearTimeout(comboTimer);
+    // clearTimeout(comboTimer);
     if (comboTimerCount > 1) {
-      setComboTimerCount(comboTimerCount - 2);
-    } else if (comboTimerCount === 1) {
+      setComboTimerCount(comboTimerCount - 1);
+    } else if (comboTimerCount <= 0.5 && comboTimerCount !== 0) {
       setComboCount(0);
       setComboTimerCount(0);
-      props.finishEffect();
       clearTimeout(comboTimer);
+      props.finishEffect();
     }
-  }, 1000 / (comboTimerCount / 5));
+  }, 1000 / (comboTimerCount / 6));
 
   const hitCombo = () => {
-    clearTimeout(comboTimer);
+    // clearTimeout(comboTimer);
     setComboCount(comboCount + 1);
-    setComboTimerCount(comboTimerCount + 1);
+    setComboTimerCount(comboTimerCount + 1.5);
   };
 
   return (
@@ -44,7 +46,8 @@ const StyledContainer = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  opacity: 1;
+  z-index: 5;
+  background-color: rgba(255, 255, 255, 0);
 `;
 
 const shake = (comboTimerCount: number) => keyframes`

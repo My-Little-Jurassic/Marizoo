@@ -8,11 +8,7 @@ import { ovActions } from "../../store/ovSlice";
 import { broadcastActions } from "../../store/broadcastSlice";
 import { openModal, setContent } from "../../store/modalSlice";
 
-interface IProps {
-  onClick: () => void;
-}
-
-function BroadcastVideo(props: IProps) {
+function BroadcastVideo() {
   const dispatch = useDispatch();
   const params = useParams();
 
@@ -141,7 +137,7 @@ function BroadcastVideo(props: IProps) {
   }, [session]);
 
   return (
-    <StyledContainer onClick={props.onClick}>
+    <StyledContainer>
       <StyledVideo autoPlay={true} ref={streamRef} />
     </StyledContainer>
   );
