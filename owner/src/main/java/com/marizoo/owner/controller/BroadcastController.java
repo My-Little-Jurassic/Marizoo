@@ -27,6 +27,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api/owner/")
 public class BroadcastController {
     private final BroadcastService broadcastService;
