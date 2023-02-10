@@ -27,3 +27,10 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+  server:
+    port: 5000
+    ssl:
+      enabled: false
+
+  OPENVIDU_URL: https://i8b208.p.ssafy.io:8445/
+  OPENVIDU_SECRET: MY_SECRET
