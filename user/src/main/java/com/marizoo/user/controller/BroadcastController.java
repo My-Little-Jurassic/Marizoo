@@ -25,12 +25,13 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api/users")
 public class BroadcastController {
-    @Value("${OPENVIDU_URL}")
-    private String OPENVIDU_URL;
+//    @Value("${OPENVIDU_URL}")
+    private static String OPENVIDU_URL = "https://i8b208.p.ssafy.io:8445/";
 
-    @Value("${OPENVIDU_SECRET}")
-    private String OPENVIDU_SECRET;
+//    @Value("${OPENVIDU_SECRET}")
+    private static String OPENVIDU_SECRET = "MY_SECRET";
 
     private OpenVidu openvidu;
     private final BroadcastService broadcastService;
