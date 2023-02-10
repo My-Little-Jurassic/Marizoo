@@ -32,6 +32,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("권한이나 인증 처리를 위한 필터 입장:)");
+        log.info("URI = {}", request.getRequestURI());
         String servletPath = request.getServletPath();
         String jwtHeader = request.getHeader(AT_HEADER);
 
