@@ -17,7 +17,7 @@ public interface AnimalStoreRepository extends JpaRepository<AnimalStore, Long>,
     // 상호명으로 가게 검색
     List<AnimalStore> findBystoreNameContaining(String storeName);
 
-    @Query("select a from AnimalStore a join fetch a.followers f join fetch f.user where a.id = :storeId")
+    @Query("select distinct a from AnimalStore a join fetch a.followers f join fetch f.user where a.id = :storeId")
     // 가게 id로 가게 조회
     Optional<AnimalStore> findAnimalStoreAndFollowersById(@Param("storeId") Long storeId);
 

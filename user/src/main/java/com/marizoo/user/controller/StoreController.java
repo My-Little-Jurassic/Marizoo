@@ -104,6 +104,7 @@ public class StoreController {
     public ResponseEntity<AnimalStoreWholeDto> reserveToStore(
             @PathVariable(name = "store_id") @ApiParam(name = "동물가게 id", required = true, example = "1") Long store_id,
             @RequestParam(required = false, defaultValue = "0") Long userId){
+        log.info("가게 조회 메서드");
         return new ResponseEntity<>(animalStoreService.findAnimalStore(store_id, userId), HttpStatus.OK);
     }
 
