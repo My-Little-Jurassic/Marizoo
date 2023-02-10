@@ -163,5 +163,10 @@ const StyledPediaContainer = styled.main`
     display: flex;
     height: calc(100% - 190px);
     flex-grow: 1;
+    @media screen and (max-width: 600px) {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
   }
 `;

@@ -28,4 +28,8 @@ const StyledPediaContent = styled.section`
   box-sizing: border-box;
   padding: 32px;
   padding-left: 16px;
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    padding-inline: 16px;
+  }
 `;

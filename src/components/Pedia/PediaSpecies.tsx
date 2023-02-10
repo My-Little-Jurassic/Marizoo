@@ -65,4 +65,11 @@ const StyledPediaSpecies = styled.div<{ spaciesId: number; selectedSpeciesId: nu
       margin-left: 16px;
     }
   }
+  @media screen and (max-width: 600px) {
+    width: 48px;
+    height: 48px;
+    display: inline-block;
+    flex-shrink: 0;
+    margin: 8px;
+  }
 `;

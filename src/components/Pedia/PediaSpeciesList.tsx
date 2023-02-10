@@ -53,4 +53,10 @@ const StyledPediaSpeciesListContainer = styled.aside`
   padding-inline: 16px;
   padding-top: 9%;
   box-sizing: border-box;
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 64px 16px 16px 16px;
+  }
 `;
