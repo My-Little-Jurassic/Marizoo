@@ -1,27 +1,21 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
-import { IBroadcastSetting, TStatus } from "../../../types";
+import { IBroadcastSetting } from "../../../types";
 import BroadcastTable from "./BroadcastTable";
 
 interface IProps {
   initSetting: IBroadcastSetting;
-  status: TStatus;
   startBroadcast(setting: IBroadcastSetting): void;
   endBroadcast(): void;
 }
 
-const BroadcastSettingContainer = ({
-  initSetting,
-  status,
-  startBroadcast,
-  endBroadcast,
-}: IProps) => {
+const BroadcastSettingContainer = ({ initSetting, startBroadcast, endBroadcast }: IProps) => {
   // 방송 설정 STATE
   const [broadcastSetting, setBroadcastSetting] = useState<IBroadcastSetting>({
     ...initSetting,
   });
   const [videoList, setVideoList] = useState<MediaDeviceInfo[]>([]);
-  const { title, description, animalIdList } = broadcastSetting;
+  const { id, title, description, animalIdList } = broadcastSetting;
 
   useEffect(() => {
     getVideoList();
@@ -84,9 +78,9 @@ const BroadcastSettingContainer = ({
   const toggleAnimal = (list: number[]) => {
     setBroadcastSetting({ ...broadcastSetting, animalIdList: list });
   };
-  // 변경 가능여부 반환함수
-  const readOnly = () => {
-    switch (status) {
+  // 변경 가능여부
+  const readOnly = useMemo(() => {
+    switch (initSetting.status) {
       case "ONAIR":
       case "RESERVE":
       case "FINISH":
@@ -95,29 +89,30 @@ const BroadcastSettingContainer = ({
       default:
         return false;
     }
-  };
+  }, [initSetting]);
 
   return (
     <StyledDiv className="BroadcastStatusViewer">
       <label>방송제목</label>
-      <input id={"title"} value={title} onChange={onChange} disabled={readOnly()} />
+      <input id={"title"} value={title} onChange={onChange} disabled={readOnly} />
       <br />
 
       <label>방송동물</label>
       <BroadcastTable
-        disabled={readOnly()}
+        storeId={id}
+        disabled={readOnly}
         selectAnimalIdList={animalIdList}
         toggleAnimal={toggleAnimal}
       />
       <br />
 
       <label>방송설명</label>
-      <textarea id={"description"} value={description} onChange={onChange} disabled={readOnly()} />
+      <textarea id={"description"} value={description} onChange={onChange} disabled={readOnly} />
       <br />
       <div className="thumbnail-area">
         <div>
           <label>썸눼일 설정</label>
-          <button onClick={onClickFileUpload} disabled={readOnly()}>
+          <button onClick={onClickFileUpload} disabled={readOnly}>
             업로드
           </button>
           <input
@@ -127,13 +122,13 @@ const BroadcastSettingContainer = ({
             accept="image/*"
             onChange={onChangeUploadFile}
             hidden
-            readOnly={readOnly()}
+            readOnly={readOnly}
           />
-          <img src={String(preview.current)} />
+          <img src={String(preview.current ? preview.current : "")} />
         </div>
         <div>
           <label>캐뭐라 설정</label>
-          <select onChange={onChangeVideo} disabled={readOnly()}>
+          <select onChange={onChangeVideo} disabled={readOnly}>
             <option>-</option>
             {videoList.map((item, index) => (
               <option key={index} value={item.deviceId}>
@@ -145,10 +140,10 @@ const BroadcastSettingContainer = ({
         </div>
       </div>
       <div className="btn-area">
-        <button onClick={endBroadcast} disabled={!readOnly()}>
+        <button onClick={endBroadcast} disabled={!readOnly}>
           방송종료
         </button>
-        <button onClick={onStartBroadcast} disabled={readOnly()}>
+        <button onClick={onStartBroadcast} disabled={readOnly}>
           방송시작
         </button>
       </div>

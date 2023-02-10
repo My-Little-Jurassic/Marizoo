@@ -1,14 +1,16 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
+import { getStoreAnimal } from "../../../api";
 import { IAnimal } from "../../../types";
 
 interface IProps {
+  storeId: string;
   disabled: boolean;
   selectAnimalIdList: number[];
   toggleAnimal(list: (number | undefined)[]): void;
 }
 
-const BroadcastTable = ({ disabled, selectAnimalIdList, toggleAnimal }: IProps) => {
+const BroadcastTable = ({ storeId, disabled, selectAnimalIdList, toggleAnimal }: IProps) => {
   const [animalList, setAnimalList] = useState<IAnimal[]>([]);
 
   useEffect(() => {
@@ -16,18 +18,14 @@ const BroadcastTable = ({ disabled, selectAnimalIdList, toggleAnimal }: IProps) 
   }, []);
 
   const getAnimalList = async () => {
-    // TODO: getAnimalList 요청을 통한 동물
-    // select 값은 기본 false로 삽입한다.
-    const initialAnimalList = [
-      { id: 1, name: "레오", select: false, classification: "레오파드게코" },
-      { id: 2, name: "좌파", select: false, classification: "아홀로틀" },
-    ];
+    const animals: IAnimal[] = await getStoreAnimal(storeId).then((res) => res.data.animals);
 
+    // select 값은 기본 false로 삽입한다.
     // 서버로부터 받은 동물 리스트에 대해 이미 선택되어있는 동물의 select 값을 true로 변경하여 반환한다.
-    return initialAnimalList.map((animal) => {
+    return animals.map((animal) => {
       if (selectAnimalIdList.find((id) => id === animal.id)) {
         animal.select = true;
-      }
+      } else animal.select = false;
       return animal;
     });
   };
