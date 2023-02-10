@@ -62,7 +62,7 @@ public class BroadcastController {
     }
 
     @ApiOperation(value = "broadcast_id에 해당하는 방송 정보를 가져오기", notes = "방송 정보, 방송 출연 동물 정보, 방송 가게 정보")
-    @GetMapping("/broadcasts/{broadcast_id}/{session_id}")
+    @PostMapping("/broadcasts/{broadcast_id}/{session_id}")
     public ResponseEntity<?> getBroadcastInfo
             (@PathVariable("broadcast_id") @ApiParam(name = "방송 id", required = true, example = "1") Long broadcastId,
              @PathVariable("session_id") @ApiParam(name = "세션 id", required = true) String sessionId)
@@ -74,6 +74,13 @@ public class BroadcastController {
         // broadcast_id에 해당하는 방송 정보 가져오기.
         log.info("---------------------------------createConnection--------------------------------------");
         Map<String, Object> params = null;
+        boolean fetch = openvidu.fetch();
+        log.info(("fetch : " + fetch));
+
+        List<Session> sessions = openvidu.getActiveSessions();
+        log.info(("sessions size : " + sessions.size()));
+
+
         Session session = openvidu.getActiveSession(sessionId);
         log.info(("session : " + session));
 
