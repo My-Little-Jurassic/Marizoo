@@ -3,6 +3,10 @@ import styled from "styled-components";
 import { useAppDispatch } from "../../../store";
 import { closeModal } from "../../../store/modalSlice";
 import DefaultContent from "./DefaultContent";
+import StoreReservationNotNumber from "./StoreReservationNotNumber";
+import StoreReservationEmpty from "./StoreReservationEmpty";
+import StoreReservationAgree from "./StoreReservationAgree";
+import StoreReservationExceed from "./StoreReservationExceed";
 
 interface IProps {
   content: string;
@@ -13,7 +17,7 @@ const Modal = ({ content }: IProps): JSX.Element => {
   const [state, setState] = useState("");
 
   useEffect(() => {
-    if (state === "close") setTimeout(() => dispatch(closeModal), 500);
+    if (state === "close") setTimeout(() => dispatch(closeModal()), 500);
   }, [state]);
 
   const onClose = () => {
@@ -22,6 +26,18 @@ const Modal = ({ content }: IProps): JSX.Element => {
 
   const modalContent = useMemo(() => {
     switch (content) {
+      case "StoreReservationNotNumber":
+        return <StoreReservationNotNumber onClose={onClose} />;
+
+      case "StoreReservationEmpty":
+        return <StoreReservationEmpty onClose={onClose} />;
+
+      case "StoreReservationAgree":
+        return <StoreReservationAgree onClose={onClose} />;
+
+      case "StoreReservationExceed":
+        return <StoreReservationExceed onClose={onClose} />;
+
       default:
         return <DefaultContent onClose={onClose} />;
     }
