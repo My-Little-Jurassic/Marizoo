@@ -37,7 +37,6 @@ export default HomeNav;
 const StyledHomeNavbar = styled.nav<{ isHide: boolean }>`
   z-index: 10;
   width: 100vw;
-  height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,11 +45,13 @@ const StyledHomeNavbar = styled.nav<{ isHide: boolean }>`
   background-color: ${(props) => props.theme.colors.primaryBg};
   color: ${(props) => props.theme.colors.primaryText};
   @media screen and (max-width: 600px) {
+    height: 64px;
     position: fixed;
     bottom: 0px;
     border-top: 1px solid ${(props) => props.theme.colors.disable};
   }
   @media screen and (min-width: 600px) {
+    height: 80px;
     position: absolute;
     top: ${(props) => (props.isHide ? "-20" : "60")}px;
     border-bottom: 1px solid ${(props) => props.theme.colors.disable};
