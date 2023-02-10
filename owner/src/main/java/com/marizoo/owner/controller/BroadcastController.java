@@ -51,16 +51,23 @@ public class BroadcastController {
         log.info("title : " + broadcastInfo.getTitle());
         log.info("animal ID List : " + broadcastInfo.getAnimalIdList().toString());
         Map<String, Object> params = null;
-        SessionProperties properties = SessionProperties.fromJson(params).build();
-        Session session = openvidu.createSession(properties);
+        SessionProperties sProperties = SessionProperties.fromJson(params).build();
+        Session session = openvidu.createSession(sProperties);
         log.info("session id : " + session.getSessionId());
         Long broadcastId = broadcastService.createBroadcast(broadcastInfo.getTitle(), broadcastInfo.getDescription(),
                 session.getSessionId(), broadcastInfo.getAnimalStoreId(), broadcastInfo.getAnimalIdList(), img);
+        log.info("------------------------커넥션을 만들어볼게욤---------------------------");
+        if (session == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        ConnectionProperties cProperties = ConnectionProperties.fromJson(params).build();
+        Connection connection = session.createConnection(cProperties);
+        log.info("------------------------커넥션을 다 만들었어욤---------------------------");
 
         log.info("-----------------------------------------------------------------------");
 
         if(broadcastId != null){
-            return new ResponseEntity<>(broadcastId, HttpStatus.OK);
+            return new ResponseEntity<>(new CreateBroadcastResponse(broadcastId, session.getSessionId(), connection.getToken()), HttpStatus.OK);
         }else{
             return new ResponseEntity<>("방송 생성 실패 :(", HttpStatus.BAD_REQUEST);
         }
