@@ -34,6 +34,7 @@ import static com.marizoo.user.constant.JwtConstant.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/user/")
 public class UserController {
 
     private final BCryptPasswordEncoder encoder;
