@@ -31,5 +31,6 @@ const StyledPediaContent = styled.section`
   @media screen and (max-width: 600px) {
     width: 100%;
     padding-inline: 16px;
+    padding-block: 0px;
   }
 `;

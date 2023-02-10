@@ -57,7 +57,7 @@ const StyledPediaContentGrid = styled.section`
   box-sizing: border-box;
   width: 100%;
   border-radius: 32px;
-  margin-top: 32px;
+  margin-block: 32px;
   padding: 32px;
   min-height: 150px;
   border: ${({ theme }) => theme.colors.brandColors.basaltGray[900]} 8px solid;

@@ -93,7 +93,7 @@ const StyledPediaContainer = styled.main`
   }
   @media screen and (max-width: 600px) {
     margin-top: 60px;
-    margin-bottom: 80px;
+    margin-bottom: 64px;
   }
   @media screen and (min-width: 900px) {
     margin-top: 156px;
