@@ -67,13 +67,21 @@ public class BroadcastController {
             (@PathVariable("broadcast_id") @ApiParam(name = "방송 id", required = true, example = "1") Long broadcastId,
              @PathVariable("session_id") @ApiParam(name = "세션 id", required = true) String sessionId)
             throws OpenViduJavaClientException, OpenViduHttpException {
+        log.info("---------------------------------path variable--------------------------------------");
+        log.info(("broadcast_id : " + broadcastId));
+        log.info(("session_id : " + sessionId));
+
         // broadcast_id에 해당하는 방송 정보 가져오기.
         log.info("---------------------------------createConnection--------------------------------------");
         Map<String, Object> params = null;
         Session session = openvidu.getActiveSession(sessionId);
+        log.info(("session : " + session));
+
         if (session == null) {
+            log.info("!!!!!!!!!!!!session null!!!!!!!!!!!!!!!");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        log.info("getSessionId : " + session.getSessionId());
         ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
         Connection connection = session.createConnection(properties);
         log.info("-----------------------------------------------------------------------");
