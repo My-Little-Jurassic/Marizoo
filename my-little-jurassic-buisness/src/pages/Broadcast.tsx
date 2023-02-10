@@ -10,7 +10,7 @@ import { IBroadcastSetting } from "../types";
 import { IBroadcastStatus, IVote, TConnectionId, TUserId } from "../types/Broadcast";
 import { postBroadcast } from "../api";
 import BroadcastVoteModal from "../components/Broadcast/BroadcastVoteModal";
-import { OpenVidu } from "openvidu-browser";
+import { ConnectionEvent, OpenVidu } from "openvidu-browser";
 import { postOpenViduToken } from "../api/openvidu";
 
 const Broadcast = () => {
@@ -41,6 +41,7 @@ const Broadcast = () => {
   const viewerRef = useRef<number>(0);
   const likeRef = useRef<number>(0);
   const viewerMap = useRef<Map<TUserId, TConnectionId>>(new Map());
+  const connectionMap = useRef<Map<TConnectionId, TUserId>>(new Map());
   const OV = useMemo(() => new OpenVidu(), []);
   const session = useMemo(() => OV.initSession(), [OV]);
 
@@ -148,13 +149,22 @@ const Broadcast = () => {
   });
   // 유저가 나가면 해당 유저 정보 삭제
   session.on("connectionDestroyed", (e) => {
-    console.log("delete user");
+    const connectionId = e.connection!.connectionId;
+    const userId = connectionMap.current.get(connectionId);
+    connectionMap.current.delete(connectionId);
+    viewerMap.current.delete(userId!);
   });
   // thankYou SIGNAL 감지시 해당 유저 정보 저장
   session.on("signal:thankYou", (e) => {
     if (e.data && e.from) {
-      if (!viewerMap.current.get(e.data)) viewerRef.current++;
-      viewerMap.current.set(e.data, e.from.connectionId);
+      const connectionId = e.from.connectionId;
+      const userId = e.data;
+
+      if (!viewerMap.current.get(e.data)) {
+        viewerRef.current++;
+        connectionMap.current.set(connectionId, userId);
+        viewerMap.current.set(userId, connectionId);
+      }
     }
   });
   // like SIGNAL 감지시 좋아요 수 변경
@@ -162,7 +172,10 @@ const Broadcast = () => {
     if (e.data) likeRef.current++;
     else likeRef.current--;
   });
-  // vote SIGNAL 감지시
+  // vote SIGNAL 감지시 투표수 반영
+  session.on("signal:vote", (e) => {
+    console.log("signal: vote |", e.data);
+  });
 
   return (
     <StyledDiv className="Broadcast">
