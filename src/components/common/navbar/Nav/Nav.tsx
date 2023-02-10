@@ -38,7 +38,7 @@ function Nav(props: IProps) {
       </StyledNavContainer>
       {location.pathname === "/" ||
       location.pathname === "/cafe" ||
-      location.pathname === "/dict" ? (
+      location.pathname === "/pedia" ? (
         <HomeNav></HomeNav>
       ) : null}
     </StyledNavbar>
