@@ -4,6 +4,10 @@ import { useAppDispatch } from "../../../store";
 import { closeModal } from "../../../store/modalSlice";
 import BroadcastFinish from "./BroadcastFinish";
 import DefaultContent from "./DefaultContent";
+import StoreReservationNotNumber from "./StoreReservationNotNumber";
+import StoreReservationEmpty from "./StoreReservationEmpty";
+import StoreReservationAgree from "./StoreReservationAgree";
+import StoreReservationExceed from "./StoreReservationExceed";
 
 interface IProps {
   content: string;
@@ -25,6 +29,18 @@ const Modal = ({ content }: IProps): JSX.Element => {
     switch (content) {
       case "BroadcastFinish":
         return <BroadcastFinish onClose={onClose} />;
+
+      case "StoreReservationNotNumber":
+        return <StoreReservationNotNumber onClose={onClose} />;
+
+      case "StoreReservationEmpty":
+        return <StoreReservationEmpty onClose={onClose} />;
+
+      case "StoreReservationAgree":
+        return <StoreReservationAgree onClose={onClose} />;
+
+      case "StoreReservationExceed":
+        return <StoreReservationExceed onClose={onClose} />;
 
       default:
         return <DefaultContent onClose={onClose} />;

@@ -20,7 +20,7 @@ const ProfileLarge = function (props: IProps) {
         <StyledFooter>
           <StyledClassification>{props.classification}</StyledClassification>
           <StyledGenderBox gender={props.gender}>
-            {props.gender == "male" ? <TbGenderMale size={20} /> : <TbGenderFemale size={20} />}
+            {props.gender === "MALE" ? <TbGenderMale size={20} /> : <TbGenderFemale size={20} />}
           </StyledGenderBox>
         </StyledFooter>
       </StyledInfo>
@@ -100,7 +100,7 @@ const StyledClassification = styled.span`
 const StyledGenderBox = styled.div<{ gender: string }>`
   width: 16px;
   height: 16px;
-  color: ${(props) => (props.gender == "male" ? props.theme.colors.blue : props.theme.colors.red)};
+  color: ${(props) => (props.gender == "MALE" ? props.theme.colors.blue : props.theme.colors.red)};
 `;
 
 const StyledFooter = styled.div`
