@@ -47,7 +47,7 @@ public class BroadcastRepositoryCustomImpl implements BroadcastRepositoryCustom 
     public List<SearchBroadcastDto> searchBroadcastRelated(List<String> classifications) {
         BroadcastStatus status = BroadcastStatus.ONAIR;
         return queryFactory
-                .select(new QSearchBroadcastDto(broadcast.id, broadcast.title, broadcast.thumbnail)).distinct()
+                .select(new QSearchBroadcastDto(broadcast.id, broadcast.sessionId, broadcast.title, broadcast.thumbnail)).distinct()
                 .from(broadcastAnimal)
                 .join(broadcastAnimal.broadcast, broadcast)
                 .where(onAir(status), classificationsIn(classifications))

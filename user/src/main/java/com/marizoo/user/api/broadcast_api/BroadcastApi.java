@@ -17,4 +17,5 @@ public class BroadcastApi {
     private BroadcastDto broadcast;
     private List<onAirAnimalDto> animals;
     private onAirAnimalStoreDto stores;
+    private String connectionToken;
 }

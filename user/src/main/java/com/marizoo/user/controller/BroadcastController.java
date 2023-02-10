@@ -6,10 +6,13 @@ import com.marizoo.user.api.broadcast_api.OnairApi;
 import com.marizoo.user.dto.broadcast_dto.*;
 import com.marizoo.user.entity.*;
 import com.marizoo.user.service.BroadcastService;
+import io.openvidu.java.client.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +20,29 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class BroadcastController {
+    @Value("${OPENVIDU_URL}")
+    private String OPENVIDU_URL;
+
+    @Value("${OPENVIDU_SECRET}")
+    private String OPENVIDU_SECRET;
+
+    private OpenVidu openvidu;
     private final BroadcastService broadcastService;
+
+    @PostConstruct
+    public void init() {
+        this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+    }
+
 
     @ApiOperation(value= "현재 방송 중인 목록 가져오기")
     @GetMapping("/broadcasts")
@@ -36,7 +55,7 @@ public class BroadcastController {
             for (BroadcastAnimal broadcastAnimal : onair.getBroadcastAnimalList()) {
                 classificationImgs.add(broadcastAnimal.getAnimal().getSpecies().getClassificationImg());
             }
-            result.add(new BroadcastsDto(onair.getId(),onair.getTitle(), onair.getThumbnail(), classificationImgs));
+            result.add(new BroadcastsDto(onair.getId(),onair.getSessionId(),onair.getTitle(), onair.getThumbnail(), classificationImgs));
         }
         if(result.isEmpty()){
             return new ResponseEntity<>("방송 없음", HttpStatus.BAD_REQUEST);
@@ -45,10 +64,21 @@ public class BroadcastController {
     }
 
     @ApiOperation(value = "broadcast_id에 해당하는 방송 정보를 가져오기", notes = "방송 정보, 방송 출연 동물 정보, 방송 가게 정보")
-    @GetMapping("/broadcasts/{broadcast_id}")
-    public ResponseEntity<?> getBroadcastInfo(@PathVariable("broadcast_id") @ApiParam(name = "방송 id", required = true, example = "1") Long broadcastId){
+    @GetMapping("/broadcasts/{broadcast_id}/{session_id}")
+    public ResponseEntity<?> getBroadcastInfo
+            (@PathVariable("broadcast_id") @ApiParam(name = "방송 id", required = true, example = "1") Long broadcastId,
+             @PathVariable("session_id") @ApiParam(name = "세션 id", required = true) String sessionId)
+            throws OpenViduJavaClientException, OpenViduHttpException {
         // broadcast_id에 해당하는 방송 정보 가져오기.
-
+        log.info("---------------------------------createConnection--------------------------------------");
+        Map<String, Object> params = null;
+        Session session = openvidu.getActiveSession(sessionId);
+        if (session == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
+        Connection connection = session.createConnection(properties);
+        log.info("-----------------------------------------------------------------------");
         Broadcast broadcast = broadcastService.getBroadcast(broadcastId);
         if(broadcast == null){
             // broadcast_id에 해당하는 방송이 없음
@@ -71,7 +101,7 @@ public class BroadcastController {
         onAirAnimalStoreDto animalStoreDto = new onAirAnimalStoreDto(animalStore.getId(), animalStore.getStoreName(), animalStore.getProfileImg());
 
 //        api 형식으로 변환
-        return new ResponseEntity<BroadcastApi>(new BroadcastApi(broadcastDto, animals, animalStoreDto), HttpStatus.OK);
+        return new ResponseEntity<BroadcastApi>(new BroadcastApi(broadcastDto, animals, animalStoreDto, connection.getToken()), HttpStatus.OK);
     }
 
     @ApiOperation(value = "broadcast_id에 해당하는 vote 정보 가져오기")
@@ -93,7 +123,7 @@ public class BroadcastController {
         return new ResponseEntity<FeedVoteApi>(new FeedVoteApi(result), HttpStatus.OK);
 
     }
-@ApiOperation(value = "keyword에 해당하는 종이 방송에 출연하는 현재 방송중인 방송 목록 가져오기")
+    @ApiOperation(value = "keyword에 해당하는 종이 방송에 출연하는 현재 방송중인 방송 목록 가져오기")
     @GetMapping("/broadcasts/search")
     public ResponseEntity<?> getSearchOnairs(@RequestParam(value = "keyword") @ApiParam(name = "검색어", required = true)String keyword){
         List<Broadcast> searchOnairs = broadcastService.searchOnAirsHavingSpeciesList(keyword);
@@ -103,7 +133,7 @@ public class BroadcastController {
             for (BroadcastAnimal broadcastAnimal : onair.getBroadcastAnimalList()) {
                 classificationImgs.add(broadcastAnimal.getAnimal().getSpecies().getClassificationImg());
             }
-            result.add(new BroadcastsDto(onair.getId(),onair.getTitle(), onair.getThumbnail(), classificationImgs));
+            result.add(new BroadcastsDto(onair.getId(),onair.getSessionId(), onair.getTitle(), onair.getThumbnail(), classificationImgs));
         }
         if(result.isEmpty()){
             return new ResponseEntity<>("방송 없음", HttpStatus.BAD_REQUEST);

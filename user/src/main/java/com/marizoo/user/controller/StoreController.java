@@ -124,7 +124,7 @@ public class StoreController {
                 for (BroadcastAnimal broadcastAnimal : onair.getBroadcastAnimalList()) {
                     classificationImgs.add(broadcastAnimal.getAnimal().getSpecies().getClassificationImg());
                 }
-                result.add(new BroadcastsDto(onair.getId(), onair.getTitle(), onair.getThumbnail(), classificationImgs));
+                result.add(new BroadcastsDto(onair.getId(), onair.getSessionId(), onair.getTitle(), onair.getThumbnail(), classificationImgs));
             }
         }
         return new ResponseEntity<>(new BroadcastListResponse(result), HttpStatus.OK);

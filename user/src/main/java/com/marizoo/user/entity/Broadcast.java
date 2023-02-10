@@ -17,6 +17,7 @@ public class Broadcast extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "broadcast_id")
     private Long id;
+    private String sessionId;
     private String title;
     private String description;
     private String thumbnail;
