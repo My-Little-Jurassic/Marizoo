@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +56,7 @@ public class BroadcastService {
      */
     @Transactional
     public Long createBroadcast(
-            String title, String description, Long animalStoreId,
+            String title, String description, String sessionId, Long animalStoreId,
             List<Long> animalIdList, MultipartFile img
     ){
         // entity
@@ -87,10 +89,15 @@ public class BroadcastService {
             throw new RuntimeException(e);
         }
         // 방송 생성
-        Broadcast broadcast = Broadcast.createBroadcast(title, description, imgUrl, animalStore, broadcastAnimalList);
+        Broadcast broadcast = Broadcast.createBroadcast(title, description, imgUrl, sessionId, animalStore, broadcastAnimalList);
 
         // 방송 저장
         broadcastRepository.save(broadcast);
         return broadcast.getId();
+    }
+    
+    public void finishBroadcast(Long broadcastId){
+        Broadcast broadcastById = broadcastRepository.findBroadcastById(broadcastId);
+        broadcastById.setEndTime(LocalDateTime.now());
     }
 }

@@ -1,9 +1,10 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/marizoo?
+    url: jdbc:mysql://3.36.112.78:3306/marizoo?
     username:  # MySQL DB Username
     password:  # MySQL DB password
+
   servlet:
     multipart:
       max-file-size: 128MB
@@ -11,7 +12,7 @@ spring:
       enabled: true
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -29,3 +30,10 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+server:
+  port: 5000
+  ssl:
+    enabled: false
+
+OPENVIDU_URL: https://i8b208.p.ssafy.io:8445/
+OPENVIDU_SECRET: MY_SECRET
