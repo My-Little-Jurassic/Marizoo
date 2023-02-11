@@ -7,7 +7,6 @@ import VoteModal from "./VoteModal";
 import VoteResultModal from "./VoteResultModal";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { broadcastActions } from "../../store/broadcastSlice";
-import { ovActions } from "../../store/ovSlice";
 
 interface IProps {
   title: string;
