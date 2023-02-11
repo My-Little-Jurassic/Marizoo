@@ -1,5 +1,5 @@
 import React from "react";
-import { BroadcastHome } from "../../components/broadcast";
+import { BroadcastHome } from "../../components/Broadcast";
 
 const Broadcast = function () {
   return <BroadcastHome />;

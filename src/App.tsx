@@ -21,9 +21,6 @@ import { useAppSelector } from "./store";
 import { selectModal } from "./store/modalSlice";
 import { Modal } from "./components/common/modal";
 import Broadcast from "./pages/Broadcast";
-import BroadcastVideo from "./components/broadcast/BroadcastVideo";
-import BroadcastScreen from "./components/broadcast/BroadcastScreen";
-import BroadcastTmp from "./components/broadcast/BroadcastTmp";
 
 function App() {
   const [themeMode, toggleTheme] = useTheme();

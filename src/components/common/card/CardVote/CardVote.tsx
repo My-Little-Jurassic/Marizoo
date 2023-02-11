@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { IFeed } from "../../../broadcast/type";
+import { IFeed } from "../../../Broadcast/type";
 
 interface IProps {
   title: string;

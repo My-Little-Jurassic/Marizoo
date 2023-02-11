@@ -47,7 +47,7 @@ const BroadcastScreen = function (props: IProps) {
   const session = useAppSelector((state) => state.broadcast.session);
   const streamRef = useRef<HTMLVideoElement>(null);
   const startTime = useState<number>(Date.now())[0];
-  const effectCnt = useAppSelector((state) => state.broadcast.effectCnt);
+  const effectCnt = useRef(0);
 
   useEffect(() => {
     if (OV) dispatch(broadcastActions.makeSession(OV));
@@ -56,6 +56,28 @@ const BroadcastScreen = function (props: IProps) {
   useEffect(() => {
     // Session 생성
     if (session) createToken().then(joinRoom);
+    // 방 퇴장
+    return () => {
+      if (!session) {
+        return;
+      }
+      dispatch(broadcastActions.resetRoom());
+      const totalTime = Math.floor((Date.now() - startTime) / 3600000);
+      const voteCnt = isVoted ? 1 : 0;
+
+      axios({
+        method: "put",
+        url: `/api/user/users/watchEnd`,
+        data: {
+          userId: 1,
+          effectCount: effectCnt,
+          feedCount: voteCnt,
+          watchTime: totalTime,
+        },
+      })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    };
   }, [session]);
 
   // 세션 참가
@@ -140,6 +162,7 @@ const BroadcastScreen = function (props: IProps) {
     if (playingReaction === null) {
       return;
     }
+    effectCnt.current += 1;
     setPlayingReaction(null);
   };
 
@@ -176,6 +199,7 @@ const BroadcastScreen = function (props: IProps) {
     setTimeout(() => {
       setPlayingReaction(null);
       setIsMouseOver(false);
+      effectCnt.current += 1;
     }, 5000);
   }, [playingReaction]);
 

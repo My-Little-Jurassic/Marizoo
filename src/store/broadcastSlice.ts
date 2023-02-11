@@ -1,13 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Connection, Session } from "openvidu-browser";
-import { IFeed } from "../components/broadcast/type";
+import { IFeed } from "../components/Broadcast/type";
 
 interface IInitialState {
   isMaximized: boolean;
   isLiked: boolean;
   numberOfViewers: number;
   numberOfLikes: number;
-  effectCnt: number;
   isVoted: boolean;
   isVoting: string;
   winnerFeed: null | undefined | IFeed;
@@ -21,7 +20,6 @@ const initialState: IInitialState = {
   isLiked: false,
   numberOfViewers: 0,
   numberOfLikes: 0,
-  effectCnt: 0,
   isVoted: false,
   isVoting: "",
   winnerFeed: null,
@@ -101,6 +99,9 @@ const broadcastSlice = createSlice({
       state.isLiked = false;
       state.numberOfViewers = 0;
       state.numberOfLikes = 0;
+      if (state.session) {
+        state.session.disconnect();
+      }
     },
   },
 });

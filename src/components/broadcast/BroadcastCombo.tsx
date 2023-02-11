@@ -29,10 +29,8 @@ function BroadcastCombo(props: IProps) {
   const [comboCount, setComboCount] = useState(0);
   const [comboTimerCount, setComboTimerCount] = useState(0);
   const comboRef = useRef<number>(0);
-  console.log("outside");
 
   useInterval(() => {
-    console.log("interval");
     if (comboTimerCount < 0.96 && comboTimerCount !== 0) {
       setComboCount(0);
       props.finishEffect();
