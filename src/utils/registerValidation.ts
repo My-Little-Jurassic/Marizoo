@@ -10,8 +10,8 @@ export function validateIdLength(value: string): boolean {
  * 영문 소문자와 숫자로만 이루어져야 함
  */
 export function validateIdChar(value: string): boolean {
-  const regExp = /^[a-z0-9] */g;
-  return regExp.test(value);
+  const regExp = /[^a-z0-9] *?/g;
+  return !regExp.test(value);
 }
 
 // PW

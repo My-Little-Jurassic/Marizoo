@@ -146,7 +146,7 @@ const RegistForm = () => {
       placeholder: "아이디",
       inputVerifyList: [
         { description: "8글자 이상 16자 이하 입력", verify: validateIdLength },
-        { description: "영문 소문자와 숫자로 구성", verify: validateIdChar },
+        { description: "영문 소문자나 숫자로 구성", verify: validateIdChar },
         { description: "사용가능한 아이디", verify: validateIdUnique, lazy: true },
       ],
     },
