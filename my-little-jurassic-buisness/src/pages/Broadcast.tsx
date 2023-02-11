@@ -87,8 +87,9 @@ const Broadcast = () => {
       insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
       mirror: false, // Whether to mirror your local video or not
     });
-    session.publish(newPublisher);
     if (videoRef.current) newPublisher.addVideoElement(videoRef.current);
+    session.publish(newPublisher);
+
     // **openvidu signal events**
     //  새로운 세션 연결 시 welcome SIGNAL 호출
     session.on("connectionCreated", (e) => {
@@ -109,11 +110,11 @@ const Broadcast = () => {
       console.log("connection destroyed");
       const connectionId = e.connection.connectionId;
       const userId = connectionMap.current.get(connectionId);
-      let remove = connectionMap.current.delete(connectionId);
       if (userId) {
-        remove = viewerMap.current.delete(userId) || remove;
+        viewerMap.current.delete(userId);
+        connectionMap.current.delete(connectionId);
+        variableRef.current.viewers--;
       }
-      if (remove) variableRef.current.viewers--;
     });
     // thankYou SIGNAL 감지시 해당 유저 정보 저장
     session.on("signal:thankYou", (e) => {
@@ -122,11 +123,16 @@ const Broadcast = () => {
         const connectionId = e.from.connectionId;
         const userId = e.data;
 
-        if (!viewerMap.current.get(e.data)) {
+        const prevConnectionId = viewerMap.current.get(userId);
+        // 이미 접속해있었던 사람이라면 connectionId 바뀔것이므로 map update
+        if (prevConnectionId) {
+          connectionMap.current.delete(prevConnectionId);
+        } else {
+          // 새롭게 들어오는 사람이라면 시청자수 ++
           variableRef.current.viewers++;
-          connectionMap.current.set(connectionId, userId);
-          viewerMap.current.set(userId, connectionId);
         }
+        connectionMap.current.set(connectionId, userId);
+        viewerMap.current.set(userId, connectionId);
       }
     });
     // like SIGNAL 감지시 좋아요 수 변경
