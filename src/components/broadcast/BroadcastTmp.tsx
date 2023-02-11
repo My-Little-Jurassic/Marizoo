@@ -1,38 +1,97 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import { useAppSelector } from "../../store";
-import { useDispatch } from "react-redux";
-import { ovActions } from "../../store/ovSlice";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { broadcastActions } from "../../store/broadcastSlice";
 import { openModal, setContent } from "../../store/modalSlice";
+import { OpenVidu, Publisher, Subscriber } from "openvidu-browser";
 
 function BroadcastVideo() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const params = useParams();
+  const [subscriber, setSubscriber] = useState<Subscriber>();
 
   const { pk, uid } = useAppSelector((state) => state.user);
-  const { mySessionId, myUserName, session, subscriber } = useAppSelector((state) => state.ov);
+  const OV = useMemo(() => new OpenVidu(), []);
+  const session = useMemo(() => OV.initSession(), [OV]);
+
+  // 방송 화면 출력
+  const streamRef = useRef<HTMLVideoElement>(null);
   const startTime = useState<number>(Date.now())[0];
   const effectCnt = useAppSelector((state) => state.broadcast.effectCnt);
   const isVoted = useAppSelector((state) => state.broadcast.isVoted);
 
   useEffect(() => {
     // Session 생성
-    console.log("room");
-    dispatch(ovActions.createOpenvidu({ nickname: uid, roomId: params.session_id }));
-  }, []);
+    if (session) createToken().then(joinRoom);
+  }, [session]);
 
-  const joinRoom = function () {
-    if (session) {
-      dispatch(broadcastActions.resetRoom());
+  useEffect(() => {
+    if (subscriber && streamRef.current) {
+      subscriber.addVideoElement(streamRef.current);
     }
-    dispatch(ovActions.createOpenvidu({ nickname: uid, roomId: params.session_id }));
+  }, [subscriber]);
+
+  // 세션 참가
+  const joinRoom = async (token: string) => {
+    await session.connect(token);
+    // 방장 비디오 연결
+    // session.on("streamCreated", (e) => {
+    //   console.log("streamCreated");
+    //   if (streamRef.current) {
+    //     const subscriber: Subscriber = session.subscribe(e.stream, undefined);
+    //     subscriber.addVideoElement(streamRef.current);
+    //   }
+    // });
+
+    // 방장과 주고받는 시그널
+    session.on("signal:welcome", (e) => {
+      console.dir(e.from);
+      if (e.from) {
+        session.signal({
+          data: String(pk),
+          to: [e.from],
+          type: "thankYou",
+        });
+      }
+      if (e.data) {
+        const roomInfo = JSON.parse(e.data);
+        if (roomInfo.voteStatus === "proceeding") {
+          dispatch(broadcastActions.startVote(roomInfo.feedList));
+        } else if (roomInfo.voteStatus === "finish") {
+          dispatch(broadcastActions.finishVote(roomInfo.winnerFeedId));
+        }
+      }
+      if (e.from?.stream) {
+        setSubscriber(session.subscribe(e.from.stream, undefined));
+      }
+    });
+    session.on("signal:roomInfo", (e) => {
+      dispatch(broadcastActions.changeRoomInfo(e.data));
+    });
+    session.on("signal:voteStart", (e) => {
+      if (e.data) {
+        const feedList = JSON.parse(e.data);
+        dispatch(broadcastActions.startVote(feedList));
+      }
+    });
+    session.on("signal:voteFinish", (e) => {
+      dispatch(broadcastActions.finishVote(e.data));
+    });
+    session.on("signal:badge", () => {
+      console.log("배지 받았다");
+    });
+    session.on("signal:finish", () => {
+      dispatch(broadcastActions.resetRoom());
+      session.disconnect();
+      dispatch(setContent("BroadcastFinish"));
+      dispatch(openModal());
+    });
   };
 
   // 토큰 생성
-  const createToken = async function (sessionId: string) {
+  const createToken = async function () {
     const response = await axios({
       method: "post",
       url: `/api/user/broadcasts/${params.broadcast_id}/${params.session_id}`,
@@ -46,89 +105,14 @@ function BroadcastVideo() {
     return response.data.connectionToken;
   };
 
-  // 방송 화면 출력
-  const streamRef = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    if (subscriber && streamRef.current) {
-      subscriber.addVideoElement(streamRef.current);
-    }
-  }, [subscriber]);
-
-  // 토큰 생성 및 비디오 연결
-  useEffect(() => {
-    if (session && mySessionId) {
-      createToken(mySessionId)
-        .then((token: string) => {
-          return session.connect(token, { clientData: myUserName });
-        })
-        .then(() => {
-          // 방장 비디오 연결
-          session?.on("streamCreated", (event) => {
-            if (streamRef.current !== null) {
-              dispatch(ovActions.subscribeVideo(event.stream));
-            }
-          });
-
-          // 방장과 주고받는 시그널
-          session?.on("signal", (event) => {
-            if (event.type === "signal:welcome") {
-              if (event.from) {
-                session?.signal({
-                  data: String(pk),
-                  to: [event.from],
-                  type: "thankYou",
-                });
-              }
-              dispatch(ovActions.connectOwner(event.from));
-              if (event.data === undefined) {
-                return;
-              }
-              const roomInfo = JSON.parse(event.data);
-              if (roomInfo.voteStatus === "proceeding") {
-                dispatch(broadcastActions.startVote(roomInfo.feedList));
-              } else if (roomInfo.voteStatus === "finish") {
-                dispatch(broadcastActions.finishVote(roomInfo.winnerFeedId));
-              }
-            }
-
-            if (event.type === "signal:roomInfo") {
-              if (event.data !== undefined) {
-                dispatch(broadcastActions.changeRoomInfo(event.data));
-              }
-            }
-
-            if (event.type === "signal:voteStart") {
-              if (event.data === undefined) {
-                return;
-              }
-              const feedList = JSON.parse(event.data);
-              dispatch(broadcastActions.startVote(feedList));
-            }
-
-            if (event.type === "signal:voteFinish") {
-              if (event.data != undefined) {
-                dispatch(broadcastActions.finishVote(event.data));
-              }
-            }
-
-            if (event.type === "signal:badge") {
-              console.log("배지 받았다");
-            }
-
-            if (event.type === "signal:finish") {
-              dispatch(broadcastActions.resetRoom());
-              dispatch(ovActions.leaveSession());
-              dispatch(setContent("BroadcastFinish"));
-              dispatch(openModal());
-            }
-          });
-        });
-    }
-  }, [session]);
+  // useEffect(() => {
+  //   if (subscriber && streamRef.current) {
+  //     subscriber.addVideoElement(streamRef.current);
+  //   }
+  // }, [subscriber]);
 
   return (
     <StyledContainer>
-      <button onClick={joinRoom}>설마?</button>
       <StyledVideo autoPlay={true} ref={streamRef} />
     </StyledContainer>
   );
