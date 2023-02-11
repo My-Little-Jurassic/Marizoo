@@ -29,6 +29,7 @@ function BroadcastVideo() {
 
   useEffect(() => {
     if (subscriber && streamRef.current) {
+      console.log("useEffect: subscriber");
       subscriber.addVideoElement(streamRef.current);
     }
   }, [subscriber]);
@@ -38,8 +39,8 @@ function BroadcastVideo() {
     await session.connect(token);
 
     // 방장과 주고받는 시그널
-    session.on("signal:welcome", (e) => {
-      console.dir(e.from);
+    session.on("signal:welcome", async (e) => {
+      console.dir("signal:welcome");
       if (e.from) {
         session.signal({
           data: String(pk),
@@ -55,8 +56,9 @@ function BroadcastVideo() {
           dispatch(broadcastActions.finishVote(roomInfo.winnerFeedId));
         }
       }
-      if (e.from?.stream) {
-        setSubscriber(session.subscribe(e.from.stream, undefined));
+      if (streamRef.current && e.from?.stream) {
+        const subscriber = await session.subscribeAsync(e.from.stream, "subscriber");
+        setSubscriber(subscriber);
       }
     });
     session.on("signal:roomInfo", (e) => {
@@ -105,7 +107,7 @@ function BroadcastVideo() {
 
   return (
     <StyledContainer>
-      <StyledVideo autoPlay={true} ref={streamRef} />
+      <StyledVideo autoPlay={true} muted={true} ref={streamRef} />
     </StyledContainer>
   );
 }
