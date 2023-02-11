@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { broadcastActions } from "../../store/broadcastSlice";
 import { openModal, setContent } from "../../store/modalSlice";
-import { OpenVidu, Publisher, Subscriber } from "openvidu-browser";
+import { OpenVidu, Subscriber } from "openvidu-browser";
 
 function BroadcastVideo() {
   const dispatch = useAppDispatch();
@@ -36,14 +36,6 @@ function BroadcastVideo() {
   // 세션 참가
   const joinRoom = async (token: string) => {
     await session.connect(token);
-    // 방장 비디오 연결
-    // session.on("streamCreated", (e) => {
-    //   console.log("streamCreated");
-    //   if (streamRef.current) {
-    //     const subscriber: Subscriber = session.subscribe(e.stream, undefined);
-    //     subscriber.addVideoElement(streamRef.current);
-    //   }
-    // });
 
     // 방장과 주고받는 시그널
     session.on("signal:welcome", (e) => {
