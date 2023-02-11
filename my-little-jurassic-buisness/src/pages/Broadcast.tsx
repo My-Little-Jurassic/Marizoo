@@ -17,11 +17,13 @@ import {
 import { postBroadcast } from "../api";
 import BroadcastVoteModal from "../components/Broadcast/BroadcastVoteModal";
 import { OpenVidu } from "openvidu-browser";
+import { useParams } from "react-router-dom";
 
 const Broadcast = () => {
+  const params = useParams();
   // 방송설정 STATE
   const [broadcastSetting, setBroadcastSetting] = useState<IBroadcastSetting>({
-    id: "1",
+    id: String(params.id),
     status: "DEFAULT",
     title: "",
     description: "",
