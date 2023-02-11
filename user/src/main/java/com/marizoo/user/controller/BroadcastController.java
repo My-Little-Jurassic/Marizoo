@@ -7,12 +7,10 @@ import com.marizoo.user.dto.broadcast_dto.*;
 import com.marizoo.user.entity.*;
 import com.marizoo.user.service.BroadcastService;
 import io.openvidu.java.client.*;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -142,7 +140,7 @@ public class BroadcastController {
     @ApiOperation(value = "broadcast_id 방송과 연관된 방송 목록 가져오기")
     @GetMapping("/broadcasts/{broadcast_id}/related")
     public ResponseEntity<?> getRelatedOnairs(@PathVariable("broadcast_id") @ApiParam(name = "방송 id", required = true, example = "1")Long broadcastId){
-        List<SearchBroadcastDto> relatedOnairs = broadcastService.searchBroadcastRelated(broadcastId);
+        List<RelatedBroadcastDto> relatedOnairs = broadcastService.searchBroadcastRelated(broadcastId);
         if(relatedOnairs.isEmpty()){
             return new ResponseEntity<>("관련 방송 없음", HttpStatus.BAD_REQUEST);
         }

@@ -1,12 +1,11 @@
 package com.marizoo.user.service;
 
-import com.marizoo.user.dto.broadcast_dto.SearchBroadcastDto;
+import com.marizoo.user.dto.broadcast_dto.RelatedBroadcastDto;
 import com.marizoo.user.entity.Broadcast;
 import com.marizoo.user.entity.BroadcastAnimal;
 import com.marizoo.user.entity.BroadcastStatus;
 import com.marizoo.user.entity.FeedVote;
 import com.marizoo.user.repository.broadcast_repo.BroadcastRepository;
-import com.marizoo.user.repository.broadcast_repo.BroadcastRepositoryCustomImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -68,7 +67,7 @@ public class BroadcastService {
      * @param broadcastId : 방송 PK
      * @return 라이브 방송 중 종 리스트에 있는 종이 출연하는 방송 목록
      */
-    public List<SearchBroadcastDto> searchBroadcastRelated(Long broadcastId){
+    public List<RelatedBroadcastDto> searchBroadcastRelated(Long broadcastId){
         Optional<Broadcast> opt = broadcastRepository.findById(broadcastId);
         if(opt.isEmpty()){
             // error
@@ -80,7 +79,7 @@ public class BroadcastService {
             classifications.add(broadcastAnimal.getClassification());
         }
 
-        List<SearchBroadcastDto> relateBroadcastList = broadcastRepository.searchBroadcastRelated(classifications);
+        List<RelatedBroadcastDto> relateBroadcastList = broadcastRepository.searchBroadcastRelated(broadcastId, classifications);
         return relateBroadcastList;
     }
 
