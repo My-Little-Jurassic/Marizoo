@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import {
   TbHandStop,
@@ -17,6 +18,10 @@ import BroadcastCombo from "./BroadcastCombo";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { broadcastActions } from "../../store/broadcastSlice";
 import BroadcastHeart from "./BroadcastHeart";
+import { OpenVidu } from "openvidu-browser";
+import { useParams } from "react-router-dom";
+import { openModal, setContent } from "../../store/modalSlice";
+import BroadcastStreamVideo from "./BroadcastStreamVideo";
 
 interface IProps {
   title: string;
@@ -35,26 +40,91 @@ const BroadcastScreen = function (props: IProps) {
   const numberOfViewers = useAppSelector((state) => state.broadcast.numberOfViewers);
   const numberOfLikes = useAppSelector((state) => state.broadcast.numberOfLikes);
 
+  // OpenVidu STATUS
+  const params = useParams();
   const dispatch = useAppDispatch();
+  const { pk } = useAppSelector((state) => state.user);
+  const OV = useMemo(() => new OpenVidu(), []);
+  const session = useMemo(() => OV.initSession(), [OV]);
+  const streamRef = useRef<HTMLVideoElement>(null);
+  const startTime = useState<number>(Date.now())[0];
+  const effectCnt = useAppSelector((state) => state.broadcast.effectCnt);
 
-  // 마우스 멈추면 버튼들 사라지게
-  useEffect(() => {
-    if (isMouseOver) {
-      return;
-    }
-    const timeout = setTimeout(() => {
-      setIsBtnShown(false);
-    }, 3000);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [isBtnShown, isMouseOver]);
+  // 세션 참가
+  const joinRoom = async (token: string) => {
+    await session.connect(token);
+
+    // 방장과 주고받는 시그널
+    session.on("signal:welcome", async (e) => {
+      console.dir("signal:welcome");
+      if (e.from) {
+        session.signal({
+          data: String(pk),
+          to: [e.from],
+          type: "thankYou",
+        });
+      }
+      if (e.data) {
+        const roomInfo = JSON.parse(e.data);
+        if (roomInfo.voteStatus === "proceeding") {
+          dispatch(broadcastActions.startVote(roomInfo.feedList));
+        } else if (roomInfo.voteStatus === "finish") {
+          dispatch(broadcastActions.finishVote(roomInfo.winnerFeedId));
+        }
+      }
+      if (streamRef.current && e.from?.stream) {
+        const subscriber = await session.subscribeAsync(e.from.stream, "subscriber");
+        subscriber.addVideoElement(streamRef.current);
+      }
+    });
+    session.on("signal:roomInfo", (e) => {
+      dispatch(broadcastActions.changeRoomInfo(e.data));
+    });
+    session.on("signal:voteStart", (e) => {
+      if (e.data) {
+        const feedList = JSON.parse(e.data);
+        dispatch(broadcastActions.startVote(feedList));
+      }
+    });
+    session.on("signal:voteFinish", (e) => {
+      dispatch(broadcastActions.finishVote(e.data));
+    });
+    session.on("signal:badge", () => {
+      console.log("배지 받았다");
+    });
+    session.on("signal:finish", () => {
+      dispatch(broadcastActions.resetRoom());
+      session.disconnect();
+      dispatch(setContent("BroadcastFinish"));
+      dispatch(openModal());
+    });
+  };
+  // 토큰 생성
+  const createToken = async function () {
+    const response = await axios({
+      method: "post",
+      url: `/api/user/broadcasts/${params.broadcast_id}/${params.session_id}`,
+      data: JSON.stringify({}),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + btoa("OPENVIDUAPP:MY_SECRET"),
+      },
+    });
+    return response.data.connectionToken;
+  };
 
   // 마우스 움직이면 버튼들 나오도록
   const showBtns = function () {
     if (isMouseOver || (!isBtnShown && !isVoteModalOpened)) {
       setIsBtnShown(true);
     }
+  };
+  // 콤보 끝나면 이펙트 종료
+  const finishEffect = function () {
+    if (playingReaction === null) {
+      return;
+    }
+    setPlayingReaction(null);
   };
 
   // 클릭한 곳에서 리액션하도록 마우스 좌표 기억
@@ -69,13 +139,23 @@ const BroadcastScreen = function (props: IProps) {
     };
   }, []);
 
-  // 콤보 끝나면 이펙트 종료
-  const finishEffect = function () {
-    if (playingReaction === null) {
+  useEffect(() => {
+    // Session 생성
+    if (session) createToken().then(joinRoom);
+  }, [session]);
+
+  // 마우스 멈추면 버튼들 사라지게
+  useEffect(() => {
+    if (isMouseOver) {
       return;
     }
-    setPlayingReaction(null);
-  };
+    const timeout = setTimeout(() => {
+      setIsBtnShown(false);
+    }, 3000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [isBtnShown, isMouseOver]);
 
   // 5초 지나면 이펙트 종료
   useEffect(() => {
@@ -130,7 +210,7 @@ const BroadcastScreen = function (props: IProps) {
           <TbMaximize size={30} />
         </StyledReactionCancleContainer>
       )}
-      <BroadcastTmp />
+      <BroadcastStreamVideo ref={streamRef} />
       {isMaximized && !playingReaction && (
         <StyledHeader isBtnShown={isBtnShown}>
           <StyledTopShadow />

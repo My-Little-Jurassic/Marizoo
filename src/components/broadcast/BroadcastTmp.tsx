@@ -10,7 +10,6 @@ import { OpenVidu, Subscriber } from "openvidu-browser";
 function BroadcastVideo() {
   const dispatch = useAppDispatch();
   const params = useParams();
-  const [subscriber, setSubscriber] = useState<Subscriber>();
 
   const { pk, uid } = useAppSelector((state) => state.user);
   const OV = useMemo(() => new OpenVidu(), []);
@@ -26,13 +25,6 @@ function BroadcastVideo() {
     // Session 생성
     if (session) createToken().then(joinRoom);
   }, [session]);
-
-  useEffect(() => {
-    if (subscriber && streamRef.current) {
-      console.log("useEffect: subscriber");
-      subscriber.addVideoElement(streamRef.current);
-    }
-  }, [subscriber]);
 
   // 세션 참가
   const joinRoom = async (token: string) => {
@@ -58,7 +50,7 @@ function BroadcastVideo() {
       }
       if (streamRef.current && e.from?.stream) {
         const subscriber = await session.subscribeAsync(e.from.stream, "subscriber");
-        setSubscriber(subscriber);
+        subscriber.addVideoElement(streamRef.current);
       }
     });
     session.on("signal:roomInfo", (e) => {
@@ -91,19 +83,12 @@ function BroadcastVideo() {
       url: `/api/user/broadcasts/${params.broadcast_id}/${params.session_id}`,
       data: JSON.stringify({}),
       headers: {
-        "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
         Authorization: "Basic " + btoa("OPENVIDUAPP:MY_SECRET"),
       },
     });
     return response.data.connectionToken;
   };
-
-  // useEffect(() => {
-  //   if (subscriber && streamRef.current) {
-  //     subscriber.addVideoElement(streamRef.current);
-  //   }
-  // }, [subscriber]);
 
   return (
     <StyledContainer>
