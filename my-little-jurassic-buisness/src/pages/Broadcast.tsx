@@ -17,11 +17,13 @@ import {
 import { postBroadcast } from "../api";
 import BroadcastVoteModal from "../components/Broadcast/BroadcastVoteModal";
 import { OpenVidu } from "openvidu-browser";
+import { useParams } from "react-router-dom";
 
 const Broadcast = () => {
+  const params = useParams();
   // 방송설정 STATE
   const [broadcastSetting, setBroadcastSetting] = useState<IBroadcastSetting>({
-    id: "1",
+    id: String(params.id),
     status: "DEFAULT",
     title: "",
     description: "",
@@ -87,8 +89,71 @@ const Broadcast = () => {
       insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
       mirror: false, // Whether to mirror your local video or not
     });
-    session.publish(newPublisher);
     if (videoRef.current) newPublisher.addVideoElement(videoRef.current);
+    session.publish(newPublisher);
+
+    // **openvidu signal events**
+    //  새로운 세션 연결 시 welcome SIGNAL 호출
+    session.on("connectionCreated", (e) => {
+      console.log("connection created");
+      const { options, winnerFeed, voteStatus } = vote;
+      session.signal({
+        data: JSON.stringify({
+          feedList: options,
+          winnerFeed,
+          voteStatus,
+        }),
+        to: [e.connection],
+        type: "welcome",
+      });
+    });
+    // 유저가 나가면 해당 유저 정보 삭제
+    session.on("connectionDestroyed", (e) => {
+      console.log("connection destroyed");
+      const connectionId = e.connection.connectionId;
+      const userId = connectionMap.current.get(connectionId);
+      if (userId) {
+        viewerMap.current.delete(userId);
+        connectionMap.current.delete(connectionId);
+        variableRef.current.viewers--;
+      }
+    });
+    // thankYou SIGNAL 감지시 해당 유저 정보 저장
+    session.on("signal:thankYou", (e) => {
+      console.log("signal thankYou");
+      if (e.data && e.from) {
+        const connectionId = e.from.connectionId;
+        const userId = e.data;
+
+        const prevConnectionId = viewerMap.current.get(userId);
+        // 이미 접속해있었던 사람이라면 connectionId 바뀔것이므로 map update
+        if (prevConnectionId) {
+          connectionMap.current.delete(prevConnectionId);
+        } else {
+          // 새롭게 들어오는 사람이라면 시청자수 ++
+          variableRef.current.viewers++;
+        }
+        connectionMap.current.set(connectionId, userId);
+        viewerMap.current.set(userId, connectionId);
+      }
+    });
+    // like SIGNAL 감지시 좋아요 수 변경
+    session.on("signal:like", (e) => {
+      console.log("signal like");
+      if (e.data) variableRef.current.likes++;
+      else variableRef.current.likes--;
+    });
+    // vote SIGNAL 감지시 투표수 반영
+    session.on("signal:vote", (e) => {
+      console.log("signal vote");
+      const vote = variableRef.current.vote;
+      const options = vote.options;
+      if (e.data) return;
+      const feedId = Number(e.data);
+      const feedIndex = options.findIndex((feed) => feed.id === feedId);
+      options[feedIndex].numberOfVotes++;
+      variableRef.current.vote = { ...vote, options };
+    });
   };
   // 세션 퇴장 함수
   const leaveSession = () => {
@@ -188,61 +253,6 @@ const Broadcast = () => {
       type: "voteFinish",
     });
   };
-
-  // **openvidu signal events**
-  //  새로운 세션 연결 시 welcome SIGNAL 호출
-  session.on("connectionCreated", (e) => {
-    console.log("connection created");
-    const { options, winnerFeed, voteStatus } = vote;
-    session.signal({
-      data: JSON.stringify({
-        feedList: options,
-        winnerFeed,
-        voteStatus,
-      }),
-      to: [e.connection],
-      type: "welcome",
-    });
-  });
-  // 유저가 나가면 해당 유저 정보 삭제
-  session.on("connectionDestroyed", (e) => {
-    console.log("connection destroyed");
-    const connectionId = e.connection.connectionId;
-    const userId = connectionMap.current.get(connectionId);
-    connectionMap.current.delete(connectionId);
-    if (userId) viewerMap.current.delete(userId);
-  });
-  // thankYou SIGNAL 감지시 해당 유저 정보 저장
-  session.on("signal:thankYou", (e) => {
-    console.log("signal thankYou");
-    if (e.data && e.from) {
-      const connectionId = e.from.connectionId;
-      const userId = e.data;
-
-      if (!viewerMap.current.get(e.data)) {
-        variableRef.current.viewers++;
-        connectionMap.current.set(connectionId, userId);
-        viewerMap.current.set(userId, connectionId);
-      }
-    }
-  });
-  // like SIGNAL 감지시 좋아요 수 변경
-  session.on("signal:like", (e) => {
-    console.log("signal like");
-    if (e.data) variableRef.current.likes++;
-    else variableRef.current.likes--;
-  });
-  // vote SIGNAL 감지시 투표수 반영
-  session.on("signal:vote", (e) => {
-    console.log("signal vote");
-    const vote = variableRef.current.vote;
-    const options = vote.options;
-    if (e.data) return;
-    const feedId = Number(e.data);
-    const feedIndex = options.findIndex((feed) => feed.id === feedId);
-    options[feedIndex].numberOfVotes++;
-    variableRef.current.vote = { ...vote, options };
-  });
 
   return (
     <StyledDiv className="Broadcast">

@@ -1,6 +1,8 @@
 import React from "react";
+import { Route, Routes } from "react-router";
 import { ThemeProvider } from "styled-components";
 import Broadcast from "./pages/Broadcast";
+import Home from "./pages/Home";
 import { darkTheme } from "./styles/themes/darkTheme";
 import { lightTheme } from "./styles/themes/lightTheme";
 import Itheme from "./styles/themes/theme";
@@ -13,7 +15,10 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <Broadcast />
+        <Routes>
+          <Route path={"/"} element={<Home />} />
+          <Route path={"/broadcast/:id"} element={<Broadcast />} />
+        </Routes>
       </div>
     </ThemeProvider>
   );
