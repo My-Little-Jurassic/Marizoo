@@ -34,6 +34,7 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+<<<<<<< HEAD
 
 OPENVIDU_URL: https://i8b208.p.ssafy.io:8445/
 OPENVIDU_SECRET: MY_SECRET
@@ -46,3 +47,12 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+=======
+server:
+  port: 5000
+  ssl:
+    enabled: false
+
+OPENVIDU_URL: https://i8b208.p.ssafy.io:8445/
+OPENVIDU_SECRET: MY_SECRET
+>>>>>>> 1b341438ac601d5aaac8c221f82ce78b77b78650
