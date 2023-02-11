@@ -32,7 +32,15 @@ const StyledDiv = styled.div`
     box-sizing: border-box;
     padding: 0 16px;
     width: 100%;
-    max-width: 1056px;
+    max-width: 1088px;
+  }
+  & .swiper-wrapper {
+    flex-wrap: wrap;
+    width: max-content;
+    & > div {
+      flex: 1;
+      min-width: 320px;
+    }
   }
 `;
 

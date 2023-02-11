@@ -24,12 +24,19 @@ const StyledLi = styled.li`
   box-sizing: border-box;
   display: flex;
   width: 100%;
+  min-width: 320px;
   height: 128px;
   border-radius: 32px;
   background-color: ${({ theme }) => theme.colors.primaryBg};
   ${({ theme }) => theme.shadow};
   margin-right: 32px;
   padding: 4px;
+
+  &:hover {
+    z-index: 1;
+    transform: scale(1.1);
+    transition: all ease 0.1s;
+  }
 
   & > div {
     display: flex;
