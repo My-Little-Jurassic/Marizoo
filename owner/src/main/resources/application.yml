@@ -40,8 +40,8 @@ spring:
 cloud:
   aws:
     credentials:
-      access-key: # 이성복한테 문의
-      secret-key: # 이성복한테 문의
+      access-key:  # 이성복한테 문의
+      secret-key:  # 이성복한테 문의
     s3:
       bucket: marizoo
     region:
