@@ -24,7 +24,10 @@ const BroadcastRecommendations = function () {
             }
             return (
               <Grid key={broadcast.id} item xs={12} sm={6} md={12}>
-                <NavLink to={"/broadcast/" + broadcast.id} style={{ textDecoration: "none" }}>
+                <NavLink
+                  to={`api/user/broadcast/${broadcast.id}/${broadcast.sessionId}`}
+                  style={{ textDecoration: "none" }}
+                >
                   <CardLabelMedium
                     key={broadcast.id}
                     title={broadcast.title}

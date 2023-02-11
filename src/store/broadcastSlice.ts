@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Connection, Session } from "openvidu-browser";
 import { IFeed } from "../components/broadcast/type";
 
 interface IInitialState {
   isMaximized: boolean;
-  selectedFeed: null | string;
   isLiked: boolean;
   numberOfViewers: number;
   numberOfLikes: number;
@@ -12,11 +12,12 @@ interface IInitialState {
   isVoting: string;
   winnerFeed: null | undefined | IFeed;
   feedList: null | IFeed[];
+  session: null | Session;
+  ownerConnection: null | Connection;
 }
 
 const initialState: IInitialState = {
   isMaximized: false,
-  selectedFeed: null,
   isLiked: false,
   numberOfViewers: 0,
   numberOfLikes: 0,
@@ -25,23 +26,54 @@ const initialState: IInitialState = {
   isVoting: "",
   winnerFeed: null,
   feedList: null,
+  session: null,
+  ownerConnection: null,
 };
 
 const broadcastSlice = createSlice({
   name: "broadcastSlice",
   initialState,
   reducers: {
+    makeSession(state, { payload }) {
+      state.session = payload.initSession();
+    },
+
+    connectOwner: (state, { payload }) => {
+      state.ownerConnection = payload;
+    },
+
     maximize(state) {
       state.isMaximized = !state.isMaximized;
     },
 
     vote(state, { payload }) {
-      state.selectedFeed = payload;
-      state.isVoted = !state.isVoted;
+      state.isVoted = true;
+      if (state.session && state.ownerConnection) {
+        state.session.signal({
+          data: String(payload),
+          to: [state.ownerConnection],
+          type: "vote",
+        });
+      }
     },
 
-    toggleLike(state) {
-      state.isLiked = !state.isLiked;
+    like(state) {
+      if (state.session && state.ownerConnection) {
+        if (!state.isLiked) {
+          state.session.signal({
+            data: "like",
+            to: [state.ownerConnection],
+            type: "like",
+          });
+        } else {
+          state.session.signal({
+            data: "",
+            to: [state.ownerConnection],
+            type: "like",
+          });
+        }
+        state.isLiked = !state.isLiked;
+      }
     },
 
     changeRoomInfo(state, { payload }) {
@@ -63,17 +95,8 @@ const broadcastSlice = createSlice({
       }
     },
 
-    pickFeed(state, { payload }) {
-      if (state.selectedFeed === payload) {
-        state.selectedFeed = null;
-      } else {
-        state.selectedFeed = payload;
-      }
-    },
-
     resetRoom(state) {
       state.isMaximized = false;
-      state.selectedFeed = null;
       state.isVoted = false;
       state.isLiked = false;
       state.numberOfViewers = 0;

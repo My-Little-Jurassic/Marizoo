@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 
@@ -7,10 +7,7 @@ import { CardVote } from "../common/card/index";
 import { Grid } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { broadcastActions } from "../../store/broadcastSlice";
-import axios from "axios";
-import { useParams } from "react-router-dom";
 import { IFeed } from "./type";
-import { ovActions } from "../../store/ovSlice";
 
 interface Iprops {
   closeModal: () => void;
@@ -18,22 +15,17 @@ interface Iprops {
 
 const VoteModal = function (props: Iprops) {
   const dispatch = useAppDispatch();
-  const params = useParams();
 
-  const [feedList, setFeedList] = useState<IFeed[] | null>(null);
-  const selectedFeed = useAppSelector((state) => state.broadcast.selectedFeed);
+  const [selectedFeed, setSelectedFeed] = useState<IFeed>();
+  const feedList = useAppSelector((state) => state.broadcast.feedList);
 
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_API_URL}/broadcasts/${params.broadcast_id}/vote`,
-    })
-      .then((res) => setFeedList(res.data.feeds))
-      .catch((err) => console.log(err));
-  }, []);
-
-  const selectFeed = function (feed: string) {
-    dispatch(broadcastActions.pickFeed(feed));
+  const selectFeed = function (clickedFeed: string) {
+    if (feedList) {
+      const targetFeed = feedList.find((feed) => {
+        return feed.name === clickedFeed;
+      });
+      setSelectedFeed(targetFeed);
+    }
   };
 
   const feedCardList = feedList?.map((feed: IFeed) => {
@@ -50,11 +42,8 @@ const VoteModal = function (props: Iprops) {
   });
 
   const vote = function () {
-    if (typeof selectedFeed === "string") {
-      dispatch(broadcastActions.vote(selectedFeed));
-      dispatch(ovActions.vote(selectFeed));
-      props.closeModal();
-    }
+    dispatch(broadcastActions.vote(selectedFeed));
+    props.closeModal();
   };
 
   return (

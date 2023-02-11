@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { IFeed } from "../../../broadcast/type";
 
 interface IProps {
   title: string;
   imgSrc: string;
-  selectedFeed: string | null;
+  selectedFeed: IFeed | undefined;
   selectFeed(feed: string): void;
 }
 
@@ -24,7 +25,7 @@ const CardVote = function (props: IProps) {
 
 export default CardVote;
 
-const StyledContainer = styled.div<{ selectedFeed: string | null; title: string }>`
+const StyledContainer = styled.div<{ selectedFeed: IFeed | undefined | null; title: string }>`
   width: 100%;
   height: 160px;
   display: flex;
@@ -34,9 +35,12 @@ const StyledContainer = styled.div<{ selectedFeed: string | null; title: string 
   position: relative;
   box-sizing: border-box;
   // light & black: mango yellow 600
-  ${(props) =>
-    props.selectedFeed === props.title &&
-    `border: 8px solid ${props.theme.colors.brandColors.mangoYellow["600"]}`};
+  ${(props) => {
+    return (
+      props.selectedFeed?.name === props.title &&
+      `border: 8px solid ${props.theme.colors.brandColors.mangoYellow["600"]}`
+    );
+  }};
   ${(props) => props.theme.styles.card}
   cursor: pointer;
 `;

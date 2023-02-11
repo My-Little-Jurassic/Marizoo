@@ -13,7 +13,6 @@ import {
 
 import { GreenBtn, ReactionBtn } from "../common/button";
 import VoteModal from "./VoteModal";
-import BroadcastTmp from "./BroadcastTmp";
 import BroadcastCombo from "./BroadcastCombo";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { broadcastActions } from "../../store/broadcastSlice";
@@ -44,20 +43,33 @@ const BroadcastScreen = function (props: IProps) {
   const params = useParams();
   const dispatch = useAppDispatch();
   const { pk } = useAppSelector((state) => state.user);
-  const OV = useMemo(() => new OpenVidu(), []);
-  const session = useMemo(() => OV.initSession(), [OV]);
+  const OV = useMemo(() => new OpenVidu(), [params.broadcast_id]);
+  const session = useAppSelector((state) => state.broadcast.session);
   const streamRef = useRef<HTMLVideoElement>(null);
   const startTime = useState<number>(Date.now())[0];
   const effectCnt = useAppSelector((state) => state.broadcast.effectCnt);
 
+  useEffect(() => {
+    if (OV) dispatch(broadcastActions.makeSession(OV));
+  }, [OV]);
+
+  useEffect(() => {
+    // Session 생성
+    if (session) createToken().then(joinRoom);
+  }, [session]);
+
   // 세션 참가
   const joinRoom = async (token: string) => {
+    if (session === null) {
+      return;
+    }
+
     await session.connect(token);
 
     // 방장과 주고받는 시그널
     session.on("signal:welcome", async (e) => {
-      console.dir("signal:welcome");
       if (e.from) {
+        dispatch(broadcastActions.connectOwner(e.from));
         session.signal({
           data: String(pk),
           to: [e.from],
@@ -78,7 +90,10 @@ const BroadcastScreen = function (props: IProps) {
       }
     });
     session.on("signal:roomInfo", (e) => {
-      dispatch(broadcastActions.changeRoomInfo(e.data));
+      if (e.data) {
+        const roomInfo = JSON.parse(e.data);
+        dispatch(broadcastActions.changeRoomInfo(roomInfo));
+      }
     });
     session.on("signal:voteStart", (e) => {
       if (e.data) {
@@ -99,6 +114,7 @@ const BroadcastScreen = function (props: IProps) {
       dispatch(openModal());
     });
   };
+
   // 토큰 생성
   const createToken = async function () {
     const response = await axios({
@@ -138,11 +154,6 @@ const BroadcastScreen = function (props: IProps) {
       document.removeEventListener("mousedown", ChangeMousePosition);
     };
   }, []);
-
-  useEffect(() => {
-    // Session 생성
-    if (session) createToken().then(joinRoom);
-  }, [session]);
 
   // 마우스 멈추면 버튼들 사라지게
   useEffect(() => {

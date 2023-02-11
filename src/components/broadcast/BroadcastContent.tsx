@@ -56,8 +56,7 @@ const BroadcastContent = function (props: IProps) {
           )}
           <LikeBtn
             onClick={() => {
-              dispatch(broadcastActions.toggleLike());
-              dispatch(ovActions.like(isLiked));
+              dispatch(broadcastActions.like());
             }}
             isLiked={isLiked}
           />

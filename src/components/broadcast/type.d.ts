@@ -8,7 +8,7 @@ export interface IAnimalInfo {
   name: string;
   gender: string;
   classification: string;
-  profile: string;
+  img: string;
 }
 
 export interface IStoreInfo {
@@ -19,6 +19,7 @@ export interface IStoreInfo {
 
 export interface IRelatedBroadcastInfo {
   id: number;
+  sessionId: string;
   title: string;
   thumbnail: string;
 }

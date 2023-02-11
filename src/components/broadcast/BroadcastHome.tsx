@@ -11,7 +11,6 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { IBroadcastInfo, IAnimalInfo, IStoreInfo } from "./type";
 import { NavLink } from "react-router-dom";
-import BroadcastVideo from "./BroadcastVideo";
 
 const BroadcastHome = function () {
   const [broadcastInfo, setBroadcastInfo] = useState<IBroadcastInfo | null>(null);
@@ -42,7 +41,7 @@ const BroadcastHome = function () {
                   animalName={animal.name}
                   gender={animal.gender}
                   classification={animal.classification}
-                  imgSrc={animal.profile}
+                  imgSrc={animal.img}
                 />
               </NavLink>
             </Grid>
