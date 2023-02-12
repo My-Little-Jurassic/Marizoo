@@ -4,18 +4,19 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 @Data
-public class SearchBroadcastDto {
+public class RelatedBroadcastDto {
     private Long id;
     private String sessionId;
     private String title;
     private String thumbnail;
 
-    public SearchBroadcastDto(){
+    public RelatedBroadcastDto(){
     }
 
     @QueryProjection
-    public SearchBroadcastDto(Long id, String sessionId, String title, String thumbnail){
+    public RelatedBroadcastDto(Long id, String sessionId, String title, String thumbnail){
         this.id = id;
+        this.sessionId = sessionId;
         this.title = title;
         this.thumbnail = thumbnail;
     }
