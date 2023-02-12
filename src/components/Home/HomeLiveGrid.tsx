@@ -4,24 +4,26 @@ import styled from "styled-components";
 import { Grid } from "@mui/material";
 
 import { CardLabelLarge } from "../common/card";
+import { NavLink } from "react-router-dom";
 
 interface IProps {
   broadcastList: IBroadcast[];
 }
 
 function HomeLiveGrid(props: IProps) {
-  // 모든 방송 정보(/broadcasts)에서는 title, thumbnail, classificationsImgs 받아옴
-  // 방송 검색(/broadcasts/search)에서는 id, title, thumbnail 받아옴
-  // 건의 사항 1. key 값을 위해 모든 방송 정보에서도 id가 필요
-  //          2. 방송 검색에도 classificationsImgs가 필요
   const itemList: React.ReactNode[] = props.broadcastList.map((broadcast) => {
     return (
       <Grid key={broadcast.id} item xs={12} sm={6} md={4}>
-        <CardLabelLarge
-          title={broadcast.title}
-          thumbnailSrc={broadcast.thumbnail}
-          classficationImgList={broadcast.classificationImgs}
-        ></CardLabelLarge>
+        <NavLink
+          to={`/broadcast/${broadcast.id}/${broadcast.sessionId}`}
+          style={{ textDecoration: "none" }}
+        >
+          <CardLabelLarge
+            title={broadcast.title}
+            thumbnailSrc={broadcast.thumbnail}
+            classficationImgList={broadcast.classificationImgs}
+          ></CardLabelLarge>
+        </NavLink>
       </Grid>
     );
   });

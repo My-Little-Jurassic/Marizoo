@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { TbX } from "react-icons/tb";
 import styled from "styled-components";
@@ -6,20 +5,12 @@ import styled from "styled-components";
 import { SearchInput } from "../../components/common/input";
 import { HomeFilterSwiper, HomeLiveGrid } from "../../components/Home";
 import { SideBg } from "../../components/common/background";
+import { getBroadcastList, getSearchedBroadcastList, getSpeciesList } from "../../api";
 
 function Home() {
-  // 동물 정보 더미데이터
-  // const animalList = [
-  //   { animalName: "도마뱀", imgUrl: "https://picsum.photos/200/300" },
-  //   { animalName: "뱀", imgUrl: "https://picsum.photos/200/300" },
-  //   { animalName: "거북이", imgUrl: "https://picsum.photos/200/300" },
-  //   { animalName: "악어", imgUrl: "https://picsum.photos/200/300" },
-  //   { animalName: "고등어초밥", imgUrl: "https://picsum.photos/200/300" },
-  // ];
-
   const [speciesList, setSpeciesList] = useState<ISpecies[] | null>();
-  const [allOfBroadcastList, setAllOfBroadcastList] = useState<IBroadcast[] | null>();
-  const [searchedBroadcastList, setSearchedBroadcastList] = useState<IBroadcast[]>();
+  const [allOfBroadcastList, setAllOfBroadcastList] = useState<IBroadcast[]>([]);
+  const [searchedBroadcastList, setSearchedBroadcastList] = useState<IBroadcast[]>([]);
 
   // focus된 아이콘
   const [focusdFilter, setFocusdFilter] = useState<number | null>(null);
@@ -30,43 +21,29 @@ function Home() {
   // 첫 렌더링
   useEffect(() => {
     // DB에 저장된 종 정보 요청하기
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_API_URL}/species`,
-    })
+    getSpeciesList()
       .then((res) => setSpeciesList(res.data.species))
       .catch((err) => console.log(err));
 
     // 현재 방송 중인 모든 방송 요청하기
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_API_URL}/broadcasts`,
-    })
+    getBroadcastList()
       .then((res) => setAllOfBroadcastList(res.data.onAir))
       .catch((err) => console.log(err));
   }, []);
 
+  // search keyword 변화에 다른 hook
   // 검색 시 0.3초 동안 검색 멈추면 해당 종이 출연하는 방송 정보 요청하기
   useEffect(() => {
+    if (!searchKeyword) {
+      setSearchKeyword(null);
+      return;
+    }
     const timeout = setTimeout(() => {
-      axios({
-        method: "get",
-        url: `${process.env.REACT_APP_API_URL}/broadcasts/search`,
-        params: {
-          keyword: searchKeyword,
-        },
-      })
+      getSearchedBroadcastList({ keyword: searchKeyword })
         .then((res) => setSearchedBroadcastList(res.data.onAir))
         .catch(() => setSearchedBroadcastList([]));
     }, 300);
     return () => clearTimeout(timeout);
-  }, [searchKeyword]);
-
-  // search keyword 변화에 다른 hook
-  useEffect(() => {
-    if (searchKeyword === "") {
-      setSearchKeyword(null);
-    }
   }, [searchKeyword]);
 
   return (
@@ -89,7 +66,7 @@ function Home() {
           </StyledHomeInput>
           <StyledSpacer space={32} />
           <HomeFilterSwiper
-            animalList={animalList}
+            speciesList={speciesList}
             focusdFilter={focusdFilter}
             setFocusdFilter={setFocusdFilter}
             searchKeyword={searchKeyword}
@@ -113,14 +90,11 @@ function Home() {
 
           {/* 검색 키워드가 있을 때만 검색 조건에 해당하는 방송 정보 렌더링 */}
           {/* 검색 키워드 없을 때는 모든 방송 정보 렌더링 */}
-          {allOfBroadcastList && searchedBroadcastList && (
-            <>
-              {searchKeyword ? (
-                <HomeLiveGrid broadcastList={searchedBroadcastList} />
-              ) : (
-                <HomeLiveGrid broadcastList={allOfBroadcastList} />
-              )}
-            </>
+
+          {searchKeyword ? (
+            <HomeLiveGrid broadcastList={searchedBroadcastList} />
+          ) : (
+            <HomeLiveGrid broadcastList={allOfBroadcastList} />
           )}
         </>
       )}

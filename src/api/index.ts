@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // User에 대한 요청을 보낼 서버 URL
-const URL = process.env.REACT_APP_API_URL;
+// const URL = process.env.REACT_APP_API_URL;
+const URL = "https://i8b208.p.ssafy.io/api/user";
 
 // 기본 axios 설정
 const instance = axios.create({ baseURL: URL, timeout: 2000 });
@@ -13,3 +14,4 @@ export default instance;
 export * from "./user";
 export * from "./cafeDetail";
 export * from "./store";
+export * from "./home";

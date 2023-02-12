@@ -6,6 +6,7 @@ interface ISpecies {
 
 interface IBroadcast {
   id: number;
+  sessionId: string;
   title: string;
   thumbnail: string;
   classificationImgs: string[];
