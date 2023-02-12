@@ -138,10 +138,7 @@ public class AnimalStoreService {
          return new PlayAndStoreInfoResponse(playInfoDto, storeInfoDto);
      }
 
-    public StoreSubDto findStoreSubDto(Long animalId){
-         AnimalStore animalStore = animalStoreRepository.findAnimalStoreSubInfo(animalId);
-         return new StoreSubDto(animalStore.getId(), animalStore.getStoreName(), animalStore.getProfileImg());
-    }
+
 
 
 }

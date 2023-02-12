@@ -1,14 +1,18 @@
 package com.marizoo.user.controller;
 
 import com.marizoo.user.api.animalstore_api.*;
+import com.marizoo.user.dto.animal_dto.AnimalDetailDto;
+import com.marizoo.user.dto.animal_dto.AnimalDto;
 import com.marizoo.user.dto.animalstore_dto.AnimalStoreDto;
 import com.marizoo.user.dto.animalstore_dto.AnimalStoreWholeDto;
+import com.marizoo.user.dto.animalstore_dto.StoreSubDto;
+import com.marizoo.user.dto.broadcast_dto.AnimalBroadcastStatusDto;
+import com.marizoo.user.dto.broadcast_dto.BroadcastStatusDto;
 import com.marizoo.user.dto.broadcast_dto.BroadcastsDto;
+import com.marizoo.user.dto.feed_dto.FeedDto;
 import com.marizoo.user.dto.play_dto.StorePlayDto;
-import com.marizoo.user.entity.AnimalStore;
-import com.marizoo.user.entity.Broadcast;
-import com.marizoo.user.entity.BroadcastAnimal;
-import com.marizoo.user.entity.Play;
+import com.marizoo.user.dto.species_dto.SpeciesWholeDto;
+import com.marizoo.user.entity.*;
 import com.marizoo.user.exception.PlayReservationCloasedException;
 import com.marizoo.user.service.*;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -181,13 +186,30 @@ public class StoreController {
     @ApiOperation(value = "animal_id 동물 상세 정보 가져오기")
     @GetMapping("/stores/{animal_id}/animal_detail")
     public ResponseEntity<AnimalDetailResponse> getAnimalInfo(@PathVariable(name = "animal_id") @ApiParam(name = "동물 id", required = true, example = "1") Long animalId){
+        AnimalDetailDto aDDto = animalService.getAnimalDetail(animalId);
+        AnimalBroadcastStatusDto animalBroadcastStatusDto = animalService.getBroadcastStatus(animalId);
+        List<FeedDto> feeds = feedService.findFeedListforAnimal(animalId);
+
+        if(aDDto == null || animalBroadcastStatusDto == null || feeds == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        log.info("!!!!" + aDDto.getAnimal().toString());
+        log.info("!!!!" + aDDto.getAnimalStore().toString());
+        log.info("!!!!" + aDDto.getSpecies().toString());
+        log.info("!!!!" + animalBroadcastStatusDto.isOnair());
+        log.info("!!!!" + feeds.toString());
+
+        Animal animal = aDDto.getAnimal();
+        AnimalStore animalStore = aDDto.getAnimalStore();;
+        Species species = aDDto.getSpecies();
         AnimalDetailResponse animalDetailResponse = new AnimalDetailResponse(
-                animalService.findAnimalInfo(animalId),
-                animalStoreService.findStoreSubDto(animalId),
-                speciesService.findSpeciesDetail(animalId),
-                animalService.getBroadcastStatus(animalId),
-                feedService.findFeedListforAnimal(animalId)
+                new AnimalDto(animal.getName(), animal.getGender(), animal.getFeature(), animal.getLength(), animal.getWeight(), animal.getAge(), animal.getImg()),
+                new StoreSubDto(animalStore.getId(), animalStore.getStoreName(), animalStore.getProfileImg()),
+                new SpeciesWholeDto(species.getId(), species.getHabitat(), species.getClassification(), species.getLifeSpan(), species.getInfo(), species.getClassificationImg()),
+                animalBroadcastStatusDto,
+                feeds
         );
+
         return new ResponseEntity(animalDetailResponse, HttpStatus.OK);
     }
     

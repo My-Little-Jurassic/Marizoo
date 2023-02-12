@@ -1,8 +1,10 @@
 package com.marizoo.user.service;
 
 import com.marizoo.user.dto.SpeciesAnimalsDto;
+import com.marizoo.user.dto.animal_dto.AnimalDetailDto;
 import com.marizoo.user.dto.animal_dto.AnimalDto;
 import com.marizoo.user.dto.animal_dto.OwnedAnimalDto;
+import com.marizoo.user.dto.broadcast_dto.AnimalBroadcastStatusDto;
 import com.marizoo.user.dto.broadcast_dto.BroadcastStatusDto;
 import com.marizoo.user.dto.feed_dto.FeedDto;
 import com.marizoo.user.entity.Animal;
@@ -31,26 +33,24 @@ public class AnimalService {
         return animalStoreRepository.findOwnedAnimalInfo(storeId);
     }
 
-    public AnimalDto findAnimalInfo(Long animalId){
-        Animal animal =  animalRepository.findAnimalById(animalId);
-        AnimalDto animalDto = new AnimalDto(
-                                    animal.getName(),
-                                    animal.getGender(),
-                                    animal.getFeature(),
-                                    animal.getLength(),
-                                    animal.getWeight(),
-                                    animal.getAge(),
-                                    animal.getImg());
-        return animalDto;
-    }
 
-    public BroadcastStatusDto getBroadcastStatus(Long animalId){
-        return animalRepository.findBroadcastStatus(animalId);
+    public AnimalBroadcastStatusDto getBroadcastStatus(Long animalId){
+        BroadcastStatusDto broadcastStatusDto = animalRepository.findBroadcastStatus(animalId);
+
+        if(broadcastStatusDto != null && broadcastStatusDto.getStatus() == BroadcastStatus.ONAIR){
+            return new AnimalBroadcastStatusDto(broadcastStatusDto.getId(), true);
+        }
+        return new AnimalBroadcastStatusDto(-1L, false);
     }
 
     // 종에 해당하는 동물 목록 가져오기
     public List<SpeciesAnimalsDto> getSpeciesAnimals(Long speciesId) {
         List<Animal> bySpeciesId = animalRepository.findBySpeciesId(speciesId);
         return bySpeciesId.stream().map(a->new SpeciesAnimalsDto(a.getId(), a.getName(), a.getGender(), a.getImg())).collect(Collectors.toList());
+    }
+
+    // animal id에 해당하는 동물 정보, 가게 정보, 종 정보 가져오기
+    public AnimalDetailDto getAnimalDetail(Long animalId){
+        return animalRepository.findAnimalDetail(animalId);
     }
 }
