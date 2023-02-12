@@ -1,7 +1,7 @@
 package com.marizoo.user.repository.broadcast_repo;
 
-import com.marizoo.user.dto.broadcast_dto.QSearchBroadcastDto;
-import com.marizoo.user.dto.broadcast_dto.SearchBroadcastDto;
+import com.marizoo.user.dto.broadcast_dto.QRelatedBroadcastDto;
+import com.marizoo.user.dto.broadcast_dto.RelatedBroadcastDto;
 
 import com.marizoo.user.entity.Broadcast;
 import com.marizoo.user.entity.BroadcastStatus;
@@ -44,14 +44,17 @@ public class BroadcastRepositoryCustomImpl implements BroadcastRepositoryCustom 
     }
 
     @Override
-    public List<SearchBroadcastDto> searchBroadcastRelated(List<String> classifications) {
+    public List<RelatedBroadcastDto> searchBroadcastRelated(Long broadcastId, List<String> classifications) {
         BroadcastStatus status = BroadcastStatus.ONAIR;
         return queryFactory
-                .select(new QSearchBroadcastDto(broadcast.id, broadcast.sessionId, broadcast.title, broadcast.thumbnail)).distinct()
+                .select(new QRelatedBroadcastDto(broadcast.id, broadcast.sessionId, broadcast.title, broadcast.thumbnail)).distinct()
                 .from(broadcastAnimal)
                 .join(broadcastAnimal.broadcast, broadcast)
-                .where(onAir(status), classificationsIn(classifications))
+                .where(onAir(status), classificationsIn(classifications), notMine(broadcastId))
                 .fetch();
 
+    }
+    private BooleanExpression notMine(Long broadcastId){
+        return broadcastId != null ? broadcast.id.ne(broadcastId): null;
     }
 }
