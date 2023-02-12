@@ -21,6 +21,7 @@ import { OpenVidu } from "openvidu-browser";
 import { useParams } from "react-router-dom";
 import { openModal, setContent } from "../../store/modalSlice";
 import BroadcastStreamVideo from "./BroadcastStreamVideo";
+import { getBroadcastInfo, modifyUserBadgeInfo } from "../../api";
 
 interface IProps {
   title: string;
@@ -42,7 +43,7 @@ const BroadcastScreen = function (props: IProps) {
   // OpenVidu STATUS
   const params = useParams();
   const dispatch = useAppDispatch();
-  const { pk } = useAppSelector((state) => state.user);
+  const pk = 1;
   const OV = useMemo(() => new OpenVidu(), [params.broadcast_id]);
   const session = useAppSelector((state) => state.broadcast.session);
   const streamRef = useRef<HTMLVideoElement>(null);
@@ -63,20 +64,28 @@ const BroadcastScreen = function (props: IProps) {
     if (session) createToken().then(joinRoom);
     // 방 퇴장
     return () => {
-      if (!session) return;
+      if (!session || !pk) return;
 
-      axios({
-        method: "put",
-        url: `/api/user/users/watchEnd`,
-        data: {
-          userId: pk,
-          effectCount: effectCnt.current,
-          feedCount: isVotedRef.current ? 1 : 0,
-          watchTime: Math.floor((Date.now() - startTime.current) / 3600000),
-        },
+      modifyUserBadgeInfo({
+        userId: pk,
+        effectCount: effectCnt.current,
+        feedCount: isVotedRef.current ? 1 : 0,
+        watchTime: Math.floor((Date.now() - startTime.current) / 3600000),
       })
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
+      // axios({
+      //   method: "put",
+      //   url: `/api/user/users/watchEnd`,
+      //   data: {
+      //     userId: pk,
+      //     effectCount: effectCnt.current,
+      //     feedCount: isVotedRef.current ? 1 : 0,
+      //     watchTime: Math.floor((Date.now() - startTime.current) / 3600000),
+      //   },
+      // })
+      //   .then((res) => console.log(res))
+      //   .catch((err) => console.log(err));
       dispatch(broadcastActions.resetRoom());
     };
   }, [session]);
@@ -140,15 +149,10 @@ const BroadcastScreen = function (props: IProps) {
 
   // 토큰 생성
   const createToken = async function () {
-    const response = await axios({
-      method: "post",
-      url: `/api/user/broadcasts/${params.broadcast_id}/${params.session_id}`,
-      data: JSON.stringify({}),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Basic " + btoa("OPENVIDUAPP:MY_SECRET"),
-      },
-    });
+    if (!params.broadcast_id || !params.session_id) {
+      return;
+    }
+    const response = await getBroadcastInfo(params.broadcast_id, params.session_id);
     return response.data.connectionToken;
   };
 

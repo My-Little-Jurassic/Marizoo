@@ -7,10 +7,10 @@ import BroadcastScreen from "./BroadcastScreen";
 import BroadcastRecommendations from "./BroadcastRecommendations";
 import Grid from "@mui/material/Grid";
 import { useAppSelector } from "../../store";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { IBroadcastInfo, IAnimalInfo, IStoreInfo } from "./type";
 import { NavLink } from "react-router-dom";
+import { getBroadcastInfo } from "../../api";
 
 const BroadcastHome = function () {
   const [broadcastInfo, setBroadcastInfo] = useState<IBroadcastInfo | null>(null);
@@ -22,14 +22,10 @@ const BroadcastHome = function () {
   const params = useParams();
 
   useEffect(() => {
-    axios({
-      method: "post",
-      url: `/api/user/broadcasts/${params.broadcast_id}/${params.session_id}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Basic " + btoa("OPENVIDUAPP:MY_SECRET"),
-      },
-    })
+    if (!params.broadcast_id || !params.session_id) {
+      return;
+    }
+    getBroadcastInfo(params.broadcast_id, params.session_id)
       .then((res) => {
         res.data.broadcast.description = res.data.broadcast.description.replace(/\./g, ".\n");
         setBroadcastInfo(res.data.broadcast);
@@ -50,7 +46,10 @@ const BroadcastHome = function () {
         setAnimalList(tmpAnimalList);
         setStoreInfo(res.data.stores);
       })
-      .catch(() => navigate("/404", { replace: false }));
+      .catch((err) => {
+        console.log(err);
+        navigate("/404", { replace: false });
+      });
     window.scrollTo(0, 0);
   }, [params.broadcast_id]);
 
