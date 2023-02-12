@@ -30,7 +30,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Nav themeMode={themeMode} toggleTheme={toggleTheme}></Nav>
       <Routes>
-        <Route path="/" element={<Home />}></Route>
+        <Route path="/user" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/regist" element={<Regist />}></Route>
         {/* <Route path="/user/:user_id" element={}></Route> */}
