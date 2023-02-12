@@ -24,7 +24,7 @@ const initialState: IUserState = {
 export const login = createAsyncThunk("user/login", async (body: ILoginBody) => {
   const res = await postLogin(body);
   const data = {
-    pk: res.data.userId,
+    pk: res.data.id,
     uid: res.data.uid,
     nickname: res.data.nickname,
     token: res.headers["access-token"],
@@ -35,7 +35,7 @@ export const login = createAsyncThunk("user/login", async (body: ILoginBody) => 
 export const refresh = createAsyncThunk("user/refresh", async () => {
   const res = await getRefresh();
   const data = {
-    pk: res.data.userId,
+    pk: res.data.id,
     uid: res.data.uid,
     nickname: res.data.nickname,
     token: res.headers["access-token"],
@@ -62,7 +62,11 @@ const userSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, { payload }) => {
       state.status = "success";
-      state.token = payload;
+      const { pk, uid, nickname, token } = JSON.parse(payload);
+      state.pk = pk;
+      state.uid = uid;
+      state.nickname = nickname;
+      state.token = token;
       state.isUser = true;
     });
     builder.addCase(login.rejected, (state) => {

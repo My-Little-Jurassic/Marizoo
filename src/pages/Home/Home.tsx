@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 import { SearchInput } from "../../components/common/input";
 import { HomeFilterSwiper, HomeLiveGrid } from "../../components/Home";
+import { SideBg } from "../../components/common/background";
 
 function Home() {
   // 동물 정보 더미데이터
@@ -63,7 +64,6 @@ function Home() {
 
   // search keyword 변화에 다른 hook
   useEffect(() => {
-    console.log("input search", searchKeyword);
     if (searchKeyword === "") {
       setSearchKeyword(null);
     }
@@ -71,6 +71,8 @@ function Home() {
 
   return (
     <StyledMain>
+      <SideBg></SideBg>
+      <StyledSpacer space={180} />
       {speciesList && (
         <>
           <StyledHomeInput>
@@ -87,7 +89,7 @@ function Home() {
           </StyledHomeInput>
           <StyledSpacer space={32} />
           <HomeFilterSwiper
-            speciesList={speciesList}
+            animalList={animalList}
             focusdFilter={focusdFilter}
             setFocusdFilter={setFocusdFilter}
             searchKeyword={searchKeyword}
@@ -175,8 +177,8 @@ const StyledSearchResetBtn = styled.button`
   background-color: ${(props) => props.theme.colors.secondaryBg};
   outline: none;
   border: none;
-  margin-left: 5px;
-  padding-inline: 10px;
+  margin-left: 8px;
+  padding-inline: 8px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
