@@ -22,7 +22,6 @@ const AnimalDetailProfile = function (props: IProps) {
   });
 
   useEffect(() => {
-    console.log(props.broadcastInfo);
     if (props.broadcastInfo.status === "RESERVE") {
       setStatusBtn(<AnimalDetailRedBtn label="방송 대기중" type={2} isDisable={true} />);
     } else if (props.broadcastInfo.status === "ONAIR") {

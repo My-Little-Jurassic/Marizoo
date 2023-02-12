@@ -1,8 +1,8 @@
 import { Grid } from "@mui/material";
-import axios from "axios";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { getSameSpeciesAnimals, getSameStoreAnimals } from "../../api";
 import { ProfileLarge, ProfileStore } from "../common/profile";
 import { IStoreInfo, IStoreAnimalInfo } from "./type";
 
@@ -22,10 +22,7 @@ const AnimalDetailSide = function (props: IProps) {
   const params = useParams();
 
   useEffect(() => {
-    axios({
-      method: "get",
-      url: `/api/user/stores/${props.storeInfo.storeId}/animals`,
-    })
+    getSameStoreAnimals(props.storeInfo.storeId)
       .then((res) => {
         const tmpStoreAnimalList = res.data.animals.map((animal: IStoreAnimalInfo) => {
           if (animal.name === props.currentAnimalName) {
@@ -48,10 +45,7 @@ const AnimalDetailSide = function (props: IProps) {
       })
       .catch((err) => console.log(err));
 
-    axios({
-      method: "get",
-      url: `/api/user/species/${props.speciesId}`,
-    })
+    getSameSpeciesAnimals(props.speciesId)
       .then((res) => {
         const tmpSameSpeciesAnimalList = res.data.animals.map((animal: IStoreAnimalInfo) => {
           if (animal.name === props.currentAnimalName) {

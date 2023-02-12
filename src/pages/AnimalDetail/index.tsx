@@ -1,7 +1,7 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { getAnimalDetail } from "../../api";
 import {
   AnimalDetailProfile,
   AnimalDetailDescription,
@@ -16,7 +16,6 @@ import {
 } from "../../components/AnimalDetail/type";
 
 const AnimalDetail = function () {
-  const APPLICATION_SERVER_URL = process.env.REACT_APP_API_URL;
   const params = useParams();
   const navigate = useNavigate();
 
@@ -27,12 +26,11 @@ const AnimalDetail = function () {
   const [storeInfo, setStoreInfo] = useState<IStoreInfo | null>(null);
 
   useEffect(() => {
-    axios({
-      method: "get",
-      url: `/api/user/stores/${params.animal_id}/animal_detail`,
-    })
+    if (params.animal_id === undefined) {
+      return;
+    }
+    getAnimalDetail(params.animal_id)
       .then((res) => {
-        res.data.broadcastInfo = "ONAIR";
         res.data.speciesInfo.info = res.data.speciesInfo.info.replace(/\./g, ".\n");
         setAnimalInfo(res.data.animalInfo);
         setBroadcastInfo(res.data.broadcastInfo);
