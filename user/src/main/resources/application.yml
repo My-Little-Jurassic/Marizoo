@@ -9,7 +9,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://3.36.112.78:3306/marizoo?
-    username: ss # MySQL DB Username
+    username: ssafy # MySQL DB Username
     password: ssafy # MySQL DB password
 
   jpa:
