@@ -4,9 +4,9 @@ import styled from "styled-components";
 import CheckBtn from "./CheckBtn";
 import { openModal, setContent } from "../../store/modalSlice";
 import { IPlayInfo } from "./type";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store";
+import { makeReservation } from "../../api";
 
 interface IProps {
   playInfo: IPlayInfo;
@@ -43,17 +43,11 @@ const StoreReservationNotice = function (props: IProps) {
       return;
     }
 
-    axios({
-      method: "post",
-      url: `${process.env.REACT_APP_API_URL}/stores/books`,
-      data: {
-        uid: uid,
-        playId: params.play_id,
-        totalVisitor: props.numberOfVisitor,
-      },
-    })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    if (uid && params.play_id && props.numberOfVisitor) {
+      makeReservation({ uid, playId: params.play_id, totalVisitor: props.numberOfVisitor })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    }
     props.openCompleteModal();
   };
 

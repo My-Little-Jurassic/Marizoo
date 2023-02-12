@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -9,6 +8,7 @@ import {
   StoreReservationCompleteModal,
 } from "../../components/StoreReservation";
 import { IPlayInfo, IStoreInfo } from "../../components/StoreReservation/type";
+import { getReservationDetail } from "../../api";
 
 const StoreReservation = function () {
   const params = useParams();
@@ -20,10 +20,10 @@ const StoreReservation = function () {
   const [numberOfVisitor, setNumberOfVisitor] = useState<number | null>(null);
 
   useEffect(() => {
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_API_URL}/stores/${params.cafe_id}/plays/${params.play_id}`,
-    })
+    if (params.cafe_id === undefined || params.play_id === undefined) {
+      return;
+    }
+    getReservationDetail(params.cafe_id, params.play_id)
       .then((res) => {
         const tmpPlayInfo = res.data.playInfo;
         const dateTime = tmpPlayInfo.playDateTime;
@@ -33,8 +33,11 @@ const StoreReservation = function () {
         setPlayInfo(tmpPlayInfo);
         setStoreInfo(res.data.storeInfo);
       })
-      .catch(() => navigate("/404", { replace: false }));
-  }, []);
+      .catch((err) => {
+        console.log(err);
+        navigate("/404", { replace: false });
+      });
+  }, [params.cafe_id, params.play_id]);
 
   return (
     <StyledContainer>
