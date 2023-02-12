@@ -20,6 +20,7 @@ import AnimalDetail from "./pages/AnimalDetail";
 import { useAppSelector } from "./store";
 import { selectModal } from "./store/modalSlice";
 import { Modal } from "./components/common/modal";
+import Mypage from "./pages/Mypage";
 
 function App() {
   const [themeMode, toggleTheme] = useTheme();
@@ -33,6 +34,7 @@ function App() {
         <Route path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/regist" element={<Regist />}></Route>
+        <Route path="/account" element={<Mypage />} />
         {/* <Route path="/user/:user_id" element={}></Route> */}
         {/* <Route path="/user/:user_id/set_account" element={}></Route> */}
         {/* <Route path="/find_account" element={}></Route> */}

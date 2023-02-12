@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { FreeModeSwiper } from "../../common/swiper";
 import MypageFollowStoreItem from "./MypageFollowStoreItem";
 
