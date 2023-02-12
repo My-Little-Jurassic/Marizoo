@@ -24,7 +24,7 @@ const AnimalDetailSide = function (props: IProps) {
   useEffect(() => {
     axios({
       method: "get",
-      url: `${process.env.REACT_APP_API_URL}/stores/${props.storeInfo.storeId}/animals`,
+      url: `/api/user/stores/${props.storeInfo.storeId}/animals`,
     })
       .then((res) => {
         const tmpStoreAnimalList = res.data.animals.map((animal: IStoreAnimalInfo) => {
@@ -50,7 +50,7 @@ const AnimalDetailSide = function (props: IProps) {
 
     axios({
       method: "get",
-      url: `${process.env.REACT_APP_API_URL}/species/${props.speciesId}`,
+      url: `/api/user/species/${props.speciesId}`,
     })
       .then((res) => {
         const tmpSameSpeciesAnimalList = res.data.animals.map((animal: IStoreAnimalInfo) => {

@@ -29,9 +29,10 @@ const AnimalDetail = function () {
   useEffect(() => {
     axios({
       method: "get",
-      url: `${APPLICATION_SERVER_URL}/stores/${params.animal_id}/animal_detail`,
+      url: `/api/user/stores/${params.animal_id}/animal_detail`,
     })
       .then((res) => {
+        res.data.broadcastInfo = "ONAIR";
         res.data.speciesInfo.info = res.data.speciesInfo.info.replace(/\./g, ".\n");
         setAnimalInfo(res.data.animalInfo);
         setBroadcastInfo(res.data.broadcastInfo);

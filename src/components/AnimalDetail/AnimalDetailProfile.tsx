@@ -22,11 +22,15 @@ const AnimalDetailProfile = function (props: IProps) {
   });
 
   useEffect(() => {
+    console.log(props.broadcastInfo);
     if (props.broadcastInfo.status === "RESERVE") {
       setStatusBtn(<AnimalDetailRedBtn label="방송 대기중" type={2} isDisable={true} />);
     } else if (props.broadcastInfo.status === "ONAIR") {
       setStatusBtn(
-        <NavLink to={`/broadcast/${props.broadcastInfo.id}`} style={{ textDecoration: "none" }}>
+        <NavLink
+          to={`/broadcast/${props.broadcastInfo.id}/${props.broadcastInfo.sessionId}`}
+          style={{ textDecoration: "none" }}
+        >
           <AnimalDetailRedBtn label="지금 방송중!" type={0} isDisable={false} />
         </NavLink>,
       );

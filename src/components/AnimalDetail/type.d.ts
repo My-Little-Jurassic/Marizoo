@@ -10,6 +10,7 @@ export interface IAnimalInfo {
 
 export interface IBroadcastInfo {
   id: number;
+  sessionId: string;
   status: string;
 }
 
