@@ -3,11 +3,10 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import userReducer from "./userSlice";
 import modalReducer from "./modalSlice";
 import broadcastReducer from "./broadcastSlice";
-import ovReducer from "./ovSlice";
 
 export const store = configureStore({
   // 로그인 유지용 access-token store
-  reducer: { user: userReducer, modal: modalReducer, broadcast: broadcastReducer, ov: ovReducer },
+  reducer: { user: userReducer, modal: modalReducer, broadcast: broadcastReducer },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });
 
