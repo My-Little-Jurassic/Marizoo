@@ -64,17 +64,15 @@ const BroadcastScreen = function (props: IProps) {
     // 방 퇴장
     return () => {
       if (!session) return;
-      const totalTime = Math.floor((Date.now() - startTime.current) / 3600000);
-      const voteCnt = isVotedRef.current ? 1 : 0;
 
       axios({
         method: "put",
         url: `/api/user/users/watchEnd`,
         data: {
-          userId: 3,
+          userId: pk,
           effectCount: effectCnt.current,
-          feedCount: voteCnt,
-          watchTime: totalTime,
+          feedCount: isVotedRef.current ? 1 : 0,
+          watchTime: Math.floor((Date.now() - startTime.current) / 3600000),
         },
       })
         .then((res) => console.log(res))
