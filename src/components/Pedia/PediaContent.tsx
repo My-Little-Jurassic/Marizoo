@@ -3,16 +3,20 @@ import styled from "styled-components";
 import PediaContentGrid from "./PediaContentGrid";
 
 import PediaContentScreen from "./PediaContentScreen";
+import { ISpecies } from "./type";
 
 interface IProps {
-  selectedSpeciesId: number | null;
+  selectedSpecies: ISpecies | null;
 }
 
 const PediaContent = (props: IProps): JSX.Element => {
   return (
     <StyledPediaContent>
-      <PediaContentScreen selectedSpeciesId={props.selectedSpeciesId}></PediaContentScreen>
-      <PediaContentGrid selectedSpeciesId={props.selectedSpeciesId}></PediaContentGrid>
+      <PediaContentScreen
+        selectedSpeciesId={props.selectedSpecies?.id}
+        selectedSpeciesImg={props.selectedSpecies?.classificationImg}
+      ></PediaContentScreen>
+      <PediaContentGrid selectedSpeciesId={props.selectedSpecies?.id}></PediaContentGrid>
     </StyledPediaContent>
   );
 };

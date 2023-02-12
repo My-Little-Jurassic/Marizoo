@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import PediaContent from "./PediaContent";
 import PediaSpeciesList from "./PediaSpeciesList";
+import { ISpecies } from "./type";
 
 const PediaContainer = (): JSX.Element => {
-  const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | null>(null);
+  const [selectedSpecies, setSelectedSpecies] = useState<ISpecies | null>(null);
 
   useEffect(() => {
     const lensImg: Element | null = document.querySelector("#lens");
@@ -26,7 +27,7 @@ const PediaContainer = (): JSX.Element => {
         duration: 1000, // 시간
       },
     );
-  }, [selectedSpeciesId]);
+  }, [selectedSpecies]);
 
   return (
     <StyledPediaContainer>
@@ -41,10 +42,10 @@ const PediaContainer = (): JSX.Element => {
       </div>
       <div id="main">
         <PediaSpeciesList
-          selectedSpeciesId={selectedSpeciesId}
-          setSelectedSpeciesId={setSelectedSpeciesId}
+          selectedSpecies={selectedSpecies}
+          setSelectedSpecies={setSelectedSpecies}
         ></PediaSpeciesList>
-        <PediaContent selectedSpeciesId={selectedSpeciesId}></PediaContent>
+        <PediaContent selectedSpecies={selectedSpecies}></PediaContent>
       </div>
     </StyledPediaContainer>
   );

@@ -4,7 +4,7 @@ import { ISpecies } from "./type";
 
 interface IProps {
   species: ISpecies;
-  selectedSpeciesId: number | null;
+  selectedSpeciesId: number | undefined;
   onClick: () => void;
 }
 
@@ -27,7 +27,7 @@ export default React.memo(PediaSpecies);
 const StyledPediaSpecies = styled.div<{
   speciesImg: string;
   speciesId: number;
-  selectedSpeciesId: number | null;
+  selectedSpeciesId: number | undefined;
 }>`
   ${({ theme }) => theme.styles.button};
   width: calc(100% - 32px);

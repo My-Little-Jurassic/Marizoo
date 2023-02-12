@@ -7,7 +7,7 @@ import { getSpeciesAnimalList } from "../../api/pedia";
 import { Link } from "react-router-dom";
 
 interface IProps {
-  selectedSpeciesId: number | null;
+  selectedSpeciesId: number | undefined;
 }
 
 const PediaContentGrid = (props: IProps): JSX.Element => {
@@ -32,7 +32,7 @@ const PediaContentGrid = (props: IProps): JSX.Element => {
         <Grid key={`speciesAnimal-${index}`} item xs={12} sm={6} md={4}>
           <Link to={`/animal/${animal.id}`} style={{ textDecoration: "none" }}>
             <div id="gridItem">
-              <img src="https://picsum.photos/200/300"></img>
+              <img src={animal.img}></img>
               <p>{animal.name}</p>
             </div>
           </Link>

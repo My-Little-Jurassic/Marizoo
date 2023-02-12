@@ -4,7 +4,8 @@ import { getSpeciesInfo } from "../../api/pedia";
 import { ISpeciesDetail } from "./type";
 
 interface IProps {
-  selectedSpeciesId: number | null;
+  selectedSpeciesId: number | undefined;
+  selectedSpeciesImg: string | undefined;
 }
 
 const PediaContentScreen = (props: IProps): JSX.Element => {
@@ -25,7 +26,7 @@ const PediaContentScreen = (props: IProps): JSX.Element => {
   return (
     <>
       <StyledPediaContentScreen>
-        {speciesInfo && <img src="https://picsum.photos/200/300"></img>}
+        {speciesInfo && <img src={props.selectedSpeciesImg}></img>}
         {speciesInfo ? (
           <div>
             <h3>{speciesInfo.speciesInfo.classification}</h3>
