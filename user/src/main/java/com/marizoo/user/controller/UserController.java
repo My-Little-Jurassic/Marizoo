@@ -153,7 +153,8 @@ public class UserController {
                     usersPlay.getPlay().getAnimalStore().getStoreName(),
                     usersPlay.getPlay().getAnimalStore().getTel(),
                     usersPlay.getPlay().getImg(),
-                    usersPlay.getStatus())
+                    usersPlay.getStatus(),
+                    usersPlay.getPlay().getTitle())
             );
         }
         return ResponseEntity.ok(new BookListResponseApi(bookDtoList));

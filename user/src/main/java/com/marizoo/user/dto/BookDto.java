@@ -20,5 +20,6 @@ public class BookDto {
     private String tel;
     private String img;
     private BookStatus status;
+    private String playTitle;
 //    private PlayType playType;
 }
