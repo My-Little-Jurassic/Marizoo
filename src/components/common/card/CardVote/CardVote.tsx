@@ -1,18 +1,21 @@
 import React from "react";
-import { useState } from "react";
 import styled from "styled-components";
+import { IFeed } from "../../../Broadcast/type";
 
 interface IProps {
   title: string;
   imgSrc: string;
+  selectedFeed: IFeed | undefined;
+  selectFeed(feed: string): void;
 }
 
 const CardVote = function (props: IProps) {
-  // prop으로 받을지는 나중에 설정
-  const [isSelected, setIsSelected] = useState(false);
-
   return (
-    <StyledContainer isSelected={isSelected} onClick={() => setIsSelected(!isSelected)}>
+    <StyledContainer
+      title={props.title}
+      selectedFeed={props.selectedFeed}
+      onClick={() => props.selectFeed(props.title)}
+    >
       <StyledCardImg src={props.imgSrc} alt="" />
       <StyledCardTitle>{props.title}</StyledCardTitle>
       <StyledCardInnerShadow />
@@ -22,7 +25,7 @@ const CardVote = function (props: IProps) {
 
 export default CardVote;
 
-const StyledContainer = styled.div<{ isSelected: boolean }>`
+const StyledContainer = styled.div<{ selectedFeed: IFeed | undefined | null; title: string }>`
   width: 100%;
   height: 160px;
   display: flex;
@@ -32,10 +35,12 @@ const StyledContainer = styled.div<{ isSelected: boolean }>`
   position: relative;
   box-sizing: border-box;
   // light & black: mango yellow 600
-  ${(props) =>
-    props.isSelected
-      ? `border: 8px solid ${props.theme.colors.brandColors.mangoYellow["600"]}`
-      : ""};
+  ${(props) => {
+    return (
+      props.selectedFeed?.name === props.title &&
+      `border: 8px solid ${props.theme.colors.brandColors.mangoYellow["600"]}`
+    );
+  }};
   ${(props) => props.theme.styles.card}
   cursor: pointer;
 `;

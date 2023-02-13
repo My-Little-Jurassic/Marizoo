@@ -63,5 +63,6 @@
     "cross-env": "^7.0.3",
     "eslint": "^8.32.0",
     "eslint-plugin-react": "^7.32.1"
-  }
+  },
+  "proxy": "https://i8b208.p.ssafy.io"
 }
