@@ -1,5 +1,10 @@
 import { instance } from "..";
-import { IPostBroadcastBadge, IPostBroadcastFeeds, IPostBroadcastInfoRes } from "./types";
+import {
+  IPostBroadcastBadge,
+  IPostBroadcastEnd,
+  IPostBroadcastFeeds,
+  IPostBroadcastInfoRes,
+} from "./types";
 
 export function postBroadcast(body: FormData) {
   return instance.post<IPostBroadcastInfoRes>("/broadcasts", body, {
@@ -13,4 +18,8 @@ export function postBroadcastFeeds(body: IPostBroadcastFeeds) {
 
 export function postBroadcastBadge(body: IPostBroadcastBadge) {
   return instance.post("/broadcasts/badge", body);
+}
+
+export function postBroadcastEnd(body: IPostBroadcastEnd, broadcastId: string) {
+  return instance.post(`/broadcasts/${broadcastId}`, body);
 }

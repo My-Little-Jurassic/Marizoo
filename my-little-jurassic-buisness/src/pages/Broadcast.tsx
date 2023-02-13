@@ -14,10 +14,11 @@ import {
   TConnectionId,
   TUserId,
 } from "../types/Broadcast";
-import { postBroadcast } from "../api";
+import { postBroadcast, postBroadcastEnd } from "../api";
 import BroadcastVoteModal from "../components/Broadcast/BroadcastVoteModal";
 import { OpenVidu } from "openvidu-browser";
 import { useParams } from "react-router-dom";
+import { IVoteTarget } from "../api/broadcasts/types";
 
 const Broadcast = () => {
   const params = useParams();
@@ -156,10 +157,15 @@ const Broadcast = () => {
     });
   };
   // 세션 퇴장 함수
-  const leaveSession = () => {
+  const leaveSession = async () => {
     session.disconnect();
     setBroadcastSetting({ ...broadcastSetting, status: "FINISH" });
     // TODO: 서버에 방송 결과 전송
+    const title = "먹일 먹이를 투표해주세요.";
+    const result: IVoteTarget[] = variableRef.current.vote.options.map((item) => {
+      return { feedId: String(item.id), count: item.numberOfVotes };
+    });
+    postBroadcastEnd({ title, result }, broadcastSetting.id);
   };
   // 방 정보 제공 함수
   const signalRoomInfo = () => {
@@ -220,7 +226,7 @@ const Broadcast = () => {
       to: [],
       type: "finish",
     });
-    leaveSession();
+    await leaveSession();
   };
   // 투표 시작 함수
   const startVote = (vote: IVote) => {
