@@ -22,16 +22,17 @@ const AnimalDetailProfile = function (props: IProps) {
   });
 
   useEffect(() => {
-    if (props.broadcastInfo.status === "RESERVE") {
-      setStatusBtn(<AnimalDetailRedBtn label="방송 대기중" type={2} isDisable={true} />);
-    } else if (props.broadcastInfo.status === "ONAIR") {
+    if (!props.broadcastInfo.onAir) {
+      setStatusBtn(<AnimalDetailRedBtn label="지금은 쉬고 있어요" type={1} isDisable={true} />);
+    } else {
       setStatusBtn(
-        <NavLink to={`/broadcast/${props.broadcastInfo.id}`} style={{ textDecoration: "none" }}>
+        <NavLink
+          to={`/broadcast/${props.broadcastInfo.broadcastId}/${props.broadcastInfo.sessionId}`}
+          style={{ textDecoration: "none" }}
+        >
           <AnimalDetailRedBtn label="지금 방송중!" type={0} isDisable={false} />
         </NavLink>,
       );
-    } else if (props.broadcastInfo.status === "FINISH") {
-      setStatusBtn(<AnimalDetailRedBtn label="지금은 쉬고 있어요" type={1} isDisable={true} />);
     }
   }, []);
 
@@ -68,8 +69,8 @@ export default AnimalDetailProfile;
 
 const StyledContainer = styled.div`
   width: 100%;
-  height: 100%;
-  max-height: 280px;
+  /* height: 100%; */
+  /* max-height: 280px; */
   display: flex;
   gap: 24px;
   @media screen and (max-width: 800px) {
@@ -113,7 +114,7 @@ const StyledStatusButton = styled.button<{ status: string }>`
   box-shadow: 2px 2px 8px rgba(67, 67, 67, 0.2);
   cursor: pointer;
   ${(props) =>
-    props.status === "onair"
+    props.status === "onAir"
       ? `background: ${props.theme.colors.red}
       &:hover {
 
