@@ -4,9 +4,9 @@ import styled from "styled-components";
 import CheckBtn from "./CheckBtn";
 import { openModal, setContent } from "../../store/modalSlice";
 import { IPlayInfo } from "./type";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import { redirect, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store";
+import { makeReservation } from "../../api";
 
 interface IProps {
   playInfo: IPlayInfo;
@@ -22,6 +22,12 @@ const StoreReservationNotice = function (props: IProps) {
   const dispatch = useAppDispatch();
 
   const reserve = function () {
+    if (!uid) {
+      dispatch(setContent("ReservationRedirectToLogin"));
+      dispatch(openModal());
+      return;
+    }
+
     if (props.numberOfVisitor === null || props.numberOfVisitor === 0) {
       dispatch(setContent("StoreReservationEmpty"));
       dispatch(openModal());
@@ -43,17 +49,11 @@ const StoreReservationNotice = function (props: IProps) {
       return;
     }
 
-    axios({
-      method: "post",
-      url: `${process.env.REACT_APP_API_URL}/stores/books`,
-      data: {
-        uid: uid,
-        playId: params.play_id,
-        totalVisitor: props.numberOfVisitor,
-      },
-    })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    if (uid && params.play_id && props.numberOfVisitor) {
+      makeReservation(uid, params.play_id, props.numberOfVisitor)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    }
     props.openCompleteModal();
   };
 
@@ -105,7 +105,7 @@ const StyledNoticeBox = styled.div`
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  max-height: 168px;
+  max-height: 184px;
   overflow: scroll;
   &::-webkit-scrollbar {
     display: none;
