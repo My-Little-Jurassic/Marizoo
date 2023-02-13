@@ -27,10 +27,13 @@ const BroadcastVoteTable = ({ animalIdList, setFeedList }: IProps) => {
           .catch(() => [])
       : [];
   }, [animalIdList]);
+
+  // 먹이 선택 이벤트
   const changeFeeds = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     const newFeeds = feeds.map((feed) => {
       if (feed.id === +value) feed.select = checked;
+      feed.numberOfVotes = 0;
       return feed;
     });
     setFeeds(newFeeds);
@@ -46,7 +49,9 @@ const BroadcastVoteTable = ({ animalIdList, setFeedList }: IProps) => {
       </thead>
       <tbody>
         {!feeds.length ? (
-          <tr>먹일 수 있는 먹이가 없습니다!</tr>
+          <tr>
+            <td colSpan={2}>먹일 수 있는 먹이가 없습니다!</td>
+          </tr>
         ) : (
           feeds.map((feed, index) => (
             <tr key={index}>
@@ -56,7 +61,7 @@ const BroadcastVoteTable = ({ animalIdList, setFeedList }: IProps) => {
                   type="checkbox"
                   value={feed.id}
                   onChange={changeFeeds}
-                  checked={feed.select}
+                  checked={feed.select ?? false}
                 />
               </td>
             </tr>

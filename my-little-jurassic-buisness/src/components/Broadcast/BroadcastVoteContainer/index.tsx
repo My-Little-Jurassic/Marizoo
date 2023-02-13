@@ -17,7 +17,7 @@ const BroadcastVoteContainer = ({ vote, status, finishVote }: IProps) => {
     dispatch(openModal());
   };
   const checkDisable = useMemo(() => {
-    return status !== "ONAIR" || voteStatus !== "default";
+    return status !== "ONAIR" || voteStatus === "finish";
   }, [status, voteStatus]);
 
   return (
@@ -26,9 +26,15 @@ const BroadcastVoteContainer = ({ vote, status, finishVote }: IProps) => {
         투표 결과{" "}
         <span>{winnerFeed ? options.find((item) => item.id === winnerFeed)?.name : "-"}</span>
       </h4>
-      <button onClick={onClick} disabled={checkDisable}>
-        투표 생성
-      </button>
+      {voteStatus === "default" ? (
+        <button onClick={onClick} disabled={checkDisable}>
+          투표 생성
+        </button>
+      ) : (
+        <button onClick={finishVote} disabled={checkDisable}>
+          투표 마감
+        </button>
+      )}
     </StyledDiv>
   );
 };

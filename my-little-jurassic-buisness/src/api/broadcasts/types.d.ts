@@ -20,3 +20,13 @@ export interface IPostBroadcastBadge {
   userIdList: number[];
   badgeId: number;
 }
+
+export interface IVoteTarget {
+  feedId: string;
+  count: number;
+}
+
+export interface IPostBroadcastEnd {
+  title: string;
+  result: IVoteTarget[];
+}
