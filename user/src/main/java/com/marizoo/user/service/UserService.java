@@ -11,6 +11,7 @@ import com.marizoo.user.entity.Badge;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.entity.UsersPlay;
 import com.marizoo.user.entity.UsersBadge;
+import com.marizoo.user.exception.AlreadyJoinException;
 import com.marizoo.user.exception.BadgeNotFoundException;
 import com.marizoo.user.exception.PasswordNotMatchException;
 import com.marizoo.user.exception.UserNotFoundException;
@@ -144,10 +145,17 @@ public class UserService {
                     () -> new UserNotFoundException("유저가 없습니다.")
             );
 
+            if (userRepository.findByNickname(myPageRequest.getNickname()).isPresent()) {
+                throw new AlreadyJoinException("이미 존재하는 닉네임입니다.");
+            }
+
+            if (userRepository.findByEmail(myPageRequest.getEmail()).isPresent()) {
+                throw new AlreadyJoinException("이미 존재하는 이메일입니다.");
+            }
+
             user.setNickname(myPageRequest.getNickname());
             user.setPhoneNumber(myPageRequest.getPhoneNumber());
             user.setEmail(myPageRequest.getEmail());
-
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException(e.getMessage());
         }
