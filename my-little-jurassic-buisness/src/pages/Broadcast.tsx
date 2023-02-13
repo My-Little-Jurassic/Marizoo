@@ -234,6 +234,7 @@ const Broadcast = () => {
       type: "finish",
     });
     await leaveSession();
+    alert("방송이 종료되었습니다!");
   };
   // 투표 시작 함수
   const startVote = (vote: IVote) => {
