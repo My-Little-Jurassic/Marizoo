@@ -18,9 +18,6 @@ const CardLabelLarge = function (props: IProps) {
     }
   });
 
-  const newTitle: string =
-    props.title.length > 10 ? props.title.substring(0, 14) + "..." : props.title;
-
   return (
     <StyledContainer>
       <StyledThumbnailContainer>
@@ -49,7 +46,7 @@ const CardLabelLarge = function (props: IProps) {
       </StyledThumbnailContainer>
 
       {/* 제목 */}
-      <StyledCardTitle>{newTitle}</StyledCardTitle>
+      <StyledCardTitle>{props.title}</StyledCardTitle>
     </StyledContainer>
   );
 };
@@ -162,6 +159,7 @@ const StyledCardTitle = styled.span`
   font: ${(props) => props.theme.fonts.mainContentBold};
   cursor: pointer;
   width: 100%;
+  display: block;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
