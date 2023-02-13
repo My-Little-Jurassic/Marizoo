@@ -16,3 +16,4 @@ export * from "./cafeDetail";
 export * from "./store";
 export * from "./broadcast";
 export * from "./home";
+export * from "./animalDetail";

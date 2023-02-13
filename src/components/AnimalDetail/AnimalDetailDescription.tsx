@@ -6,7 +6,6 @@ interface IProps {
   speciesInfo: ISpeciesInfo;
 }
 
-// 백엔드에 저장될 정보 정해지면 나머지 하기
 const AnimalDetailDescription = function (props: IProps) {
   return (
     <StyledContainer>
@@ -31,12 +30,12 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   color: ${(props) => props.theme.colors.primaryText};
-  gap: 16px;
 `;
 
 const StyledHeader = styled.div`
   font: ${(props) => props.theme.fonts.mainContentBold};
   font-size: 32px;
+  margin-bottom: 16px;
 `;
 
 const StyledColorHeader = styled.span`
@@ -47,6 +46,7 @@ const StyledSpan = styled.span`
   font: ${(props) => props.theme.fonts.mainContent};
   font-size: 24px;
   white-space: pre-line;
+  line-height: 56px;
 `;
 
 const StyledBold = styled.span`
