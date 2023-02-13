@@ -8,6 +8,8 @@ import StoreReservationNotNumber from "./StoreReservationNotNumber";
 import StoreReservationEmpty from "./StoreReservationEmpty";
 import StoreReservationAgree from "./StoreReservationAgree";
 import StoreReservationExceed from "./StoreReservationExceed";
+import RedirectToLogin from "./ReservationRedirectToLogin";
+import ReservationRedirectToLogin from "./ReservationRedirectToLogin";
 
 interface IProps {
   content: string;
@@ -41,6 +43,9 @@ const Modal = ({ content }: IProps): JSX.Element => {
 
       case "StoreReservationExceed":
         return <StoreReservationExceed onClose={onClose} />;
+
+      case "ReservationRedirectToLogin":
+        return <ReservationRedirectToLogin onClose={onClose} />;
 
       default:
         return <DefaultContent onClose={onClose} />;
