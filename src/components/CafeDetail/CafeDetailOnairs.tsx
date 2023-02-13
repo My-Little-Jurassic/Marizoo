@@ -24,7 +24,7 @@ function CafeDetailOnairs(props: { cafeId: number }) {
     if (cafeOnairList) {
       const newOnairSwiper = cafeOnairList.map((onair, index) => (
         <Link
-          to={`/broadcast/${onair.id}`}
+          to={`/broadcast/${onair.id}/${onair.sessionId}`}
           key={`data-${index}`}
           style={{ textDecoration: "none" }}
         >
