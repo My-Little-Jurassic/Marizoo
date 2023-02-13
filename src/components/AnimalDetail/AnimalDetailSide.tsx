@@ -75,20 +75,20 @@ const AnimalDetailSide = function (props: IProps) {
         <ProfileStore storeName={props.storeInfo.storeName} imgSrc={props.storeInfo.img} />
       </NavLink>
       {storeAnimalList !== null && (
-        <>
+        <div>
           <StyledSpan>카페 동물들</StyledSpan>
           <Grid container spacing={2}>
             {storeAnimalList}
           </Grid>
-        </>
+        </div>
       )}
       {sameSpeciesAnimalList !== null && (
-        <>
+        <div>
           <StyledSpan>같은 종의 동물들</StyledSpan>
           <Grid container spacing={2}>
             {sameSpeciesAnimalList}
           </Grid>
-        </>
+        </div>
       )}
     </StyledContainer>
   );
@@ -98,9 +98,15 @@ export default AnimalDetailSide;
 
 const StyledContainer = styled.div`
   width: 100%;
+  padding-bottom: 16px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 48px;
+  & > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 `;
 
 const StyledSpan = styled.span`

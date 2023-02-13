@@ -29,6 +29,7 @@ const AnimalDetail = function () {
     if (params.animal_id === undefined) {
       return;
     }
+    scrollTo(0, 0);
     getAnimalDetail(params.animal_id)
       .then((res) => {
         res.data.speciesInfo.info = res.data.speciesInfo.info.replace(/\./g, ".\n");
@@ -38,7 +39,10 @@ const AnimalDetail = function () {
         setSpeciesInfo(res.data.speciesInfo);
         setStoreInfo(res.data.storeInfo);
       })
-      .catch(() => navigate("/404", { replace: true }));
+      .catch((err) => {
+        console.log(err);
+        navigate("/404", { replace: true });
+      });
   }, [params.animal_id]);
 
   return (
@@ -53,6 +57,9 @@ const AnimalDetail = function () {
               storeInfo={storeInfo}
             />
           </StyledLeftSide>
+
+          <StyledHr />
+
           <StyledRightSide>
             <AnimalDetailProfile
               animalInfo={animalInfo}
@@ -76,7 +83,7 @@ const StyledContainer = styled.div`
   gap: 40px;
   @media screen and (max-width: 1200px) {
     flex-direction: column-reverse;
-    gap: 64px;
+    gap: 32px;
   }
 `;
 
@@ -104,5 +111,14 @@ const StyledRightSide = styled.div`
   gap: 40px;
   @media screen and (max-width: 800px) {
     width: 100%;
+  }
+`;
+
+const StyledHr = styled.hr`
+  width: 100%;
+  color: ${(props) => props.theme.colors.primaryText};
+  display: none;
+  @media screen and (max-width: 1200px) {
+    display: block;
   }
 `;

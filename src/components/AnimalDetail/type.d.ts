@@ -9,9 +9,9 @@ export interface IAnimalInfo {
 }
 
 export interface IBroadcastInfo {
-  id: number;
-  sessionId: string;
-  status: string;
+  broadcastId: number;
+  sessionId: number;
+  onair: boolean;
 }
 
 export interface IFeed {
