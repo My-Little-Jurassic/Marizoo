@@ -1,5 +1,6 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
+import { postBroadcastFeeds } from "../../../api";
 import { IFeed } from "../../../types";
 
 interface IProps {
@@ -15,35 +16,17 @@ const BroadcastVoteTable = ({ animalIdList, setFeedList }: IProps) => {
   const [feeds, setFeeds] = useState<ISelectFeed[]>([]);
 
   useEffect(() => {
-    initFeeds().then((val) => setFeeds(val));
-  }, []);
+    getFeedList.then((val) => setFeeds(val));
+  }, [animalIdList]);
 
   // 먹이 정보를 가져오는 함수
-  const initFeeds = async (): Promise<ISelectFeed[]> => {
-    return [
-      {
-        id: 1,
-        name: "밀웜",
-        img: "test.png",
-        select: false,
-        numberOfVotes: 0,
-      },
-      {
-        id: 2,
-        name: "귀뚜라미",
-        img: "test.png",
-        select: false,
-        numberOfVotes: 0,
-      },
-      {
-        id: 3,
-        name: "개미",
-        img: "test.png",
-        select: false,
-        numberOfVotes: 0,
-      },
-    ];
-  };
+  const getFeedList = useMemo(async (): Promise<ISelectFeed[]> => {
+    return animalIdList.length
+      ? postBroadcastFeeds({ animalIdList })
+          .then((res) => res.data.feeds)
+          .catch(() => [])
+      : [];
+  }, [animalIdList]);
   const changeFeeds = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     const newFeeds = feeds.map((feed) => {
@@ -62,14 +45,23 @@ const BroadcastVoteTable = ({ animalIdList, setFeedList }: IProps) => {
         </tr>
       </thead>
       <tbody>
-        {feeds.map((feed, index) => (
-          <tr key={index}>
-            <td>{feed.name}</td>
-            <td>
-              <input type="checkbox" value={feed.id} onChange={changeFeeds} checked={feed.select} />
-            </td>
-          </tr>
-        ))}
+        {!feeds.length ? (
+          <tr>먹일 수 있는 먹이가 없습니다!</tr>
+        ) : (
+          feeds.map((feed, index) => (
+            <tr key={index}>
+              <td>{feed.name}</td>
+              <td>
+                <input
+                  type="checkbox"
+                  value={feed.id}
+                  onChange={changeFeeds}
+                  checked={feed.select}
+                />
+              </td>
+            </tr>
+          ))
+        )}
       </tbody>
     </StyledTable>
   );
