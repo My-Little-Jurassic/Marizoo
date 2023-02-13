@@ -11,7 +11,7 @@ const Home = (): JSX.Element => {
     setId(e.target.value);
   };
   const onSubmit = () => {
-    navigate(`/broadcast/${id}`);
+    navigate(`broadcast/${id}`);
   };
 
   return (

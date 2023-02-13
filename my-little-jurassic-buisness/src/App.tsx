@@ -18,6 +18,12 @@ function App() {
         <Routes>
           <Route path={"/"} element={<Home />} />
           <Route path={"/broadcast/:id"} element={<Broadcast />} />
+
+          {/* 포트포워딩에 문제가 있을 경우 아래를 따라가도록 합니다 */}
+          <Route path="owner">
+            <Route index element={<Home />} />
+            <Route path={"broadcast/:id"} element={<Broadcast />} />
+          </Route>
         </Routes>
       </div>
     </ThemeProvider>
