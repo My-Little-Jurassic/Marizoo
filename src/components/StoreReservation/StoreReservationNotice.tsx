@@ -4,7 +4,7 @@ import styled from "styled-components";
 import CheckBtn from "./CheckBtn";
 import { openModal, setContent } from "../../store/modalSlice";
 import { IPlayInfo } from "./type";
-import { useParams } from "react-router-dom";
+import { redirect, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { makeReservation } from "../../api";
 
@@ -18,10 +18,17 @@ const StoreReservationNotice = function (props: IProps) {
   const [checked, setChecked] = useState<boolean>(false);
   const params = useParams();
 
-  const uid = useAppSelector((state) => state.user.uid);
+  // const uid = useAppSelector((state) => state.user.uid);
+  const uid = "seungwoon";
   const dispatch = useAppDispatch();
 
   const reserve = function () {
+    if (!uid) {
+      dispatch(setContent("ReservationRedirectToLogin"));
+      dispatch(openModal());
+      return;
+    }
+
     if (props.numberOfVisitor === null || props.numberOfVisitor === 0) {
       dispatch(setContent("StoreReservationEmpty"));
       dispatch(openModal());
@@ -44,7 +51,7 @@ const StoreReservationNotice = function (props: IProps) {
     }
 
     if (uid && params.play_id && props.numberOfVisitor) {
-      makeReservation({ uid, playId: params.play_id, totalVisitor: props.numberOfVisitor })
+      makeReservation(uid, params.play_id, props.numberOfVisitor)
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
     }
@@ -99,7 +106,7 @@ const StyledNoticeBox = styled.div`
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  max-height: 168px;
+  max-height: 184px;
   overflow: scroll;
   &::-webkit-scrollbar {
     display: none;

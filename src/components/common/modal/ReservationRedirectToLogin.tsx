@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { GreenBtn } from "../button";
 
@@ -7,19 +7,21 @@ interface IProps {
   onClose(): void;
 }
 
-const BroadcastFinish = ({ onClose }: IProps): JSX.Element => {
+const ReservationRedirectToLogin = ({ onClose }: IProps): JSX.Element => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    return () => {
-      navigate("/", { replace: true });
-    };
-  }, []);
+  const goToLogin = function () {
+    onClose();
+    navigate(`/login`);
+  };
 
   return (
     <StyledDiv>
-      <h1>방송이 종료되었습니다</h1>
-      <GreenBtn label={"확인"} type={0} isDisable={false} onClick={onClose} />
+      <h1>로그인 후 이용해주세요</h1>
+      <div>
+        <GreenBtn label={"로그인"} type={0} isDisable={false} onClick={goToLogin} />
+        <GreenBtn label={"돌아가기"} type={2} isDisable={false} onClick={onClose} />
+      </div>
     </StyledDiv>
   );
 };
@@ -49,6 +51,11 @@ const StyledDiv = styled.div`
   & > span {
     font: ${({ theme }) => theme.fonts.mainContent};
   }
+
+  & > div {
+    display: flex;
+    gap: 16px;
+  }
 `;
 
-export default BroadcastFinish;
+export default ReservationRedirectToLogin;

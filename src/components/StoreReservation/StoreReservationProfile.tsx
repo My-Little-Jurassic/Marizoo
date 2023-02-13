@@ -12,7 +12,7 @@ const StoreReservationProfile = function (props: IProps) {
   const navigate = useNavigate();
 
   return (
-    <StyledContainer onClick={() => navigate(`/cafe/${params.cafe_id}`, { replace: true })}>
+    <StyledContainer onClick={() => navigate(`/cafe/${params.cafe_id}`, { replace: false })}>
       <StyledTitle>{props.storeInfo.storename}</StyledTitle>
       <StyledSpan>{props.storeInfo.address}</StyledSpan>
       <StyledSpan>{props.storeInfo.tel}</StyledSpan>
@@ -40,6 +40,9 @@ const StyledContainer = styled.div`
   &:active {
     transform: scale(1);
     filter: brightness(0.9);
+  }
+  @media screen and (max-width: 1024px) {
+    height: 100%;
   }
 `;
 

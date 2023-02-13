@@ -1,5 +1,4 @@
 import instance from "..";
-import { IBookInfo } from "./type";
 
 /**
  * GET: 예약 정보
@@ -11,6 +10,6 @@ export async function getReservationDetail(cafe_id: string, play_id: string) {
 /**
  * POST: 예약하기
  */
-export async function makeReservation(data: IBookInfo) {
-  return instance.post(`/stores/books`, { data });
+export async function makeReservation(uid: string, playId: string, totalVisitor: number) {
+  return instance.post(`/stores/books`, { uid, playId, totalVisitor });
 }
