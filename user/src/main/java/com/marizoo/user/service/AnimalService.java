@@ -38,9 +38,9 @@ public class AnimalService {
         BroadcastStatusDto broadcastStatusDto = animalRepository.findBroadcastStatus(animalId);
 
         if(broadcastStatusDto != null && broadcastStatusDto.getStatus() == BroadcastStatus.ONAIR){
-            return new AnimalBroadcastStatusDto(broadcastStatusDto.getId(), true);
+            return new AnimalBroadcastStatusDto(broadcastStatusDto.getId(), true, broadcastStatusDto.getSessionId());
         }
-        return new AnimalBroadcastStatusDto(-1L, false);
+        return new AnimalBroadcastStatusDto(-1L, false, "");
     }
 
     // 종에 해당하는 동물 목록 가져오기

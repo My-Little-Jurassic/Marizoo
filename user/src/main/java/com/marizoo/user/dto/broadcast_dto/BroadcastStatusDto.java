@@ -9,11 +9,13 @@ import lombok.Data;
 public class BroadcastStatusDto {
     private Long id;
     private BroadcastStatus status;
+    private String sessionId;
 
     @QueryProjection
-    public BroadcastStatusDto(Long id, BroadcastStatus broadcastStatus){
+    public BroadcastStatusDto(Long id, BroadcastStatus broadcastStatus, String sessionId){
         this.id = id;
         this.status = broadcastStatus;
+        this.sessionId = sessionId;
     }
 
 }

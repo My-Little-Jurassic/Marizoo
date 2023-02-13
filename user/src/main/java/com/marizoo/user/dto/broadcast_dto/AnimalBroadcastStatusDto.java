@@ -7,5 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class AnimalBroadcastStatusDto {
     private Long broadcastId;
-    private boolean isOnair;
+    private boolean isOnAir;
+    private String sessionId;
 }

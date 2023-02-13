@@ -196,7 +196,7 @@ public class StoreController {
         log.info("!!!!" + aDDto.getAnimal().toString());
         log.info("!!!!" + aDDto.getAnimalStore().toString());
         log.info("!!!!" + aDDto.getSpecies().toString());
-        log.info("!!!!" + animalBroadcastStatusDto.isOnair());
+        log.info("!!!!" + animalBroadcastStatusDto.isOnAir());
         log.info("!!!!" + feeds.toString());
 
         Animal animal = aDDto.getAnimal();

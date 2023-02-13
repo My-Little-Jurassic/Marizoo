@@ -27,7 +27,7 @@ public class AnimalRepositoryImpl implements AnimalRepositoryCustom{
     public BroadcastStatusDto findBroadcastStatus(Long animalId){
         BroadcastStatus bstatus = BroadcastStatus.ONAIR;
         BroadcastStatusDto status = queryFactory
-                .select(new QBroadcastStatusDto(broadcast.id, broadcast.status))
+                .select(new QBroadcastStatusDto(broadcast.id, broadcast.status, broadcast.sessionId))
                 .from(broadcastAnimal)
                 .join(broadcastAnimal.broadcast, broadcast)
                 .where(broadcastAnimal.animal.id.eq(animalId), broadcast.status.eq(bstatus))
