@@ -25,7 +25,7 @@ const MypageStoreReservationItem = ({ item }: IProps): JSX.Element => {
 };
 
 const StyledDiv = styled.div`
-  /* box-sizing: border-box;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -44,7 +44,7 @@ const StyledDiv = styled.div`
     & > img {
       width: 100%;
     }
-  } */
+  }
 `;
 
 export default MypageStoreReservationItem;

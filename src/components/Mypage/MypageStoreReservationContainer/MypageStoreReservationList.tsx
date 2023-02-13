@@ -64,7 +64,7 @@ const MypageStoreReservationList = () => {
       elementList={storeReservationList.map((item, index) => (
         <MypageStoreReservationItem key={index} item={item} />
       ))}
-      slidesPerView={4}
+      slidesPerView={"auto"}
       spaceBetween={32}
     />
   );

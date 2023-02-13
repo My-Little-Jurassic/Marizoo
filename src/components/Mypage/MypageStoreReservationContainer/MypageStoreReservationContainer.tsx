@@ -22,16 +22,16 @@ const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: visible;
   & > h2 {
     box-sizing: border-box;
     max-width: 1088px;
     width: 100%;
-    padding: 0 16px;
   }
   & > div {
     overflow: visible;
     box-sizing: border-box;
-    padding: 0 16px;
+    padding: 0;
     width: 100%;
     max-width: 1088px;
   }
