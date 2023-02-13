@@ -7,7 +7,7 @@ export function validateIdLength(value: string): boolean {
 }
 
 /**
- * 영문 소문자와 숫자로만 이루어져야 함
+ * 영문 소문자나 숫자로만 이루어져야 함
  */
 export function validateIdChar(value: string): boolean {
   const regExp = /[^a-z0-9] *?/g;
@@ -44,4 +44,10 @@ export function validateEmail(value: string): boolean {
 export function validatePhoneNumber(value: string): boolean {
   const regExp = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
   return regExp.test(value);
+}
+
+// nickname
+export function validateNickname(value: string): boolean {
+  const regExp = /[^a-zA-Z0-9가-힣] *?/g;
+  return !regExp.test(value) && value.length > 0;
 }
