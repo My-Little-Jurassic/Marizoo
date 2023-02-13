@@ -3,7 +3,6 @@ package com.marizoo.user.service;
 import com.marizoo.user.api.MyPageRequestApi;
 import com.marizoo.user.api.PwdChangeRequestApi;
 import com.marizoo.user.api.WatchEndRequestApi;
-import com.marizoo.user.constant.BadgeCondition;
 import com.marizoo.user.dto.BadgeDto;
 import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.MailDto;
@@ -21,12 +20,14 @@ import com.marizoo.user.repository.reservation_repo.UsersPlayRepository;
 import com.marizoo.user.repository.UsersBadgeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NonUniqueResultException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -47,6 +48,19 @@ public class UserService {
     private final JavaMailSender mailSender;
 
     private final BCryptPasswordEncoder encoder;
+
+    public boolean isDuplicatedEmail(String email) {
+        try {
+            if (userRepository.findByEmail(email).isPresent()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (NonUniqueResultException | IncorrectResultSizeDataAccessException e) {
+            log.error(e.getMessage());
+            return false;
+        }
+    }
 
     public boolean isDuplicatedUid(String uid) {
         return !userRepository.findByUid(uid).isPresent();

@@ -45,7 +45,7 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity join(@RequestBody JoinRequestDto joinRequestDto) {
 
-        if (userRepository.findByEmail(joinRequestDto.getEmail()).isPresent()) {
+        if (userService.isDuplicatedEmail(joinRequestDto.getEmail())) {
             throw new AlreadyJoinException("이미 가입된 이메일입니다.");
         }
 
