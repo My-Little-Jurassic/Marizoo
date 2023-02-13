@@ -15,6 +15,7 @@ public class DeployTest {
     @GetMapping("/welcome")
     public String welcome() throws UnknownHostException {
         InetAddress ipAddress = InetAddress.getLocalHost();
+
         return String.format("welcome to the operator service!!!!"
                 + "my public IP is " + ipAddress);
     }
