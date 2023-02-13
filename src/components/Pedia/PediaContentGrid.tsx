@@ -15,7 +15,7 @@ const PediaContentGrid = (props: IProps): JSX.Element => {
   const [speciesAnimalList, setSpeciesAnimalList] = useState<JSX.Element[] | null>(null);
 
   useEffect(() => {
-    if (props.selectedSpeciesId !== null) {
+    if (props.selectedSpeciesId) {
       getSpeciesAnimalList(props.selectedSpeciesId)
         .then((res) => {
           setSpeciesAnimalDataList(res.data.animals);
