@@ -5,6 +5,7 @@ import com.marizoo.owner.api.request.CreateVoteRequest;
 import com.marizoo.owner.api.request.EndVoteRequest;
 import com.marizoo.owner.api.response.CreateBroadcastResponse;
 import com.marizoo.owner.dto.CreateBroadcastDto;
+import com.marizoo.owner.entity.Vote;
 import com.marizoo.owner.service.BroadcastService;
 import com.marizoo.owner.service.FeedService;
 import com.marizoo.owner.service.VoteService;
@@ -74,48 +75,19 @@ public class BroadcastController {
         }
     }
 
-    @ApiOperation(value = "방송 종료")
-    @PutMapping("/broadcasts/{broadcast_id}")
-    public ResponseEntity<?> endBroadcast(@PathVariable("broadcast_id") @ApiParam(value = "방송 id", example = "1") Long broadcastId){
-        boolean result = broadcastService.saveEndTime(broadcastId);
-        if(result){
-            return new ResponseEntity<>("방송 종료 성공", HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>("방송 종료 실패 :(", HttpStatus.BAD_REQUEST);
+    @ApiOperation(value = "방송 종료 및 방송에서 진행된 투표 정보 저장")
+    @PostMapping("/broadcasts/{broadcast_id}")
+    public ResponseEntity<?> endBroadcast
+            (@PathVariable("broadcast_id") @ApiParam(value = "방송 id", example = "1") Long broadcastId,
+             @ApiParam(value = "투표정보") @RequestBody EndVoteRequest endVoteRequest){
+        Vote vote = voteService.endVote(broadcastId, endVoteRequest.getTitle(), endVoteRequest.getResult());
+        boolean result = broadcastService.saveEndTime(broadcastId, vote);
+        if(!result){
+            return new ResponseEntity<>("방송 종료 시간 저장 실패", HttpStatus.BAD_GATEWAY);
         }
-    }
 
-    @ApiOperation("broadcast_id 방송에 투표 생성하기")
-    @PostMapping("/broadcasts/{broadcast_id}/vote")
-    public ResponseEntity<?> createVote(@PathVariable("broadcast_id") @ApiParam(value = "방송 id", example = "1") Long broadcastId, @RequestBody CreateVoteRequest createVoteRequest){
-        Long voteId = voteService.createVote(broadcastId, createVoteRequest.getVoteInfo().getTitle(), createVoteRequest.getVoteInfo().getFeedIdList());
-        if(voteId != null){
-            return new ResponseEntity<>(voteId, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>("투표 생성 실패 :(", HttpStatus.BAD_REQUEST);
-        }
-    }
+        return new ResponseEntity<>("방송 종료", HttpStatus.OK);
 
-    @ApiOperation(value = "broadcast_id에 해당하는 투표 종료하기")
-    @PutMapping("/broadcasts/{broadcast_id}/vote")
-    public ResponseEntity<?> endVote(@PathVariable("broadcast_id") @ApiParam(value = "방송 id", example = "1") Long broadcastId, @RequestBody EndVoteRequest endVoteRequest){
-        voteService.endVote(broadcastId, endVoteRequest.getVoteInfo().getVoteId(),  endVoteRequest.getVoteInfo().getResult());
-        return new ResponseEntity<>("투표 종료", HttpStatus.OK);
-    }
-
-    // session id랑 broadcast id를 주기로 했는데 token도 같이 주는 게 나으려나 결국 ㅇowner는 createBroadcast랑 createConnection을 둘 다 불러야 해서
-    @PostMapping("/broadcasts/connections")
-    public ResponseEntity<?> createConnection(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException{
-        log.info("---------------------------------createConnection--------------------------------------");
-        Session session = openvidu.getActiveSession(sessionId);
-        if (session == null) {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        Map<String, Object> params = null;
-        ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
-        Connection connection = session.createConnection(properties);
-        log.info("-----------------------------------------------------------------------");
-        return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
 
 }
