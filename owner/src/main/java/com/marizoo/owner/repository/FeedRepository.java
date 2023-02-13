@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface FeedRepository extends JpaRepository<Feed, Long> {
-    @Query("select f from Feed f join f.animalFeeds af where af.animal.id in :animalIdList")
+    @Query("select distinct f from Feed f join f.animalFeeds af where af.animal.id in :animalIdList")
     List<Feed> findFeedListFromAnimalId(@Param("animalIdList") List<Long> animalIdList);
 
 
