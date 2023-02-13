@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import PediaContent from "./PediaContent";
 import PediaSpeciesList from "./PediaSpeciesList";
+import { ISpecies } from "./type";
 
 const PediaContainer = (): JSX.Element => {
-  const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | null>(null);
+  const [selectedSpecies, setSelectedSpecies] = useState<ISpecies | null>(null);
 
   useEffect(() => {
     const lensImg: Element | null = document.querySelector("#lens");
@@ -26,7 +27,7 @@ const PediaContainer = (): JSX.Element => {
         duration: 1000, // 시간
       },
     );
-  }, [selectedSpeciesId]);
+  }, [selectedSpecies]);
 
   return (
     <StyledPediaContainer>
@@ -41,10 +42,10 @@ const PediaContainer = (): JSX.Element => {
       </div>
       <div id="main">
         <PediaSpeciesList
-          selectedSpeciesId={selectedSpeciesId}
-          setSelectedSpeciesId={setSelectedSpeciesId}
+          selectedSpecies={selectedSpecies}
+          setSelectedSpecies={setSelectedSpecies}
         ></PediaSpeciesList>
-        <PediaContent selectedSpeciesId={selectedSpeciesId}></PediaContent>
+        <PediaContent selectedSpecies={selectedSpecies}></PediaContent>
       </div>
     </StyledPediaContainer>
   );
@@ -93,7 +94,7 @@ const StyledPediaContainer = styled.main`
   }
   @media screen and (max-width: 600px) {
     margin-top: 60px;
-    margin-bottom: 80px;
+    margin-bottom: 64px;
   }
   @media screen and (min-width: 900px) {
     margin-top: 156px;
@@ -163,5 +164,10 @@ const StyledPediaContainer = styled.main`
     display: flex;
     height: calc(100% - 190px);
     flex-grow: 1;
+    @media screen and (max-width: 600px) {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
   }
 `;
