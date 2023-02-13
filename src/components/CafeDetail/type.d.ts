@@ -12,6 +12,7 @@ export interface ICafeDetail {
   prifileImg: string;
   lat: number;
   lng: number;
+  following: boolean;
 }
 
 export interface ICafeAnimal {
@@ -24,6 +25,7 @@ export interface ICafeAnimal {
 
 export interface ICafeOnair {
   id: number;
+  sessionId: string;
   title: string;
   thumbnail: string;
   classificationImgs: string[];

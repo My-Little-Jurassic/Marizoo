@@ -18,6 +18,9 @@ const CardLabelLarge = function (props: IProps) {
     }
   });
 
+  const newTitle: string =
+    props.title.length > 10 ? props.title.substring(0, 14) + "..." : props.title;
+
   return (
     <StyledContainer>
       <StyledThumbnailContainer>
@@ -46,7 +49,7 @@ const CardLabelLarge = function (props: IProps) {
       </StyledThumbnailContainer>
 
       {/* 제목 */}
-      <StyledCardTitle>{props.title}</StyledCardTitle>
+      <StyledCardTitle>{newTitle}</StyledCardTitle>
     </StyledContainer>
   );
 };

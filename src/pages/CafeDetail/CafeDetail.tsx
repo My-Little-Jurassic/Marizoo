@@ -8,6 +8,7 @@ import CafeBg from "../../components/CafeDetail/CafeBg";
 import CafeDetailMain from "../../components/CafeDetail/CafeDetailMain";
 import CafeDetailProfile from "../../components/CafeDetail/CafeDetailProfile";
 import { GrayBtn } from "../../components/common/button";
+import { useAppSelector } from "../../store";
 
 interface ICafeInfo {
   storeId: number;
@@ -20,17 +21,19 @@ interface ICafeInfo {
   prifileImg: string;
   lat: number;
   lng: number;
+  following: boolean;
 }
 
 function CafeDetail() {
   const [cafeInfo, setCafeInfo] = useState<ICafeInfo>();
+  const pk = useAppSelector((state) => state.user.pk);
 
   const navigate = useNavigate();
 
   const params = useParams();
   useEffect(() => {
     if (params.cafe_id) {
-      getStoreDetail(params.cafe_id)
+      getStoreDetail(params.cafe_id, pk)
         .then((res) => {
           setCafeInfo(res.data);
         })
