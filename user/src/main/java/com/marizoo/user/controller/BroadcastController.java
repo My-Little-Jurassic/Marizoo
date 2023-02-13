@@ -60,18 +60,33 @@ public class BroadcastController {
     }
 
     @ApiOperation(value = "broadcast_id에 해당하는 방송 정보를 가져오기", notes = "방송 정보, 방송 출연 동물 정보, 방송 가게 정보")
-    @GetMapping("/broadcasts/{broadcast_id}/{session_id}")
+    @PostMapping("/broadcasts/{broadcast_id}/{session_id}")
     public ResponseEntity<?> getBroadcastInfo
             (@PathVariable("broadcast_id") @ApiParam(name = "방송 id", required = true, example = "1") Long broadcastId,
              @PathVariable("session_id") @ApiParam(name = "세션 id", required = true) String sessionId)
             throws OpenViduJavaClientException, OpenViduHttpException {
+        log.info("---------------------------------path variable--------------------------------------");
+        log.info(("broadcast_id : " + broadcastId));
+        log.info(("session_id : " + sessionId));
+
         // broadcast_id에 해당하는 방송 정보 가져오기.
         log.info("---------------------------------createConnection--------------------------------------");
         Map<String, Object> params = null;
+        boolean fetch = openvidu.fetch();
+        log.info(("fetch : " + fetch));
+
+        List<Session> sessions = openvidu.getActiveSessions();
+        log.info(("sessions size : " + sessions.size()));
+
+
         Session session = openvidu.getActiveSession(sessionId);
+        log.info(("session : " + session));
+
         if (session == null) {
+            log.info("!!!!!!!!!!!!session null!!!!!!!!!!!!!!!");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        log.info("getSessionId : " + session.getSessionId());
         ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
         Connection connection = session.createConnection(properties);
         log.info("-----------------------------------------------------------------------");

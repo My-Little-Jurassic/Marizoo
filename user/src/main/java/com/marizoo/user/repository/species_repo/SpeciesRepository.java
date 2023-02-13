@@ -9,6 +9,5 @@ public interface SpeciesRepository extends JpaRepository<Species, Long> {
 
     Species findSpeciesById(Long speciesId);
 
-    @Query("select s from Animal a join a.species s where s.id = :animalId")
-    Species findSpeciesByAnimalId(@Param("animalId") Long animalId);
+
 }

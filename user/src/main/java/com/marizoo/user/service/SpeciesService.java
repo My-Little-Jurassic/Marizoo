@@ -29,18 +29,6 @@ public class SpeciesService {
         return speciesDto;
     }
 
-    public SpeciesWholeDto findSpeciesDetail(Long animalId){
-        Species species = speciesRepository.findSpeciesByAnimalId(animalId);
-        SpeciesWholeDto speciesWholeDto = new SpeciesWholeDto(
-                species.getId(),
-                species.getHabitat(),
-                species.getClassification(),
-                species.getLifeSpan(),
-                species.getInfo(),
-                species.getClassificationImg()
-        );
-        return speciesWholeDto;
-    }
 
     // 종 정보 목록 가져오기
     public List<SpeciesListDto> getSpecies(){

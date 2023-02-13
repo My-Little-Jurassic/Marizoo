@@ -1,15 +1,18 @@
 package com.marizoo.user;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/user/")
+@Slf4j
 public class DeployCheck {
 
     @GetMapping("/welcome")
-    public String welcome(){
-        return "welcome to the user service!!!!!!";
+    public String welcome() {
+        log.info("배포 health-check");
+        return "welcome to the user service!!!!!!@@!!!!zzzzfff slack";
     }
 }

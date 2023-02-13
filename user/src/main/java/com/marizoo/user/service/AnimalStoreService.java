@@ -15,6 +15,7 @@ import com.marizoo.user.repository.broadcast_repo.BroadcastRepository;
 import com.marizoo.user.repository.play_repo.PlayRepository;
 import com.marizoo.user.repository.reservation_repo.UsersPlayRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class AnimalStoreService {
 
     private final UserRepository userRepository;
@@ -51,7 +53,8 @@ public class AnimalStoreService {
      */
 
     public AnimalStoreWholeDto findAnimalStore(Long storeId, Long userId) {
-        AnimalStore animalStore = animalStoreRepository.findAnimalStoreAndFollowersById(storeId).get();
+        log.info("가게 아이디로 가게 조회, 가게 아이디 = {} 유저 아이디 = {}", storeId, userId);
+        AnimalStore animalStore = animalStoreRepository.findById(storeId).get();
 
         boolean followFlag = false;
         List<UsersAnimalStore> followers = animalStore.getFollowers();
@@ -135,10 +138,7 @@ public class AnimalStoreService {
          return new PlayAndStoreInfoResponse(playInfoDto, storeInfoDto);
      }
 
-    public StoreSubDto findStoreSubDto(Long animalId){
-         AnimalStore animalStore = animalStoreRepository.findAnimalStoreSubInfo(animalId);
-         return new StoreSubDto(animalStore.getId(), animalStore.getStoreName(), animalStore.getProfileImg());
-    }
+
 
 
 }
