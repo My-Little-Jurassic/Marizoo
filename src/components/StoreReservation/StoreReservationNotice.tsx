@@ -18,8 +18,7 @@ const StoreReservationNotice = function (props: IProps) {
   const [checked, setChecked] = useState<boolean>(false);
   const params = useParams();
 
-  // const uid = useAppSelector((state) => state.user.uid);
-  const uid = "seungwoon";
+  const uid = useAppSelector((state) => state.user.uid);
   const dispatch = useAppDispatch();
 
   const reserve = function () {
