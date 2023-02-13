@@ -26,6 +26,9 @@ function CafeDetailPlays(props: { cafeId: number }) {
           <StyledCafePlays imgSrc={play.img}>
             <div>
               <label>{play.title}</label>
+              <label>{play.description}</label>
+              <label>{play.playDateTime.substring(0, 10)}</label>
+              <label>{play.playDateTime.substring(11, 16)}</label>
             </div>
           </StyledCafePlays>
         </Link>
@@ -60,12 +63,32 @@ export default React.memo(CafeDetailPlays);
 const StyledCafePlays = styled.div<{ imgSrc: string }>`
   ${({ theme }) => theme.styles.card};
   cursor: pointer;
+  width: 100%;
   height: 300px;
   background: linear-gradient(180deg, rgba(2, 0, 36, 0) 40%, rgba(0, 0, 0, 0.7) 100%),
     url(${({ imgSrc }) => imgSrc});
   background-size: cover;
   display: inline-block;
-  & div {
+  &:hover {
+    background: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 50%),
+      url(${({ imgSrc }) => imgSrc});
+    background-size: cover;
+    & div {
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    & div :nth-child(1) {
+      display: none;
+    }
+    & div :nth-child(2),
+    & div :nth-child(3),
+    & div :nth-child(4) {
+      display: inline-block;
+      pointer-events: none;
+    }
+  }
+  & > div {
     width: 100%;
     height: 100%;
     display: flex;
@@ -73,10 +96,21 @@ const StyledCafePlays = styled.div<{ imgSrc: string }>`
     padding: 24px;
     box-sizing: border-box;
   }
-  & label {
+  & div :nth-child(1) {
     white-space: normal;
     word-break: break-all;
     font: ${({ theme }) => theme.fonts.mainContentBold};
     color: ${({ theme }) => theme.colors.brandColors.basaltGray[50]};
+    cursor: pointer;
+  }
+  & div :nth-child(2),
+  & div :nth-child(3),
+  & div :nth-child(4) {
+    display: none;
+    white-space: normal;
+    word-break: break-all;
+    font: ${({ theme }) => theme.fonts.mainContentBold};
+    color: ${({ theme }) => theme.colors.brandColors.basaltGray[50]};
+    cursor: pointer;
   }
 `;
