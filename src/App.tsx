@@ -35,8 +35,7 @@ function App() {
         <Route path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/regist" element={<Regist />}></Route>
-        <Route path="/account" element={<Mypage />} />
-        {/* <Route path="/user/:user_id" element={}></Route> */}
+        <Route path="/user/:user_id" element={<Mypage />}></Route>
         {/* <Route path="/user/:user_id/set_account" element={}></Route> */}
         {/* <Route path="/find_account" element={}></Route> */}
         <Route path="/broadcast/:broadcast_id/:session_id" element={<Broadcast />}></Route>
