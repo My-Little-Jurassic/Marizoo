@@ -15,11 +15,17 @@ eureka:
 spring:
   application:
     name: owner
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://3.36.112.78:3306/marizoo?
-    username: ssafy # MySQL DB Username
-    password: ssafy # MySQL DB password
+  config:
+    import: "optional:configserver:http://3.36.112.78:7777/"
+  cloud:
+    config:
+      name: user, owner
+      profile: default
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://3.36.112.78:3306/marizoo?
+#    username: # MySQL DB Username
+#    password: # MySQL DB password
 
   servlet:
     multipart:
@@ -39,9 +45,9 @@ spring:
 
 cloud:
   aws:
-    credentials:
-      access-key:  # 이성복한테 문의
-      secret-key:  # 이성복한테 문의
+#    credentials:   # 암호화 완료
+#      access-key:  # 이성복한테 문의
+#      secret-key:  # 이성복한테 문의
     s3:
       bucket: marizoo
     region:
@@ -50,4 +56,4 @@ cloud:
       auto: false
 
 OPENVIDU_URL: https://i8b208.p.ssafy.io:8445/
-OPENVIDU_SECRET: MY_SECRET
+#OPENVIDU_SECRET: # 암호화 완료
