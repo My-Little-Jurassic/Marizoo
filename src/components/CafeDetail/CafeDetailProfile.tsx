@@ -30,7 +30,7 @@ function CafeDetailProfile(props: { cafeInfo: ICafeDetail }) {
     <StyledCafeDetailProfile>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={5} md={12}>
-          <StyledProfileImg imgSrc={props.cafeInfo.prifileImg} isFollowed={isFollowed}>
+          <StyledProfileImg imgSrc={props.cafeInfo.profileImg} isFollowed={isFollowed}>
             <p>{props.cafeInfo.storename}</p>
             {pk && (
               <div onClick={() => follow()}>

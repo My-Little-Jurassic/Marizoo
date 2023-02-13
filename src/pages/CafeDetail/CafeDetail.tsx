@@ -18,7 +18,7 @@ interface ICafeInfo {
   openingHours: string;
   tel: string;
   email: string;
-  prifileImg: string;
+  profileImg: string;
   lat: number;
   lng: number;
   following: boolean;
