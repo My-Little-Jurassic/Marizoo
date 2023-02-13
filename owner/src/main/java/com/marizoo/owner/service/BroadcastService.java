@@ -38,13 +38,14 @@ public class BroadcastService {
      * @param broadcastId : 방송 PK
      * @return boolean
      */
-    public boolean saveEndTime(Long broadcastId){
+    public boolean saveEndTime(Long broadcastId, Vote vote){
         Optional<Broadcast> opt = broadcastRepository.findById(broadcastId);
         if(opt.isEmpty()){
             return false;
         }
         Broadcast broadcast = opt.get();
         broadcast.setEndTime();
+        broadcast.setVote(vote);
         broadcastRepository.save(broadcast);
         return true;
     }
