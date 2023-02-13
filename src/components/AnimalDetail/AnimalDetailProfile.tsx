@@ -22,7 +22,7 @@ const AnimalDetailProfile = function (props: IProps) {
   });
 
   useEffect(() => {
-    if (props.broadcastInfo.onair === false) {
+    if (!props.broadcastInfo.onAir) {
       setStatusBtn(<AnimalDetailRedBtn label="지금은 쉬고 있어요" type={1} isDisable={true} />);
     } else {
       setStatusBtn(
@@ -114,7 +114,7 @@ const StyledStatusButton = styled.button<{ status: string }>`
   box-shadow: 2px 2px 8px rgba(67, 67, 67, 0.2);
   cursor: pointer;
   ${(props) =>
-    props.status === "onair"
+    props.status === "onAir"
       ? `background: ${props.theme.colors.red}
       &:hover {
 

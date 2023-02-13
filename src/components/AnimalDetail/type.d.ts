@@ -11,7 +11,7 @@ export interface IAnimalInfo {
 export interface IBroadcastInfo {
   broadcastId: number;
   sessionId: number;
-  onair: boolean;
+  onAir: boolean;
 }
 
 export interface IFeed {
