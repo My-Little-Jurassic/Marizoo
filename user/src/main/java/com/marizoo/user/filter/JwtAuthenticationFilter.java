@@ -108,7 +108,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .httpOnly(true)
                 .maxAge(RT_EXP_TIME)
                 .domain("localhost")
-                .path("/refresh")
+                .path("/api/user/refresh")
                 .sameSite("none")
                 .secure(true)
                 .build();
