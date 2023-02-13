@@ -12,10 +12,11 @@
         </layout>
     </appender>
 
-    
+
     <!-- File에 로그 출력 세팅 -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
+        
         <!-- 출력패턴 설정-->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>${LOG_PATTERN}</pattern>
