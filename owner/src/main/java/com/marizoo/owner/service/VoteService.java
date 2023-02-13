@@ -27,8 +27,11 @@ public class VoteService {
         List<FeedVote> feedVoteList = new ArrayList<>();
         for (EndVoteFeedDto endVoteFeedDto : endVoteFeedDtoList) {
             Feed feed = feedRepository.findById(endVoteFeedDto.getFeedId()).orElseThrow(
-                    () -> new RuntimeException("먹이가 없습니다")
+                    () -> new RuntimeException("먹이가 없습니다.")
             );
+            if(endVoteFeedDto.getCount() == null){
+                throw new RuntimeException("득표수가 없습니다.");
+            }
             FeedVote feedVote = FeedVote.createFeedVote(feed, endVoteFeedDto.getCount());
             feedVoteList.add(feedVote);
         }

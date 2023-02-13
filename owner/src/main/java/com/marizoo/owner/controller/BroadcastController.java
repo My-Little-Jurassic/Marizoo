@@ -80,10 +80,16 @@ public class BroadcastController {
     public ResponseEntity<?> endBroadcast
             (@PathVariable("broadcast_id") @ApiParam(value = "방송 id", example = "1") Long broadcastId,
              @ApiParam(value = "투표정보") @RequestBody EndVoteRequest endVoteRequest){
-        Vote vote = voteService.endVote(broadcastId, endVoteRequest.getTitle(), endVoteRequest.getResult());
+
+        Vote vote = null;
+        try {
+            vote = voteService.endVote(broadcastId, endVoteRequest.getTitle(), endVoteRequest.getResult());
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
         boolean result = broadcastService.saveEndTime(broadcastId, vote);
         if(!result){
-            return new ResponseEntity<>("방송 종료 시간 저장 실패", HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>("방송 종료 시간 저장 실패", HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>("방송 종료", HttpStatus.OK);
