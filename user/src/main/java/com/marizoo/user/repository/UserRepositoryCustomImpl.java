@@ -43,13 +43,13 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public List<Badge> getBadgeList(Long userId) {
+    public User getBadgeList(Long userId) {
         return queryFactory
-                .select(badge).distinct()
+                .select(user).distinct()
                 .from(user)
                 .join(user.badgeList, usersBadge).fetchJoin()
                 .join(usersBadge.badge, badge).fetchJoin()
                 .where(user.id.eq(userId))
-                .fetch();
+                .fetchOne();
     }
 }

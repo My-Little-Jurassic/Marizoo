@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface UserRepositoryCustom {
     List<FavorStoreDto> getFavorStoreList(Long userId);
 
-    List<Badge> getBadgeList(Long userId);
+    User getBadgeList(Long userId);
 }
