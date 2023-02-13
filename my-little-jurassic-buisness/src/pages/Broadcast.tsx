@@ -80,18 +80,25 @@ const Broadcast = () => {
   const joinSession = async (token: string, setting: IBroadcastSetting) => {
     await session.connect(token);
     const { videoDevice } = setting;
-    const newPublisher = await OV.initPublisherAsync(undefined, {
-      audioSource: undefined, // The source of audio. If undefined default microphone
-      videoSource: videoDevice, // The source of video. If undefined default webcam
-      publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-      publishVideo: true, // Whether you want to start publishing with your video enabled or not
-      resolution: "640x480", // The resolution of your video
-      frameRate: 60, // The frame rate of your video
-      insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-      mirror: false, // Whether to mirror your local video or not
-    });
-    if (videoRef.current) newPublisher.addVideoElement(videoRef.current);
-    session.publish(newPublisher);
+
+    try {
+      const newPublisher = await OV.initPublisherAsync(undefined, {
+        audioSource: undefined, // The source of audio. If undefined default microphone
+        videoSource: videoDevice, // The source of video. If undefined default webcam
+        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+        publishVideo: true, // Whether you want to start publishing with your video enabled or not
+        resolution: "1920x1080", // The resolution of your video
+        frameRate: 60, // The frame rate of your video
+        insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+        mirror: false, // Whether to mirror your local video or not
+      });
+      if (videoRef.current) newPublisher.addVideoElement(videoRef.current);
+      session.publish(newPublisher);
+    } catch (e) {
+      alert("방송에 실패하였습니다! 비디오 장비 상태를 확인해주세요.");
+      await leaveSession();
+      return;
+    }
 
     // **openvidu signal events**
     //  새로운 세션 연결 시 welcome SIGNAL 호출
@@ -160,7 +167,7 @@ const Broadcast = () => {
   const leaveSession = async () => {
     session.disconnect();
     setBroadcastSetting({ ...broadcastSetting, status: "FINISH" });
-    // TODO: 서버에 방송 결과 전송
+    // 서버에 방송 결과 전송
     const title = "먹일 먹이를 투표해주세요.";
     const result: IVoteTarget[] = variableRef.current.vote.options.map((item) => {
       return { feedId: String(item.id), count: item.numberOfVotes };
