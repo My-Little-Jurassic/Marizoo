@@ -43,7 +43,7 @@ const BroadcastScreen = function (props: IProps) {
   // OpenVidu STATUS
   const params = useParams();
   const dispatch = useAppDispatch();
-  const pk = 1;
+  const pk = useAppSelector((state) => state.user.pk);
   const OV = useMemo(() => new OpenVidu(), [params.broadcast_id]);
   const session = useAppSelector((state) => state.broadcast.session);
   const streamRef = useRef<HTMLVideoElement>(null);
@@ -74,18 +74,6 @@ const BroadcastScreen = function (props: IProps) {
       })
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
-      // axios({
-      //   method: "put",
-      //   url: `/api/user/users/watchEnd`,
-      //   data: {
-      //     userId: pk,
-      //     effectCount: effectCnt.current,
-      //     feedCount: isVotedRef.current ? 1 : 0,
-      //     watchTime: Math.floor((Date.now() - startTime.current) / 3600000),
-      //   },
-      // })
-      //   .then((res) => console.log(res))
-      //   .catch((err) => console.log(err));
       dispatch(broadcastActions.resetRoom());
     };
   }, [session]);

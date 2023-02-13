@@ -19,13 +19,6 @@ export async function getRecommendedBroadcastList(broadcastId: string) {
 /**
  * PUT: 방송 종료 시 뱃지 획득 관련 현황 수정
  */
-// cors error...
 export async function modifyUserBadgeInfo(data: type.IModifyUserBadgeInfoData) {
-  return instance.put(`/users/watchEnd`, data, {
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, PUT, GET, OPTIONS",
-    },
-  });
+  return instance.put(`/users/watchEnd`, data);
 }
