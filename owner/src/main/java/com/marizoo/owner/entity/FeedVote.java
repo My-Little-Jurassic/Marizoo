@@ -27,9 +27,10 @@ public class FeedVote extends BaseEntity {
     private Feed feed;
 
 //    === 생성 메서드 ===
-    public static FeedVote createFeedVote(Feed feed) {
+    public static FeedVote createFeedVote(Feed feed, Integer count) {
         FeedVote feedVote = new FeedVote();
         feedVote.setFeed(feed);
+        feedVote.setCount(count);
         return feedVote;
     }
 }

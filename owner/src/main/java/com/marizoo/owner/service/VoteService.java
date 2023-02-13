@@ -19,43 +19,22 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class VoteService {
-    private final BroadcastRepository broadcastRepository;
     private final VoteRepository voteRepository;
     private final FeedRepository feedRepository;
-    private final FeedVoteRepository feedVoteRepository;
 
-    public Long createVote(Long broadcastId, String title, List<Long> feedIdList){
-        // feedVoteList 생성 : 투표 옵션 리슽
+    public Vote endVote(Long broadcastId, String title, List<EndVoteFeedDto> endVoteFeedDtoList){
+        // 투표 옵션 먹이 리스트
         List<FeedVote> feedVoteList = new ArrayList<>();
-        for (Long aLong : feedIdList) {
-            Optional<Feed> optionalFeed = feedRepository.findById(aLong);
-            if (optionalFeed.isEmpty()) {
-                return null;
-            }
-            FeedVote feedVote = FeedVote.createFeedVote(optionalFeed.get());
+        for (EndVoteFeedDto endVoteFeedDto : endVoteFeedDtoList) {
+            Feed feed = feedRepository.findById(endVoteFeedDto.getFeedId()).orElseThrow(
+                    () -> new RuntimeException("먹이가 없습니다")
+            );
+            FeedVote feedVote = FeedVote.createFeedVote(feed, endVoteFeedDto.getCount());
             feedVoteList.add(feedVote);
         }
-        // vote 생성
+        // 투표 생성
         Vote vote = Vote.createVote(title, feedVoteList);
         voteRepository.save(vote);
-
-        // 방송 find
-        Optional<Broadcast> optionalBroadcast = broadcastRepository.findById(broadcastId);
-        if(optionalBroadcast.isEmpty()){
-            return null;
-        }
-        // 방송에 vote
-        optionalBroadcast.get().setVote(vote);
-
-
-        return vote.getId();
-    }
-
-    public void endVote(Long broadcastId, Long voteId, List<EndVoteFeedDto> endVoteFeedDtoList){
-        for (EndVoteFeedDto endVoteFeedDto : endVoteFeedDtoList) {
-            FeedVote feedVote = feedVoteRepository.findByVoteIdAndFeedId(voteId, endVoteFeedDto.getFeedId());
-            feedVote.setCount(endVoteFeedDto.getCount());
-            feedVoteRepository.save(feedVote);
-        }
+        return vote;
     }
 }
