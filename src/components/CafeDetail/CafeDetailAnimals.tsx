@@ -23,7 +23,7 @@ function CafeDetailAnimals(props: { cafeId: number }) {
     if (cafeAnimalList) {
       const newAnimalSwiper = cafeAnimalList.map((animal, index) => (
         <Link
-          to={`/animal/${animal.name}`}
+          to={`/animal/${animal.id}`}
           key={`animal-${index}`}
           style={{ textDecoration: "none" }}
         >

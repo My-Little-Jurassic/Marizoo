@@ -22,7 +22,7 @@ function CafeDetailPlays(props: { cafeId: number }) {
   useEffect(() => {
     if (cafePlayList) {
       const newPlaySwiper = cafePlayList.map((play, index) => (
-        <Link key={`play-${index}`} to={`/stores/books/${play.id}`}>
+        <Link key={`play-${index}`} to={`/reservation/${props.cafeId}/${play.id}`}>
           <StyledCafePlays imgSrc={play.img}>
             <div>
               <label>{play.title}</label>

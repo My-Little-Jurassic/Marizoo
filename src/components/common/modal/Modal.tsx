@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { useAppDispatch } from "../../../store";
 import { closeModal } from "../../../store/modalSlice";
+import BroadcastFinish from "./BroadcastFinish";
 import DefaultContent from "./DefaultContent";
 import StoreReservationNotNumber from "./StoreReservationNotNumber";
 import StoreReservationEmpty from "./StoreReservationEmpty";
@@ -26,6 +27,9 @@ const Modal = ({ content }: IProps): JSX.Element => {
 
   const modalContent = useMemo(() => {
     switch (content) {
+      case "BroadcastFinish":
+        return <BroadcastFinish onClose={onClose} />;
+
       case "StoreReservationNotNumber":
         return <StoreReservationNotNumber onClose={onClose} />;
 
