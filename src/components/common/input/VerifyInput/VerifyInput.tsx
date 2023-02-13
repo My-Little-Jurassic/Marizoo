@@ -11,7 +11,8 @@ const StyledDiv = styled.div`
 export interface IInputVerify {
   description: string; // 사용자에게 보여질 설명
   verify(value: string): boolean | Promise<boolean>; // value를 받아 참 거짓을 판별하는 함수
-  lazy?: boolean; // focusOut 후에 판단할지를 결정하는
+  lazy?: boolean; // focusOut 후부터 노출될지
+  api?: boolean; // api 요청여부
 }
 
 interface IProps {
@@ -29,32 +30,51 @@ const VerifyInput = forwardRef<HTMLInputElement, IProps>(
   ): JSX.Element => {
     const [inputValue, setInputValue] = useState(value);
     const [inputStatus, setInputStatus] = useState(EInputStatus.default);
+    const inputVerifyResultRef = useRef<IInputVerifyResult[]>([]);
     const isInitial = useRef(true);
 
+    /**
+     * inputVerify에 대해 판별대상 여부를 판단
+     */
+    const isTargetVerify = useCallback(
+      (target: IInputVerify, all = false) => {
+        if (!target.api) {
+          return !target.lazy || inputStatus !== EInputStatus.default || all;
+        }
+        return all;
+      },
+      [inputStatus],
+    );
     /**
      * input 조건 판별 결과를 담은 배열
      */
     const getInputVerifyResultList = useCallback(
       async (str: string, all = false): Promise<IInputVerifyResult[]> => {
-        const targetList = inputVerifyList.filter(
-          (item) => !item.lazy || inputStatus !== EInputStatus.default || all,
-        );
+        // const targetList = inputVerifyList.filter((item) => isTargetVerify(item, all));
         const result = await Promise.all(
-          targetList.map<Promise<IInputVerifyResult>>(async (item) => {
+          inputVerifyList.map<Promise<IInputVerifyResult>>(async (item, index) => {
             const { description, verify } = item;
             let result = EInputStatus.default;
 
-            if (item.lazy && !all) {
-              result = (await verify(value)) ? EInputStatus.success : EInputStatus.fail;
-            } else if (str && !isInitial.current) {
+            // 현재 판별 업데이트 대상이라면
+            if (str && isTargetVerify(item, all)) {
               result = (await verify(str)) ? EInputStatus.success : EInputStatus.fail;
+              // 판별 결과를 저장한다
+              inputVerifyResultRef.current[index] = { description, result };
+            }
+            // 업데이트 대상이 아니고, 이미 판별한 적이 있다면
+            else if (inputVerifyResultRef.current[index]) {
+              return inputVerifyResultRef.current[index];
+            } else if (item.lazy) {
+              return { description: "", result };
             }
             return { description, result };
           }),
         );
+
         return result;
       },
-      [isInitial, inputStatus, inputVerifyList],
+      [isTargetVerify, inputVerifyList],
     );
 
     /**
