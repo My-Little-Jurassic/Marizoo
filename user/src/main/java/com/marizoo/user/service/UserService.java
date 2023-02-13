@@ -52,13 +52,13 @@ public class UserService {
     public boolean isDuplicatedEmail(String email) {
         try {
             if (userRepository.findByEmail(email).isPresent()) {
-                return true;
-            } else {
                 return false;
+            } else {
+                return true;
             }
         } catch (NonUniqueResultException | IncorrectResultSizeDataAccessException e) {
             log.error(e.getMessage());
-            return false;
+            return true;
         }
     }
 
