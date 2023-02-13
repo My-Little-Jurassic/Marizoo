@@ -2,12 +2,8 @@ package com.marizoo.user.service;
 
 import com.marizoo.user.api.animalstore_api.PlayAndStoreInfoResponse;
 import com.marizoo.user.dto.animalstore_dto.*;
-import com.marizoo.user.dto.broadcast_dto.BroadcastDto;
-import com.marizoo.user.dto.broadcast_dto.BroadcastsDto;
 import com.marizoo.user.dto.play_dto.PlayInfoDto;
-import com.marizoo.user.dto.play_dto.StorePlayDto;
 import com.marizoo.user.entity.*;
-import com.marizoo.user.exception.PlayReservationCloasedException;
 import com.marizoo.user.repository.UserRepository;
 import com.marizoo.user.repository.animalstore_repo.AnimalStoreFollowRepository;
 import com.marizoo.user.repository.animalstore_repo.AnimalStoreRepository;
@@ -16,11 +12,8 @@ import com.marizoo.user.repository.play_repo.PlayRepository;
 import com.marizoo.user.repository.reservation_repo.UsersPlayRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import springfox.documentation.service.ResponseMessage;
 
 import java.util.List;
 
@@ -127,11 +120,13 @@ public class AnimalStoreService {
                                                 play.getTitle(),
                                                 play.getDescription(),
                                                 play.getRunningTime(),
-                                                play.getNotice(), playTotalVisitor);
+                                                play.getNotice(), 0);
 
          if(playMaxVisitor <= playTotalVisitor){
              return new PlayAndStoreInfoResponse(playInfoDto, null);
          }
+
+         playInfoDto.setAvailableVisitor(playMaxVisitor - playTotalVisitor);
 
          AnimalStore animalStore = animalStoreRepository.findById(store_id).get();
          StoreInfoDto storeInfoDto= new StoreInfoDto(animalStore.getStoreName(),
