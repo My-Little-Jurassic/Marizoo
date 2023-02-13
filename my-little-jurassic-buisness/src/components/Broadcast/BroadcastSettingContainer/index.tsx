@@ -140,7 +140,7 @@ const BroadcastSettingContainer = ({ initSetting, startBroadcast, endBroadcast }
         </div>
       </div>
       <div className="btn-area">
-        <button onClick={endBroadcast} disabled={!readOnly}>
+        <button onClick={endBroadcast} disabled={!readOnly || initSetting.status === "FINISH"}>
           방송종료
         </button>
         <button onClick={onStartBroadcast} disabled={readOnly}>
