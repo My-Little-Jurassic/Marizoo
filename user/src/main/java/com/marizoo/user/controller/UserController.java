@@ -18,6 +18,8 @@ import com.marizoo.user.repository.UserRepository;
 import com.marizoo.user.service.AuthService;
 import com.marizoo.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,7 @@ import java.util.Map;
 
 import static com.marizoo.user.constant.JwtConstant.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user/")
@@ -203,5 +206,18 @@ public class UserController {
     @ExceptionHandler(PasswordNotMatchException.class)
     public ExceptionResponseDto passwordNotMatchException(PasswordNotMatchException e) {
         return new ExceptionResponseDto(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
+    public ExceptionResponseDto incorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException e) {
+        return new ExceptionResponseDto(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(Exception.class)
+    public ExceptionResponseDto exception(Exception e) {
+        log.error("class = {} message = {}", e.getClass(), e.getMessage());
+        return new ExceptionResponseDto("잘못된 요청입니다.");
     }
 }

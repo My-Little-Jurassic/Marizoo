@@ -1,24 +1,24 @@
 package com.marizoo.user.service;
 
 import com.marizoo.user.api.MyPageRequestApi;
+import com.marizoo.user.api.MyPageResponseApi;
 import com.marizoo.user.api.PwdChangeRequestApi;
 import com.marizoo.user.api.WatchEndRequestApi;
 import com.marizoo.user.dto.BadgeDto;
 import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.MailDto;
-import com.marizoo.user.api.MyPageResponseApi;
 import com.marizoo.user.entity.Badge;
 import com.marizoo.user.entity.User;
-import com.marizoo.user.entity.UsersPlay;
 import com.marizoo.user.entity.UsersBadge;
+import com.marizoo.user.entity.UsersPlay;
 import com.marizoo.user.exception.AlreadyJoinException;
 import com.marizoo.user.exception.BadgeNotFoundException;
 import com.marizoo.user.exception.PasswordNotMatchException;
 import com.marizoo.user.exception.UserNotFoundException;
 import com.marizoo.user.repository.BadgeRepository;
 import com.marizoo.user.repository.UserRepository;
-import com.marizoo.user.repository.reservation_repo.UsersPlayRepository;
 import com.marizoo.user.repository.UsersBadgeRepository;
+import com.marizoo.user.repository.reservation_repo.UsersPlayRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -51,16 +51,7 @@ public class UserService {
     private final BCryptPasswordEncoder encoder;
 
     public boolean isDuplicatedEmail(String email) {
-        try {
-            if (userRepository.findByEmail(email).isPresent()) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (NonUniqueResultException | IncorrectResultSizeDataAccessException e) {
-            log.error(e.getMessage());
-            return true;
-        }
+        return userRepository.findByEmail(email).isPresent() == true ? true : false;
     }
 
     public boolean isDuplicatedUid(String uid) {
@@ -72,12 +63,9 @@ public class UserService {
     }
 
     public String findUidByEmail(String email) {
-        try {
-            User user = userRepository.findByEmail(email).get();
-            return user.getUid();
-        } catch (Exception e) {
-            throw new UserNotFoundException("이메일에 해당하는 유저가 없습니다.");
-        }
+        return userRepository.findByEmail(email).orElseThrow(
+                () -> new UserNotFoundException("이메일에 해당하는 유저가 없습니다.")
+        ).getUid();
     }
 
     public void createMailAndChangePwd(String email) {
@@ -203,22 +191,15 @@ public class UserService {
      */
     @Transactional
     public void addBadge(Long userId, Long badgeId) {
-        try {
-            User user = userRepository.findById(userId).orElseThrow(
-                    () -> new UserNotFoundException("해당하는 유저가 없습니다.")
-            );
-            Badge badge = badgeRepository.findById(badgeId).orElseThrow(
-                    () -> new BadgeNotFoundException("해당하는 배지가 없습니다.")
-            );
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new UserNotFoundException("해당하는 유저가 없습니다.")
+        );
+        Badge badge = badgeRepository.findById(badgeId).orElseThrow(
+                () -> new BadgeNotFoundException("해당하는 배지가 없습니다.")
+        );
 
-            UsersBadge usersBadge = UsersBadge.createUsersBadge(badge);
-            user.addBadge(usersBadge);
-
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException(e.getMessage());
-        } catch (BadgeNotFoundException e) {
-            throw new BadgeNotFoundException(e.getMessage());
-        }
+        UsersBadge usersBadge = UsersBadge.createUsersBadge(badge);
+        user.addBadge(usersBadge);
     }
 
     @Transactional
