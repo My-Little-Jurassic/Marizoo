@@ -118,7 +118,9 @@ public class AnimalStoreService {
     public PlayAndStoreInfoResponse findPlayInfo(Long store_id, Long play_id){
          Play play = playRepository.findPlayById(play_id);
          Integer playMaxVisitor = play.getMaxVisitor();
-         Integer playTotalVisitor = usersPlayRepository.findPlayTotalVisitor(play_id);
+         Integer playTotalVisitor = usersPlayRepository.findPlayTotalVisitor(play_id).orElseGet(
+                 () -> 0
+         );
 
          // 보내는 날짜와 시간은 아직 형식을 정하지 않아서 , localDateTime으로 보냄.
          PlayInfoDto playInfoDto = new PlayInfoDto(play.getPlayDateTime(),

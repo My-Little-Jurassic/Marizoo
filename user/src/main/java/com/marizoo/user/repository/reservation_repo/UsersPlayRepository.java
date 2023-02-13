@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UsersPlayRepository extends JpaRepository<UsersPlay, Long> {
 
@@ -13,6 +14,6 @@ public interface UsersPlayRepository extends JpaRepository<UsersPlay, Long> {
 
     // playId 체험 프로그램을 예약한 사람 수
     @Query(value = " select sum(usersPlay.total_visitor)  from users_play usersPlay where usersPlay.play_id = :playId", nativeQuery = true)
-    Integer findPlayTotalVisitor(@Param("playId") Long playId);
+    Optional<Integer> findPlayTotalVisitor(@Param("playId") Long playId);
 
 }
