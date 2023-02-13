@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { TbThumbUp } from "react-icons/tb"; // 엄지 아이콘 import
 
 interface IProps {
-  onClick?(): void; // onclick props
+  onClick(): void; // onclick props
+  isLiked: boolean | string;
 }
 
 function LikeBtn(props: IProps) {
@@ -34,10 +35,11 @@ function LikeBtn(props: IProps) {
       onClick={() => {
         // 클릭시 애니메이션 실행
         thumbUpIconAnimate();
+        props.onClick();
       }}
     >
       <div className="thumb-up-icon">
-        <TbThumbUp size={32} />
+        <TbThumbUp size={32} fill={props.isLiked === true ? "#f2c619" : "none"} />
       </div>
       <StyledLabel>좋아요</StyledLabel>
     </StyledLikeBtn>
