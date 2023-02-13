@@ -13,6 +13,6 @@ public class DeployCheck {
     @GetMapping("/welcome")
     public String welcome() {
         log.info("배포 health-check");
-        return "welcome to the user service!!!!!!@@!!!!zzzzfff slack";
+        return "welcome to the user service!!!!!!@@!!!!zzzzfff slack!!!!! nginx";
     }
 }
