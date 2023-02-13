@@ -12,7 +12,7 @@ function ReactionBtn(props: IProps) {
   const Icon = props.icon; // prop된 아이콘
 
   return (
-    <StyledReactionBtn background={props.color}>
+    <StyledReactionBtn background={props.color} onClick={props.onClick}>
       <StyledBtnLabel>{props.label}</StyledBtnLabel>
       <Icon size={30} strokeWidth={2}></Icon>
     </StyledReactionBtn>

@@ -20,6 +20,7 @@ import AnimalDetail from "./pages/AnimalDetail";
 import { useAppSelector } from "./store";
 import { selectModal } from "./store/modalSlice";
 import { Modal } from "./components/common/modal";
+import Broadcast from "./pages/Broadcast";
 
 function App() {
   const [themeMode, toggleTheme] = useTheme();
@@ -36,7 +37,7 @@ function App() {
         {/* <Route path="/user/:user_id" element={}></Route> */}
         {/* <Route path="/user/:user_id/set_account" element={}></Route> */}
         {/* <Route path="/find_account" element={}></Route> */}
-        {/* <Route path="/broadcast/:broadcast_id" element={}></Route> */}
+        <Route path="/broadcast/:broadcast_id/:session_id" element={<Broadcast />}></Route>
         <Route path="/cafe" element={<Cafe />}></Route>
         <Route path="/cafe/:cafe_id" element={<CafeDetail />}></Route>
         {/* <Route path="/reservation/:cafe_id/:play_id" element={}></Route> */}
