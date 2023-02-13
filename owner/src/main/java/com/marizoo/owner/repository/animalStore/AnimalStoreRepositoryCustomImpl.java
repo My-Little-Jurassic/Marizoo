@@ -22,7 +22,7 @@ public class AnimalStoreRepositoryCustomImpl implements AnimalStoreRepositoryCus
         List<OwnedAnimalDto> findOwnedAnimal = queryFactory
                 .select(new QOwnedAnimalDto(animal.id, animal.name, species.classification))
                 .from(animal)
-                .join(animal.species, species).fetchJoin()
+                .join(animal.species, species)
                 .where(animal.animalStore.id.eq(storeId))
                 .fetch();
         return findOwnedAnimal;
