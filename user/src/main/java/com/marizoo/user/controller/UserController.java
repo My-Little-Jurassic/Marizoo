@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class UserController {
     private final AuthService authService;
 
     @PostMapping("/users")
-    public ResponseEntity join(@RequestBody JoinRequestDto joinRequestDto) {
+    public ResponseEntity join(@Valid @RequestBody JoinRequestDto joinRequestDto) {
 
         if (userService.isDuplicatedEmail(joinRequestDto.getEmail())) {
             throw new AlreadyJoinException("이미 가입된 이메일입니다.");

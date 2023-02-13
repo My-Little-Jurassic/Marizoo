@@ -53,9 +53,9 @@ public class UserService {
     public boolean isDuplicatedEmail(String email) {
         try {
             if (userRepository.findByEmail(email).isPresent()) {
-                return false;
-            } else {
                 return true;
+            } else {
+                return false;
             }
         } catch (NonUniqueResultException | IncorrectResultSizeDataAccessException e) {
             log.error(e.getMessage());
@@ -197,6 +197,7 @@ public class UserService {
             usersPlayRepository.deleteById(bookId);
         }
     }
+
     /**
      * 배지 획득
      */
