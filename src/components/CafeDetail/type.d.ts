@@ -9,9 +9,10 @@ export interface ICafeDetail {
   openingHours: string;
   tel: string;
   email: string;
-  prifileImg: string;
+  profileImg: string;
   lat: number;
   lng: number;
+  following: boolean;
 }
 
 export interface ICafeAnimal {
@@ -24,6 +25,7 @@ export interface ICafeAnimal {
 
 export interface ICafeOnair {
   id: number;
+  sessionId: string;
   title: string;
   thumbnail: string;
   classificationImgs: string[];

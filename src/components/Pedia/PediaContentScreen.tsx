@@ -4,7 +4,8 @@ import { getSpeciesInfo } from "../../api/pedia";
 import { ISpeciesDetail } from "./type";
 
 interface IProps {
-  selectedSpeciesId: number | null;
+  selectedSpeciesId: number | undefined;
+  selectedSpeciesImg: string | undefined;
 }
 
 const PediaContentScreen = (props: IProps): JSX.Element => {
@@ -25,16 +26,15 @@ const PediaContentScreen = (props: IProps): JSX.Element => {
   return (
     <>
       <StyledPediaContentScreen>
-        {speciesInfo && <img src="https://picsum.photos/200/300"></img>}
+        {speciesInfo && <img src={props.selectedSpeciesImg}></img>}
         {speciesInfo ? (
           <div>
             <h3>{speciesInfo.speciesInfo.classification}</h3>
             <p>서식지 : {speciesInfo.speciesInfo.habitat}</p>
             <p>수명 : {speciesInfo.speciesInfo.lifeSpan}년</p>
-            <p>{speciesInfo.speciesInfo.info}</p>
           </div>
         ) : (
-          <div id="pediaTitle">
+          <div id="pedia-title">
             <h2>마리쥬 도감</h2>
           </div>
         )}
@@ -83,8 +83,11 @@ const StyledPediaContentScreen = styled.section`
   & > div {
     padding: 16px;
     margin-left: 8px;
+    @media screen and (max-width: 600px) {
+      padding: 16px 0px 0px 0px;
+    }
     & h3 {
-      font: ${({ theme }) => theme.fonts.display4};
+      font: ${({ theme }) => theme.fonts.display5};
       color: ${({ theme }) => theme.colors.brandColors.jurassicGreen[300]};
       margin-bottom: 16px;
     }
@@ -94,12 +97,14 @@ const StyledPediaContentScreen = styled.section`
       margin-bottom: 8px;
     }
   }
-  & #pediaTitle {
+  & #pedia-title {
+    padding: 0px;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    font: ${({ theme }) => theme.fonts.display4};
+    min-height: 100px;
+    font: ${({ theme }) => theme.fonts.display5};
     color: ${({ theme }) => theme.colors.brandColors.basaltGray[100]};
     animation: ${sizeChange} 1s ease-in-out infinite alternate;
   }

@@ -58,7 +58,6 @@ const StyledIcon = styled.div<{ animalId: number; imgUrl: string; focusdIcon: nu
   background-image: url("${(props) => props.imgUrl}");
   background-size: cover;
   transition: all 0.2s;
-  margin-right: -16px;
   filter: ${(props) =>
     props.focusdIcon !== null && props.animalId !== props.focusdIcon
       ? "drop-shadow(2px 2px 8px rgba(67, 67, 67, 0.2)) brightness(0.5)"

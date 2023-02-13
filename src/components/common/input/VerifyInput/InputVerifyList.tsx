@@ -29,9 +29,11 @@ const InputVerifyList = ({ inputVerifyResultList }: IProps): JSX.Element => {
 
   return (
     <StyledUl>
-      {verifyList.map((item, index) => (
-        <InputVerifyItem key={index} description={item.description} result={item.result} />
-      ))}
+      {verifyList
+        .filter((item) => item.description)
+        .map((item, index) => (
+          <InputVerifyItem key={index} description={item.description} result={item.result} />
+        ))}
     </StyledUl>
   );
 };

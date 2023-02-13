@@ -4,14 +4,15 @@ import { ISpecies } from "./type";
 
 interface IProps {
   species: ISpecies;
-  selectedSpeciesId: number | null;
+  selectedSpeciesId: number | undefined;
   onClick: () => void;
 }
 
 const PediaSpecies = (props: IProps): JSX.Element => {
   return (
     <StyledPediaSpecies
-      spaciesId={props.species.id}
+      speciesId={props.species.id}
+      speciesImg={props.species.classificationImg}
       selectedSpeciesId={props.selectedSpeciesId}
       onClick={props.onClick}
     >
@@ -23,7 +24,11 @@ const PediaSpecies = (props: IProps): JSX.Element => {
 
 export default React.memo(PediaSpecies);
 
-const StyledPediaSpecies = styled.div<{ spaciesId: number; selectedSpeciesId: number | null }>`
+const StyledPediaSpecies = styled.div<{
+  speciesImg: string;
+  speciesId: number;
+  selectedSpeciesId: number | undefined;
+}>`
   ${({ theme }) => theme.styles.button};
   width: calc(100% - 32px);
   font: ${({ theme }) => theme.fonts.mainContentBold};
@@ -34,35 +39,49 @@ const StyledPediaSpecies = styled.div<{ spaciesId: number; selectedSpeciesId: nu
   align-items: center;
   @media screen and (max-width: 900px) {
     border: ${(props) =>
-        props.spaciesId === props.selectedSpeciesId
+        props.speciesId === props.selectedSpeciesId
           ? ({ theme }) => theme.colors.yellow
           : ({ theme }) => theme.colors.brandColors.basaltGray[50]}
       4px solid;
     ${(props) =>
-      props.spaciesId === props.selectedSpeciesId
+      props.speciesId === props.selectedSpeciesId
         ? "box-shadow: 0px 0px 20px 4px #fff539; filter: brightness(1.4);"
         : "box-shadow: none; filter: none;"}
     border-radius: 96px;
-    max-width: 96px;
-    & > img {
-      width: 100%;
-      max-width: 96px;
-    }
-    & > span {
-      display: none;
-    }
+    width: 96px;
+    height: 96px;
+    background-image: url(${(props) => props.speciesImg});
+    background-size: cover;
   }
   @media screen and (min-width: 900px) {
     padding: 8px;
     background-color: ${(props) =>
-      props.spaciesId === props.selectedSpeciesId
+      props.speciesId === props.selectedSpeciesId
         ? ({ theme }) => theme.colors.yellow
         : ({ theme }) => theme.colors.brandColors.basaltGray[50]};
-    & > img {
-      width: 48px;
+  }
+  @media screen and (max-width: 600px) {
+    width: 48px;
+    height: 48px;
+    display: inline-block;
+    flex-shrink: 0;
+    margin-inline: 8px;
+  }
+  & > img {
+    @media screen and (max-width: 900px) {
+      display: none;
     }
-    & > span {
-      margin-left: 16px;
+    @media screen and (min-width: 900px) {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 32px;
+    }
+  }
+  & > span {
+    margin-left: 8px;
+    @media screen and (max-width: 900px) {
+      display: none;
     }
   }
 `;

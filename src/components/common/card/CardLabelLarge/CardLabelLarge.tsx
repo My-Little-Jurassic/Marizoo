@@ -159,6 +159,7 @@ const StyledCardTitle = styled.span`
   font: ${(props) => props.theme.fonts.mainContentBold};
   cursor: pointer;
   width: 100%;
+  display: block;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

@@ -5,8 +5,8 @@ import PediaSpecies from "./PediaSpecies";
 import { ISpecies } from "./type";
 
 interface IProps {
-  selectedSpeciesId: number | null;
-  setSelectedSpeciesId: (id: number | null) => void;
+  selectedSpecies: ISpecies | null;
+  setSelectedSpecies: (species: ISpecies | null) => void;
 }
 
 const PediaSpeciesList = (props: IProps): JSX.Element => {
@@ -21,19 +21,17 @@ const PediaSpeciesList = (props: IProps): JSX.Element => {
       .catch((e) => {
         console.log("종 목록 로드 실패", e);
       });
-  }, [props.selectedSpeciesId]);
+  }, [props.selectedSpecies]);
 
   useEffect(() => {
-    console.log(speciesDataList);
     if (speciesDataList) {
       const newSpeciesList = speciesDataList.map((species: ISpecies, index: number) => (
         <PediaSpecies
           key={`species-${index}`}
           species={species}
-          selectedSpeciesId={props.selectedSpeciesId}
+          selectedSpeciesId={props.selectedSpecies?.id}
           onClick={() => {
-            console.log(species.id);
-            props.setSelectedSpeciesId(species.id);
+            props.setSelectedSpecies(species);
           }}
         ></PediaSpecies>
       ));
@@ -53,4 +51,18 @@ const StyledPediaSpeciesListContainer = styled.aside`
   padding-inline: 16px;
   padding-top: 9%;
   box-sizing: border-box;
+  @media screen and (max-width: 900px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    padding-inline: 16px;
+    padding-block: 0px;
+    margin-block: 48px 16px;
+  }
 `;
