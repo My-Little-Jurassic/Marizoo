@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { CafeMap } from "../../components/Cafe";
+import { CafeMap } from "../../../components/user/Cafe";
 
 function Cafe() {
   return (

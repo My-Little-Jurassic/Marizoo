@@ -3,12 +3,12 @@ import styled from "styled-components";
 import { Grid } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { getStoreDetail } from "../../api";
-import CafeBg from "../../components/CafeDetail/CafeBg";
-import CafeDetailMain from "../../components/CafeDetail/CafeDetailMain";
-import CafeDetailProfile from "../../components/CafeDetail/CafeDetailProfile";
-import { GrayBtn } from "../../components/common/button";
-import { useAppSelector } from "../../store";
+import { getStoreDetail } from "../../../api";
+import CafeBg from "../../../components/user/CafeDetail/CafeBg";
+import CafeDetailMain from "../../../components/user/CafeDetail/CafeDetailMain";
+import CafeDetailProfile from "../../../components/user/CafeDetail/CafeDetailProfile";
+import { GrayBtn } from "../../../components/common/button";
+import { useAppSelector } from "../../../store";
 
 interface ICafeInfo {
   storeId: number;
