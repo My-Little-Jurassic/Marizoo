@@ -81,13 +81,7 @@ public class SecurityConfig {
                         }))
                         .invalidateHttpSession(true)
                         .addLogoutHandler(((request, response, authentication) -> {
-                            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                            String uid = auth.getName();
-                            User user = userRepository.findByUid(uid).get();
-                            user.setRefreshToken("");
-
-                            userRepository.save(user);
-                            
+                            log.info("Auth = {}", authentication);
                             log.info("Logout Success");
                         }))
                 )
