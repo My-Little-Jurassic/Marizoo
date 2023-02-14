@@ -36,18 +36,22 @@ public class BroadcastService {
     /**
      * broadcast_id에 해당하는 방송 종료 시간
      * @param broadcastId : 방송 PK
-     * @return boolean
      */
-    public boolean saveEndTime(Long broadcastId, Vote vote){
-        Optional<Broadcast> opt = broadcastRepository.findById(broadcastId);
-        if(opt.isEmpty()){
-            return false;
+    public void saveEndTime(Long broadcastId, Vote vote){
+        Optional<Broadcast> opt = null;
+        try {
+            opt = broadcastRepository.findById(broadcastId);
+        } catch (Exception e) {
+            throw new RuntimeException("방송이 없습니다.");
         }
         Broadcast broadcast = opt.get();
-        broadcast.setEndTime();
+        try {
+            broadcast.endBroadcast();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
         broadcast.setVote(vote);
         broadcastRepository.save(broadcast);
-        return true;
     }
 
     /**
@@ -81,7 +85,7 @@ public class BroadcastService {
         }
 
         if(img.isEmpty()) {
-         return null;
+            return null;
         }
         String imgUrl = null;
         try {
@@ -96,7 +100,7 @@ public class BroadcastService {
         broadcastRepository.save(broadcast);
         return broadcast.getId();
     }
-    
+
     public void finishBroadcast(Long broadcastId){
         Broadcast broadcastById = broadcastRepository.findBroadcastById(broadcastId);
         broadcastById.setEndTime(LocalDateTime.now());
