@@ -21,6 +21,7 @@ public class Species extends BaseEntity {
     private String habitat;
     private Integer lifeSpan;
     private String info;
+    private String classificationIcon;
     @OneToMany(mappedBy = "species")
     private List<Animal> animalList = new ArrayList<>();
     @OneToMany(mappedBy = "species")
