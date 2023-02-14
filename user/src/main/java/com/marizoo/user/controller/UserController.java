@@ -20,6 +20,7 @@ import com.marizoo.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -76,12 +77,12 @@ public class UserController {
             ResponseCookie cookie = ResponseCookie.from(RT_HEADER, refreshToken)
                     .httpOnly(true)
                     .maxAge(RT_EXP_TIME)
-                    .domain("localhost")
+                    .domain("i8b208.p.ssafy.io")
                     .path("/refresh")
-                    .sameSite("none")
+                    .sameSite("None")
                     .secure(true)
                     .build();
-            response.addHeader("Set-Cookie", cookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         }
 
         return ResponseEntity.ok().build();
