@@ -12,13 +12,14 @@ import {
   TUserId,
 } from "../../../components/owner/Broadcast/type";
 import { IVoteTarget } from "../../../api/broadcast/type";
-import { postBroadcast, postBroadcastEnd } from "../../../api";
+import { postBroadcast, postBroadcastBadges, postBroadcastEnd } from "../../../api";
 import {
   BroadcastSettingContainer,
   BroadcastStatusViewer,
   BroadcastVoteContainer,
 } from "../../../components/owner/Broadcast";
 import BroadcastVoteModal from "../../../components/owner/Broadcast/BroadcastVoteModal";
+import BroadcastBadgeController from "../../../components/owner/Broadcast/BroadcastBadgeController/BroadcastBadgeController";
 
 const Broadcast = () => {
   const params = useParams();
@@ -273,8 +274,8 @@ const Broadcast = () => {
     const max = 36;
     const badgeId = Math.floor(Math.random() * (max - min + 1)) + min;
 
-    const userIdList = viewerMap.current.keys();
-    // await postBroadcastBadges({ userIdList, badgeId });
+    const userIdList: string[] = Array.from(viewerMap.current.keys());
+    await postBroadcastBadges({ userIdList, badgeId });
   };
 
   return (
@@ -282,7 +283,7 @@ const Broadcast = () => {
       <div>
         <BroadcastStatusViewer ref={videoRef} status={status} viewers={viewers} likes={likes} />
         <BroadcastVoteContainer vote={vote} status={status} finishVote={finishVote} />
-        {/* <BroadcastBadgeController spreadBadge={spreadBadge} /> */}
+        <BroadcastBadgeController spreadBadge={spreadBadge} />
       </div>
       <div>
         <BroadcastSettingContainer

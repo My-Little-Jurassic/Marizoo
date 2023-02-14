@@ -29,14 +29,15 @@ export function postBroadcast(body: FormData) {
   });
 }
 
+// Owner REQUEST
+
 export function postBroadcastFeeds(body: type.IPostBroadcastFeeds) {
   return ownerInstance.post("/broadcasts/feeds", body);
 }
 
-export function postBroadcastBadge(body: type.IPostBroadcastBadge) {
-  return ownerInstance.post("/broadcasts/badge", body);
-}
-
 export function postBroadcastEnd(body: type.IPostBroadcastEnd, broadcastId: string) {
   return ownerInstance.post(`/broadcasts/${broadcastId}`, body);
+}
+export function postBroadcastBadges(body: type.IPostBroadcastBadge) {
+  return ownerInstance.post(`/broadcasts/badges`, body);
 }
