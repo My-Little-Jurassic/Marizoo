@@ -25,6 +25,7 @@ import { getBroadcastInfo, modifyUserBadgeInfo } from "../../api";
 
 interface IProps {
   title: string;
+  setReceivedBadge(badgeNumber: number): void;
 }
 
 const BroadcastScreen = function (props: IProps) {
@@ -59,23 +60,27 @@ const BroadcastScreen = function (props: IProps) {
     isVotedRef.current = isVoted;
   }, [isVoted]);
 
+  const leaveRoom = function () {
+    if (!session) return;
+    session.disconnect();
+    dispatch(broadcastActions.resetRoom());
+
+    if (!pk) return;
+    modifyUserBadgeInfo({
+      userId: pk,
+      effectCount: effectCnt.current,
+      feedCount: isVotedRef.current ? 1 : 0,
+      watchTime: Math.floor((Date.now() - startTime.current) / 3600000),
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     // Session 생성
     if (session) createToken().then(joinRoom);
     // 방 퇴장
-    return () => {
-      if (!session || !pk) return;
-
-      modifyUserBadgeInfo({
-        userId: pk,
-        effectCount: effectCnt.current,
-        feedCount: isVotedRef.current ? 1 : 0,
-        watchTime: Math.floor((Date.now() - startTime.current) / 3600000),
-      })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-      dispatch(broadcastActions.resetRoom());
-    };
+    return () => leaveRoom();
   }, [session]);
 
   // 세션 참가
@@ -83,7 +88,6 @@ const BroadcastScreen = function (props: IProps) {
     if (session === null) {
       return;
     }
-
     await session.connect(token);
 
     // 방장과 주고받는 시그널
@@ -124,12 +128,13 @@ const BroadcastScreen = function (props: IProps) {
     session.on("signal:voteFinish", (e) => {
       dispatch(broadcastActions.finishVote(e.data));
     });
-    session.on("signal:badge", () => {
-      console.log("배지 받았다");
+    session.on("signal:badge", (e) => {
+      if (e.data) {
+        props.setReceivedBadge(Number(e.data));
+      }
     });
     session.on("signal:finish", () => {
-      dispatch(broadcastActions.resetRoom());
-      session.disconnect();
+      leaveRoom();
       dispatch(setContent("BroadcastFinish"));
       dispatch(openModal());
     });
