@@ -1,4 +1,4 @@
-import userInstance from "..";
+import { userInstance } from "..";
 
 /**
  * GET : 전체 방송 목록

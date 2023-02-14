@@ -1,4 +1,4 @@
-import userInstance from "..";
+import { userInstance } from "..";
 
 /**
  * GET: 예약 정보

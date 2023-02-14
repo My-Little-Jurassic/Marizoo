@@ -2,27 +2,27 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-
-import Login from "./pages/Login";
-import Regist from "./pages/Regist";
-import Home from "./pages/Home/Home";
-
-import Pedia from "./pages/Pedia/Pedia";
-import Cafe from "./pages/Cafe/Cafe";
+import Login from "./pages/user/Login";
+import Regist from "./pages/user/Regist";
+import Home from "./pages/user/Home/Home";
+import Pedia from "./pages/user/Pedia/Pedia";
+import Cafe from "./pages/user/Cafe/Cafe";
 import Itheme from "./styles/themes/theme";
 import useTheme from "./styles/themes/useTheme";
-import NotFound from "./pages/NotFound/NotFound";
+import NotFound from "./pages/user/NotFound/NotFound";
+import OwnerHome from "./pages/owner/Home";
+import OwnerBroadcast from "./pages/owner/Broadcast";
 import { Nav } from "./components/common/navbar";
 import { darkTheme } from "./styles/themes/darkTheme";
 import { lightTheme } from "./styles/themes/lightTheme";
-import CafeDetail from "./pages/CafeDetail/CafeDetail";
-import AnimalDetail from "./pages/AnimalDetail";
+import CafeDetail from "./pages/user/CafeDetail/CafeDetail";
+import AnimalDetail from "./pages/user/AnimalDetail";
 import { useAppDispatch, useAppSelector } from "./store";
 import { selectModal } from "./store/modalSlice";
 import { Modal } from "./components/common/modal";
-import Mypage from "./pages/Mypage";
-import StoreReservation from "./pages/StoreReservation";
-import Broadcast from "./pages/Broadcast";
+import Mypage from "./pages/user/Mypage";
+import StoreReservation from "./pages/user/StoreReservation";
+import Broadcast from "./pages/user/Broadcast";
 import { refresh } from "./store/userSlice";
 
 function App() {
@@ -51,6 +51,10 @@ function App() {
         <Route path="/reservation/:cafe_id/:play_id" element={<StoreReservation />}></Route>
         <Route path="/pedia" element={<Pedia />}></Route>
         <Route path="/animal/:animal_id" element={<AnimalDetail />}></Route>
+        <Route path="owner">
+          <Route index element={<OwnerHome />} />
+          <Route path={"broadcast/:id"} element={<OwnerBroadcast />} />
+        </Route>
         <Route path="/*" element={<NotFound />}></Route>
       </Routes>
 

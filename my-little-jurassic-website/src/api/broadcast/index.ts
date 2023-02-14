@@ -1,4 +1,4 @@
-import userInstance from "..";
+import { userInstance, ownerInstance } from "..";
 import * as type from "./type";
 
 /**
@@ -21,4 +21,22 @@ export async function getRecommendedBroadcastList(broadcastId: string) {
  */
 export async function modifyUserBadgeInfo(data: type.IModifyUserBadgeInfoData) {
   return userInstance.put(`/users/watchEnd`, data);
+}
+
+export function postBroadcast(body: FormData) {
+  return ownerInstance.post<type.IPostBroadcastInfoRes>("/broadcasts", body, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+}
+
+export function postBroadcastFeeds(body: type.IPostBroadcastFeeds) {
+  return ownerInstance.post("/broadcasts/feeds", body);
+}
+
+export function postBroadcastBadge(body: type.IPostBroadcastBadge) {
+  return ownerInstance.post("/broadcasts/badge", body);
+}
+
+export function postBroadcastEnd(body: type.IPostBroadcastEnd, broadcastId: string) {
+  return ownerInstance.post(`/broadcasts/${broadcastId}`, body);
 }

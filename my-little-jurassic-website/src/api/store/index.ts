@@ -1,5 +1,13 @@
-import userInstance from "..";
+import { userInstance } from "..";
+import { ownerInstance } from "..";
 import * as type from "./type";
+
+/**
+ * 가게 동물 목록
+ */
+export function getStoreAnimal(animalStoreId: string | number) {
+  return ownerInstance.get(`/stores/${animalStoreId}/animals`);
+}
 
 /**
  * GET : 전체 파충류카페 목록
