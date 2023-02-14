@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { TbUsers, TbThumbUp } from "react-icons/tb";
 
-import { GreenBtn, LikeBtn } from "../common/button/index";
+import { GreenBtn, LikeBtn } from "../../common/button/index";
 import VoteModal from "./VoteModal";
 import VoteResultModal from "./VoteResultModal";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { broadcastActions } from "../../store/broadcastSlice";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import { broadcastActions } from "../../../store/broadcastSlice";
 
 interface IProps {
   title: string;

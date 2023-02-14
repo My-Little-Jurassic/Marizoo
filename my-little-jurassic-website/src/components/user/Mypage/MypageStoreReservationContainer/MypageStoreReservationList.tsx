@@ -1,5 +1,5 @@
 import React from "react";
-import { FreeModeSwiper } from "../../common/swiper";
+import { FreeModeSwiper } from "../../../common/swiper";
 import MypageStoreReservationItem from "./MypageStoreReservationItem";
 
 export type TPlayStatus = "book" | "cancel" | "finish";

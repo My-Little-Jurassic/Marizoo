@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { ProfileStore, ProfileLarge } from "../common/profile/index";
+import { ProfileStore, ProfileLarge } from "../../common/profile/index";
 import BroadcastContent from "./BroadcastContent";
 import BroadcastScreen from "./BroadcastScreen";
 import BroadcastRecommendations from "./BroadcastRecommendations";
 import Grid from "@mui/material/Grid";
-import { useAppSelector } from "../../store";
+import { useAppSelector } from "../../../store";
 import { useNavigate, useParams } from "react-router-dom";
 import { IBroadcastInfo, IAnimalInfo, IStoreInfo } from "./type";
 import { NavLink } from "react-router-dom";
-import { getBroadcastInfo } from "../../api";
+import { getBroadcastInfo } from "../../../api";
 import BroadcastBadge from "./BroadcastBadge";
 
 const BroadcastHome = function () {

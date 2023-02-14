@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { IFeed } from "../../../Broadcast/type";
+import { IFeed } from "../../../user/Broadcast/type";
 
 interface IProps {
   title: string;
@@ -35,12 +35,10 @@ const StyledContainer = styled.div<{ selectedFeed: IFeed | undefined | null; tit
   position: relative;
   box-sizing: border-box;
   // light & black: mango yellow 600
-  ${(props) => {
-    return (
-      props.selectedFeed?.name === props.title &&
-      `border: 8px solid ${props.theme.colors.brandColors.mangoYellow["600"]}`
-    );
-  }};
+  ${(props) =>
+    props.selectedFeed?.name === props.title
+      ? `border: 8px solid ${props.theme.colors.brandColors.mangoYellow["600"]};`
+      : ""}
   ${(props) => props.theme.styles.card}
   cursor: pointer;
 `;

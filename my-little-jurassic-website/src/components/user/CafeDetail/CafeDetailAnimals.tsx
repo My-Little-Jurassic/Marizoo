@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { FreeModeSwiper } from "../common/swiper";
-import { getStoreAinmalList } from "../../api";
+import { FreeModeSwiper } from "../../common/swiper";
+import { getStoreAinmalList } from "../../../api";
 import { ICafeAnimal } from "./type";
 
 function CafeDetailAnimals(props: { cafeId: number }) {

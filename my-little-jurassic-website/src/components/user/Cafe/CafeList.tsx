@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { TbX } from "react-icons/tb";
 import { TbChevronUp, TbChevronDown } from "react-icons/tb";
 import { CafeFilterSwiper, CafeListContent } from ".";
-import { SearchInput } from "../common/input";
-import { searchStores } from "../../api";
+import { SearchInput } from "../../common/input";
+import { searchStores } from "../../../api";
 import { ICafe } from "./type";
 
 const { kakao } = window as any;

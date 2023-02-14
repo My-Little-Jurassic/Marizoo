@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { GrayBtn, GreenBtn } from "../common/button";
+import { GrayBtn, GreenBtn } from "../../common/button";
 
 const StyledDiv = styled.div`
   height: 100vh;

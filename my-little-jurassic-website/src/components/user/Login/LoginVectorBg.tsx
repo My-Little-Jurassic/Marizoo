@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { GrayBtn } from "../common/button";
+import { GrayBtn } from "../../common/button";
 
 const StyledDiv = styled.div`
   width: 100%;

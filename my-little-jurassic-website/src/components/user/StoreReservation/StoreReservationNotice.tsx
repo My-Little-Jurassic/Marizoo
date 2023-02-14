@@ -2,11 +2,11 @@ import Checkbox from "./Checkbox";
 import React, { useState } from "react";
 import styled from "styled-components";
 import CheckBtn from "./CheckBtn";
-import { openModal, setContent } from "../../store/modalSlice";
+import { openModal, setContent } from "../../../store/modalSlice";
 import { IPlayInfo } from "./type";
 import { redirect, useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { makeReservation } from "../../api";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import { makeReservation } from "../../../api";
 
 interface IProps {
   playInfo: IPlayInfo;

@@ -1,10 +1,9 @@
 import { Grid } from "@mui/material";
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { getRecommendedBroadcastList } from "../../api";
-import { CardLabelMedium } from "../common/card";
+import { getRecommendedBroadcastList } from "../../../api";
+import { CardLabelMedium } from "../../common/card";
 import { IRelatedBroadcastInfo } from "./type";
 
 const BroadcastRecommendations = function () {

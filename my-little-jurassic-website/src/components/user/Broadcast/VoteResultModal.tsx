@@ -1,8 +1,8 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { useAppSelector } from "../../store";
+import { useAppSelector } from "../../../store";
 
-import { CardNotLabel } from "../common/card/index";
+import { CardNotLabel } from "../../common/card/index";
 
 interface Iprops {
   closeModal: () => void;

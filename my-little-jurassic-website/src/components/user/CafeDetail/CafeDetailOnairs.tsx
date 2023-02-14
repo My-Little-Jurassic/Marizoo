@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { CardLabelLarge } from "../common/card";
-import { FreeModeSwiper } from "../common/swiper";
+import { CardLabelLarge } from "../../common/card";
+import { FreeModeSwiper } from "../../common/swiper";
 import { ICafeOnair } from "./type";
-import { getStoreBroadcastsList } from "../../api";
+import { getStoreBroadcastsList } from "../../../api";
 import styled from "styled-components";
 
 function CafeDetailOnairs(props: { cafeId: number }) {

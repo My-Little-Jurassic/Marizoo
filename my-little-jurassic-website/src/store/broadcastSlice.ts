@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Connection, Session } from "openvidu-browser";
-import { IFeed } from "../components/Broadcast/type";
+import { IFeed } from "../components/user/Broadcast/type";
 
 interface IInitialState {
   isMaximized: boolean;

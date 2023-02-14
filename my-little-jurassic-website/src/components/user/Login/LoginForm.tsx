@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { login, selectUser } from "../../store/userSlice";
-import { GreenBtn } from "../common/button";
-import { IInputVerify, Input, VerifyInput } from "../common/input";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import { login, selectUser } from "../../../store/userSlice";
+import { GreenBtn } from "../../common/button";
+import { IInputVerify, Input, VerifyInput } from "../../common/input";
 
 const StyledForm = styled.form<{ status: string }>`
   display: flex;

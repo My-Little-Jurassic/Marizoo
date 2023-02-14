@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 
-import { GreenBtn } from "../common/button";
-import { CardVote } from "../common/card/index";
+import { GreenBtn } from "../../common/button";
+import { CardVote } from "../../common/card/index";
 import { Grid } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { broadcastActions } from "../../store/broadcastSlice";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import { broadcastActions } from "../../../store/broadcastSlice";
 import { IFeed } from "./type";
 
 interface Iprops {

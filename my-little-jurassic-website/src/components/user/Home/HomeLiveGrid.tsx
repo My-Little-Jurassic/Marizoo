@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { Grid } from "@mui/material";
 
-import { CardLabelLarge } from "../common/card";
+import { CardLabelLarge } from "../../common/card";
 import { NavLink } from "react-router-dom";
 
 interface IProps {

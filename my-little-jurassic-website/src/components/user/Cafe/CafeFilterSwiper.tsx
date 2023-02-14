@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getSpeciesList } from "../../api";
+import { getSpeciesList } from "../../../api";
 
 import CafeFilterSwiperIcon from "./CafeFilterSwiperIcon";
 import { ISpecies } from "./type";

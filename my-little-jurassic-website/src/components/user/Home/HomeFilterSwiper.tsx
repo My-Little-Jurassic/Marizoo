@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { FreeModeSwiper } from "../common/swiper";
+import { FreeModeSwiper } from "../../common/swiper";
 
 interface IProps {
   speciesList: ISpecies[];

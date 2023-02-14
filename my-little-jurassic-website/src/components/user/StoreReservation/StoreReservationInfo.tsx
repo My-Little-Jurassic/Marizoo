@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Input } from "../common/input/index";
+import { Input } from "../../common/input/index";
 import { IPlayInfo } from "./type";
 
 interface IProps {

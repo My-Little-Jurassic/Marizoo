@@ -5,8 +5,8 @@ import { TbMapPin, TbClock, TbPhone, TbMail } from "react-icons/tb";
 import { Grid } from "@mui/material";
 import { ICafeDetail } from "./type";
 import { TbCheck } from "react-icons/tb";
-import { followStore } from "../../api";
-import { useAppSelector } from "../../store";
+import { followStore } from "../../../api";
+import { useAppSelector } from "../../../store";
 
 function CafeDetailProfile(props: { cafeInfo: ICafeDetail }) {
   const [isFollowed, setIsFollowed] = useState(props.cafeInfo.following);

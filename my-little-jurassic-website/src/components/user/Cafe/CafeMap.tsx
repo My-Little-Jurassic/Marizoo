@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { TbZoomCancel, TbLocation } from "react-icons/tb";
 import { CafeList } from ".";
-import { getStoresList } from "../../api";
+import { getStoresList } from "../../../api";
 import { ICafe } from "./type";
 
 const { kakao } = window as any;

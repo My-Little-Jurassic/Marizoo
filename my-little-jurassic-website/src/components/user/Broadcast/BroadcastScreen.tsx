@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import {
   TbHandStop,
@@ -11,17 +10,17 @@ import {
   TbThumbUp,
 } from "react-icons/tb";
 
-import { GreenBtn, ReactionBtn } from "../common/button";
+import { GreenBtn, ReactionBtn } from "../../common/button";
 import VoteModal from "./VoteModal";
 import BroadcastCombo from "./BroadcastCombo";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { broadcastActions } from "../../store/broadcastSlice";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import { broadcastActions } from "../../../store/broadcastSlice";
 import BroadcastHeart from "./BroadcastHeart";
 import { OpenVidu } from "openvidu-browser";
 import { useParams } from "react-router-dom";
-import { openModal, setContent } from "../../store/modalSlice";
+import { openModal, setContent } from "../../../store/modalSlice";
 import BroadcastStreamVideo from "./BroadcastStreamVideo";
-import { getBroadcastInfo, modifyUserBadgeInfo } from "../../api";
+import { getBroadcastInfo, modifyUserBadgeInfo } from "../../../api";
 
 interface IProps {
   title: string;

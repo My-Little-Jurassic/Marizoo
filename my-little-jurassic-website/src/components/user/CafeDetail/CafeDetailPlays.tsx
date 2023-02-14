@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getStorePlayList } from "../../api";
-import { FreeModeSwiper } from "../common/swiper";
+import { getStorePlayList } from "../../../api";
+import { FreeModeSwiper } from "../../common/swiper";
 import { ICafePlay } from "./type";
 
 function CafeDetailPlays(props: { cafeId: number }) {

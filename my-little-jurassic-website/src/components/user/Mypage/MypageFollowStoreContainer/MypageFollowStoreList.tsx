@@ -1,5 +1,5 @@
 import React from "react";
-import { FreeModeSwiper } from "../../common/swiper";
+import { FreeModeSwiper } from "../../../common/swiper";
 import MypageFollowStoreItem from "./MypageFollowStoreItem";
 
 export interface IStore {

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { GrayBtn } from "../common/button";
+import { GrayBtn } from "../../common/button";
 
 const MypageHeader = () => {
   const nickname = "nickname";

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getCheckNickname, getCheckUid, postRegist } from "../../api";
+import { getCheckNickname, getCheckUid, postRegist } from "../../../api";
 import {
   validateEmail,
   validateIdChar,
@@ -10,9 +10,9 @@ import {
   validatePhoneNumber,
   validatePWChar,
   validatePWLength,
-} from "../../utils/registerValidation";
-import { GreenBtn } from "../common/button";
-import { IInputVerify, VerifyInput } from "../common/input";
+} from "../../../utils/registerValidation";
+import { GreenBtn } from "../../common/button";
+import { IInputVerify, VerifyInput } from "../../common/input";
 
 const StyledForm = styled.form`
   display: flex;
