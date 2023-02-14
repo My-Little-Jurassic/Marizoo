@@ -7,6 +7,7 @@ import com.marizoo.user.filter.JwtAuthorizationFilter;
 import com.marizoo.user.filter.JwtAuthenticationFilter;
 import com.marizoo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +30,7 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     private final UserRepository userRepository;
@@ -63,15 +65,13 @@ public class SecurityConfig {
                 .and()
                 .logout().permitAll()
                 .logoutUrl("/api/user/logout")
-                .logoutSuccessHandler(((request, response, authentication) -> {
-                    for (Cookie cookie : request.getCookies()) {
-                        String name = cookie.getName();
-                        Cookie deleteCookie = new Cookie(name, null);
-                        deleteCookie.setMaxAge(0);
-                        response.addCookie(deleteCookie);
-                    }
-                }))
                 .deleteCookies(JwtConstant.RT_HEADER)
+                .logoutSuccessHandler(((request, response, authentication) -> {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                }))
+                .addLogoutHandler(((request, response, authentication) -> {
+                    log.info("Logout Success");
+                }))
                 .and()
                 .build();
     }
