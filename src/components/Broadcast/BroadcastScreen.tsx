@@ -22,6 +22,7 @@ import { useParams } from "react-router-dom";
 import { openModal, setContent } from "../../store/modalSlice";
 import BroadcastStreamVideo from "./BroadcastStreamVideo";
 import { getBroadcastInfo, modifyUserBadgeInfo } from "../../api";
+import BroadcastBadge from "./BroadcastBadge";
 
 interface IProps {
   title: string;
@@ -33,6 +34,7 @@ const BroadcastScreen = function (props: IProps) {
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
   const [playingReaction, setPlayingReaction] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState<number[]>([0, 0]);
+  const [receivedBadge, setReceivedBadge] = useState<number>(2);
 
   const isMaximized = useAppSelector((state) => state.broadcast.isMaximized);
   const isVoted = useAppSelector((state) => state.broadcast.isVoted);
@@ -127,8 +129,10 @@ const BroadcastScreen = function (props: IProps) {
     session.on("signal:voteFinish", (e) => {
       dispatch(broadcastActions.finishVote(e.data));
     });
-    session.on("signal:badge", () => {
-      console.log("배지 받았다");
+    session.on("signal:badge", (e) => {
+      if (e.data) {
+        setReceivedBadge(Number(e.data));
+      }
     });
     session.on("signal:finish", () => {
       leaveRoom();
@@ -305,6 +309,9 @@ const BroadcastScreen = function (props: IProps) {
         </StyledBtnContainer>
       )}
       {isVoteModalOpened && <VoteModal closeModal={() => setIsVoteModalOpened(false)} />}
+      {receivedBadge > 0 && (
+        <BroadcastBadge closeModal={() => setReceivedBadge(-1)} receivedBadge={receivedBadge} />
+      )}
       {!isMaximized && !playingReaction && (
         <StyledModeChangeIconContainer
           onMouseOver={() => setIsMouseOver(true)}
