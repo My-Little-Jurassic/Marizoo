@@ -67,7 +67,7 @@ export default React.memo(CafeDetailOnairs);
 
 const StyledSpan = styled.span`
   font: ${(props) => props.theme.fonts.mainContent};
-  color: ${(props) => props.theme.colors.primarytext};
+  color: ${(props) => props.theme.colors.primaryText};
   display: inline-block;
   box-sizing: border-box;
   margin: 16px 16px 48px;

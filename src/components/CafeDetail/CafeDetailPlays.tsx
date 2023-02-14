@@ -67,7 +67,13 @@ const StyledCafePlays = styled.div<{ imgSrc: string }>`
   cursor: pointer;
   width: 100%;
   height: 300px;
-  background: linear-gradient(180deg, rgba(2, 0, 36, 0) 40%, rgba(0, 0, 0, 0.7) 100%),
+  background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.54) 0%,
+      rgba(217, 217, 217, 0) 21.88%,
+      rgba(190, 190, 190, 0.126667) 55.73%,
+      rgba(0, 0, 0, 0.54) 100%
+    ),
     url(${({ imgSrc }) => imgSrc});
   background-size: cover;
   display: inline-block;
