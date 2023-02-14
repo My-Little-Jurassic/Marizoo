@@ -21,7 +21,10 @@ const StyledDiv = styled.div`
   }
 
   & > .backImg {
-    background-color: ${({ theme }) => theme.colors.brandColors.mangoYellow[50]};
+    background: ${({ theme }) =>
+      theme.isDark
+        ? theme.colors.brandColors.basaltGray[900]
+        : theme.colors.brandColors.mangoYellow[50]};
     z-index: 0;
     position: fixed;
     width: 100%;
@@ -29,6 +32,10 @@ const StyledDiv = styled.div`
 
     & > img {
       width: 100%;
+      content: ${({ theme }) =>
+        theme.isDark
+          ? "url(./images/darkLoginVectorBgBack.svg)"
+          : "url(./images/lightLoginVectorBgBack.svg)"};
       @media screen and (max-aspect-ratio: 16/11) {
         width: auto;
         height: 100%;

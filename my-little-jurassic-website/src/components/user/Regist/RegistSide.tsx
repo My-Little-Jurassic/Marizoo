@@ -10,6 +10,7 @@ const StyledDiv = styled.div`
   align-items: center;
 
   & > h1 {
+    cursor: pointer;
     margin: auto;
     position: fixed;
     font: ${({ theme }) => theme.fonts.display1};
@@ -53,12 +54,12 @@ const RegistSide = (): JSX.Element => {
   const navigate = useNavigate();
   const onBack = () => {
     navigate(-1);
-    console.log("fsdf");
   };
+  const onClick = () => navigate("/");
   return (
     <StyledDiv>
       <GrayBtn label={"뒤로가기"} type={2} isDisable={false} onClick={onBack} />
-      <h1>
+      <h1 onClick={onClick}>
         <span>마이</span>
         <span>리틀</span>
         <span>쥬라기</span>
