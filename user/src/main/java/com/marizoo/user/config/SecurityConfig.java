@@ -22,6 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
 @Configuration
@@ -59,8 +60,11 @@ public class SecurityConfig {
                 .and()
                 .apply(new MyCustomDsl())
                 .and()
-                .logout()
+                .logout().permitAll()
                 .logoutUrl("/api/user/logout")
+                .logoutSuccessHandler(((request, response, authentication) -> {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                }))
                 .deleteCookies(JwtConstant.RT_HEADER)
                 .and()
                 .build();
