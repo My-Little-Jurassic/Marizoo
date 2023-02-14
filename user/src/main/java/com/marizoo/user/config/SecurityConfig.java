@@ -1,6 +1,7 @@
 package com.marizoo.user.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.marizoo.user.constant.JwtConstant;
 import com.marizoo.user.filter.ExceptionHandlerFilter;
 import com.marizoo.user.filter.JwtAuthorizationFilter;
 import com.marizoo.user.filter.JwtAuthenticationFilter;
@@ -57,6 +58,10 @@ public class SecurityConfig {
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                 .apply(new MyCustomDsl())
+                .and()
+                .logout()
+                .logoutUrl("/api/user/logout")
+                .deleteCookies(JwtConstant.RT_HEADER)
                 .and()
                 .build();
     }
