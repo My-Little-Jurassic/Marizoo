@@ -1,2 +1,2 @@
-export { default as LiveGrid } from "./LiveGrid/LiveGrid";
-export { default as FilterSwiper } from "./FilterSwiper/FilterSwiper";
+export { default as HomeLiveGrid } from "./HomeLiveGrid";
+export { default as HomeFilterSwiper } from "./HomeFilterSwiper";

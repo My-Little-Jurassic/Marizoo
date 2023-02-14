@@ -1,8 +1,8 @@
 import { Grid } from "@mui/material";
-import axios from "axios";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { getSameSpeciesAnimals, getSameStoreAnimals } from "../../api";
 import { ProfileLarge, ProfileStore } from "../common/profile";
 import { IStoreInfo, IStoreAnimalInfo } from "./type";
 
@@ -22,10 +22,7 @@ const AnimalDetailSide = function (props: IProps) {
   const params = useParams();
 
   useEffect(() => {
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_API_URL}/stores/${props.storeInfo.storeId}/animals`,
-    })
+    getSameStoreAnimals(props.storeInfo.storeId)
       .then((res) => {
         const tmpStoreAnimalList = res.data.animals.map((animal: IStoreAnimalInfo) => {
           if (animal.name === props.currentAnimalName) {
@@ -48,10 +45,7 @@ const AnimalDetailSide = function (props: IProps) {
       })
       .catch((err) => console.log(err));
 
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_API_URL}/species/${props.speciesId}`,
-    })
+    getSameSpeciesAnimals(props.speciesId)
       .then((res) => {
         const tmpSameSpeciesAnimalList = res.data.animals.map((animal: IStoreAnimalInfo) => {
           if (animal.name === props.currentAnimalName) {
@@ -81,20 +75,20 @@ const AnimalDetailSide = function (props: IProps) {
         <ProfileStore storeName={props.storeInfo.storeName} imgSrc={props.storeInfo.img} />
       </NavLink>
       {storeAnimalList !== null && (
-        <>
+        <div>
           <StyledSpan>카페 동물들</StyledSpan>
           <Grid container spacing={2}>
             {storeAnimalList}
           </Grid>
-        </>
+        </div>
       )}
       {sameSpeciesAnimalList !== null && (
-        <>
+        <div>
           <StyledSpan>같은 종의 동물들</StyledSpan>
           <Grid container spacing={2}>
             {sameSpeciesAnimalList}
           </Grid>
-        </>
+        </div>
       )}
     </StyledContainer>
   );
@@ -104,9 +98,15 @@ export default AnimalDetailSide;
 
 const StyledContainer = styled.div`
   width: 100%;
+  padding-bottom: 16px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 48px;
+  & > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 `;
 
 const StyledSpan = styled.span`

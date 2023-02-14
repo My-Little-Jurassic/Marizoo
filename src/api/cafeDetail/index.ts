@@ -4,8 +4,9 @@ import instance from "..";
 /**
  * GET: 가게 정보
  */
-export async function getStoreDetail(store_id: string) {
-  return instance.get(`/stores/${store_id}`);
+export async function getStoreDetail(store_id: string, userId: string | undefined) {
+  if (userId) return instance.get(`/stores/${store_id}`, { params: { userId: userId } });
+  else return instance.get(`/stores/${store_id}`);
 }
 /**
  * GET: 가게의 동물 정보
@@ -28,6 +29,6 @@ export async function getStorePlayList(store_id: string) {
 /**
  * POST: 가게 팔로우
  */
-export async function followStore(uid: number, store_id: string) {
+export async function followStore(uid: string, store_id: string) {
   return instance.post(`/stores/${store_id}`, { uid });
 }

@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "./store";
 import { selectModal } from "./store/modalSlice";
 import { Modal } from "./components/common/modal";
 import Mypage from "./pages/Mypage";
+import StoreReservation from "./pages/StoreReservation";
 import Broadcast from "./pages/Broadcast";
 import { refresh } from "./store/userSlice";
 
@@ -47,7 +48,7 @@ function App() {
         <Route path="/broadcast/:broadcast_id/:session_id" element={<Broadcast />}></Route>
         <Route path="/cafe" element={<Cafe />}></Route>
         <Route path="/cafe/:cafe_id" element={<CafeDetail />}></Route>
-        {/* <Route path="/reservation/:cafe_id/:play_id" element={}></Route> */}
+        <Route path="/reservation/:cafe_id/:play_id" element={<StoreReservation />}></Route>
         <Route path="/pedia" element={<Pedia />}></Route>
         <Route path="/animal/:animal_id" element={<AnimalDetail />}></Route>
         <Route path="/*" element={<NotFound />}></Route>

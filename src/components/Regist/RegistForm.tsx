@@ -6,6 +6,7 @@ import {
   validateEmail,
   validateIdChar,
   validateIdLength,
+  validateNickname,
   validatePhoneNumber,
   validatePWChar,
   validatePWLength,
@@ -135,7 +136,7 @@ const RegistForm = () => {
 
   const validateNicknameUnique = async (nickname: string): Promise<boolean> => {
     return getCheckNickname({ nickname })
-      .then(() => true)
+      .then(() => true && validateNickname(nickname))
       .catch(() => false);
   };
 

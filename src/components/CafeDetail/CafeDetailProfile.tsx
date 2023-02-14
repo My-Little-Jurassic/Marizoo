@@ -6,13 +6,17 @@ import { Grid } from "@mui/material";
 import { ICafeDetail } from "./type";
 import { TbCheck } from "react-icons/tb";
 import { followStore } from "../../api";
-// import { useAppSelector } from "../../store";
+import { useAppSelector } from "../../store";
 
 function CafeDetailProfile(props: { cafeInfo: ICafeDetail }) {
-  const [isFollowed, setIsFollowed] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(props.cafeInfo.following);
+  const pk = useAppSelector((state) => state.user.pk);
 
   const follow = () => {
-    followStore(1, String(props.cafeInfo.storeId))
+    if (!pk || isFollowed) {
+      return;
+    }
+    followStore(pk, String(props.cafeInfo.storeId))
       .then((res) => {
         console.log("팔로우 성공", res.data);
         setIsFollowed(true);
@@ -26,16 +30,18 @@ function CafeDetailProfile(props: { cafeInfo: ICafeDetail }) {
     <StyledCafeDetailProfile>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={5} md={12}>
-          <StyledProfileImg imgSrc={props.cafeInfo.prifileImg} isFollowed={isFollowed}>
+          <StyledProfileImg imgSrc={props.cafeInfo.profileImg} isFollowed={isFollowed}>
             <p>{props.cafeInfo.storename}</p>
-            <div onClick={() => follow()}>
-              {isFollowed ? <TbCheck size={32}></TbCheck> : "팔로우"}
-            </div>
+            {pk && (
+              <div onClick={() => follow()}>
+                {isFollowed ? <TbCheck size={32}></TbCheck> : "팔로우"}
+              </div>
+            )}
           </StyledProfileImg>
         </Grid>
         <Grid item xs={12} sm={7} md={12}>
           <StyledProfileContent>
-            <p>{props.cafeInfo.description}</p>
+            {props.cafeInfo.description && <div>{props.cafeInfo.description}</div>}
             <StyledProfileContentRow>
               <TbMapPin></TbMapPin>
               <span>{props.cafeInfo.address}</span>
@@ -48,10 +54,12 @@ function CafeDetailProfile(props: { cafeInfo: ICafeDetail }) {
               <TbPhone></TbPhone>
               <a href={`tel:${props.cafeInfo.tel}`}>{props.cafeInfo.tel}</a>
             </StyledProfileContentRow>
-            <StyledProfileContentRow>
-              <TbMail></TbMail>
-              <a href={`mailto:${props.cafeInfo.email}`}>{props.cafeInfo.email}</a>
-            </StyledProfileContentRow>
+            {props.cafeInfo.email && (
+              <StyledProfileContentRow>
+                <TbMail></TbMail>
+                <a href={`mailto:${props.cafeInfo.email}`}>{props.cafeInfo.email}</a>
+              </StyledProfileContentRow>
+            )}
           </StyledProfileContent>
         </Grid>
       </Grid>
@@ -121,19 +129,17 @@ const StyledProfileContent = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 32px;
+  box-sizing: border-box;
+  padding: 32px;
   background: ${({ theme }) => theme.colors.secondaryBg};
-  & > :first-child {
-    padding: 32px 32px 16px 32px;
+  & > div {
+    margin-bottom: 16px;
     font: ${({ theme }) => theme.fonts.mainContentBold};
     color: ${({ theme }) => theme.colors.green};
-  }
-  & > :last-child {
-    margin-bottom: 32px;
   }
 `;
 
 const StyledProfileContentRow = styled.p`
-  padding-inline: 32px;
   display: flex;
   align-items: center;
   & > * {

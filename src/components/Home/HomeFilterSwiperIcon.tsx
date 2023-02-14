@@ -11,9 +11,9 @@ interface IProps {
   setSearchKeyword: (index: string | null) => void;
 }
 
-function FilterSwiperIcon(props: IProps) {
+function HomeFilterSwiperIcon(props: IProps) {
   return (
-    <StyledFilterSwiperIcon
+    <StyledHomeFilterSwiperIcon
       onMouseOver={() => {
         props.setFocusdFilter(props.index);
       }}
@@ -29,13 +29,13 @@ function FilterSwiperIcon(props: IProps) {
         imgUrl={props.imgUrl}
         focusdIcon={props.focusdFilter}
       ></StyledIcon>
-    </StyledFilterSwiperIcon>
+    </StyledHomeFilterSwiperIcon>
   );
 }
 
-export default FilterSwiperIcon;
+export default HomeFilterSwiperIcon;
 
-const StyledFilterSwiperIcon = styled.div`
+const StyledHomeFilterSwiperIcon = styled.div`
   position: relative;
   display: inline-block;
 `;

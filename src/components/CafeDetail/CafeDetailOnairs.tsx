@@ -5,6 +5,7 @@ import { CardLabelLarge } from "../common/card";
 import { FreeModeSwiper } from "../common/swiper";
 import { ICafeOnair } from "./type";
 import { getStoreBroadcastsList } from "../../api";
+import styled from "styled-components";
 
 function CafeDetailOnairs(props: { cafeId: number }) {
   const [cafeOnairList, setCafeOnairList] = useState<ICafeOnair[]>();
@@ -24,7 +25,7 @@ function CafeDetailOnairs(props: { cafeId: number }) {
     if (cafeOnairList) {
       const newOnairSwiper = cafeOnairList.map((onair, index) => (
         <Link
-          to={`/broadcast/${onair.id}`}
+          to={`/broadcast/${onair.id}/${onair.sessionId}`}
           key={`data-${index}`}
           style={{ textDecoration: "none" }}
         >
@@ -40,16 +41,34 @@ function CafeDetailOnairs(props: { cafeId: number }) {
   }, [cafeOnairList]);
 
   return (
-    <div>
-      {onairSwiper && (
-        <FreeModeSwiper
-          elementList={onairSwiper}
-          slidesPerView={window.innerWidth > 600 ? 2.5 : 1.5}
-          spaceBetween={16}
-        ></FreeModeSwiper>
+    <>
+      {cafeOnairList && (
+        <>
+          {cafeOnairList.length > 0 ? (
+            <div>
+              {onairSwiper && (
+                <FreeModeSwiper
+                  elementList={onairSwiper}
+                  slidesPerView={window.innerWidth > 600 ? 2.5 : 1.5}
+                  spaceBetween={16}
+                ></FreeModeSwiper>
+              )}
+            </div>
+          ) : (
+            <StyledSpan>현재 스트리밍 중인 방송이 없어요</StyledSpan>
+          )}
+        </>
       )}
-    </div>
+    </>
   );
 }
 
 export default React.memo(CafeDetailOnairs);
+
+const StyledSpan = styled.span`
+  font: ${(props) => props.theme.fonts.mainContent};
+  color: ${(props) => props.theme.colors.primaryText};
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 16px 16px 48px;
+`;
