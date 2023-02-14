@@ -33,7 +33,8 @@ public class SpeciesService {
     // 종 정보 목록 가져오기
     public List<SpeciesListDto> getSpecies(){
         List<Species> all = speciesRepository.findAll();
-        List<SpeciesListDto> findAll = all.stream().map(a -> new SpeciesListDto(a.getId(), a.getClassification(), a.getClassificationImg())).collect(Collectors.toList());
+        List<SpeciesListDto> findAll = all.stream().map(a -> new SpeciesListDto(a.getId(), a.getClassification(), a.getClassificationImg(), a.getClassificationIcon()))
+                .collect(Collectors.toList());
         return findAll;
     }
 }
