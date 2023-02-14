@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
@@ -17,16 +17,22 @@ import { darkTheme } from "./styles/themes/darkTheme";
 import { lightTheme } from "./styles/themes/lightTheme";
 import CafeDetail from "./pages/CafeDetail/CafeDetail";
 import AnimalDetail from "./pages/AnimalDetail";
-import { useAppSelector } from "./store";
+import { useAppDispatch, useAppSelector } from "./store";
 import { selectModal } from "./store/modalSlice";
 import { Modal } from "./components/common/modal";
 import Mypage from "./pages/Mypage";
 import Broadcast from "./pages/Broadcast";
+import { refresh } from "./store/userSlice";
 
 function App() {
   const [themeMode, toggleTheme] = useTheme();
   const modal = useAppSelector(selectModal);
+  const dispatch = useAppDispatch();
   const theme: Itheme = themeMode === "light" ? lightTheme : darkTheme;
+
+  useEffect(() => {
+    dispatch(refresh());
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

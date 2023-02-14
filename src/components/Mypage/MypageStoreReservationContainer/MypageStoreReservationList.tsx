@@ -2,7 +2,7 @@ import React from "react";
 import { FreeModeSwiper } from "../../common/swiper";
 import MypageStoreReservationItem from "./MypageStoreReservationItem";
 
-type IPlayStatus = "book" | "cancel" | "finish";
+export type TPlayStatus = "book" | "cancel" | "finish";
 export interface IStoreReservation {
   id: string; // pk
   playDateTime: string; // 방문 날짜 및 시간
@@ -12,7 +12,7 @@ export interface IStoreReservation {
   storeName: string; // 상호명, 가게명
   tel: string; // 가게 연락처
   img: string; // 체험 미리보기 이미지
-  status: IPlayStatus; // 예약 상태
+  status: TPlayStatus; // 예약 상태
 }
 
 const MypageStoreReservationList = () => {
