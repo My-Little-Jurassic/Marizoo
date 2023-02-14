@@ -9,6 +9,8 @@ import {
   TbUsers,
   TbThumbUp,
   TbX,
+  TbVolume,
+  TbVolumeOff,
 } from "react-icons/tb";
 
 import { GreenBtn, ReactionBtn } from "../../common/button";
@@ -189,6 +191,10 @@ const BroadcastScreen = function (props: IProps) {
     };
   }, [isBtnShown, isMouseOver]);
 
+  const toggleMute = function () {
+    if (streamRef.current) streamRef.current.muted = !streamRef.current.muted;
+  };
+
   return (
     <StyledContainer
       onMouseMove={showBtns}
@@ -277,33 +283,48 @@ const BroadcastScreen = function (props: IProps) {
         </StyledBtnContainer>
       )}
       {isVoteModalOpened && <VoteModal closeModal={() => setIsVoteModalOpened(false)} />}
-      {!isMaximized && !playingReaction && (
-        <StyledModeChangeIconContainer
-          onMouseOver={() => setIsMouseOver(true)}
-          onMouseOut={() => setIsMouseOver(false)}
-          isBtnShown={isBtnShown}
-          onClick={() => {
-            document.documentElement.requestFullscreen();
-            dispatch(broadcastActions.maximize());
-            setIsMouseOver(false);
-          }}
-        >
-          <TbMaximize size={30} />
-        </StyledModeChangeIconContainer>
-      )}
-      {isMaximized && !playingReaction && (
-        <StyledModeChangeIconContainer
-          onMouseOver={() => setIsMouseOver(true)}
-          onMouseOut={() => setIsMouseOver(false)}
-          isBtnShown={isBtnShown}
-          onClick={() => {
-            document.exitFullscreen();
-            dispatch(broadcastActions.maximize());
-            setIsMouseOver(false);
-          }}
-        >
-          <TbMinimize size={30} />
-        </StyledModeChangeIconContainer>
+
+      {!playingReaction && (
+        <StyledRightButtonDiv>
+          <StyledModeChangeIconContainer
+            onMouseOver={() => setIsMouseOver(true)}
+            onMouseOut={() => setIsMouseOver(false)}
+            isBtnShown={isBtnShown}
+            onClick={() => {
+              if (streamRef.current) streamRef.current.muted = !streamRef.current.muted;
+              setIsMouseOver(false);
+            }}
+          >
+            {streamRef.current?.muted ? <TbVolumeOff size={30} /> : <TbVolume size={30} />}
+          </StyledModeChangeIconContainer>
+          {!isMaximized ? (
+            <StyledModeChangeIconContainer
+              onMouseOver={() => setIsMouseOver(true)}
+              onMouseOut={() => setIsMouseOver(false)}
+              isBtnShown={isBtnShown}
+              onClick={() => {
+                document.documentElement.requestFullscreen();
+                dispatch(broadcastActions.maximize());
+                setIsMouseOver(false);
+              }}
+            >
+              <TbMaximize size={30} />
+            </StyledModeChangeIconContainer>
+          ) : (
+            <StyledModeChangeIconContainer
+              onMouseOver={() => setIsMouseOver(true)}
+              onMouseOut={() => setIsMouseOver(false)}
+              isBtnShown={isBtnShown}
+              onClick={() => {
+                document.exitFullscreen();
+                dispatch(broadcastActions.maximize());
+                setIsMouseOver(false);
+              }}
+            >
+              <TbMinimize size={30} />
+            </StyledModeChangeIconContainer>
+          )}
+        </StyledRightButtonDiv>
       )}
     </StyledContainer>
   );
@@ -417,9 +438,6 @@ const StyledReactionCancleContainer = styled.div`
 `;
 
 const StyledModeChangeIconContainer = styled.div<{ isBtnShown: boolean }>`
-  position: absolute;
-  bottom: 24px;
-  right: 24px;
   width: 56px;
   height: 56px;
   border-radius: 32px;
@@ -453,4 +471,13 @@ const StyledCountInfoContainer = styled.div`
 
 const StyledSpan = styled.span`
   font: ${(props) => props.theme.fonts.paragraph};
+`;
+
+const StyledRightButtonDiv = styled.div`
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  justify-content: space-evenly;
+  width: 136px;
 `;
