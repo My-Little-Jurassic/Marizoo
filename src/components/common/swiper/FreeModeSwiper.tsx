@@ -14,7 +14,7 @@ import { FreeMode } from "swiper";
 
 interface IProps {
   elementList: JSX.Element[];
-  slidesPerView: number;
+  slidesPerView: number | "auto";
   spaceBetween: number;
 }
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
@@ -17,16 +17,23 @@ import { darkTheme } from "./styles/themes/darkTheme";
 import { lightTheme } from "./styles/themes/lightTheme";
 import CafeDetail from "./pages/CafeDetail/CafeDetail";
 import AnimalDetail from "./pages/AnimalDetail";
-import { useAppSelector } from "./store";
+import { useAppDispatch, useAppSelector } from "./store";
 import { selectModal } from "./store/modalSlice";
 import { Modal } from "./components/common/modal";
+import Mypage from "./pages/Mypage";
 import StoreReservation from "./pages/StoreReservation";
 import Broadcast from "./pages/Broadcast";
+import { refresh } from "./store/userSlice";
 
 function App() {
   const [themeMode, toggleTheme] = useTheme();
   const modal = useAppSelector(selectModal);
+  const dispatch = useAppDispatch();
   const theme: Itheme = themeMode === "light" ? lightTheme : darkTheme;
+
+  useEffect(() => {
+    dispatch(refresh());
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -35,7 +42,7 @@ function App() {
         <Route path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/regist" element={<Regist />}></Route>
-        {/* <Route path="/user/:user_id" element={}></Route> */}
+        <Route path="/user/:user_id" element={<Mypage />}></Route>
         {/* <Route path="/user/:user_id/set_account" element={}></Route> */}
         {/* <Route path="/find_account" element={}></Route> */}
         <Route path="/broadcast/:broadcast_id/:session_id" element={<Broadcast />}></Route>
