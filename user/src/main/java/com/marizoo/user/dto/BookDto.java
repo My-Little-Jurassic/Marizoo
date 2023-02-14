@@ -21,5 +21,7 @@ public class BookDto {
     private String img;
     private BookStatus status;
     private String playTitle;
+
+    private Long storeId;
 //    private PlayType playType;
 }
