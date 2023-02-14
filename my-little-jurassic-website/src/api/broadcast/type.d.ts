@@ -27,7 +27,7 @@ export interface IPostBroadcastFeeds {
 }
 
 export interface IPostBroadcastBadge {
-  userIdList: number[];
+  userIdList: string[];
   badgeId: number;
 }
 
