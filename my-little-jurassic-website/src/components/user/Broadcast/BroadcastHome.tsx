@@ -11,7 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { IBroadcastInfo, IAnimalInfo, IStoreInfo } from "./type";
 import { NavLink } from "react-router-dom";
 import { getBroadcastInfo } from "../../../api";
-import BroadcastBadge from "./BroadcastBadge";
+import BroadcastBadgeModal from "./BroadcastBadgeModal";
 
 const BroadcastHome = function () {
   const [broadcastInfo, setBroadcastInfo] = useState<IBroadcastInfo | null>(null);
@@ -50,7 +50,7 @@ const BroadcastHome = function () {
       })
       .catch((err) => {
         console.log(err);
-        navigate("/404", { replace: false });
+        navigate("/404", { replace: true });
       });
     window.scrollTo(0, 0);
   }, [params.broadcast_id]);
@@ -60,7 +60,10 @@ const BroadcastHome = function () {
       {broadcastInfo && animalList && storeInfo && (
         <>
           {receivedBadge > 0 && (
-            <BroadcastBadge closeModal={() => setReceivedBadge(-1)} receivedBadge={receivedBadge} />
+            <BroadcastBadgeModal
+              closeModal={() => setReceivedBadge(-1)}
+              receivedBadge={receivedBadge}
+            />
           )}
           <StyledLeftSection>
             <BroadcastScreen
