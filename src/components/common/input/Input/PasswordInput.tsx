@@ -47,6 +47,7 @@ const StyledDiv = styled.div<{ status: EInputStatus }>`
     padding: 0;
     font: ${({ theme }) => theme.fonts.subContentBold};
     color: ${({ theme }) => theme.colors.primaryText};
+    background-color: ${({ theme }) => theme.colors.secondaryBg};
     &:focus {
       outline: none;
     }
