@@ -8,6 +8,9 @@ import {
   TbMinimize,
   TbUsers,
   TbThumbUp,
+  TbX,
+  TbVolume,
+  TbVolumeOff,
 } from "react-icons/tb";
 
 import { GreenBtn, ReactionBtn } from "../../common/button";
@@ -104,7 +107,7 @@ const BroadcastScreen = function (props: IProps) {
         if (roomInfo.voteStatus === "proceeding") {
           dispatch(broadcastActions.startVote(roomInfo.feedList));
         } else if (roomInfo.voteStatus === "finish") {
-          dispatch(broadcastActions.finishVote(roomInfo.winnerFeedId));
+          dispatch(broadcastActions.finishVote(roomInfo));
         }
       }
       if (streamRef.current && e.from?.stream) {
@@ -129,7 +132,7 @@ const BroadcastScreen = function (props: IProps) {
     });
     session.on("signal:badge", (e) => {
       if (e.data) {
-        props.setReceivedBadge(Number(e.data));
+        props.setReceivedBadge(Number(e.data) - 27);
       }
     });
     session.on("signal:finish", () => {
@@ -188,17 +191,9 @@ const BroadcastScreen = function (props: IProps) {
     };
   }, [isBtnShown, isMouseOver]);
 
-  // 5초 지나면 이펙트 종료
-  useEffect(() => {
-    if (playingReaction === null || playingReaction === "응원하기") {
-      return;
-    }
-    setTimeout(() => {
-      setPlayingReaction(null);
-      setIsMouseOver(false);
-      effectCnt.current += 1;
-    }, 5000);
-  }, [playingReaction]);
+  const toggleMute = function () {
+    if (streamRef.current) streamRef.current.muted = !streamRef.current.muted;
+  };
 
   return (
     <StyledContainer
@@ -208,38 +203,19 @@ const BroadcastScreen = function (props: IProps) {
       isVoteModalOpened={isVoteModalOpened}
       playingReaction={playingReaction}
     >
-      {/* {playingReaction === "쓰다듬기" && (
-        <SytledIframe
-          src="https://embed.lottiefiles.com/animation/97180"
-          clientX={mousePosition[0]}
-          clientY={mousePosition[1]}
-        />
-      )} */}
       {playingReaction === "예뻐하기" && (
         <BroadcastHeart clientX={mousePosition[0]} clientY={mousePosition[1]} />
-        // <SytledIframe
-        //   src="https://embed.lottiefiles.com/animation/42243"
-        //   clientX={mousePosition[0]}
-        //   clientY={mousePosition[1]}
-        // />
       )}
-      {playingReaction === "응원하기" && (
-        <>
-          {/* <SytledIframe
-            src="https://embed.lottiefiles.com/animation/35139"
-            clientX={mousePosition[0]}
-            clientY={mousePosition[1]}
-          /> */}
-          <BroadcastCombo finishEffect={finishEffect} />
-        </>
-      )}
+      {playingReaction === "응원하기" && <BroadcastCombo finishEffect={finishEffect} />}
       {playingReaction && (
         <StyledReactionCancleContainer
-          onMouseOver={() => setIsMouseOver(true)}
-          onMouseOut={() => setIsMouseOver(false)}
-          isBtnShown={isBtnShown}
+          onClick={() => {
+            setPlayingReaction(null);
+            setIsMouseOver(false);
+            effectCnt.current += 1;
+          }}
         >
-          <TbMaximize size={30} />
+          <TbX size={36} />
         </StyledReactionCancleContainer>
       )}
       <BroadcastStreamVideo ref={streamRef} />
@@ -307,33 +283,48 @@ const BroadcastScreen = function (props: IProps) {
         </StyledBtnContainer>
       )}
       {isVoteModalOpened && <VoteModal closeModal={() => setIsVoteModalOpened(false)} />}
-      {!isMaximized && !playingReaction && (
-        <StyledModeChangeIconContainer
-          onMouseOver={() => setIsMouseOver(true)}
-          onMouseOut={() => setIsMouseOver(false)}
-          isBtnShown={isBtnShown}
-          onClick={() => {
-            document.documentElement.requestFullscreen();
-            dispatch(broadcastActions.maximize());
-            setIsMouseOver(false);
-          }}
-        >
-          <TbMaximize size={30} />
-        </StyledModeChangeIconContainer>
-      )}
-      {isMaximized && !playingReaction && (
-        <StyledModeChangeIconContainer
-          onMouseOver={() => setIsMouseOver(true)}
-          onMouseOut={() => setIsMouseOver(false)}
-          isBtnShown={isBtnShown}
-          onClick={() => {
-            document.exitFullscreen();
-            dispatch(broadcastActions.maximize());
-            setIsMouseOver(false);
-          }}
-        >
-          <TbMinimize size={30} />
-        </StyledModeChangeIconContainer>
+
+      {!playingReaction && (
+        <StyledRightButtonDiv>
+          <StyledModeChangeIconContainer
+            onMouseOver={() => setIsMouseOver(true)}
+            onMouseOut={() => setIsMouseOver(false)}
+            isBtnShown={isBtnShown}
+            onClick={() => {
+              if (streamRef.current) streamRef.current.muted = !streamRef.current.muted;
+              setIsMouseOver(false);
+            }}
+          >
+            {streamRef.current?.muted ? <TbVolumeOff size={30} /> : <TbVolume size={30} />}
+          </StyledModeChangeIconContainer>
+          {!isMaximized ? (
+            <StyledModeChangeIconContainer
+              onMouseOver={() => setIsMouseOver(true)}
+              onMouseOut={() => setIsMouseOver(false)}
+              isBtnShown={isBtnShown}
+              onClick={() => {
+                document.documentElement.requestFullscreen();
+                dispatch(broadcastActions.maximize());
+                setIsMouseOver(false);
+              }}
+            >
+              <TbMaximize size={30} />
+            </StyledModeChangeIconContainer>
+          ) : (
+            <StyledModeChangeIconContainer
+              onMouseOver={() => setIsMouseOver(true)}
+              onMouseOut={() => setIsMouseOver(false)}
+              isBtnShown={isBtnShown}
+              onClick={() => {
+                document.exitFullscreen();
+                dispatch(broadcastActions.maximize());
+                setIsMouseOver(false);
+              }}
+            >
+              <TbMinimize size={30} />
+            </StyledModeChangeIconContainer>
+          )}
+        </StyledRightButtonDiv>
       )}
     </StyledContainer>
   );
@@ -421,7 +412,8 @@ const StyledBtnContainer = styled.div<{ isBtnShown: boolean }>`
   transition: bottom 0.5s;
 `;
 
-const StyledReactionCancleContainer = styled.div<{ isBtnShown: boolean }>`
+const StyledReactionCancleContainer = styled.div`
+  z-index: 5;
   position: absolute;
   bottom: 24px;
   left: 50%;
@@ -433,12 +425,11 @@ const StyledReactionCancleContainer = styled.div<{ isBtnShown: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: ${(props) => (props.isBtnShown ? "1" : "0")};
   background-color: rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: all 0.2s;
   &:hover {
-    transform: translateX(-50%) scale(1.02);
+    transform: translateX(-50%) scale(1.05);
   }
   &:active {
     transform: translateX(-50%) scale(1);
@@ -447,9 +438,6 @@ const StyledReactionCancleContainer = styled.div<{ isBtnShown: boolean }>`
 `;
 
 const StyledModeChangeIconContainer = styled.div<{ isBtnShown: boolean }>`
-  position: absolute;
-  bottom: 24px;
-  right: 24px;
   width: 56px;
   height: 56px;
   border-radius: 32px;
@@ -485,16 +473,11 @@ const StyledSpan = styled.span`
   font: ${(props) => props.theme.fonts.paragraph};
 `;
 
-const SytledIframe = styled.iframe<{
-  clientX: number | null;
-  clientY: number | null;
-}>`
+const StyledRightButtonDiv = styled.div`
   position: absolute;
-  top: ${(props) => `${props.clientY}px`};
-  left: ${(props) => `${props.clientX}px`};
-  transform: translate(-50%, -50%);
-  width: 30%;
-  height: 30%;
-  pointer-events: none;
-  z-index: 4;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  justify-content: space-evenly;
+  width: 136px;
 `;

@@ -52,7 +52,7 @@ const StyledBlackDiv = styled.div`
   left: 0;
   background-color: black;
   opacity: 0.7;
-  z-index: 1;
+  z-index: 10000;
   animation: ${boxFade} 2s linear;
 `;
 
@@ -63,7 +63,7 @@ const SytledIframe = styled.iframe`
   top: -50px;
   left: 0;
   pointer-events: none;
-  z-index: 3;
+  z-index: 10002;
 `;
 
 const StyledContainer = styled.div`
@@ -75,7 +75,7 @@ const StyledContainer = styled.div`
   left: 50vw;
   transform: translate(-50%, -50%);
   color: ${(props) => props.theme.colors.brandColors.basaltGray["50"]};
-  z-index: 2;
+  z-index: 10001;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -89,7 +89,8 @@ const StyledHeader2 = styled.span`
 `;
 
 const StyledCardBox = styled.div`
-  width: 240px;
+  height: 100%;
+  max-height: 176px;
 `;
 
 const StyledHeader3 = styled.span`

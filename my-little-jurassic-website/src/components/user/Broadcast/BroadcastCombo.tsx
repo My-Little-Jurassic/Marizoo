@@ -27,27 +27,41 @@ function useInterval(callback: () => void, delay: number) {
 // 수정 필요
 function BroadcastCombo(props: IProps) {
   const [comboCount, setComboCount] = useState(0);
-  const [comboTimerCount, setComboTimerCount] = useState(0);
-  const comboRef = useRef<number>(0);
+  const [comboTimerCount, setComboTimerCount] = useState(2);
+  const [isComboStart, setIsComboStart] = useState(false);
+
+  // useInterval(() => {
+  //   if (comboTimerCount < 0.96 && comboTimerCount !== 0) {
+  //     setComboCount(0);
+  //     props.finishEffect();
+  //   }
+  //   if (comboTimerCount === 0) {
+  //     return;
+  //   }
+  //   if (comboTimerCount < 20) {
+  //     setComboTimerCount(comboTimerCount * 0.95);
+  //   } else {
+  //     setComboTimerCount(comboTimerCount * 0.93);
+  //   }
+  // }, 100);
 
   useInterval(() => {
-    if (comboTimerCount < 0.96 && comboTimerCount !== 0) {
+    if (!isComboStart) {
+      return;
+    }
+    if (comboTimerCount === 1) {
       setComboCount(0);
       props.finishEffect();
     }
-    if (comboTimerCount === 0) {
-      return;
-    }
-    if (comboTimerCount < 20) {
-      setComboTimerCount(comboTimerCount * 0.95);
-    } else {
-      setComboTimerCount(comboTimerCount * 0.93);
-    }
-  }, 100);
+    setComboTimerCount(comboTimerCount - 1);
+  }, 3000 / (comboTimerCount + 5));
 
   const hitCombo = () => {
     setComboCount(comboCount + 1);
     setComboTimerCount(comboTimerCount + 2);
+    if (!isComboStart) {
+      setIsComboStart(true);
+    }
   };
 
   return (
@@ -103,8 +117,8 @@ const StyledCombo = styled.div<{
   height: 30px;
   position: absolute;
   z-index: 10;
-  top: 24px;
-  right: 48px;
+  top: 16px;
+  left: 16px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

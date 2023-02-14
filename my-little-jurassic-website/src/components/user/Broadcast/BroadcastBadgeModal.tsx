@@ -1,12 +1,14 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+import { GreenBtn } from "../../common/button";
 
 interface Iprops {
   closeModal: () => void;
   receivedBadge: number;
 }
 
-const BroadcastBadge = function (props: Iprops) {
+const BroadcastBadgeModal = function (props: Iprops) {
   return (
     <StyledModal onClick={props.closeModal}>
       <StyledBlackDiv />
@@ -14,12 +16,15 @@ const BroadcastBadge = function (props: Iprops) {
       <StyledContainer>
         <StyledHeader2>부화에 성공했어요!</StyledHeader2>
         <StyledImg src={`../../images/badgeEgg${props.receivedBadge}.png`} />
+        <NavLink to="/user" style={{ textDecoration: "none" }}>
+          <GreenBtn label="확인하러 가기" type={0} isDisable={false} />
+        </NavLink>
       </StyledContainer>
     </StyledModal>
   );
 };
 
-export default BroadcastBadge;
+export default BroadcastBadgeModal;
 
 const StyledModal = styled.div``;
 
@@ -40,7 +45,7 @@ const StyledBlackDiv = styled.div`
   left: 0;
   background-color: black;
   opacity: 0.7;
-  z-index: 1;
+  z-index: 10000;
   animation: ${boxFade} 2s linear;
 `;
 
@@ -51,7 +56,7 @@ const SytledIframe = styled.iframe`
   top: -50px;
   left: 0;
   pointer-events: none;
-  z-index: 6;
+  z-index: 10002;
 `;
 
 const StyledContainer = styled.div`
@@ -63,7 +68,7 @@ const StyledContainer = styled.div`
   left: 50vw;
   transform: translate(-50%, -50%);
   color: ${(props) => props.theme.colors.brandColors.basaltGray["50"]};
-  z-index: 2;
+  z-index: 10001;
   display: flex;
   flex-direction: column;
   align-items: center;

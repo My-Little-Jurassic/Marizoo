@@ -42,7 +42,7 @@ const VoteModal = function (props: Iprops) {
   });
 
   const vote = function () {
-    dispatch(broadcastActions.vote(selectedFeed));
+    dispatch(broadcastActions.vote(selectedFeed?.id));
     props.closeModal();
   };
 
@@ -81,11 +81,11 @@ const StyledBlackDiv = styled.div`
   left: 0;
   background-color: black;
   opacity: 0.7;
-  z-index: 101;
+  z-index: 10001;
 `;
 
 const StyledContainer = styled.div`
-  z-index: 102;
+  z-index: 10002;
   position: fixed;
   top: 50%;
   left: 50%;
