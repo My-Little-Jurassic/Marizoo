@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { getSameSpeciesAnimals, getSameStoreAnimals } from "../../api";
 import { ProfileLarge, ProfileStore } from "../common/profile";
@@ -18,8 +18,6 @@ const AnimalDetailSide = function (props: IProps) {
   const [sameSpeciesAnimalList, setSameSpeciesAnimalList] = useState<React.ReactNode[] | null>(
     null,
   );
-
-  const params = useParams();
 
   useEffect(() => {
     getSameStoreAnimals(props.storeInfo.storeId)
@@ -67,7 +65,7 @@ const AnimalDetailSide = function (props: IProps) {
         setSameSpeciesAnimalList(tmpSameSpeciesAnimalList);
       })
       .catch((err) => console.log(err));
-  }, [params.animal_id]);
+  }, [props.currentAnimalName]);
 
   return (
     <StyledContainer>
