@@ -86,6 +86,7 @@ public class Broadcast extends BaseEntity {
     public void endBroadcast(){
         if(this.getStatus() == BroadcastStatus.FINISH){
             // 이미 종료된 방송은 종료 불가
+            throw new RuntimeException("방송 중이 아닙니다.");
         }
         this.setStatus(BroadcastStatus.FINISH);
         this.setEndTime();
