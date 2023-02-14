@@ -2,6 +2,7 @@ interface ISpecies {
   id: number;
   classification: string;
   classificationImg: string;
+  classificationIcon: string;
 }
 
 interface IBroadcast {

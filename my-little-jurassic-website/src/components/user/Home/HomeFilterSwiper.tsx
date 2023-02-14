@@ -34,7 +34,7 @@ function HomeFilterSwiper(props: IProps) {
       >
         <StyledIcon
           index={index}
-          imgUrl={species.classificationImg}
+          imgUrl={species.classificationIcon}
           focusdIcon={props.focusdFilter}
         ></StyledIcon>
       </div>

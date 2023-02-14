@@ -30,7 +30,10 @@ const StyledDiv = styled.div`
 
   & > .backImg,
   & > .frontImg {
-    background-color: ${({ theme }) => theme.colors.brandColors.mangoYellow[50]};
+    background: ${({ theme }) =>
+      theme.isDark
+        ? theme.colors.brandColors.basaltGray[900]
+        : theme.colors.brandColors.mangoYellow[50]};
     z-index: -1;
     position: fixed;
     width: 100%;
@@ -45,7 +48,21 @@ const StyledDiv = styled.div`
     z-index: 10;
     top: -30px;
     pointer-events: none;
+    & > img {
+      content: ${({ theme }) =>
+        theme.isDark
+          ? "url(./images/darkLoginVectorBgFront.svg)"
+          : "url(./images/lightLoginVectorBgFront.svg)"};
+    }
   }
+
+  & > .backImg > img {
+    content: ${({ theme }) =>
+      theme.isDark
+        ? "url(./images/darkLoginVectorBgBack.svg)"
+        : "url(./images/lightLoginVectorBgBack.svg)"};
+  }
+
   @media screen and (max-aspect-ratio: 16/10) {
     & > .backImg,
     & > .frontImg {
@@ -82,10 +99,10 @@ const LoginVectorBg = ({ children }: IProps) => {
     <StyledDiv>
       <GrayBtn label={"뒤로가기"} type={2} isDisable={false} onClick={onBack} />
       <div className="frontImg">
-        <img src="./images/lightLoginVectorBgFront.svg" />
+        <img src="./images/darkLoginVectorBgFront.svg" />
       </div>
       <div className="backImg">
-        <img src="./images/lightLoginVectorBgBack.svg" />
+        <img src="./images/darkLoginVectorBgBack.svg" />
       </div>
       <main>{children}</main>
     </StyledDiv>

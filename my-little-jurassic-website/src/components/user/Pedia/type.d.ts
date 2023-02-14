@@ -5,6 +5,7 @@ export interface ISpecies {
   id: number;
   classification: string;
   classificationImg: string;
+  classificationIcon: string;
 }
 /**
  * 동물 정보

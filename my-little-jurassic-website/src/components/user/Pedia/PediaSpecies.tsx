@@ -16,7 +16,7 @@ const PediaSpecies = (props: IProps): JSX.Element => {
       selectedSpeciesId={props.selectedSpeciesId}
       onClick={props.onClick}
     >
-      <img src={props.species.classificationImg}></img>
+      <img src={props.species.classificationIcon}></img>
       <span>{props.species.classification}</span>
     </StyledPediaSpecies>
   );
