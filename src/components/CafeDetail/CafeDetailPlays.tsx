@@ -25,10 +25,12 @@ function CafeDetailPlays(props: { cafeId: number }) {
         <Link key={`play-${index}`} to={`/reservation/${props.cafeId}/${play.id}`}>
           <StyledCafePlays imgSrc={play.img}>
             <div>
-              <label>{play.title}</label>
-              <label>{play.description}</label>
               <label>{play.playDateTime.substring(0, 10)}</label>
-              <label>{play.playDateTime.substring(11, 16)}</label>
+              <div>
+                <label>{play.title}</label>
+                <label>{play.playDateTime.substring(11, 16)}</label>
+              </div>
+              <label>{play.description}</label>
             </div>
           </StyledCafePlays>
         </Link>
@@ -78,12 +80,11 @@ const StyledCafePlays = styled.div<{ imgSrc: string }>`
       justify-content: center;
       align-items: flex-start;
     }
-    & div :nth-child(1) {
+    & div :nth-child(1),
+    & div :nth-child(2) {
       display: none;
     }
-    & div :nth-child(2),
-    & div :nth-child(3),
-    & div :nth-child(4) {
+    & div :nth-child(3) {
       display: inline-block;
       pointer-events: none;
     }
@@ -92,24 +93,42 @@ const StyledCafePlays = styled.div<{ imgSrc: string }>`
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: end;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
     padding: 24px;
     box-sizing: border-box;
   }
-  & div :nth-child(1) {
+  & > div > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    box-sizing: border-box;
+  }
+  & div :nth-child(1),
+  & div :nth-child(2) {
     white-space: normal;
     word-break: break-all;
-    font: ${({ theme }) => theme.fonts.mainContentBold};
-    color: ${({ theme }) => theme.colors.brandColors.basaltGray[50]};
     cursor: pointer;
   }
-  & div :nth-child(2),
-  & div :nth-child(3),
-  & div :nth-child(4) {
+  & div :nth-child(1) {
+    font: ${({ theme }) => theme.fonts.subContentBold};
+    color: ${({ theme }) => theme.colors.brandColors.basaltGray[50]};
+  }
+  & > div > div :nth-child(1) {
+    font: ${({ theme }) => theme.fonts.mainContentBold};
+    color: ${({ theme }) => theme.colors.brandColors.basaltGray[50]};
+  }
+  & > div > div :nth-child(2) {
+    font: ${({ theme }) => theme.fonts.tinyContentBold};
+    color: ${({ theme }) => theme.colors.brandColors.basaltGray[50]};
+  }
+  & div :nth-child(3) {
     display: none;
     white-space: normal;
     word-break: break-all;
-    font: ${({ theme }) => theme.fonts.mainContentBold};
+    font: ${({ theme }) => theme.fonts.subContentBold};
     color: ${({ theme }) => theme.colors.brandColors.basaltGray[50]};
     cursor: pointer;
   }
