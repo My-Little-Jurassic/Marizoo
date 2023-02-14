@@ -30,6 +30,13 @@ export async function postLogin(body: type.ILoginBody) {
 }
 
 /**
+ * GET: 로그아웃
+ */
+export async function getLogout() {
+  return userInstance.get("/logout");
+}
+
+/**
  * GET: 토큰 재발급
  */
 export async function getRefresh() {

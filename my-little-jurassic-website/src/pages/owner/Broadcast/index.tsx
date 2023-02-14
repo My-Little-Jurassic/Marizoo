@@ -104,7 +104,7 @@ const Broadcast = () => {
     //  새로운 세션 연결 시 welcome SIGNAL 호출
     session.on("connectionCreated", (e) => {
       console.log("connection created");
-      const { options, winnerFeed, voteStatus } = vote;
+      const { options, winnerFeed, voteStatus } = variableRef.current.vote;
       session.signal({
         data: JSON.stringify({
           feedList: options,
@@ -155,11 +155,10 @@ const Broadcast = () => {
     session.on("signal:vote", (e) => {
       console.log("signal vote");
       const vote = variableRef.current.vote;
-      const options = vote.options;
-      if (e.data) return;
-      const feedId = Number(e.data);
-      const feedIndex = options.findIndex((feed) => feed.id === feedId);
-      options[feedIndex].numberOfVotes++;
+      const options = vote.options.map((feed) => {
+        if (feed.id === Number(e.data)) feed.numberOfVotes += 1;
+        return feed;
+      });
       variableRef.current.vote = { ...vote, options };
     });
   };
@@ -255,6 +254,7 @@ const Broadcast = () => {
     console.log("finishVote");
     const vote = variableRef.current.vote;
     if (vote === null) return;
+    console.log(vote);
     vote.winnerFeed = vote.options.sort((a, b) => b.numberOfVotes - a.numberOfVotes)[0].id;
     vote.voteStatus = "finish";
     variableRef.current.vote = vote;
@@ -267,12 +267,22 @@ const Broadcast = () => {
       type: "voteFinish",
     });
   };
+  const spreadBadge = async () => {
+    console.log("spreadBadge");
+    const min = 28;
+    const max = 36;
+    const badgeId = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const userIdList = viewerMap.current.keys();
+    // await postBroadcastBadges({ userIdList, badgeId });
+  };
 
   return (
     <StyledDiv className="Broadcast">
       <div>
         <BroadcastStatusViewer ref={videoRef} status={status} viewers={viewers} likes={likes} />
         <BroadcastVoteContainer vote={vote} status={status} finishVote={finishVote} />
+        {/* <BroadcastBadgeController spreadBadge={spreadBadge} /> */}
       </div>
       <div>
         <BroadcastSettingContainer
