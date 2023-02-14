@@ -1,6 +1,6 @@
 import { ActionReducerMapBuilder, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
-import { getRefresh, postLogin } from "../api";
+import { getLogout, getRefresh, postLogin } from "../api";
 import { ILoginBody } from "../api/user/type";
 
 interface IUserState {
@@ -48,6 +48,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
+      getLogout();
       state.status = "default";
       state.isUser = false;
       state.pk = undefined;
