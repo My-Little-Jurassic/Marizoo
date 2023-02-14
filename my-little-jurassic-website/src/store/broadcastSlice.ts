@@ -44,7 +44,7 @@ const broadcastSlice = createSlice({
       state.isMaximized = !state.isMaximized;
     },
 
-    vote(state, { payload }) {
+    vote(state: IInitialState, { payload }) {
       state.isVoted = true;
       if (state.session && state.ownerConnection) {
         state.session.signal({
