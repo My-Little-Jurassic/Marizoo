@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,7 +20,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -26,6 +30,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+
+import static com.marizoo.user.constant.JwtConstant.RT_EXP_TIME;
+import static com.marizoo.user.constant.JwtConstant.RT_HEADER;
 
 @Configuration
 @EnableWebSecurity
@@ -63,16 +70,26 @@ public class SecurityConfig {
                 .and()
                 .apply(new MyCustomDsl())
                 .and()
-                .logout().permitAll()
-                .logoutUrl("/api/user/logout")
-                .deleteCookies(JwtConstant.RT_HEADER)
-                .logoutSuccessHandler(((request, response, authentication) -> {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                }))
-                .addLogoutHandler(((request, response, authentication) -> {
-                    log.info("Logout Success");
-                }))
-                .and()
+                .logout(
+                        logout -> logout
+                        .logoutUrl("/api/user/logout")
+                        .logoutSuccessHandler(((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                        }))
+                        .invalidateHttpSession(true)
+                        .addLogoutHandler(((request, response, authentication) -> {
+                            ResponseCookie cookie = ResponseCookie.from(RT_HEADER, null)
+                                    .httpOnly(true)
+                                    .maxAge(0)
+                                    .domain("i8b208.p.ssafy.io")
+                                    .path("/")
+                                    .sameSite("None")
+                                    .secure(true)
+                                    .build();
+                            response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+                            log.info("Logout Success");
+                        }))
+                )
                 .build();
     }
 
