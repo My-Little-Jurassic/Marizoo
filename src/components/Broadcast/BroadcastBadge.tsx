@@ -12,12 +12,8 @@ const BroadcastBadge = function (props: Iprops) {
       <StyledBlackDiv />
       <SytledIframe src="https://embed.lottiefiles.com/animation/32585" />
       <StyledContainer>
-        <StyledHeader2>먹이 투표 결과</StyledHeader2>
-        <StyledCardBox>
-          <img src={`./images/badgeEgg${props.receivedBadge}.png`} />
-        </StyledCardBox>
-        <StyledHeader2>1등</StyledHeader2>
-        <StyledHeader3>asdf</StyledHeader3>
+        <StyledHeader2>부화에 성공했어요!</StyledHeader2>
+        <StyledImg src={`../../images/badgeEgg${props.receivedBadge}.png`} />
       </StyledContainer>
     </StyledModal>
   );
@@ -55,7 +51,7 @@ const SytledIframe = styled.iframe`
   top: -50px;
   left: 0;
   pointer-events: none;
-  z-index: 3;
+  z-index: 6;
 `;
 
 const StyledContainer = styled.div`
@@ -71,6 +67,7 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 32px;
   box-sizing: border-box;
   padding: 112px 32px;
@@ -80,10 +77,6 @@ const StyledHeader2 = styled.span`
   font: ${(props) => props.theme.fonts.header2};
 `;
 
-const StyledCardBox = styled.div`
+const StyledImg = styled.img`
   width: 240px;
-`;
-
-const StyledHeader3 = styled.span`
-  font: ${(props) => props.theme.fonts.header3};
 `;

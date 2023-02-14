@@ -11,11 +11,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { IBroadcastInfo, IAnimalInfo, IStoreInfo } from "./type";
 import { NavLink } from "react-router-dom";
 import { getBroadcastInfo } from "../../api";
+import BroadcastBadge from "./BroadcastBadge";
 
 const BroadcastHome = function () {
   const [broadcastInfo, setBroadcastInfo] = useState<IBroadcastInfo | null>(null);
   const [animalList, setAnimalList] = useState<React.ReactNode[] | null>(null);
   const [storeInfo, setStoreInfo] = useState<IStoreInfo | null>(null);
+  const [receivedBadge, setReceivedBadge] = useState<number>(-1);
 
   const isMaximized = useAppSelector((state) => state.broadcast.isMaximized);
   const navigate = useNavigate();
@@ -57,8 +59,14 @@ const BroadcastHome = function () {
     <StyledContainer>
       {broadcastInfo && animalList && storeInfo && (
         <>
+          {receivedBadge > 0 && (
+            <BroadcastBadge closeModal={() => setReceivedBadge(-1)} receivedBadge={receivedBadge} />
+          )}
           <StyledLeftSection>
-            <BroadcastScreen title={broadcastInfo.title} />
+            <BroadcastScreen
+              title={broadcastInfo.title}
+              setReceivedBadge={(badgeNumber) => setReceivedBadge(badgeNumber)}
+            />
             {!isMaximized && (
               <BroadcastContent
                 title={broadcastInfo.title}
