@@ -9,4 +9,5 @@ public class SpeciesListDto {
     private Long id;
     private String classification;
     private String classificationImg;
+    private String classificationIcon;
 }
