@@ -78,7 +78,7 @@ public class UserController {
                     .httpOnly(true)
                     .maxAge(RT_EXP_TIME)
                     .domain("i8b208.p.ssafy.io")
-                    .path("/refresh")
+                    .path("/api/user/refresh")
                     .sameSite("None")
                     .secure(true)
                     .build();
