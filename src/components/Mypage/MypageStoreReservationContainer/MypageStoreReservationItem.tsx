@@ -24,7 +24,7 @@ const MypageStoreReservationItem = ({ item }: IProps): JSX.Element => {
           </span>
         </div>
       </div>
-      {/* <MypageStoreReservationCancelBtn /> */}
+      <MypageStoreReservationCancelBtn />
       <MypageStoreReservationStatus status={status} />
     </StyledDiv>
   );
