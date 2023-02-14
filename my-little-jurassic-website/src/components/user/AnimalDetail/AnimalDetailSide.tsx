@@ -2,8 +2,8 @@ import { Grid } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { getSameSpeciesAnimals, getSameStoreAnimals } from "../../api";
-import { ProfileLarge, ProfileStore } from "../common/profile";
+import { getSameSpeciesAnimals, getSameStoreAnimals } from "../../../api";
+import { ProfileLarge, ProfileStore } from "../../common/profile";
 import { IStoreInfo, IStoreAnimalInfo } from "./type";
 
 interface IProps {

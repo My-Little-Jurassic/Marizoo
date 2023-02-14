@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { PediaContainer } from "../../components/Pedia";
+import { PediaContainer } from "../../../components/user/Pedia";
 
 const Pedia = (): JSX.Element => {
   return (

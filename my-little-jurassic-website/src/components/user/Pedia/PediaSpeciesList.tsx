@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getSpeciesList } from "../../api/pedia";
+import { getSpeciesList } from "../../../api/pedia";
 import PediaSpecies from "./PediaSpecies";
 import { ISpecies } from "./type";
 

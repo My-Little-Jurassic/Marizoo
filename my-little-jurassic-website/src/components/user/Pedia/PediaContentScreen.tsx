@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import { getSpeciesInfo } from "../../api/pedia";
+import { getSpeciesInfo } from "../../../api/pedia";
 import { ISpeciesDetail } from "./type";
 
 interface IProps {

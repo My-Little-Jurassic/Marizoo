@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { getAnimalDetail } from "../../api";
+import { getAnimalDetail } from "../../../api";
 import {
   AnimalDetailProfile,
   AnimalDetailDescription,
   AnimalDetailSide,
-} from "../../components/AnimalDetail";
+} from "../../../components/user/AnimalDetail";
 import {
   IAnimalInfo,
   IBroadcastInfo,
   IFeed,
   ISpeciesInfo,
   IStoreInfo,
-} from "../../components/AnimalDetail/type";
+} from "../../../components/user/AnimalDetail/type";
 
 const AnimalDetail = function () {
   const params = useParams();

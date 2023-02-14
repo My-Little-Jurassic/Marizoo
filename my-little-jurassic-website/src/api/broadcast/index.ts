@@ -1,4 +1,4 @@
-import userInstance from "..";
+import { userInstance } from "..";
 import * as type from "./type";
 
 /**

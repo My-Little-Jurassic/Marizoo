@@ -5,5 +5,6 @@ declare namespace NodeJS {
     readonly NODE_ENV: "development" | "production" | "test";
     readonly PUBLIC_URL: string;
     readonly REACT_APP_API_URL: string;
+    readonly REACT_APP_KAKAO_MAP_KEY: string;
   }
 }

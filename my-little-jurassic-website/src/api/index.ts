@@ -9,7 +9,13 @@ userInstance.defaults.headers.post["Content-Type"] = "application/json";
 userInstance.defaults.headers.put["Content-Type"] = "application/json";
 userInstance.defaults.withCredentials = true;
 
-export default userInstance;
+// 기본 axios 설정
+const ownerInstance = axios.create({ baseURL: `${URL}/owner`, timeout: 2000 });
+ownerInstance.defaults.headers.post["Content-Type"] = "application/json";
+ownerInstance.defaults.headers.put["Content-Type"] = "application/json";
+ownerInstance.defaults.withCredentials = true;
+
+export { userInstance, ownerInstance };
 
 export * from "./user";
 export * from "./cafeDetail";

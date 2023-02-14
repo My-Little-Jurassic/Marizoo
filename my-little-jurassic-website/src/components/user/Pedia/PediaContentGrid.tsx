@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Grid } from "@mui/material";
-import { ProfileLarge } from "../common/profile";
+import { ProfileLarge } from "../../common/profile";
 import { IAinmal } from "./type";
-import { getSpeciesAnimalList } from "../../api/pedia";
+import { getSpeciesAnimalList } from "../../../api/pedia";
 import { Link } from "react-router-dom";
 
 interface IProps {
