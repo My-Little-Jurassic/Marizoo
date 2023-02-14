@@ -2,6 +2,7 @@ package com.marizoo.user.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marizoo.user.constant.JwtConstant;
+import com.marizoo.user.entity.User;
 import com.marizoo.user.filter.ExceptionHandlerFilter;
 import com.marizoo.user.filter.JwtAuthorizationFilter;
 import com.marizoo.user.filter.JwtAuthenticationFilter;
@@ -17,6 +18,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -78,15 +81,13 @@ public class SecurityConfig {
                         }))
                         .invalidateHttpSession(true)
                         .addLogoutHandler(((request, response, authentication) -> {
-                            ResponseCookie cookie = ResponseCookie.from(RT_HEADER, null)
-                                    .httpOnly(true)
-                                    .maxAge(0)
-                                    .domain("i8b208.p.ssafy.io")
-                                    .path("/")
-                                    .sameSite("None")
-                                    .secure(true)
-                                    .build();
-                            response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+                            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                            String uid = auth.getName();
+                            User user = userRepository.findByUid(uid).get();
+                            user.setRefreshToken("");
+
+                            userRepository.save(user);
+                            
                             log.info("Logout Success");
                         }))
                 )
