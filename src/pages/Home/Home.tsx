@@ -108,7 +108,6 @@ const StyledMain = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: ${(props) => props.theme.colors.primaryBg};
   padding: 16px;
   min-height: 100vh;
 `;
@@ -121,7 +120,7 @@ const StyledHomeInput = styled.div`
     margin-top: 80px;
   }
   @media screen and (min-width: 600px) {
-    margin-top: 180px;
+    margin-top: 0px;
     margin-bottom: 20px;
   }
 `;
