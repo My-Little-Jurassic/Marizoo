@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { TbX } from "react-icons/tb";
 import styled from "styled-components";
 
-import { SearchInput } from "../../components/common/input";
-import { HomeFilterSwiper, HomeLiveGrid } from "../../components/Home";
-import { SideBg } from "../../components/common/background";
-import { getBroadcastList, getSearchedBroadcastList, getSpeciesList } from "../../api";
+import { SearchInput } from "../../../components/common/input";
+import { HomeFilterSwiper, HomeLiveGrid } from "../../../components/user/Home";
+import { SideBg } from "../../../components/common/background";
+import { getBroadcastList, getSearchedBroadcastList, getSpeciesList } from "../../../api";
 
 function Home() {
   const [speciesList, setSpeciesList] = useState<ISpecies[] | null>();

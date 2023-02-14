@@ -6,7 +6,7 @@ import {
   MypageFooter,
   MypageHeader,
   MypageStoreReservationContainer,
-} from "../../components/Mypage";
+} from "../../../components/user/Mypage";
 
 const Mypage = (): JSX.Element => {
   return (

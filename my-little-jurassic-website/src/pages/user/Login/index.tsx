@@ -1,5 +1,5 @@
 import React from "react";
-import { LoginContainer, LoginSide, LoginVectorBg } from "../../components/Login";
+import { LoginContainer, LoginSide, LoginVectorBg } from "../../../components/user/Login";
 
 const Login = (): JSX.Element => {
   return (

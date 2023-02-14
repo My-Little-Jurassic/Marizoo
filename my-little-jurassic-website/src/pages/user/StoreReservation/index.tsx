@@ -6,10 +6,10 @@ import {
   StoreReservationInfo,
   StoreReservationNotice,
   StoreReservationCompleteModal,
-} from "../../components/StoreReservation";
-import { IPlayInfo, IStoreInfo } from "../../components/StoreReservation/type";
-import { getReservationDetail } from "../../api";
-import { useAppSelector } from "../../store";
+} from "../../../components/user/StoreReservation";
+import { IPlayInfo, IStoreInfo } from "../../../components/user/StoreReservation/type";
+import { getReservationDetail } from "../../../api";
+import { useAppSelector } from "../../../store";
 
 const StoreReservation = function () {
   const params = useParams();
