@@ -21,6 +21,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -76,8 +78,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("https://localhost:3000");    // allowCredentials가 true이면 origin을 정확히 명시해주어야함
-        configuration.addAllowedOrigin("https://i8b208.p.ssafy.io");    // allowCredentials가 true이면 origin을 정확히 명시해주어야함
+        configuration.setAllowedOrigins(Arrays.asList("https://localhost:3000", "https://i8b208.p.ssafy.io"));
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.addExposedHeader("access-token");

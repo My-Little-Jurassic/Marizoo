@@ -108,7 +108,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ResponseCookie cookie = ResponseCookie.from(RT_HEADER, refreshToken)
                 .httpOnly(true)
                 .maxAge(RT_EXP_TIME)
-                .domain("127.0.0.1")
+                .domain("localhost")
                 .path("/api/user/refresh")
                 .sameSite("None")
                 .secure(true)
