@@ -22,6 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
@@ -63,7 +64,12 @@ public class SecurityConfig {
                 .logout().permitAll()
                 .logoutUrl("/api/user/logout")
                 .logoutSuccessHandler(((request, response, authentication) -> {
-                    response.setStatus(HttpServletResponse.SC_OK);
+                    for (Cookie cookie : request.getCookies()) {
+                        String name = cookie.getName();
+                        Cookie deleteCookie = new Cookie(name, null);
+                        deleteCookie.setMaxAge(0);
+                        response.addCookie(deleteCookie);
+                    }
                 }))
                 .deleteCookies(JwtConstant.RT_HEADER)
                 .and()
