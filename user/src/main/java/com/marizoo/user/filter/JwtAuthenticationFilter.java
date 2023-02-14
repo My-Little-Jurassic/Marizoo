@@ -11,6 +11,7 @@ import com.marizoo.user.dto.ExceptionResponseDto;
 import com.marizoo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -107,12 +108,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ResponseCookie cookie = ResponseCookie.from(RT_HEADER, refreshToken)
                 .httpOnly(true)
                 .maxAge(RT_EXP_TIME)
-                .domain("localhost")
+                .domain("127.0.0.1")
                 .path("/api/user/refresh")
-                .sameSite("none")
+                .sameSite("None")
                 .secure(true)
                 .build();
-        response.addHeader("Set-Cookie", cookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
     private User saveRefreshToken(PrincipalDetails principalDetails, String refreshToken) {
