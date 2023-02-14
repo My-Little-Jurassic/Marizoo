@@ -76,7 +76,6 @@ public class UserController {
             // refresh token이 재생성되었으므로 쿠키에 저장하여 보내주어야한다.
             ResponseCookie cookie = ResponseCookie.from(RT_HEADER, refreshToken)
                     .httpOnly(true)
-                    .maxAge(RT_EXP_TIME)
                     .domain("i8b208.p.ssafy.io")
                     .path("/api/user/refresh")
                     .sameSite("None")
