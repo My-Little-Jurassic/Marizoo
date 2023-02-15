@@ -80,7 +80,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("쿠키에 refresh token 저장");
         setCookieRefreshToken(response, refreshToken);
 
-        SecurityContextHolder.getContext().setAuthentication(authResult);
     }
 
     @Override

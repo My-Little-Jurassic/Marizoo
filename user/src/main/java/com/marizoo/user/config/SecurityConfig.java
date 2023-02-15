@@ -81,7 +81,11 @@ public class SecurityConfig {
                         }))
                         .invalidateHttpSession(true)
                         .addLogoutHandler(((request, response, authentication) -> {
-                            log.info("Auth = {}", authentication);
+                            Long userId = Long.getLong(request.getParameter("userId"));
+                            User user = userRepository.findById(userId).get();
+                            user.setRefreshToken("");
+
+                            userRepository.save(user);
                             log.info("Logout Success");
                         }))
                 )
