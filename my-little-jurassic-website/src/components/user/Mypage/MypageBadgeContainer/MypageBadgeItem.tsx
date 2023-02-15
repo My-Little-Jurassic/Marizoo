@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { IBadge } from "./MypageBadgeList";
+import { IBadge } from "./MypageBadgeContainer";
 
 interface IProps {
   item: IBadge;
