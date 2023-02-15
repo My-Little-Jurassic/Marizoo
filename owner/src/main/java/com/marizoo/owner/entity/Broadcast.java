@@ -58,7 +58,6 @@ public class Broadcast extends BaseEntity {
 
     public void setEndTime(){
         this.endTime = LocalDateTime.now();
-        this.status = BroadcastStatus.FINISH;
     }
 
 //    === 생성 메서드 ===

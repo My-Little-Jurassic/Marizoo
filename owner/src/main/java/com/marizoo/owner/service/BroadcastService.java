@@ -36,15 +36,18 @@ public class BroadcastService {
     /**
      * broadcast_id에 해당하는 방송 종료 시간
      * @param broadcastId : 방송 PK
-     * @return boolean
      */
-    public boolean saveEndTime(Long broadcastId, Vote vote){
+    public void endBroadcast(Long broadcastId, Vote vote){
+        // broadcastId에 해당하는 방송 가져오기
         Optional<Broadcast> opt = broadcastRepository.findById(broadcastId);
         if(opt.isEmpty()){
-            return false;
+            throw new RuntimeException("해당하는 방송이 존재하지 않습니다.");
         }
         Broadcast broadcast = opt.get();
-        broadcast.setEndTime();
+
+        // boradcast 방송 종료 로직 실행
+        broadcast.endBroadcast();
+        // vote 정보가 null이 아닐 경우만 vote 정보를 설정
         if(vote != null){
             broadcast.setVote(vote);
         }
@@ -55,7 +58,6 @@ public class BroadcastService {
         }
 
         broadcastRepository.save(broadcast);
-        return true;
     }
 
     /**
@@ -72,7 +74,7 @@ public class BroadcastService {
         // animal store find
         Optional<AnimalStore> optionalAnimalStore = animalStoretRepository.findById(animalStoreId);
         if(optionalAnimalStore.isEmpty()){
-            return null;
+            throw new RuntimeException("존재하지 않는 가게입니다.");
         }
         AnimalStore animalStore = optionalAnimalStore.get();
 
@@ -81,10 +83,11 @@ public class BroadcastService {
         for (Long aLong : animalIdList) {
             Optional<Animal> optionalAnimal = animalRepository.findById(aLong);
             if (optionalAnimal.isEmpty()) {
-                return null;
+                throw new RuntimeException("존재하지 않는 동물입니다.");
             }
             Animal animal = optionalAnimal.get();
 
+            // 방송 시작하는 동물 offAir -> onAir로
             animal.setIsOnAir("onAir");
             animalRepository.save(animal);
 
@@ -93,7 +96,7 @@ public class BroadcastService {
         }
 
         if(img.isEmpty()) {
-            return null;
+            throw new RuntimeException("썸네일을 설정하지 않았습니다.");
         }
         String imgUrl = null;
         try {
@@ -109,10 +112,6 @@ public class BroadcastService {
         return broadcast.getId();
     }
 
-    public void finishBroadcast(Long broadcastId){
-        Broadcast broadcastById = broadcastRepository.findBroadcastById(broadcastId);
-        broadcastById.setEndTime(LocalDateTime.now());
-    }
 
     @Transactional
     public void bulkAddBadge(List<Long> userIdList, Long badgeId) {
