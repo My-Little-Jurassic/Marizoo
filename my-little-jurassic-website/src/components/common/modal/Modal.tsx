@@ -11,6 +11,7 @@ import StoreReservationExceed from "./StoreReservationExceed";
 import RedirectToLogin from "./ReservationRedirectToLogin";
 import ReservationRedirectToLogin from "./ReservationRedirectToLogin";
 import CancelBook from "./CancelBook";
+import MypageModifyInfo from "./MypageModifyInfo";
 
 interface IProps {
   content: string;
@@ -50,6 +51,9 @@ const Modal = ({ content }: IProps): JSX.Element => {
 
       case "CancelBook":
         return <CancelBook onClose={onClose} />;
+
+      case "MypageModifyInfo":
+        return <MypageModifyInfo onClose={onClose} />;
 
       default:
         return <DefaultContent onClose={onClose} />;

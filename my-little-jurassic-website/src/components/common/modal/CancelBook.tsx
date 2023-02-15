@@ -48,6 +48,7 @@ const StyledDiv = styled.div`
   border-radius: 32px;
   -webkit-animation: slide-in-blurred-bottom 0.4s cubic-bezier(0.23, 1, 0.32, 1) both; // 수정불가
   animation: slide-in-blurred-bottom 0.4s cubic-bezier(0.23, 1, 0.32, 1) both; // 수정불가
+  font: ${({ theme }) => theme.fonts.mainContent};
 
   & > h1 {
     font: ${({ theme }) => theme.fonts.header3};
