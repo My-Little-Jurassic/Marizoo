@@ -31,6 +31,7 @@ function CafeDetail() {
   const navigate = useNavigate();
 
   const params = useParams();
+
   useEffect(() => {
     if (params.cafe_id) {
       getStoreDetail(params.cafe_id, pk)
@@ -42,7 +43,7 @@ function CafeDetail() {
           navigate("/404");
         });
     }
-  }, [params.cafe_id]);
+  }, [params.cafe_id, pk]);
 
   return (
     <StyledCafeDetail>

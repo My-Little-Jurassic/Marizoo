@@ -117,7 +117,7 @@ const StyledHomeInput = styled.div`
   justify-content: center;
   width: 90%;
   @media screen and (max-width: 600px) {
-    margin-top: 80px;
+    margin-top: -80px;
   }
   @media screen and (min-width: 600px) {
     margin-top: 0px;
