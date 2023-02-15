@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -221,5 +222,12 @@ public class UserController {
     public ExceptionResponseDto exception(Exception e) {
         log.error("class = {} message = {}", e.getClass(), e.getMessage());
         return new ExceptionResponseDto("잘못된 요청입니다.");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ExceptionResponseDto methodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error(e.toString());
+        return new ExceptionResponseDto(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
     }
 }
