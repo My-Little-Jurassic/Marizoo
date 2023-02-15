@@ -36,7 +36,6 @@ function CafeDetail() {
     if (params.cafe_id) {
       getStoreDetail(params.cafe_id, pk)
         .then((res) => {
-          console.log("================");
           setCafeInfo(res.data);
         })
         .catch((e) => {
