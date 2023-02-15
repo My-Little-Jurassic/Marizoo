@@ -98,3 +98,9 @@ export async function getBadges(pk: string) {
 export async function getLikeStores(pk: string) {
   return userInstance.get(`user/${pk}/stores`);
 }
+/**
+ * GET: 방문 예약 조회
+ */
+export async function getLikeBooks(pk: string) {
+  return userInstance.get(`user/${pk}/books`);
+}
