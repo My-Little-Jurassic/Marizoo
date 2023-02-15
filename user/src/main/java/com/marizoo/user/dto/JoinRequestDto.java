@@ -12,7 +12,6 @@ import javax.validation.constraints.Pattern;
 public class JoinRequestDto {
 
     @NotBlank(message = "아이디를 확인해주세요.")
-    @Pattern(regexp = "[a-z0-9]", message = "아이디를 확인해주세요.")
     private String uid;
 
     @NotBlank(message = "비밀번호를 확인해주세요.")
