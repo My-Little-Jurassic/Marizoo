@@ -33,27 +33,25 @@ public class BroadcastService {
     @Autowired
     private AwsS3Uploader s3Uploader;
 
-    private static String dirName = "test";
+    private static String dirName = "broadcast";
 
     /**
      * broadcast_id에 해당하는 방송 종료 시간
      * @param broadcastId : 방송 PK
+     * @return boolean
      */
-    public void saveEndTime(Long broadcastId, Vote vote){
-        Optional<Broadcast> opt = null;
-        try {
-            opt = broadcastRepository.findById(broadcastId);
-        } catch (Exception e) {
-            throw new RuntimeException("방송이 없습니다.");
+    public boolean saveEndTime(Long broadcastId, Vote vote){
+        Optional<Broadcast> opt = broadcastRepository.findById(broadcastId);
+        if(opt.isEmpty()){
+            return false;
         }
         Broadcast broadcast = opt.get();
-        try {
-            broadcast.endBroadcast();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+        broadcast.setEndTime();
+        if(vote != null){
+            broadcast.setVote(vote);
         }
-        broadcast.setVote(vote);
         broadcastRepository.save(broadcast);
+        return true;
     }
 
     /**
