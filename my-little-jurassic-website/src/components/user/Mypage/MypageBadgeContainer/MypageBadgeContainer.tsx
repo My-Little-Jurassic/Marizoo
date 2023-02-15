@@ -1,15 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import styled from "styled-components";
+import { getBadges } from "../../../../api";
 import MypageBadgeGauge from "./MypageBadgeGauge";
 import MypageBadgeList from "./MypageBadgeList";
 
+export interface IBadge {
+  img: string;
+  type: string;
+  desc: string;
+}
+
 const MypageBadgeContainer = () => {
+  const [badgeList, setBadgeList] = useState<IBadge[]>([]);
+  const params = useParams();
+
+  // 배지에 대한 정보를 불러옵니다
+  useEffect(() => {
+    if (params.user_id)
+      getBadges(params.user_id)
+        .then((val) => setBadgeList(val.data.badges))
+        .catch((e) => console.log(e));
+  }, [params.user_id]);
+
   return (
     <StyledDiv>
       <h2>나의 배지 컬렉션</h2>
       <div className="badge-area">
-        <MypageBadgeGauge />
-        <MypageBadgeList />
+        <MypageBadgeGauge badgeListNum={badgeList.length} />
+        <MypageBadgeList badgeList={badgeList} />
       </div>
     </StyledDiv>
   );

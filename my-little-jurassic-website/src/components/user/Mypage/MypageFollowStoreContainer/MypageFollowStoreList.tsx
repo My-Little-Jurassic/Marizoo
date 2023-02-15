@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { getLikeStores } from "../../../../api";
 import { FreeModeSwiper } from "../../../common/swiper";
 import MypageFollowStoreItem from "./MypageFollowStoreItem";
 
@@ -11,6 +13,7 @@ export interface IStore {
 }
 
 const MypageFollowStoreList = () => {
+  /* 더미데이터
   const followStoreList: IStore[] = [
     {
       storeName: "마리쥬 동물샵",
@@ -48,6 +51,16 @@ const MypageFollowStoreList = () => {
       img: "https://picsum.photos/200/300",
     },
   ];
+  */
+
+  const [followStoreList, setFollowStoreList] = useState<IStore[]>([]);
+  const params = useParams();
+  useEffect(() => {
+    if (params.user_id)
+      getLikeStores(params.user_id)
+        .then((val) => setFollowStoreList(val.data.stores))
+        .catch((e) => console.log(e));
+  }, [params.user_id]);
   return (
     <FreeModeSwiper
       elementList={followStoreList.map((item, index) => (

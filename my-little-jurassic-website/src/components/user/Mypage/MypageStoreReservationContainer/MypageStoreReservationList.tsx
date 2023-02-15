@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { getUserBooks } from "../../../../api";
 import { FreeModeSwiper } from "../../../common/swiper";
 import MypageStoreReservationItem from "./MypageStoreReservationItem";
 
@@ -17,6 +19,7 @@ export interface IStoreReservation {
 
 const MypageStoreReservationList = () => {
   // TODO: 예약목록 요청
+  /*
   const storeReservationList: IStoreReservation[] = [
     {
       id: "1",
@@ -59,6 +62,16 @@ const MypageStoreReservationList = () => {
       status: "finish",
     },
   ];
+*/
+  const [storeReservationList, setStoreReservationList] = useState<IStoreReservation[]>([]);
+  const params = useParams();
+  useEffect(() => {
+    if (params.user_id)
+      getUserBooks(params.user_id)
+        .then((val) => setStoreReservationList(val.data.books))
+        .catch((e) => console.log(e));
+  }, [params.user_id]);
+
   return (
     <FreeModeSwiper
       elementList={storeReservationList.map((item, index) => (

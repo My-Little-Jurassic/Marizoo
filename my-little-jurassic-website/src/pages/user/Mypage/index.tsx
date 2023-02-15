@@ -37,6 +37,16 @@ const StyledMain = styled.main`
     font: ${({ theme }) => theme.fonts.header2};
     margin: 56px 0 24px;
   }
+  &::before {
+    position: fixed;
+    content: "";
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: ${({ theme }) => theme.colors.primaryBg};
+  }
 `;
 
 export default Mypage;
