@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IStore } from "./MypageFollowStoreList";
 
@@ -6,8 +7,13 @@ interface IProps {
   item: IStore;
 }
 const MypageFollowStoreItem = ({ item }: IProps) => {
+  const navigate = useNavigate();
+
+  const onClick = () => {
+    navigate(`/cafe/${item.animalStoreId}`);
+  };
   return (
-    <StyledLi>
+    <StyledLi onClick={onClick}>
       <div>
         <img src={item.img} />
       </div>

@@ -5,6 +5,7 @@ import { FreeModeSwiper } from "../../../common/swiper";
 import MypageFollowStoreItem from "./MypageFollowStoreItem";
 
 export interface IStore {
+  animalStoreId: number;
   storeName: string;
   id: number;
   tel: string;
