@@ -104,3 +104,9 @@ export async function getLikeStores(pk: string) {
 export async function getUserBooks(pk: string) {
   return userInstance.get(`users/${pk}/books`);
 }
+/**
+ * DELETE: 방문 예약 조회
+ */
+export async function deleteUserBook(pk: string, book_id: string) {
+  return userInstance.delete(`users/${pk}/books/${book_id}`);
+}
