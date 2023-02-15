@@ -47,60 +47,60 @@ export async function getRefresh() {
  * GET: 유저 아이디 찾기
  */
 export async function getFindUid(params: type.IFindUidParams) {
-  return userInstance.get("/user/find-pk", { params });
+  return userInstance.get("/users/find-pk", { params });
 }
 
 /**
  * GET: 유저 비밀번호 찾기
  */
 export async function getFinedPwd(params: type.IFindPwdParams) {
-  return userInstance.get("/user/find-pwd", { params });
+  return userInstance.get("/users/find-pwd", { params });
 }
 
 /**
  * POST: 비밀번호 확인
  */
 export async function postPwd(pk: string, body: type.IGetUserBody, token: string) {
-  return userInstance.post(`/user/${pk}`, body, { headers: { "access-token": token } });
+  return userInstance.post(`/users/${pk}`, body, { headers: { "access-token": token } });
 }
 
 /**
  * PUT: 유저 정보 수정
  */
 export async function modifyUser(pk: string, body: type.IModifyUserBody, token: string) {
-  return userInstance.put(`/user/${pk}`, body, { headers: { "access-token": token } });
+  return userInstance.put(`/users/${pk}`, body, { headers: { "access-token": token } });
 }
 
 /**
  * DELETE: 유저 탈퇴
  */
 export async function withdrawUser(pk: string, token: string) {
-  return userInstance.delete(`/user/${pk}`, { headers: { "access-token": token } });
+  return userInstance.delete(`/users/${pk}`, { headers: { "access-token": token } });
 }
 
 /**
  * PUT: 유저 비밀번호 수정
  */
 export async function modifyUserPwd(pk: string, body: type.IModifyUserPwdBody, token: string) {
-  return userInstance.put(`user/${pk}/change-pwd`, body, { headers: { "access-token": token } });
+  return userInstance.put(`users/${pk}/change-pwd`, body, { headers: { "access-token": token } });
 }
 
 /**
  * GET: 배지 정보
  */
 export async function getBadges(pk: string) {
-  return userInstance.get(`user/${pk}/badges`);
+  return userInstance.get(`users/${pk}/badges`);
 }
 
 /**
  * GET: 팔로우 가게 정보
  */
 export async function getLikeStores(pk: string) {
-  return userInstance.get(`user/${pk}/stores`);
+  return userInstance.get(`users/${pk}/stores`);
 }
 /**
  * GET: 방문 예약 조회
  */
-export async function getLikeBooks(pk: string) {
-  return userInstance.get(`user/${pk}/books`);
+export async function getUserBooks(pk: string) {
+  return userInstance.get(`users/${pk}/books`);
 }
