@@ -10,6 +10,7 @@ import StoreReservationAgree from "./StoreReservationAgree";
 import StoreReservationExceed from "./StoreReservationExceed";
 import RedirectToLogin from "./ReservationRedirectToLogin";
 import ReservationRedirectToLogin from "./ReservationRedirectToLogin";
+import CancelBook from "./CancelBook";
 
 interface IProps {
   content: string;
@@ -46,6 +47,9 @@ const Modal = ({ content }: IProps): JSX.Element => {
 
       case "ReservationRedirectToLogin":
         return <ReservationRedirectToLogin onClose={onClose} />;
+
+      case "CancelBook":
+        return <CancelBook onClose={onClose} />;
 
       default:
         return <DefaultContent onClose={onClose} />;
