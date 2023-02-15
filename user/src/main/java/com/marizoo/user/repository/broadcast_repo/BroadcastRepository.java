@@ -15,7 +15,4 @@ public interface BroadcastRepository extends JpaRepository<Broadcast, Long>, Bro
     // 현재 방송 중인 목록 가져오기)
     Page<Broadcast> findByStatus(BroadcastStatus status, Pageable pageable);
 
-    @Query("select b from Broadcast b where b.animalStore.id = :storeId " +
-            "and b.status = com.marizoo.user.entity.BroadcastStatus.ONAIR")
-    List<Broadcast> findBroadcasts(@Param("storeId")Long storeId);
 }

@@ -73,8 +73,7 @@ public class BroadcastService {
     public List<RelatedBroadcastDto> searchBroadcastRelated(Long broadcastId){
         Optional<Broadcast> opt = broadcastRepository.findById(broadcastId);
         if(opt.isEmpty()){
-            // error
-            return null;
+            throw new RuntimeException("방송이 존재하지 않습니다");
         }
         List<String> classifications = new ArrayList<>();
         List<BroadcastAnimal> broadcastAnimalList = opt.get().getBroadcastAnimalList();

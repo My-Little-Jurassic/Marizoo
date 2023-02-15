@@ -61,7 +61,7 @@ public class BroadcastController {
 
     @ApiOperation(value = "broadcast_id에 해당하는 방송 정보를 가져오기", notes = "방송 정보, 방송 출연 동물 정보, 방송 가게 정보")
     @PostMapping("/broadcasts/{broadcast_id}/{session_id}")
-    public ResponseEntity<?> getBroadcastInfo
+    public ResponseEntity<BroadcastApi> getBroadcastInfo
             (@PathVariable("broadcast_id") @ApiParam(name = "방송 id", required = true, example = "1") Long broadcastId,
              @PathVariable("session_id") @ApiParam(name = "세션 id", required = true) String sessionId)
             throws OpenViduJavaClientException, OpenViduHttpException {
@@ -71,22 +71,22 @@ public class BroadcastController {
 
         // broadcast_id에 해당하는 방송 정보 가져오기.
         log.info("---------------------------------createConnection--------------------------------------");
-        Map<String, Object> params = null;
+        // 활성 세션 업데이트
         boolean fetch = openvidu.fetch();
         log.info(("fetch : " + fetch));
 
-        List<Session> sessions = openvidu.getActiveSessions();
-        log.info(("sessions size : " + sessions.size()));
-
-
+        // sessionId에 해당하는 session 가져오기
         Session session = openvidu.getActiveSession(sessionId);
         log.info(("session : " + session));
 
+        // session이 null이라면 방송이 없음.
         if (session == null) {
             log.info("!!!!!!!!!!!!session null!!!!!!!!!!!!!!!");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        log.info("getSessionId : " + session.getSessionId());
+
+        // connection 생성
+        Map<String, Object> params = null;
         ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
         Connection connection = session.createConnection(properties);
         log.info("-----------------------------------------------------------------------");
@@ -142,7 +142,7 @@ public class BroadcastController {
         for (Broadcast onair : searchOnairs) {
             List<String> classificationImgs = new ArrayList<>();
             for (BroadcastAnimal broadcastAnimal : onair.getBroadcastAnimalList()) {
-                classificationImgs.add(broadcastAnimal.getAnimal().getSpecies().getClassificationImg());
+                classificationImgs.add(broadcastAnimal.getClassificationImg());
             }
             result.add(new BroadcastsDto(onair.getId(),onair.getSessionId(), onair.getTitle(), onair.getThumbnail(), classificationImgs));
         }
@@ -155,8 +155,10 @@ public class BroadcastController {
     @ApiOperation(value = "broadcast_id 방송과 연관된 방송 목록 가져오기")
     @GetMapping("/broadcasts/{broadcast_id}/related")
     public ResponseEntity<?> getRelatedOnairs(@PathVariable("broadcast_id") @ApiParam(name = "방송 id", required = true, example = "1")Long broadcastId){
-        List<RelatedBroadcastDto> relatedOnairs = broadcastService.searchBroadcastRelated(broadcastId);
-        if(relatedOnairs.isEmpty()){
+        List<RelatedBroadcastDto> relatedOnairs = null;
+        try {
+            relatedOnairs = broadcastService.searchBroadcastRelated(broadcastId);
+        } catch (Exception e) {
             return new ResponseEntity<>("관련 방송 없음", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(new OnairApi(relatedOnairs), HttpStatus.OK);
