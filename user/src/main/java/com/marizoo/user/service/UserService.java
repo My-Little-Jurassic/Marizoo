@@ -161,18 +161,12 @@ public class UserService {
 
     @Transactional
     public void deleteBook(Long userId, Long bookId) {
-        User user = userRepository.getBookList(userId);
-        for (UsersPlay usersPlay : user.getBookList()) {
-            if (usersPlay.getId() == bookId) {
-                usersPlayRepository.deleteById(bookId);
-            }
+        User user = userRepository.findById(userId).get();
+        UsersPlay usersPlay = usersPlayRepository.findById(bookId).get();
+
+        if (usersPlay.getUser().equals(user)) {
+            usersPlayRepository.delete(usersPlay);
         }
-//        User user = userRepository.findById(userId).get();
-//        UsersPlay usersPlay = usersPlayRepository.findById(bookId).get();
-//
-//        if (usersPlay.getUser().equals(user)) {
-//            usersPlayRepository.delete(usersPlay);
-//        }
     }
 
     /**
