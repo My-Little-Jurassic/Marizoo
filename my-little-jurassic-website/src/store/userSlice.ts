@@ -48,7 +48,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      getLogout();
+      if (state.uid) getLogout({ uid: state.uid });
       state.status = "default";
       state.isUser = false;
       state.pk = undefined;

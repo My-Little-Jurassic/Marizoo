@@ -32,8 +32,8 @@ export async function postLogin(body: type.ILoginBody) {
 /**
  * GET: 로그아웃
  */
-export async function getLogout() {
-  return userInstance.get("/logout");
+export async function getLogout(params: type.ILogoutParms) {
+  return userInstance.get("/logout", { params });
 }
 
 /**

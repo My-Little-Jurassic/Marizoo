@@ -21,9 +21,15 @@ const StyledLi = styled.li`
   position: relative;
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 56px;
+  width: 100%;
   & > img {
     transition: all ease 0.2s;
+    width: 120px;
+    &:hover {
+      padding-bottom: 16px;
+    }
   }
   & > div {
     transition: all ease 0.2s;

@@ -10,6 +10,13 @@ export interface IRegistBody {
 }
 
 /**
+ * 로그아웃 요청 폼
+ */
+export interface ILogoutParms {
+  uid: string;
+}
+
+/**
  * 아이디 중복 확인 파라미터
  */
 export interface ICheckUidParams {
