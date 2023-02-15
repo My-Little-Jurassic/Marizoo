@@ -107,7 +107,7 @@ const BroadcastScreen = function (props: IProps) {
         if (roomInfo.voteStatus === "proceeding") {
           dispatch(broadcastActions.startVote(roomInfo.feedList));
         } else if (roomInfo.voteStatus === "finish") {
-          dispatch(broadcastActions.finishVote(roomInfo));
+          dispatch(broadcastActions.showVoteResult(roomInfo));
         }
       }
       if (streamRef.current && e.from?.stream) {

@@ -85,9 +85,16 @@ const broadcastSlice = createSlice({
     },
 
     finishVote(state, { payload }) {
-      if (!state.isVoting) {
-        state.feedList = payload.feedList;
+      state.isVoting = "finish";
+      if (state.feedList) {
+        state.winnerFeed = state.feedList.find((feed) => {
+          return Number(feed.id) === Number(payload);
+        });
       }
+    },
+
+    showVoteResult(state, { payload }) {
+      state.feedList = payload.feedList;
       state.isVoting = "finish";
       if (state.feedList) {
         state.winnerFeed = state.feedList.find((feed) => {
