@@ -2,6 +2,8 @@ package com.marizoo.user.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.marizoo.user.api.LoginResponseApi;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.exception.RefreshTokenException;
 import com.marizoo.user.repository.UserRepository;
@@ -11,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,8 +26,9 @@ import static com.marizoo.user.constant.JwtConstant.*;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final ObjectMapper om;
 
-    public Map<String, String> refresh(String refreshToken) {
+    public Map<String, String> refresh(String refreshToken, HttpServletResponse response) {
         Map<String, String> tokenMap = new HashMap<>();
 
         // refresh token 유효성 검사
@@ -59,6 +63,7 @@ public class AuthService {
                     user.setRefreshToken(newRefreshToken);
 
                     tokenMap.put(RT_HEADER, newRefreshToken);
+                    response.getWriter().write(om.writeValueAsString(new LoginResponseApi(user.getId(), user.getUid(), user.getNickname())));
                 }
             }
         } catch (Exception e) {
