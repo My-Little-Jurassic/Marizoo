@@ -1,23 +1,19 @@
 package com.marizoo.user.repository;
 
-import com.marizoo.user.dto.BadgeDto;
 import com.marizoo.user.dto.FavorStoreDto;
-import com.marizoo.user.dto.QBadgeDto;
 import com.marizoo.user.dto.QFavorStoreDto;
-import com.marizoo.user.entity.AnimalStore;
-import com.marizoo.user.entity.Badge;
 import com.marizoo.user.entity.User;
-import com.marizoo.user.entity.UsersAnimalStore;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
 
 import static com.marizoo.user.entity.QBadge.badge;
 import static com.marizoo.user.entity.QUser.user;
 import static com.marizoo.user.entity.QUsersAnimalStore.usersAnimalStore;
 import static com.marizoo.user.entity.QUsersBadge.usersBadge;
+import static com.marizoo.user.entity.QUsersPlay.usersPlay;
+import static com.marizoo.user.entity.QPlay.play;
 
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
@@ -49,6 +45,17 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 .from(user)
                 .join(user.badgeList, usersBadge).fetchJoin()
                 .join(usersBadge.badge, badge).fetchJoin()
+                .where(user.id.eq(userId))
+                .fetchOne();
+    }
+
+    @Override
+    public User getBookList(Long userId) {
+        return queryFactory
+                .select(user).distinct()
+                .from(user)
+                .join(user.bookList, usersPlay).fetchJoin()
+                .join(usersPlay.play, play).fetchJoin()
                 .where(user.id.eq(userId))
                 .fetchOne();
     }

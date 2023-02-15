@@ -5,6 +5,7 @@ import com.marizoo.user.api.MyPageResponseApi;
 import com.marizoo.user.api.PwdChangeRequestApi;
 import com.marizoo.user.api.WatchEndRequestApi;
 import com.marizoo.user.dto.BadgeDto;
+import com.marizoo.user.dto.BookDto;
 import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.MailDto;
 import com.marizoo.user.entity.Badge;
@@ -21,14 +22,12 @@ import com.marizoo.user.repository.UsersBadgeRepository;
 import com.marizoo.user.repository.reservation_repo.UsersPlayRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.NonUniqueResultException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -263,5 +262,24 @@ public class UserService {
         }
 
         user.setFeedClickAcc(plusFeedClick);
+    }
+
+    public List<BookDto> getBookList(Long userId) {
+        User user = userRepository.getBookList(userId);
+        List<BookDto> bookDtoList = new ArrayList<>();
+        for (UsersPlay usersPlay : user.getBookList()) {
+            bookDtoList.add(new BookDto(
+                    usersPlay.getId(),
+                    usersPlay.getPlay().getPlayDateTime(),
+                    usersPlay.getTotalVisitor(),
+                    usersPlay.getPlay().getAnimalStore().getStoreName(),
+                    usersPlay.getPlay().getAnimalStore().getTel(),
+                    usersPlay.getPlay().getImg(),
+                    usersPlay.getStatus(),
+                    usersPlay.getPlay().getTitle(),
+                    usersPlay.getPlay().getAnimalStore().getId()
+            ));
+        }
+        return bookDtoList;
     }
 }

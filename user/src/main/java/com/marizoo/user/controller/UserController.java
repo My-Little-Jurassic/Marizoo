@@ -5,11 +5,8 @@ import com.marizoo.user.dto.BookDto;
 import com.marizoo.user.dto.BadgeDto;
 import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.JoinRequestDto;
-import com.marizoo.user.entity.Badge;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.dto.ExceptionResponseDto;
-import com.marizoo.user.entity.UsersPlay;
-import com.marizoo.user.entity.UsersBadge;
 import com.marizoo.user.exception.AlreadyJoinException;
 import com.marizoo.user.exception.PasswordNotMatchException;
 import com.marizoo.user.exception.RefreshTokenException;
@@ -28,10 +25,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -143,22 +138,7 @@ public class UserController {
 
     @GetMapping("/users/{userId}/books")
     public ResponseEntity getBookList(@PathVariable Long userId) {
-        User user = userRepository.findById(userId).get();
-        List<UsersPlay> bookList = user.getBookList();
-        List<BookDto> bookDtoList = new ArrayList<>();
-        for (UsersPlay usersPlay : bookList) {
-            bookDtoList.add(new BookDto(
-                    usersPlay.getId(),
-                    usersPlay.getPlay().getPlayDateTime(),
-                    usersPlay.getTotalVisitor(),
-                    usersPlay.getPlay().getAnimalStore().getStoreName(),
-                    usersPlay.getPlay().getAnimalStore().getTel(),
-                    usersPlay.getPlay().getImg(),
-                    usersPlay.getStatus(),
-                    usersPlay.getPlay().getTitle(),
-                    usersPlay.getPlay().getAnimalStore().getId())
-            );
-        }
+        List<BookDto> bookDtoList = userService.getBookList(userId);
         return ResponseEntity.ok(new BookListResponseApi(bookDtoList));
     }
 

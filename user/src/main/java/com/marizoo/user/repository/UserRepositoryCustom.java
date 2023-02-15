@@ -13,4 +13,6 @@ public interface UserRepositoryCustom {
     List<FavorStoreDto> getFavorStoreList(Long userId);
 
     User getBadgeList(Long userId);
+
+    User getBookList(Long userId);
 }

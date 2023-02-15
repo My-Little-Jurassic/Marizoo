@@ -16,7 +16,7 @@ public class BookDto {
     private LocalDateTime playDateTime;
 
     private Integer totalVisitor;
-    private String StoreName;
+    private String storeName;
     private String tel;
     private String img;
     private BookStatus status;
