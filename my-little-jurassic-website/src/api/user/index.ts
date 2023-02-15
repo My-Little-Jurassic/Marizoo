@@ -110,3 +110,9 @@ export async function getUserBooks(pk: string) {
 export async function deleteUserBook(pk: string, book_id: string) {
   return userInstance.delete(`users/${pk}/books/${book_id}`);
 }
+/**
+ * GET: 닉네임 정보 받기
+ */
+export async function getNickname(pk: string) {
+  return userInstance.get(`users/${pk}/get-nickname`);
+}
