@@ -28,6 +28,8 @@ public class BroadcastService {
     private final FeedRepository feedRepository;
     private final VoteRepository voteRepository;
     private final AnimalRepository animalRepository;
+    private final UsersBadgeRepository usersBadgeRepository;
+
     @Autowired
     private AwsS3Uploader s3Uploader;
 
@@ -104,5 +106,10 @@ public class BroadcastService {
     public void finishBroadcast(Long broadcastId){
         Broadcast broadcastById = broadcastRepository.findBroadcastById(broadcastId);
         broadcastById.setEndTime(LocalDateTime.now());
+    }
+
+    @Transactional
+    public void bulkAddBadge(List<Long> userIdList, Long badgeId) {
+        usersBadgeRepository.bulkAddBadge(userIdList, badgeId);
     }
 }
