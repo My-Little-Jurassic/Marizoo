@@ -130,7 +130,7 @@ const RegistForm = () => {
 
   const validateIdUnique = async (uid: string): Promise<boolean> => {
     return getCheckUid({ uid })
-      .then(() => true)
+      .then(() => true && validateIdChar(uid) && validateIdLength(uid))
       .catch(() => false);
   };
 
