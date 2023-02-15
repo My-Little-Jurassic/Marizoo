@@ -1,5 +1,6 @@
 package com.marizoo.owner.controller;
 
+import com.marizoo.owner.api.BulkBadgeRequestApi;
 import com.marizoo.owner.api.request.CreateBroadcastReq;
 import com.marizoo.owner.api.request.CreateVoteRequest;
 import com.marizoo.owner.api.request.EndVoteRequest;
@@ -94,5 +95,12 @@ public class BroadcastController {
         return new ResponseEntity<>("방송 종료", HttpStatus.OK);
 
     }
+
+    @PostMapping("/broadcasts/badges")
+    public ResponseEntity addBadgeAtRelatedUsers(@RequestBody BulkBadgeRequestApi bulkBadgeRequest) {
+        broadcastService.bulkAddBadge(bulkBadgeRequest.getUserIdList(), bulkBadgeRequest.getBadgeId());
+        return ResponseEntity.ok().build();
+    }
+
 
 }

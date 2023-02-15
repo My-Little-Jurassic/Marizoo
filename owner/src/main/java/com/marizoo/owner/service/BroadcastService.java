@@ -1,7 +1,5 @@
 package com.marizoo.owner.service;
 
-import com.amazonaws.services.ec2.util.S3UploadPolicy;
-import com.marizoo.owner.api.response.CreateBroadcastResponse;
 import com.marizoo.owner.entity.*;
 import com.marizoo.owner.repository.*;
 import com.marizoo.owner.repository.animalStore.AnimalStoreRepository;
@@ -28,6 +26,8 @@ public class BroadcastService {
     private final FeedRepository feedRepository;
     private final VoteRepository voteRepository;
     private final AnimalRepository animalRepository;
+    private final UsersBadgeRepository usersBadgeRepository;
+
     @Autowired
     private AwsS3Uploader s3Uploader;
 
@@ -48,6 +48,12 @@ public class BroadcastService {
         if(vote != null){
             broadcast.setVote(vote);
         }
+
+        // 방송 끝난 동물 onAir -> offAir로
+        for (BroadcastAnimal broadcastAnimal : broadcast.getBroadcastAnimalList()) {
+            broadcastAnimal.getAnimal().setIsOnAir("offAir");
+        }
+
         broadcastRepository.save(broadcast);
         return true;
     }
@@ -78,6 +84,10 @@ public class BroadcastService {
                 return null;
             }
             Animal animal = optionalAnimal.get();
+
+            animal.setIsOnAir("onAir");
+            animalRepository.save(animal);
+
             BroadcastAnimal broadcastAnimal = BroadcastAnimal.createBroadcastAnimal(animal, animal.getSpecies().getClassification(), animal.getSpecies().getClassificationImg());
             broadcastAnimalList.add(broadcastAnimal);
         }
@@ -102,5 +112,10 @@ public class BroadcastService {
     public void finishBroadcast(Long broadcastId){
         Broadcast broadcastById = broadcastRepository.findBroadcastById(broadcastId);
         broadcastById.setEndTime(LocalDateTime.now());
+    }
+
+    @Transactional
+    public void bulkAddBadge(List<Long> userIdList, Long badgeId) {
+        usersBadgeRepository.bulkAddBadge(userIdList, badgeId);
     }
 }

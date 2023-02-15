@@ -23,6 +23,7 @@ public class AnimalStoreRepositoryCustomImpl implements AnimalStoreRepositoryCus
                 .select(new QOwnedAnimalDto(animal.id, animal.name, species.classification))
                 .from(animal)
                 .join(animal.species, species)
+                .where(animal.isOnAir.eq("offAir"))
                 .where(animal.animalStore.id.eq(storeId))
                 .fetch();
         return findOwnedAnimal;

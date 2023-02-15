@@ -27,6 +27,8 @@ public class Animal extends BaseEntity {
     private Integer weight;
     private Integer age;
 
+    private String isOnAir;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_store_id")
     private AnimalStore animalStore;
