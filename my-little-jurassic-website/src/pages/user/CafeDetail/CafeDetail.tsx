@@ -31,10 +31,12 @@ function CafeDetail() {
   const navigate = useNavigate();
 
   const params = useParams();
+
   useEffect(() => {
     if (params.cafe_id) {
       getStoreDetail(params.cafe_id, pk)
         .then((res) => {
+          console.log("================");
           setCafeInfo(res.data);
         })
         .catch((e) => {
@@ -42,7 +44,7 @@ function CafeDetail() {
           navigate("/404");
         });
     }
-  }, [params.cafe_id]);
+  }, [params.cafe_id, pk]);
 
   return (
     <StyledCafeDetail>

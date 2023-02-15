@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { TbMapPin, TbClock, TbPhone, TbMail } from "react-icons/tb";
@@ -12,13 +12,16 @@ function CafeDetailProfile(props: { cafeInfo: ICafeDetail }) {
   const [isFollowed, setIsFollowed] = useState(props.cafeInfo.following);
   const pk = useAppSelector((state) => state.user.pk);
 
+  useEffect(() => {
+    if (props.cafeInfo.following) setIsFollowed(true);
+  }, [props.cafeInfo.following]);
+
   const follow = () => {
     if (!pk || isFollowed) {
       return;
     }
     followStore(pk, String(props.cafeInfo.storeId))
-      .then((res) => {
-        console.log("팔로우 성공", res.data);
+      .then(() => {
         setIsFollowed(true);
       })
       .catch((e) => console.log("팔로우 실패", e));

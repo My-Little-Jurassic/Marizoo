@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+import { useAppSelector } from "../../../store";
 import { GreenBtn } from "../../common/button";
 
 interface Iprops {
@@ -9,6 +10,8 @@ interface Iprops {
 }
 
 const BroadcastBadgeModal = function (props: Iprops) {
+  const { pk } = useAppSelector((state) => state.user);
+
   return (
     <StyledModal onClick={props.closeModal}>
       <StyledBlackDiv />
@@ -16,7 +19,7 @@ const BroadcastBadgeModal = function (props: Iprops) {
       <StyledContainer>
         <StyledHeader2>부화에 성공했어요!</StyledHeader2>
         <StyledImg src={`../../images/badgeEgg${props.receivedBadge}.png`} />
-        <NavLink to="/user" style={{ textDecoration: "none" }}>
+        <NavLink to={`/user/${pk}`} style={{ textDecoration: "none" }}>
           <GreenBtn label="확인하러 가기" type={0} isDisable={false} />
         </NavLink>
       </StyledContainer>

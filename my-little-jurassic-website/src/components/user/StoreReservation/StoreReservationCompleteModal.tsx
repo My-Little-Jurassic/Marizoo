@@ -5,6 +5,7 @@ import { TbCircleCheck } from "react-icons/tb";
 import GreenBtn from "./StoreReservationGreenBtn";
 import GrayBtn from "./StoreReservationGrayBtn";
 import { IPlayInfo } from "./type";
+import { useAppSelector } from "../../../store";
 
 interface IProps {
   playInfo: IPlayInfo;
@@ -12,7 +13,7 @@ interface IProps {
 }
 
 const StoreReservationCompleteModal = function (props: IProps) {
-  const params = useParams();
+  const { pk } = useAppSelector((state) => state.user);
 
   return (
     <>
@@ -41,8 +42,8 @@ const StoreReservationCompleteModal = function (props: IProps) {
           <NavLink to="/" style={{ textDecoration: "none" }}>
             <GreenBtn label="홈으로" type={0} isDisable={false} />
           </NavLink>
-          <NavLink to={`/cafe/${params.cafe_id}`} style={{ textDecoration: "none" }}>
-            <GrayBtn label="돌아가기" type={0} isDisable={false} />
+          <NavLink to={`/user/${pk}`} style={{ textDecoration: "none" }}>
+            <GrayBtn label="예약내역" type={0} isDisable={false} />
           </NavLink>
         </StyledButtonContainer>
       </StyledContainer>
