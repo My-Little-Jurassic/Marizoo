@@ -1,9 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { useAppSelector } from "../../../store";
+import { selectUser } from "../../../store/userSlice";
 import { GrayBtn } from "../../common/button";
 
 const MypageHeader = () => {
-  const nickname = "nickname";
+  const { nickname } = useAppSelector(selectUser);
   return (
     <StyledHeader>
       <h1>{nickname}님의 마이페이지</h1>

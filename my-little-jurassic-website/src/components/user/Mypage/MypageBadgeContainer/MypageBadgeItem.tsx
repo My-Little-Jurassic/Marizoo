@@ -24,12 +24,13 @@ const StyledLi = styled.li`
   align-items: center;
   margin-top: 56px;
   width: 100%;
+  top: 0;
+  transition: all ease 0.2s;
+  ${({ theme }) => theme.shadow}
   & > img {
     transition: all ease 0.2s;
     width: 120px;
-    &:hover {
-      padding-bottom: 16px;
-    }
+    padding-bottom: 16px;
   }
   & > div {
     transition: all ease 0.2s;
@@ -45,11 +46,10 @@ const StyledLi = styled.li`
     left: 50%;
     word-wrap: break-word;
     word-break: break-all;
-    background-color: ${({ theme }) => theme.colors.secondaryBg};
+    background-color: ${({ theme }) => theme.colors.yellow};
     ${({ theme }) => theme.shadow}
   }
   &:hover {
-    border-bottom: 24px;
     z-index: 1;
     top: -24px;
     & > img {
