@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
 import { getBadges } from "../../../../api";
+import { useAppSelector } from "../../../../store";
+import { selectUser } from "../../../../store/userSlice";
 import MypageBadgeGauge from "./MypageBadgeGauge";
 import MypageBadgeList from "./MypageBadgeList";
 
@@ -12,8 +14,9 @@ export interface IBadge {
 }
 
 const MypageBadgeContainer = () => {
-  const [badgeList, setBadgeList] = useState<IBadge[]>([]);
   const params = useParams();
+  const user = useAppSelector(selectUser);
+  const [badgeList, setBadgeList] = useState<IBadge[]>([]);
 
   // 배지에 대한 정보를 불러옵니다
   useEffect(() => {
@@ -25,7 +28,10 @@ const MypageBadgeContainer = () => {
 
   return (
     <StyledDiv>
-      <h2>나의 배지 컬렉션</h2>
+      <h2>
+        {String(user.pk) === String(params.user_id) ? "나의 " : null}
+        배지 컬렉션
+      </h2>
       <div className="badge-area">
         <MypageBadgeGauge badgeListNum={badgeList.length} />
         <MypageBadgeList badgeList={badgeList} />
