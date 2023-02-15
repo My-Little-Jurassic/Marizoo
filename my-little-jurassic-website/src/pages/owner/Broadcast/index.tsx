@@ -172,7 +172,7 @@ const Broadcast = () => {
     const result: IVoteTarget[] = variableRef.current.vote.options.map((item) => {
       return { feedId: String(item.id), count: item.numberOfVotes };
     });
-    postBroadcastEnd({ title, result }, broadcastSetting.id);
+    postBroadcastEnd({ title, result }, String(broadcastStatus.pk));
   };
   // 방 정보 제공 함수
   const signalRoomInfo = () => {

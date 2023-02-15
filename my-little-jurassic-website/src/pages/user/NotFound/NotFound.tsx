@@ -6,10 +6,10 @@ import { GreenBtn } from "../../../components/common/button";
 function NotFound() {
   return (
     <StyledNotFound>
-      <h1>{"404:("}</h1>
+      <h1>{"404 :("}</h1>
       <p>요청하신 페이지를 찾지 못했습니다.</p>
-      <Link to={`/broadcast/${0}`} style={{ textDecoration: "none" }}>
-        <GreenBtn label="이 버튼은 모징" type={0} isDisable={false}></GreenBtn>
+      <Link to={`/`} style={{ textDecoration: "none" }}>
+        <GreenBtn label="홈으로 이동" type={0} isDisable={false}></GreenBtn>
       </Link>
     </StyledNotFound>
   );
