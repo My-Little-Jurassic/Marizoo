@@ -275,7 +275,8 @@ const Broadcast = () => {
     const badgeId = Math.floor(Math.random() * (max - min + 1)) + min;
 
     const userIdList: string[] = Array.from(viewerMap.current.keys());
-    await postBroadcastBadges({ userIdList, badgeId });
+    console.log(userIdList);
+    if (userIdList.length) await postBroadcastBadges({ userIdList, badgeId });
   };
 
   return (
@@ -283,7 +284,7 @@ const Broadcast = () => {
       <div>
         <BroadcastStatusViewer ref={videoRef} status={status} viewers={viewers} likes={likes} />
         <BroadcastVoteContainer vote={vote} status={status} finishVote={finishVote} />
-        <BroadcastBadgeController spreadBadge={spreadBadge} />
+        <BroadcastBadgeController spreadBadge={spreadBadge} status={status} />
       </div>
       <div>
         <BroadcastSettingContainer
