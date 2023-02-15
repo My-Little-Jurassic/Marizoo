@@ -67,11 +67,13 @@ public class AuthService {
                     response.getWriter().write(om.writeValueAsString(new LoginResponseApi(user.getId(), user.getUid(), user.getNickname())));
                     log.info("refresh service 끝:)");
                 }
+            } else {
+                throw new RefreshTokenException("리프레시 토큰 정보가 잘못되었습니다.");
             }
         } catch (Exception e) {
             log.error(e.getClass().toString());
             log.error(e.getMessage());
-            throw new RefreshTokenException("리프레시 토큰 정보가 잘못되었습니다.");
+            throw new RefreshTokenException(e.getMessage());
         }
 
         return tokenMap;
