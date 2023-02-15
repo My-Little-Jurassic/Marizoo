@@ -1,7 +1,5 @@
 package com.marizoo.owner.service;
 
-import com.amazonaws.services.ec2.util.S3UploadPolicy;
-import com.marizoo.owner.api.response.CreateBroadcastResponse;
 import com.marizoo.owner.entity.*;
 import com.marizoo.owner.repository.*;
 import com.marizoo.owner.repository.animalStore.AnimalStoreRepository;
@@ -50,6 +48,12 @@ public class BroadcastService {
         if(vote != null){
             broadcast.setVote(vote);
         }
+
+        // 방송 끝난 동물 onAir -> offAir로
+        for (BroadcastAnimal broadcastAnimal : broadcast.getBroadcastAnimalList()) {
+            broadcastAnimal.getAnimal().setIsOnAir("offAir");
+        }
+
         broadcastRepository.save(broadcast);
         return true;
     }
@@ -80,6 +84,10 @@ public class BroadcastService {
                 return null;
             }
             Animal animal = optionalAnimal.get();
+
+            animal.setIsOnAir("onAir");
+            animalRepository.save(animal);
+
             BroadcastAnimal broadcastAnimal = BroadcastAnimal.createBroadcastAnimal(animal, animal.getSpecies().getClassification(), animal.getSpecies().getClassificationImg());
             broadcastAnimalList.add(broadcastAnimal);
         }
