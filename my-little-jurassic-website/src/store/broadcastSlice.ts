@@ -55,8 +55,7 @@ const broadcastSlice = createSlice({
       }
     },
 
-    like(state, { payload }) {
-      console.log(payload);
+    like(state) {
       if (state.session && state.ownerConnection) {
         if (!state.isLiked) {
           state.session.signal({
@@ -86,9 +85,16 @@ const broadcastSlice = createSlice({
     },
 
     finishVote(state, { payload }) {
-      if (!state.isVoting) {
-        state.feedList = payload.feedList;
+      state.isVoting = "finish";
+      if (state.feedList) {
+        state.winnerFeed = state.feedList.find((feed) => {
+          return Number(feed.id) === Number(payload);
+        });
       }
+    },
+
+    showVoteResult(state, { payload }) {
+      state.feedList = payload.feedList;
       state.isVoting = "finish";
       if (state.feedList) {
         state.winnerFeed = state.feedList.find((feed) => {
