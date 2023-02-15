@@ -13,48 +13,10 @@ export interface IStore {
 }
 
 const MypageFollowStoreList = () => {
-  /* 더미데이터
-  const followStoreList: IStore[] = [
-    {
-      storeName: "마리쥬 동물샵",
-      id: 1,
-      tel: "010-1234-1234",
-      address: "대전광역시 유성구 궁동",
-      img: "https://picsum.photos/200/300",
-    },
-    {
-      storeName: "마리쥬 동물샵",
-      id: 1,
-      tel: "010-1234-1234",
-      address: "대전광역시 유성구 궁동",
-      img: "https://picsum.photos/200/300",
-    },
-    {
-      storeName: "마리쥬 동물샵",
-      id: 1,
-      tel: "010-1234-1234",
-      address: "대전광역시 유성구 궁동",
-      img: "https://picsum.photos/200/300",
-    },
-    {
-      storeName: "마리쥬 동물샵",
-      id: 1,
-      tel: "010-1234-1234",
-      address: "대전광역시 유성구 궁동",
-      img: "https://picsum.photos/200/300",
-    },
-    {
-      storeName: "마리쥬 동물샵",
-      id: 1,
-      tel: "010-1234-1234",
-      address: "대전광역시 유성구 궁동",
-      img: "https://picsum.photos/200/300",
-    },
-  ];
-  */
-
   const [followStoreList, setFollowStoreList] = useState<IStore[]>([]);
   const params = useParams();
+
+  // 서버로부터 팔로우 가게 정보를 가져옵니다
   useEffect(() => {
     if (params.user_id)
       getLikeStores(params.user_id)
