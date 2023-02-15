@@ -65,6 +65,7 @@ public class UserController {
 
     @GetMapping("/refresh")
     public ResponseEntity refresh(@CookieValue(RT_HEADER) String refreshToken, HttpServletResponse response) {
+        log.info("refresh method 입장");
         Map<String, String> tokenMap = authService.refresh(refreshToken, response);
 
         response.addHeader(AT_HEADER, tokenMap.get(AT_HEADER));

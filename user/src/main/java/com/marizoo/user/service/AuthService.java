@@ -9,10 +9,8 @@ import com.marizoo.user.exception.RefreshTokenException;
 import com.marizoo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,6 +27,7 @@ public class AuthService {
     private final ObjectMapper om;
 
     public Map<String, String> refresh(String refreshToken, HttpServletResponse response) {
+        log.info("user service refresh 입장");
         Map<String, String> tokenMap = new HashMap<>();
 
         // refresh token 유효성 검사
@@ -64,6 +63,7 @@ public class AuthService {
 
                     tokenMap.put(RT_HEADER, newRefreshToken);
                     response.getWriter().write(om.writeValueAsString(new LoginResponseApi(user.getId(), user.getUid(), user.getNickname())));
+                    log.info("refresh service 끝:)");
                 }
             }
         } catch (Exception e) {
