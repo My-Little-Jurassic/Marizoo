@@ -186,6 +186,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/users/{userId}/get-nickname")
+    public ResponseEntity getNickname(@PathVariable Long userId) {
+        User user = userRepository.findById(userId).get();
+        return ResponseEntity.ok(new NickNameResponseApi(user.getNickname()));
+    }
+
     // Exception
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(RefreshTokenException.class)
