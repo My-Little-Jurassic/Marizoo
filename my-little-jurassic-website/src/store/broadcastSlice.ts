@@ -55,7 +55,8 @@ const broadcastSlice = createSlice({
       }
     },
 
-    like(state: IInitialState) {
+    like(state, { payload }) {
+      console.log(payload);
       if (state.session && state.ownerConnection) {
         if (!state.isLiked) {
           state.session.signal({
