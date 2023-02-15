@@ -12,8 +12,8 @@ const MypageFollowStoreItem = ({ item }: IProps) => {
         <img src={item.img} />
       </div>
       <div>
-        <h3>{item.storeName}</h3>
-        <p>{item.address}</p>
+        <h3 className="long">{item.storeName}</h3>
+        <p className="long">{item.address}</p>
         <p>{item.tel}</p>
       </div>
     </StyledLi>
@@ -61,19 +61,28 @@ const StyledLi = styled.li`
     justify-content: center;
     flex-direction: column;
     flex: 3;
-    margin-left: 8px;
-    white-space: nowrap;
-    width: max-content;
+    width: 176px;
     & > * {
+      width: 176px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       display: block;
     }
   }
-  &:hover > div:nth-child(2) > * {
+  &:hover > div:nth-child(2) {
     animation-duration: 4s;
     animation-name: text-move;
+    width: max-content;
     animation-iteration-count: infinite;
     animation-direction: alternate;
     animation-timing-function: ease-in-out;
+    & > * {
+      margin-left: 8px;
+      width: max-content;
+      overflow: visible;
+      white-space: nowrap;
+    }
   }
 
   & h3 {
@@ -81,6 +90,7 @@ const StyledLi = styled.li`
     margin-bottom: 8px;
   }
   & p {
+    margin-bottom: 4px;
     font: ${({ theme }) => theme.fonts.subContent};
   }
   @keyframes text-move {
