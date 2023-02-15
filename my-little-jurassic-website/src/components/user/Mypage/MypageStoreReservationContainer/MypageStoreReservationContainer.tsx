@@ -36,6 +36,7 @@ const StyledDiv = styled.div`
     max-width: 1088px;
   }
   & .swiper-wrapper {
+    margin: 0;
     flex-wrap: wrap;
     width: max-content;
     & > div {

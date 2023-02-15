@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
+import { useAppSelector } from "../../../../store";
+import { selectUser } from "../../../../store/userSlice";
 import MypageStoreReservationCancelBtn from "./MypageStoreReservationCancelBtn";
 import { IStoreReservation, TPlayStatus } from "./MypageStoreReservationList";
 import MypageStoreReservationStatus from "./MypageStoreReservationStatus";
@@ -9,7 +11,14 @@ interface IProps {
 }
 
 const MypageStoreReservationItem = ({ item }: IProps): JSX.Element => {
+  console.log(item);
   const { id, playDateTime, title, img, storeName, status, tel, totalVisitor } = item;
+  const user = useAppSelector(selectUser);
+
+  const canCancel = useMemo((): boolean => {
+    return status === "BOOK" && Boolean(user.pk);
+  }, [status, user.pk]);
+
   return (
     <StyledDiv status={status}>
       <div className="reservation-container">
@@ -24,7 +33,7 @@ const MypageStoreReservationItem = ({ item }: IProps): JSX.Element => {
           </span>
         </div>
       </div>
-      <MypageStoreReservationCancelBtn />
+      {canCancel ? <MypageStoreReservationCancelBtn bookId={id} /> : null}
       <MypageStoreReservationStatus status={status} />
     </StyledDiv>
   );
@@ -48,7 +57,7 @@ const StyledDiv = styled.div<{ status: TPlayStatus }>`
     min-width: 272px;
     height: 240px;
     border-radius: 32px;
-    background-color: ${({ theme }) => theme.colors.primaryBg};
+    background-color: ${({ theme }) => theme.colors.secondaryBg};
     ${({ theme }) => theme.shadow};
     margin-right: 32px;
     overflow: hidden;
@@ -59,7 +68,7 @@ const StyledDiv = styled.div<{ status: TPlayStatus }>`
       width: 100%;
       height: 100%;
       background-color: ${({ theme, status }) =>
-        theme.colors.secondaryBg + (status !== "book" ? "99" : "00")};
+        theme.colors.secondaryBg + (status !== "BOOK" ? "99" : "00")};
     }
 
     & > .img-area {

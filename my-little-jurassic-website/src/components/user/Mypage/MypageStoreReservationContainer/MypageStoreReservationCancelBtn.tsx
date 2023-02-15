@@ -1,10 +1,23 @@
 import React from "react";
 import { TbTrash } from "react-icons/tb";
 import styled from "styled-components";
+import { useAppDispatch } from "../../../../store";
+import { openModal, setContent, setContentData } from "../../../../store/modalSlice";
 
-const MypageStoreReservationCancelBtn = (): JSX.Element => {
+interface IProps {
+  bookId: string;
+}
+
+const MypageStoreReservationCancelBtn = ({ bookId }: IProps): JSX.Element => {
+  const dispatch = useAppDispatch();
+  const onCancel = () => {
+    // deleteUserBook(pk, bookId);
+    dispatch(setContentData(bookId));
+    dispatch(setContent("CancelBook"));
+    dispatch(openModal());
+  };
   return (
-    <StyledBtn>
+    <StyledBtn onClick={onCancel}>
       <TbTrash />
     </StyledBtn>
   );

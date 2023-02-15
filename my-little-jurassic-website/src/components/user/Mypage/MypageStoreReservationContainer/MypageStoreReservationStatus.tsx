@@ -9,11 +9,11 @@ interface IProps {
 const MypageStoreReservationStatus = ({ status }: IProps): JSX.Element => {
   const comment = useMemo(() => {
     switch (status) {
-      case "cancel":
+      case "CANCEL":
         return "취소";
-      case "finish":
+      case "FINISH":
         return "완료";
-      case "book":
+      case "BOOK":
       default:
         return "";
     }
@@ -37,11 +37,11 @@ const StyledDiv = styled.div<{ status: TPlayStatus }>`
 
   ${({ status, theme }) => {
     switch (status) {
-      case "finish":
+      case "FINISH":
         return `border-color: ${theme.colors.green}; color: ${theme.colors.green};`;
-      case "cancel":
+      case "CANCEL":
         return `border-color: ${theme.colors.disable};  color: ${theme.colors.disable};`;
-      case "book":
+      case "BOOK":
       default:
         return "opacity: 0;";
     }
