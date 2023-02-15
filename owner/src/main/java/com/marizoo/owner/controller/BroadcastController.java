@@ -53,12 +53,18 @@ public class BroadcastController {
         log.info("---------------------------------createBroadcast--------------------------------------");
         log.info("title : " + broadcastInfo.getTitle());
         log.info("animal ID List : " + broadcastInfo.getAnimalIdList().toString());
+
+        // params를 null로 넣어주면 sessionId를 랜덤하게 생성해 session을 만들어줌
         Map<String, Object> params = null;
         SessionProperties sProperties = SessionProperties.fromJson(params).build();
         Session session = openvidu.createSession(sProperties);
         log.info("session id : " + session.getSessionId());
+
+        // 방송 생성
         Long broadcastId = broadcastService.createBroadcast(broadcastInfo.getTitle(), broadcastInfo.getDescription(),
                 session.getSessionId(), broadcastInfo.getAnimalStoreId(), broadcastInfo.getAnimalIdList(), img);
+
+        // 커넥션 생성
         log.info("------------------------커넥션을 만들어볼게욤---------------------------");
         if (session == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -87,9 +93,10 @@ public class BroadcastController {
         if(!endVoteRequest.getResult().isEmpty()){
             vote = voteService.endVote(broadcastId, endVoteRequest.getTitle(), endVoteRequest.getResult());
         }
-        boolean result = broadcastService.saveEndTime(broadcastId, vote);
-        if(!result){
-            return new ResponseEntity<>("방송 종료 시간 저장 실패", HttpStatus.BAD_GATEWAY);
+        try {
+            broadcastService.endBroadcast(broadcastId, vote);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_GATEWAY);
         }
 
         return new ResponseEntity<>("방송 종료", HttpStatus.OK);
@@ -101,6 +108,5 @@ public class BroadcastController {
         broadcastService.bulkAddBadge(bulkBadgeRequest.getUserIdList(), bulkBadgeRequest.getBadgeId());
         return ResponseEntity.ok().build();
     }
-
 
 }
