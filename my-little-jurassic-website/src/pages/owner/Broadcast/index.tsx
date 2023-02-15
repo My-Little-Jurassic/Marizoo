@@ -25,7 +25,7 @@ const Broadcast = () => {
   const params = useParams();
   // 방송설정 STATE
   const [broadcastSetting, setBroadcastSetting] = useState<IBroadcastSetting>({
-    id: String(params.id),
+    id: String(params.id), // 사업자 아이디
     status: "DEFAULT",
     title: "",
     description: "",
@@ -37,7 +37,7 @@ const Broadcast = () => {
   // 방송상태 STATE
   const [broadcastStatus, setBroadcastStatus] = useState<IBroadcastStatus>({
     sessionId: "",
-    pk: 0,
+    pk: 0, // 방송 아이디
     viewers: 0,
     likes: 0,
     vote: { options: [], voteStatus: "default", winnerFeed: 0 },
@@ -58,10 +58,20 @@ const Broadcast = () => {
   const OV = useMemo(() => new OpenVidu(), []);
   const session = useMemo(() => OV.initSession(), [OV]);
   useEffect(() => {
-    return () => {
-      if (broadcastSetting.status === "ONAIR") endBroadcast();
+    const unLoadEvent = (e: BeforeUnloadEvent) => {
+      endBroadcast();
+      e.preventDefault();
+      e.returnValue = "";
     };
-  }, []);
+    (() => {
+      window.addEventListener("beforeunload", unLoadEvent);
+    })();
+
+    return () => {
+      window.removeEventListener("beforeunload", unLoadEvent);
+      endBroadcast();
+    };
+  }, [broadcastStatus.pk, broadcastSetting.status]);
   useEffect(() => {
     switch (broadcastSetting.status) {
       case "ONAIR":
@@ -223,6 +233,8 @@ const Broadcast = () => {
   // 방송종료 함수
   const endBroadcast = async () => {
     console.log("endBroadcast");
+    // 방송 종료가 된 상태가 아니면 서버에게 종료 신호를 보냅니다.
+    if (broadcastSetting.status !== "ONAIR") return;
     setBroadcastStatus({ ...broadcastStatus, ...variableRef.current });
     // setBroadcastStatus({ ...broadcastStatus, status: "DEFAULT" });
 
@@ -277,6 +289,11 @@ const Broadcast = () => {
     const userIdList: string[] = Array.from(viewerMap.current.keys());
     console.log(userIdList);
     if (userIdList.length) await postBroadcastBadges({ userIdList, badgeId });
+    session.signal({
+      data: String(badgeId),
+      to: [],
+      type: "badge",
+    });
   };
 
   return (
