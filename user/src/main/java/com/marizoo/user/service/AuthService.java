@@ -44,6 +44,8 @@ public class AuthService {
 
                 // user가 가지고 있던 refresh token과 비교
                 if (user.getRefreshToken().equals(refreshToken)) {
+                    log.info("보낸 refresh 토큰과 기존에 있던 refresh 토큰이 일치함");
+                    log.info("보낸거 = {}, 기존 = {}", refreshToken, user.getRefreshToken());
                     // 일치하면 access token 새로 발급
                     String accessToken = JWT.create()
                             .withSubject(user.getUid())
