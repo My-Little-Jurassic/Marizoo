@@ -60,7 +60,7 @@ public class BroadcastController {
                 session.getSessionId(), broadcastInfo.getAnimalStoreId(), broadcastInfo.getAnimalIdList(), img);
         log.info("------------------------커넥션을 만들어볼게욤---------------------------");
         if (session == null) {
-            return new ResponseEntity<>("session이 없습니다.",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         ConnectionProperties cProperties = ConnectionProperties.fromJson(params).build();
         Connection connection = session.createConnection(cProperties);
@@ -77,21 +77,20 @@ public class BroadcastController {
 
     @ApiOperation(value = "방송 종료 및 방송에서 진행된 투표 정보 저장")
     @PostMapping("/broadcasts/{broadcast_id}")
-    public ResponseEntity<String> endBroadcast
+    public ResponseEntity<?> endBroadcast
             (@PathVariable("broadcast_id") @ApiParam(value = "방송 id", example = "1") Long broadcastId,
              @ApiParam(value = "투표정보") @RequestBody EndVoteRequest endVoteRequest){
-
         Vote vote = null;
-        try {
+        log.info("------------------------endBroadcast--------------------------");
+        log.info("endVoteRequest.getResult() : " + endVoteRequest.getResult());
+        if(!endVoteRequest.getResult().isEmpty()){
             vote = voteService.endVote(broadcastId, endVoteRequest.getTitle(), endVoteRequest.getResult());
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        try {
-            broadcastService.saveEndTime(broadcastId, vote);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        boolean result = broadcastService.saveEndTime(broadcastId, vote);
+        if(!result){
+            return new ResponseEntity<>("방송 종료 시간 저장 실패", HttpStatus.BAD_GATEWAY);
         }
+
         return new ResponseEntity<>("방송 종료", HttpStatus.OK);
 
     }

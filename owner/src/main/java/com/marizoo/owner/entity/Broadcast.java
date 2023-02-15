@@ -84,7 +84,7 @@ public class Broadcast extends BaseEntity {
     //    === 비즈니스 로직 ===
     // 방송 종료
     public void endBroadcast(){
-        if(this.getStatus() == BroadcastStatus.FINISH){
+        if(this.getStatus() != BroadcastStatus.ONAIR){
             // 이미 종료된 방송은 종료 불가
             throw new RuntimeException("방송 중이 아닙니다.");
         }
