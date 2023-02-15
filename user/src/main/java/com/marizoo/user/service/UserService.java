@@ -69,12 +69,13 @@ public class UserService {
 
     public void createMailAndChangePwd(String email) {
         String tmpPwd = UUID.randomUUID().toString().substring(0, 10);
+        String encodePwd = encoder.encode(tmpPwd);
         MailDto mailDto = new MailDto();
         mailDto.setAddress(email);
         mailDto.setTitle("Marizoo 임시비밀번호 안내 이메일입니다.");
         mailDto.setMessage("안녕하세요. Marizoo입니다. 임시 비밀번호 : " + tmpPwd);
 
-        updatePwd(tmpPwd, email);
+        updatePwd(encodePwd, email);
 
         mailSend(mailDto);
     }
@@ -92,78 +93,60 @@ public class UserService {
 
     @Transactional
     public void updatePwd(String pwd, String email) {
-        try {
-            User user = userRepository.findByEmail(email).get();
-            user.setPwd(pwd);
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException("이메일에 해당하는 유저가 없습니다.");
-        }
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new UserNotFoundException("해당하는 유저가 없습니다.")
+        );
+        user.setPwd(pwd);
     }
 
     public MyPageResponseApi getMyPageInfo(Long userId, String pwd) {
-        try {
-            User user = userRepository.findById(userId).orElseThrow(
-                    () -> new UserNotFoundException("유저가 없습니다.")
-            );
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new UserNotFoundException("유저가 없습니다.")
+        );
 
-            if (encoder.matches(pwd, user.getPwd())) {
-                MyPageResponseApi myPageDto = new MyPageResponseApi();
+        if (encoder.matches(pwd, user.getPwd())) {
+            MyPageResponseApi myPageDto = new MyPageResponseApi();
 
-                myPageDto.setUid(user.getUid());
-                myPageDto.setNickname(user.getNickname());
-                myPageDto.setPhoneNumber(user.getPhoneNumber());
-                myPageDto.setEmail(user.getEmail());
+            myPageDto.setUid(user.getUid());
+            myPageDto.setNickname(user.getNickname());
+            myPageDto.setPhoneNumber(user.getPhoneNumber());
+            myPageDto.setEmail(user.getEmail());
 
-                return myPageDto;
-            } else {
-                throw new PasswordNotMatchException("비밀번호가 일치하지 않습니다.");
-            }
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException(e.getMessage());
-        } catch (PasswordNotMatchException e) {
-            throw new PasswordNotMatchException(e.getMessage());
+            return myPageDto;
+        } else {
+            throw new PasswordNotMatchException("비밀번호가 일치하지 않습니다.");
         }
     }
 
     @Transactional
     public void modifyMyPageInfo(Long userId, MyPageRequestApi myPageRequest) {
-        try {
-            User user = userRepository.findById(userId).orElseThrow(
-                    () -> new UserNotFoundException("유저가 없습니다.")
-            );
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new UserNotFoundException("유저가 없습니다.")
+        );
 
-            if (userRepository.findByNickname(myPageRequest.getNickname()).isPresent()) {
-                throw new AlreadyJoinException("이미 존재하는 닉네임입니다.");
-            }
-
-            if (userRepository.findByEmail(myPageRequest.getEmail()).isPresent()) {
-                throw new AlreadyJoinException("이미 존재하는 이메일입니다.");
-            }
-
-            user.setNickname(myPageRequest.getNickname());
-            user.setPhoneNumber(myPageRequest.getPhoneNumber());
-            user.setEmail(myPageRequest.getEmail());
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException(e.getMessage());
+        if (userRepository.findByNickname(myPageRequest.getNickname()).isPresent()) {
+            throw new AlreadyJoinException("이미 존재하는 닉네임입니다.");
         }
+
+        if (userRepository.findByEmail(myPageRequest.getEmail()).isPresent()) {
+            throw new AlreadyJoinException("이미 존재하는 이메일입니다.");
+        }
+
+        user.setNickname(myPageRequest.getNickname());
+        user.setPhoneNumber(myPageRequest.getPhoneNumber());
+        user.setEmail(myPageRequest.getEmail());
     }
 
     @Transactional
     public void changePwd(Long userId, PwdChangeRequestApi request) {
-        try {
-            User user = userRepository.findById(userId).orElseThrow(
-                    () -> new UserNotFoundException("유저가 없습니다.")
-            );
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new UserNotFoundException("유저가 없습니다.")
+        );
 
-            if (encoder.matches(request.getPastPwd(), user.getPwd())) {
-                user.setPwd(encoder.encode(request.getChangePwd()));
-            } else {
-                throw new PasswordNotMatchException("기존 비밀번호가 일치하지 않습니다.");
-            }
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException(e.getMessage());
-        } catch (PasswordNotMatchException e) {
-            throw new PasswordNotMatchException(e.getMessage());
+        if (encoder.matches(request.getPastPwd(), user.getPwd())) {
+            user.setPwd(encoder.encode(request.getChangePwd()));
+        } else {
+            throw new PasswordNotMatchException("기존 비밀번호가 일치하지 않습니다.");
         }
     }
 
@@ -176,12 +159,19 @@ public class UserService {
         return userRepository.getFavorStoreList(userId);
     }
 
+    @Transactional
     public void deleteBook(Long userId, Long bookId) {
+//        User user = userRepository.getBookList(userId);
+//        for (UsersPlay usersPlay : user.getBookList()) {
+//            if (usersPlay.getId() == bookId) {
+//                usersPlayRepository.deleteById(bookId);
+//            }
+//        }
         User user = userRepository.findById(userId).get();
         UsersPlay usersPlay = usersPlayRepository.findById(bookId).get();
 
         if (usersPlay.getUser().equals(user)) {
-            usersPlayRepository.deleteById(bookId);
+            usersPlayRepository.delete(usersPlay);
         }
     }
 

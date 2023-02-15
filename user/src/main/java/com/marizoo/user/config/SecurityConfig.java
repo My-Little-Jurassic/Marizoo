@@ -1,41 +1,29 @@
 package com.marizoo.user.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marizoo.user.constant.JwtConstant;
 import com.marizoo.user.entity.User;
 import com.marizoo.user.filter.ExceptionHandlerFilter;
-import com.marizoo.user.filter.JwtAuthorizationFilter;
 import com.marizoo.user.filter.JwtAuthenticationFilter;
+import com.marizoo.user.filter.JwtAuthorizationFilter;
 import com.marizoo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
-import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
-
-import static com.marizoo.user.constant.JwtConstant.RT_EXP_TIME;
-import static com.marizoo.user.constant.JwtConstant.RT_HEADER;
 
 @Configuration
 @EnableWebSecurity
@@ -82,6 +70,7 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .addLogoutHandler(((request, response, authentication) -> {
                             Long userId = Long.getLong(request.getParameter("userId"));
+                            log.info("userId = {}", userId);
                             User user = userRepository.findById(userId).get();
                             user.setRefreshToken("");
 

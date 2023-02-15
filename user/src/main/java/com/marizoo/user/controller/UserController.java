@@ -142,7 +142,7 @@ public class UserController {
         return ResponseEntity.ok(new BookListResponseApi(bookDtoList));
     }
 
-    @DeleteMapping("users/{userId}/books/{book_id}")
+    @DeleteMapping("users/{userId}/books/{bookId}")
     public ResponseEntity deleteBook(@PathVariable Long userId, @PathVariable Long bookId) {
         userService.deleteBook(userId, bookId);
         return ResponseEntity.ok().build();
@@ -204,16 +204,16 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(Exception.class)
-    public ExceptionResponseDto exception(Exception e) {
-        log.error("class = {} message = {}", e.getClass(), e.getMessage());
-        return new ExceptionResponseDto("잘못된 요청입니다.");
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ExceptionResponseDto methodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.toString());
         return new ExceptionResponseDto(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(Exception.class)
+    public ExceptionResponseDto exception(Exception e) {
+        log.error("class = {} message = {}", e.getClass(), e.getMessage());
+        return new ExceptionResponseDto("잘못된 요청입니다.");
     }
 }
