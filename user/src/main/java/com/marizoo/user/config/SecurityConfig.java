@@ -69,7 +69,7 @@ public class SecurityConfig {
                         }))
                         .invalidateHttpSession(true)
                         .addLogoutHandler(((request, response, authentication) -> {
-                            Long userId = Long.getLong(request.getParameter("userId"));
+                            Long userId = Long.parseLong(request.getParameter("userId"));
                             log.info("userId = {}", userId);
                             User user = userRepository.findById(userId).get();
                             user.setRefreshToken("");
