@@ -191,10 +191,6 @@ const BroadcastScreen = function (props: IProps) {
     };
   }, [isBtnShown, isMouseOver]);
 
-  const toggleMute = function () {
-    if (streamRef.current) streamRef.current.muted = !streamRef.current.muted;
-  };
-
   return (
     <StyledContainer
       onMouseMove={showBtns}
