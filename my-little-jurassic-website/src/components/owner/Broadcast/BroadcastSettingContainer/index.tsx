@@ -57,19 +57,6 @@ const BroadcastSettingContainer = ({ initSetting, startBroadcast, endBroadcast }
       }
       return;
     }
-    if (value === "screen") {
-      navigator.mediaDevices.getDisplayMedia({ video: true, audio: true }).then((stream) => {
-        try {
-          setBroadcastSetting({ ...broadcastSetting, videoDevice: stream.id });
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-          }
-        } catch (e) {
-          alert("장비를 선택해주세요!");
-        }
-      });
-      return;
-    }
     navigator.mediaDevices.getUserMedia({ video: { deviceId: value } }).then((stream) => {
       setBroadcastSetting({ ...broadcastSetting, videoDevice: value });
       if (videoRef.current) {
@@ -143,7 +130,6 @@ const BroadcastSettingContainer = ({ initSetting, startBroadcast, endBroadcast }
           <label>캐뭐라 설정</label>
           <select onChange={onChangeVideo} disabled={readOnly}>
             <option>-</option>
-            <option value={"screen"}>화면공유</option>
             {videoList.map((item, index) => (
               <option key={index} value={item.deviceId}>
                 {item?.label}
