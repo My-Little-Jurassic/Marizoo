@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import moment from "moment";
 import styled from "styled-components";
 import { useAppSelector } from "../../../../store";
 import { selectUser } from "../../../../store/userSlice";
@@ -26,7 +27,7 @@ const MypageStoreReservationItem = ({ item }: IProps): JSX.Element => {
           <img src={img} />
         </div>
         <div className="info-area">
-          <span className="play-date-time">{playDateTime}</span>
+          <span className="play-date-time">{moment(playDateTime).format("YYYY-MM-DD  HH:mm")}</span>
           <h4>{title}</h4>
           <span className="bold">
             {storeName} · {totalVisitor}명

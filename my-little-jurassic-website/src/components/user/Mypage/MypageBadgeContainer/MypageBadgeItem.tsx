@@ -33,6 +33,8 @@ const StyledLi = styled.li`
     padding-bottom: 16px;
   }
   & > div {
+    font: ${({ theme }) => theme.fonts.mainContentBold};
+    color: ${({ theme }) => theme.colors.primaryText};
     transition: all ease 0.2s;
     transform: translateX(-50%) scale(0);
     position: absolute;
@@ -40,6 +42,7 @@ const StyledLi = styled.li`
     width: 320px;
     max-width: 100%;
     display: flex;
+    justify-content: center;
     padding: 24px;
     margin: auto;
     top: calc(100% - 16px);
