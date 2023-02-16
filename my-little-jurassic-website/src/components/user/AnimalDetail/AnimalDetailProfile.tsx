@@ -19,7 +19,7 @@ const AnimalDetailProfile = function (props: IProps) {
       return <span key={feed.name}>{feed.name} </span>;
     }
     return <span key={feed.name}>{feed.name}, </span>;
-  });
+  }, []);
 
   useEffect(() => {
     if (!props.broadcastInfo.onAir) {
@@ -34,7 +34,7 @@ const AnimalDetailProfile = function (props: IProps) {
         </NavLink>,
       );
     }
-  }, []);
+  }, [props.broadcastInfo.broadcastId]);
 
   return (
     <StyledContainer>
