@@ -112,8 +112,7 @@ const StyledContainer = styled.div`
     flex-direction: column;
   }
   @media screen and (max-width: 600px) {
-    padding: 80px 2vw;
-    min-width: 375px;
+    padding: 80px 8px;
   }
 `;
 
@@ -133,7 +132,6 @@ const StyledRightSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 0 8px;
   overflow: scroll;
   &::-webkit-scrollbar {
     display: none;
