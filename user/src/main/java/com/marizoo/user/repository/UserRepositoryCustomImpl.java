@@ -3,6 +3,7 @@ package com.marizoo.user.repository;
 import com.marizoo.user.dto.FavorStoreDto;
 import com.marizoo.user.dto.QFavorStoreDto;
 import com.marizoo.user.entity.User;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
@@ -58,5 +59,15 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 .join(usersPlay.play, play).fetchJoin()
                 .where(user.id.eq(userId))
                 .fetchOne();
+    }
+
+    @Override
+    public void deleteBook(Long userId, Long bookId) {
+        queryFactory
+                .delete(usersPlay)
+                .where(usersPlay.user.id.eq(userId)
+                        .and(usersPlay.id.eq(bookId))
+                )
+                .execute();
     }
 }

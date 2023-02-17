@@ -15,4 +15,6 @@ public interface UserRepositoryCustom {
     User getBadgeList(Long userId);
 
     User getBookList(Long userId);
+
+    void deleteBook(Long userId, Long bookId);
 }
