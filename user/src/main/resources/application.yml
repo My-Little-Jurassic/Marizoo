@@ -1,0 +1,57 @@
+server:
+  port: 5000
+  ssl:
+    enabled: false
+
+spring:
+  application:
+    name: user
+  config:
+    import: "optional:configserver:http://3.36.112.78:7777/"
+  cloud:
+    config:
+      name: user, owner
+      profile: default
+#  datasource:    # 암호화 완료
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#      url: jdbc:mysql://3.36.112.78:3306/marizoo?
+#      username: # MySQL DB Username
+#      password: # MySQL DB password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher # swagger
+
+cloud:
+  aws:
+#    credentials:  # 암호화 완료
+#      access-key: # 이성복한테 문의
+#      secret-key: # 이성복한테 문의
+    s3:
+      bucket: marizoo
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+OPENVIDU_URL: https://i8b208.p.ssafy.io:8445/
+# OPENVIDU_SECRET:    # 암호화 완료
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+logging:
+  config: classpath:Logback-spring.xml
