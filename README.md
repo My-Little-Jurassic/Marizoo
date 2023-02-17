@@ -386,7 +386,7 @@ https://drive.google.com/uc?export=view&id=
 
 | 한유경            | 정민우   | 윤성운   | 김승희  | 이성복  | 최희수  |
 | ----------------- | -------- | -------- | ------- | ------- | ------- |
-| ![한유경_프로필](https://drive.google.com/uc?export=view&id=1FXOH3DQKPzS0_FKWfSm_UHCpcR7GSu78) |![정민우_프로필](https://drive.google.com/uc?export=view&id=12fJsgZx313wuBGZjXM4nYyc6xW5go-7T)  | ![윤성운_프로필](https://drive.google.com/uc?export=view&id=1KqLOXX16WZVo3PiFdpiG6v2EOLxv5_aL) | ![김승희_프로필](https://drive.google.com/uc?export=view&id=10Zf_aykwX56GIlc8fk6BK42WWcAjzZLv) | ![이성복_프로필](https://drive.google.com/uc?export=view&id=1hQIBN3tH7mvo1-Ti6gHNFro1IRHTx4LL)  | ![최희수_프로필](https://drive.google.com/uc?export=view&id=11us99QjZgvDP8cwn_PJRFKM2ZtsBuju9)  |
+| <img src="https://drive.google.com/uc?export=view&id=1FXOH3DQKPzS0_FKWfSm_UHCpcR7GSu78" width="100"> |<img src="https://drive.google.com/uc?export=view&id=12fJsgZx313wuBGZjXM4nYyc6xW5go-7T" width="100">  | <img src="https://drive.google.com/uc?export=view&id=1KqLOXX16WZVo3PiFdpiG6v2EOLxv5_aL" width="100"> | <img src="https://drive.google.com/uc?export=view&id=10Zf_aykwX56GIlc8fk6BK42WWcAjzZLv" width="100"> | <img src="https://drive.google.com/uc?export=view&id=1hQIBN3tH7mvo1-Ti6gHNFro1IRHTx4LL" width="100">  | <img src="https://drive.google.com/uc?export=view&id=11us99QjZgvDP8cwn_PJRFKM2ZtsBuju9" width="100">  |
 | Leader & FrontEnd | Frontend | Frontend | Backend | Backend | Backend |
 
 <br>
