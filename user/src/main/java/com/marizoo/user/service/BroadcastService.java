@@ -7,6 +7,8 @@ import com.marizoo.user.entity.BroadcastStatus;
 import com.marizoo.user.entity.FeedVote;
 import com.marizoo.user.repository.broadcast_repo.BroadcastRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,7 +27,8 @@ public class BroadcastService {
      * @return onair 방송 목록
      */
     public List<Broadcast> getOnAirs(){
-        return broadcastRepository.findByStatus(BroadcastStatus.ONAIR);
+        PageRequest pageRequest = PageRequest.of(0, 15, Sort.by("startTime").descending());
+        return broadcastRepository.findByStatus(BroadcastStatus.ONAIR, pageRequest).getContent();
     }
 
     /**
@@ -70,8 +73,7 @@ public class BroadcastService {
     public List<RelatedBroadcastDto> searchBroadcastRelated(Long broadcastId){
         Optional<Broadcast> opt = broadcastRepository.findById(broadcastId);
         if(opt.isEmpty()){
-            // error
-            return null;
+            throw new RuntimeException("방송이 존재하지 않습니다");
         }
         List<String> classifications = new ArrayList<>();
         List<BroadcastAnimal> broadcastAnimalList = opt.get().getBroadcastAnimalList();
