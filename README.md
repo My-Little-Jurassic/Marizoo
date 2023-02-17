@@ -389,7 +389,7 @@ https://drive.google.com/uc?export=view&id=
 | <img src="https://drive.google.com/uc?export=view&id=1FXOH3DQKPzS0_FKWfSm_UHCpcR7GSu78" width="100"> |<img src="https://drive.google.com/uc?export=view&id=12fJsgZx313wuBGZjXM4nYyc6xW5go-7T" width="100">  | <img src="https://drive.google.com/uc?export=view&id=1KqLOXX16WZVo3PiFdpiG6v2EOLxv5_aL" width="100"> | <img src="https://drive.google.com/uc?export=view&id=10Zf_aykwX56GIlc8fk6BK42WWcAjzZLv" width="100"> | <img src="https://drive.google.com/uc?export=view&id=1hQIBN3tH7mvo1-Ti6gHNFro1IRHTx4LL" width="100">  | <img src="https://drive.google.com/uc?export=view&id=11us99QjZgvDP8cwn_PJRFKM2ZtsBuju9" width="100">  |
 | Leader & FrontEnd | Frontend | Frontend | Backend | Backend | Backend |
 
-<br>
+<!-- <br>
 
 ### 🐥 팀원 역할
 
@@ -409,4 +409,4 @@ https://drive.google.com/uc?export=view&id=
   - 이성복
     - 공식문서 마스터
   - 최희수
-    - 제다이 마스터
+    - 제다이 마스터 -->
