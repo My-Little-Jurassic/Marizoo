@@ -150,7 +150,7 @@ https://drive.google.com/uc?export=view&id=
 </div>
 
 <div align = "center" style="font-size:30px">
-  ✨ Co-work tool ✨
+  <h1>✨ Co-work tool ✨</h1>
 
 <img src="https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=Jira Software&logoColor=white">
 <img src="https://img.shields.io/badge/Mattermost-0058CC?style=for-the-badge&logo=Mattermost&logoColor=white">
@@ -181,7 +181,7 @@ https://drive.google.com/uc?export=view&id=
 <br>
 
 <div align = "center" style="font-size:30px">
-  ✨ Front End Stack ✨
+  <h1>✨ Front End Stack ✨</h1>
 
 <img src="https://img.shields.io/badge/react-skyblue?style=for-the-badge&logo=react&logoColor=white">
 <img src="https://img.shields.io/badge/redux-b22af7?style=for-the-badge&logo=redux&logoColor=white">
@@ -252,7 +252,7 @@ https://drive.google.com/uc?export=view&id=
 <br>
 
 <div align = "center" style="font-size:30px">
-  ✨ Back End Stack ✨
+  <h1>✨ Back End Stack ✨</h1>
 
 <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
 <img src="https://img.shields.io/badge/linux-yellow?style=for-the-badge&logo=linux&logoColor=black">
@@ -348,7 +348,9 @@ https://drive.google.com/uc?export=view&id=
 
 ### 🦎 요구사항 정의 및 기능 명세
 
-<mark>(이미지 추가)</mark>
+<div width="100%">
+  <img src="https://drive.google.com/uc?export=view&id=19UO166jSdvQAc_jo7-N2K8GdOPRNwkSp" width="100%">
+</div>
 
 [요구사항 정의 및 명세](https://docs.google.com/spreadsheets/d/1cFsyJDR6QCAbo15gtIjVTNuGYMfXE0Ipi1QcR337MtA/edit#gid=0)
 
@@ -358,7 +360,9 @@ https://drive.google.com/uc?export=view&id=
 
 ### 🐢 화면 설계서
 
-<mark>(이미지 추가)</mark>
+<div width="100%">
+  <img src="https://drive.google.com/uc?export=view&id=17woahcx8fMwc7wzXrnUt7H3Ph754JoXp" width="100%">
+</div>
 
 [화면 설계서](https://www.figma.com/file/UuVefTqhUXn0jdwGV33AkP/%EB%A7%88%EB%A6%AC%EC%A5%AC%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84?node-id=150%3A2)
 
