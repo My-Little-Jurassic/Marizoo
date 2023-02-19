@@ -44,12 +44,12 @@ const broadcastSlice = createSlice({
       state.isMaximized = !state.isMaximized;
     },
 
-    vote(state: IInitialState, { payload }) {
+    vote(state, { payload }) {
       state.isVoted = true;
       if (state.session && state.ownerConnection) {
         state.session.signal({
           data: String(payload),
-          to: [state.ownerConnection],
+          to: [state.ownerConnection as Connection],
           type: "vote",
         });
       }
@@ -60,13 +60,13 @@ const broadcastSlice = createSlice({
         if (!state.isLiked) {
           state.session.signal({
             data: "like",
-            to: [state.ownerConnection],
+            to: [state.ownerConnection as Connection],
             type: "like",
           });
         } else {
           state.session.signal({
             data: "",
-            to: [state.ownerConnection],
+            to: [state.ownerConnection as Connection],
             type: "like",
           });
         }
@@ -106,6 +106,7 @@ const broadcastSlice = createSlice({
     resetRoom(state) {
       state.isMaximized = false;
       state.isVoted = false;
+      state.isVoting = "";
       state.isLiked = false;
       state.numberOfViewers = 0;
       state.numberOfLikes = 0;
