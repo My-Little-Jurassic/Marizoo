@@ -55,5 +55,5 @@ cloud:
     stack:
       auto: false
 
-OPENVIDU_URL: https://i8b208.p.ssafy.io:8445/
+OPENVIDU_URL: # OPENVIDU URL
 #OPENVIDU_SECRET: # 암호화 완료
