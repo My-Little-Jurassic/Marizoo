@@ -1,3 +1,20 @@
+![3](./README_assets/배너.png)
+
+> 💡 마리쥬는 마이 리틀 쥬라기의 약자로, 이색동물 스트리밍 서비스입니다
+
+🧥🖼🧬📃🥰👻🦎기획배경 🦖
+
+최근 이색 동물에 대한 사람들의 관심이 증가하고 이색 반려 동물 시장이 떠오르고 있습니다.
+
+이색 동물을 키우기 위해서는 양육 환경 조성을 위한 충분한 양육 정보가 필요합니다. 하지만 흔한 반려동물에 비해 정보가 부족하고, 접근성이 떨어진다는 단점이 있습니다.
+
+마이리틀 쥬라기는 최근 떠오르는 이색 반려동물 시장을 공략한
+전국 이색 반려동물 샵 통합 관리 서비스입니다.
+
+체험 이벤트 예약과 실시간 방송 중계 모니터링을 지원합니다.
+
+이색 반려동물 숍은 가게 홍보를, 사용자는 이색동물 정보를 보다 쉽게 수집할 수 있습니다.
+
 # 사용자용 서비스 페이지
 
 ## 메인화면
@@ -5,8 +22,8 @@
 - 현재 스트리밍중인 동물 방송 목록 제공
 - 방송 썸네일과 함께 보이는 방송중인 동물 프로필
 <div width="100%">
-<img src="https://drive.google.com/uc?export=view&id=1uVuDJoOyB3-qbZfy2KtdUaZJkTY1L9Qt" width="77%">
-<img src="https://drive.google.com/uc?export=view&id=1AbbR1WCn_9-AAgsgC7P7m4gMZbqOrMUR" width="19%">
+<img src="./README_assets/main-0.gif" width="77%">
+<img src="./README_assets/main-2.gif" width="19%">
 </div>
 
 <br/>
@@ -16,10 +33,10 @@
 - 원하는 동물 방송에 대한 필터링 지원
 - **키워드 검색** 및 **필터링 버튼** 지원
 <div width="100%">
-<img src="https://drive.google.com/uc?export=view&id=1GUAUbMMewKpAokrWro8BYAoG1VhF4uwm" width="77%">
-<img src="https://drive.google.com/uc?export=view&id=1y1QzrAL9OLIhut2sb7SwPVNj3X85pSHV" width="19%">
-<img src="https://drive.google.com/uc?export=view&id=1vakboqkj8UG5l1utZhJDfLMelcbE4NXF" width="19%">
-<img src="https://drive.google.com/uc?export=view&id=1KW3NeXWJGyw2DxxLpU6Qi5zxWJ2vOsaO" width="77%">
+<img src="./README_assets/main-filter-0.gif" width="77%">
+<img src="./README_assets/main-filter-2.gif" width="19%">
+<img src="./README_assets/main-search-2.gif" width="19%">
+<img src="./README_assets/main-search-0.gif" width="77%">
 </div>
 
 <br/>
@@ -31,10 +48,10 @@
 - **먹이 투표**로 급여 먹이 투표 가능
 - 특별한 순간을 보면 지급되는 배지
 <div width="100%">
-<img src="https://drive.google.com/uc?export=view&id=1hD7LwePDk5lh-Y21zkvrnYloAKjhpZUL" width="77%">
-<img src="https://drive.google.com/uc?export=view&id=1JsbkzLQC3Yq7L9V8OXEv0Hrya2B_IDEz" width="19%">
-<img src="https://drive.google.com/uc?export=view&id=1slwzlgpv8h-fyMejpZ-W-GB2LfwL3n87" width="19%">
-<img src="https://drive.google.com/uc?export=view&id=1HLKrAZB4EUR-euHXQPo4zg7vfTlaJc3z" width="77%">
+<img src="./README_assets/broadcast-reaction-0.gif" width="77%">
+<img src="./README_assets/broadcast-2.gif" width="19%">
+<img src="./README_assets/broadcast-vote-2.gif" width="19%">
+<img src="./README_assets/broadcast-badge-0.gif" width="77%">
 </div>
 
 <br/>
@@ -44,8 +61,8 @@
 - 실시간 validation check
 - 수정 필요한 입력에 대한 시각적인 표시 제공
 <div width="100%">
-<img src="https://drive.google.com/uc?export=view&id=1M5leDQ66B9zqiRM0bjUzHPHifh33cfaw" width="77%">
-<img src="https://drive.google.com/uc?export=view&id=19JlRV8kVPmQ1tPTun28CpvKqVgZroCyy" width="21%">
+<img src="./README_assets/shop_login_0.gif" width="77%">
+<img src="./README_assets/shop_regist_2.gif" width="21%">
 </div>
 
 <br/>
@@ -56,13 +73,13 @@
 - 확대 축소에 따라 변하는 파충류 샵 목록
 - 샵 이름 및 취급 동물 목록 **필터링** 지원
 <div width="100%">
-  <img src="https://drive.google.com/uc?export=view&id=1hQV8cmV2x_oD-VSjIUj1ic7hMEQmjmsQ" width="75%">
-  <img src="https://drive.google.com/uc?export=view&id=1iY1Mwv6vVEH46F2ZrEB8W_E1y4Ii5xrb" width="22%">
+  <img src="./README_assets/shop-0.gif" width="75%">
+  <img src="./README_assets/shop-2.gif" width="22%">
 </div>
 
 - **지도 다크모드 완벽지원**
 <div width="100%">
-  <img src="https://drive.google.com/uc?export=view&id=1qpUWKRxlp5MN1ATbwE4zDUseF0vQFIFv" width="100%">
+  <img src="./README_assets/shop-1.gif" width="100%">
 </div>
 
 <br/>
@@ -75,10 +92,10 @@
 - 샵 팔로우 기능 제공
 
 <div width="100%">
-  <img src="https://drive.google.com/uc?export=view&id=1zpi-umO9zY_msK44VWFXqfYvNBZI305M" width="78%">
-  <img src="https://drive.google.com/uc?export=view&id=1g3meYXIZfsK8bGMz1-SmCluWjWghd14y" width="20%">
-  <img src="https://drive.google.com/uc?export=view&id=1P3RpURtW-uG-eo9WoJRk3JpD_S8NVYfR" width="21%">
-  <img src="https://drive.google.com/uc?export=view&id=1KyUH4L-eJHSYtK1IgUc_NSn3ilcMDpkv" width="76%">
+  <img src="./README_assets/shop-detail-0.gif" width="78%">
+  <img src="./README_assets/shop-detail-2.gif" width="20%">
+  <img src="./README_assets/shop-detail-follow-2.gif" width="21%">
+  <img src="./README_assets/shop-reservation-0.gif" width="76%">
 </div>
 
 <br/>
@@ -90,8 +107,8 @@
 - 각 동물 종분류에 해당하는 샵 동물 목록 제공
 - 샵 동물 클릭 해당 동물의 상세 정보 열람 가능
 <div width="100%">
-  <img src="https://drive.google.com/uc?export=view&id=1GCRSYDA72_vwDBl9uhiHhNteSxhta9zo" width="78%">
-  <img src="https://drive.google.com/uc?export=view&id=1Oa8MtTIwTh07B6IdZC5srYskeijFqdHF" width="21%">
+  <img src="./README_assets/pedia-0.gif" width="78%">
+  <img src="./README_assets/pedia-2.gif" width="21%">
 </div>
 
 <br/>
@@ -101,8 +118,8 @@
 - 샵 내 동물의 정보와 종의 정보를 제공
 - 연관 동물 목록 제공
 <div width="100%">
-  <img src="https://drive.google.com/uc?export=view&id=1rBtbBWsWR8uS_hZSpjZJd211Ey9y1ZUX" width="76%">
-  <img src="https://drive.google.com/uc?export=view&id=1RUUGDz4QZYqr7mxMrawSWOE-YFBo8QQ_" width="21%">
+  <img src="./README_assets/animal-detail-0.gif" width="76%">
+  <img src="./README_assets/animal-detail-2.gif" width="21%">
 </div>
 
 <br/>
@@ -116,7 +133,7 @@
   - 예약 취소 및 예약 현황 확인 가능
 
 <div width="100%">
-<img src="https://drive.google.com/uc?export=view&id=10Tcj3xUvTGz4MC3pKJjFvi7mDWBEVkGc" width="100%">
+<img src="./README_assets/shop_mypage_0.gif" width="100%">
 </div>
 
 <br/>
@@ -129,7 +146,7 @@
 - 방송할 동물 선택하여 방송 진행
 - 먹이 투표 등 사용자 이벤트 실행 가능
 <div width="100%">
-<img src="https://drive.google.com/uc?export=view&id=11Inf5tzH8ao9axIIBDF54bQF9e6ijFJ-" width="100%">
+<img src="./README_assets/owner-broadcast.gif" width="100%">
 </div>
 
 <!-- // START: 여기 아래부터 지우기
@@ -349,7 +366,7 @@ https://drive.google.com/uc?export=view&id=
 ### 🦎 요구사항 정의 및 기능 명세
 
 <div width="100%">
-  <img src="https://drive.google.com/uc?export=view&id=19UO166jSdvQAc_jo7-N2K8GdOPRNwkSp" width="100%">
+  <img src="./README_assets/요구사항명세서.PNG" width="100%">
 </div>
 
 [요구사항 정의 및 명세](https://docs.google.com/spreadsheets/d/1cFsyJDR6QCAbo15gtIjVTNuGYMfXE0Ipi1QcR337MtA/edit#gid=0)
@@ -361,7 +378,7 @@ https://drive.google.com/uc?export=view&id=
 ### 🐢 화면 설계서
 
 <div width="100%">
-  <img src="https://drive.google.com/uc?export=view&id=17woahcx8fMwc7wzXrnUt7H3Ph754JoXp" width="100%">
+  <img src="./README_assets/와이어프레임.PNG" width="100%">
 </div>
 
 [화면 설계서](https://www.figma.com/file/UuVefTqhUXn0jdwGV33AkP/%EB%A7%88%EB%A6%AC%EC%A5%AC%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84?node-id=150%3A2)
@@ -384,11 +401,10 @@ https://drive.google.com/uc?export=view&id=
 
 ## 🍀 MARIZOO 팀의 개발자들을 소개합니다!!
 
-| 한유경            | 정민우   | 윤성운   | 김승희  | 이성복  | 최희수  |
-| ----------------- | -------- | -------- | ------- | ------- | ------- |
-| <img src="https://drive.google.com/uc?export=view&id=1FXOH3DQKPzS0_FKWfSm_UHCpcR7GSu78" width="100"> |<img src="https://drive.google.com/uc?export=view&id=12fJsgZx313wuBGZjXM4nYyc6xW5go-7T" width="100">  | <img src="https://drive.google.com/uc?export=view&id=1KqLOXX16WZVo3PiFdpiG6v2EOLxv5_aL" width="100"> | <img src="https://drive.google.com/uc?export=view&id=10Zf_aykwX56GIlc8fk6BK42WWcAjzZLv" width="100"> | <img src="https://drive.google.com/uc?export=view&id=12v061ySh1VtIcBqKwDiZ50q4FriltkeL" width="100">  | <img src="https://drive.google.com/uc?export=view&id=1WloqxQdbfwjerXQROmV5PNCDhOuBHYTj" width="100">  |
-| Leader & FrontEnd | Frontend | Frontend | Backend | Backend | Backend |
-
+| 한유경                                             | 정민우                                             | 윤성운                                             | 김승희                                             | 이성복                                              | 최희수                                              |
+| -------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------- |
+| <img src="./README_assets/한유경.jpg" width="100"> | <img src="./README_assets/정민우.jpg" width="100"> | <img src="./README_assets/윤성운.png" width="100"> | <img src="./README_assets/김승희.PNG" width="100"> | <img src="./README_assets/이성복2.PNG" width="100"> | <img src="./README_assets/최희수2.PNG" width="100"> |
+| Leader & FrontEnd                                  | Frontend                                           | Frontend                                           | Backend                                            | Backend                                             | Backend                                             |
 
 <!-- <br>
 
